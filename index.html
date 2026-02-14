@@ -21,17 +21,20 @@
   /* Okabe-Ito colorblind-safe */
   --dev:       #d55e00;
   --infra-raw: #009e73;
-  --infra-cud: #0099cc;
-  --total:     #cc79a7;
+  --infra-cud: #009e73;
+  --total:     #444444;
   --revenue:   #0072b2;
-  --profit:    #e69f00;
-  --price-min: #333333;
+  --profit:    #7b2d8b;
+  --price-min: #555555;
 
   --radius: 8px;
   --shadow: 0 2px 16px rgba(0,0,0,0.07);
 }
 
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
 
 body {
   background: var(--bg);
@@ -43,13 +46,305 @@ body {
 
 /* ─── PAPER ─────────────────────────────────────────────────────── */
 .paper {
-  max-width: 980px;
+  max-width: 1200px;
   margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── LANDING FLOW ORDER ────────────────────────────────────────── */
+.paper > .landing-intro { order: 1; }
+.paper > .credibility-section { order: 2; }
+.paper > .cta-band { order: 3; }
+.paper > .calc-section { order: 4; }
+.paper > .formulas-section { order: 5; }
+.paper > .fig-header { order: 6; }
+.paper > .controls { order: 7; }
+.paper > .chart-section { order: 8; }
+.paper > .zones-strip { order: 9; }
+.paper > .fig-footer { order: 10; }
+
+/* ─── LANDING INTRO ─────────────────────────────────────────────── */
+.landing-intro {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(20px, 4vw, 40px) clamp(16px, 4vw, 36px);
+  background:
+    radial-gradient(circle at 88% 8%, rgba(0,114,178,0.22) 0%, transparent 40%),
+    radial-gradient(circle at 8% 88%, rgba(0,158,115,0.22) 0%, transparent 38%),
+    linear-gradient(135deg, #eef7ff 0%, #f3fbf7 45%, #fff4ea 100%);
+  border-bottom: 1px solid var(--border);
+}
+.landing-intro::before,
+.landing-intro::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+.landing-intro::before {
+  width: 220px;
+  height: 220px;
+  top: -95px;
+  right: -70px;
+  background: radial-gradient(circle, rgba(66,133,244,0.28) 0%, rgba(66,133,244,0) 70%);
+}
+.landing-intro::after {
+  width: 210px;
+  height: 210px;
+  bottom: -110px;
+  left: -90px;
+  background: radial-gradient(circle, rgba(52,168,83,0.22) 0%, rgba(52,168,83,0) 72%);
+}
+.landing-kicker {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(0,114,178,0.28);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(3px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(9px, 1.1vw, 10px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0072b2;
+  margin-bottom: 10px;
+}
+.landing-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(24px, 4vw, 42px);
+  line-height: 1.12;
+  font-weight: 400;
+  color: #171b33;
+  text-wrap: balance;
+  max-width: 900px;
+}
+.landing-subtitle {
+  margin-top: 10px;
+  max-width: 880px;
+  font-size: clamp(12px, 1.4vw, 15px);
+  color: #3f4658;
+  line-height: 1.65;
+}
+.landing-grid {
+  margin-top: clamp(16px, 2.8vw, 26px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .landing-grid { grid-template-columns: 1fr; }
+}
+.landing-card {
+  position: relative;
+  border: 1px solid rgba(28, 39, 72, 0.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 8px 22px rgba(20, 33, 58, 0.07);
+  padding: 13px 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.landing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(20, 33, 58, 0.12);
+}
+.landing-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  border-radius: 10px 10px 0 0;
+}
+.landing-card:nth-child(1) {
+  background: linear-gradient(180deg, rgba(0,114,178,0.08) 0%, rgba(255,255,255,0.9) 58%);
+}
+.landing-card:nth-child(1)::before {
+  background: linear-gradient(90deg, #0072b2, #56b4e9);
+}
+.landing-card:nth-child(2) {
+  background: linear-gradient(180deg, rgba(0,158,115,0.08) 0%, rgba(255,255,255,0.9) 58%);
+}
+.landing-card:nth-child(2)::before {
+  background: linear-gradient(90deg, #009e73, #34a853);
+}
+.landing-card:nth-child(3) {
+  background: linear-gradient(180deg, rgba(230,159,0,0.1) 0%, rgba(255,255,255,0.9) 58%);
+}
+.landing-card:nth-child(3)::before {
+  background: linear-gradient(90deg, #e69f00, #ff8f1f);
+}
+.landing-card-title {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1f2a49;
+  margin-bottom: 8px;
+}
+.landing-card:nth-child(1) .landing-card-title { color: #005a8f; }
+.landing-card:nth-child(2) .landing-card-title { color: #0f7358; }
+.landing-card:nth-child(3) .landing-card-title { color: #8f5f00; }
+.landing-card-list {
+  list-style: none;
+  display: grid;
+  gap: 7px;
+}
+.landing-card-list li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 12px;
+  color: #44495a;
+  line-height: 1.55;
+}
+.landing-card-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #009e73;
+  font-weight: 700;
+}
+.landing-card:nth-child(1) .landing-card-list li::before { color: #0072b2; }
+.landing-card:nth-child(3) .landing-card-list li::before { color: #e69f00; }
+.landing-card-link {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 5px 10px;
+  border: 1px solid rgba(0,114,178,0.28);
+  background: rgba(255,255,255,0.86);
+  color: #005a8f;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+.landing-card-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+  filter: brightness(1.02);
+}
+.landing-card-link.features {
+  border-color: rgba(0,158,115,0.34);
+  color: #0f7358;
+}
+.landing-card-link.users {
+  border-color: rgba(230,159,0,0.4);
+  color: #8f5f00;
+}
+
+/* ─── CREDIBILITY SECTION ───────────────────────────────────────── */
+.credibility-section {
+  padding: clamp(16px, 2.8vw, 24px) clamp(16px, 4vw, 36px);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(240,248,255,0.72) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.cred-avatar {
+  width: 108px;
+  height: 108px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 3px solid rgba(255,255,255,0.92);
+  box-shadow: 0 10px 24px rgba(0, 114, 178, 0.28);
+  background: #fff;
+}
+.cred-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cred-content {
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cred-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0072b2;
+  margin-bottom: 4px;
+}
+.cred-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(18px, 2.2vw, 28px);
+  line-height: 1.2;
+}
+.cred-text {
+  margin-top: 8px;
+  font-size: clamp(12px, 1.35vw, 14px);
+  line-height: 1.65;
+  color: #4a4f5f;
+  max-width: 900px;
+}
+.cred-links {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.cred-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,114,178,0.2);
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(90deg, #0072b2, #009e73);
+  box-shadow: 0 6px 14px rgba(0,114,178,0.25);
+}
+.cred-link:hover { filter: brightness(1.04); }
+
+/* ─── CTA BAND ──────────────────────────────────────────────────── */
+.cta-band {
+  padding: 14px clamp(16px, 4vw, 36px) 18px;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 86% 50%, rgba(0,114,178,0.14) 0%, rgba(0,114,178,0) 38%),
+    linear-gradient(180deg, #fff8f0 0%, #f4f7fb 100%);
+  display: flex;
+  justify-content: center;
+}
+.cta-btn {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0072b2 0%, #009e73 52%, #00a5c8 100%);
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(0,114,178,0.3);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,114,178,0.34);
+  filter: brightness(1.03);
 }
 
 /* ─── FIGURE HEADER ─────────────────────────────────────────────── */
@@ -334,6 +629,19 @@ body {
   color: var(--muted);
   white-space: nowrap;
 }
+.fig-note-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.fig-note-link:hover { color: #0072b2; }
+.fig-note-link svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
 
 /* References section */
 .fig-refs {
@@ -581,6 +889,7 @@ body {
   font-weight: 500;
   color: var(--text);
   background: transparent;
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 .calc-input-wrap input::-webkit-inner-spin-button,
@@ -732,6 +1041,215 @@ body {
 .cp-pill.filled { background: #0072b2; }
 
 
+/* ── GROUP D: PROVIDERS ── */
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  padding: 16px 18px;
+}
+.provider-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #faf9f7;
+  color: #575b66;
+  font-size: clamp(11px, 1.25vw, 13px);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.provider-btn:hover {
+  border-color: #5a5a8a;
+  color: #5a5a8a;
+  background: rgba(90,90,138,0.07);
+}
+.provider-btn.selected {
+  border-color: #5a5a8a;
+  color: #42426d;
+  background: rgba(90,90,138,0.12);
+  box-shadow: 0 0 0 2px rgba(90,90,138,0.15);
+}
+.provider-btn .check {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #5a5a8a;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  margin-left: auto;
+}
+.provider-btn.selected .check { display: inline-block; }
+.provider-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.provider-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+.provider-logo.aws { background: #232f3e; color: #ff9900; }
+.provider-logo.azure { background: #0078d4; color: #fff; }
+.provider-logo.gcp {
+  color: #fff;
+  background: conic-gradient(#ea4335 0 25%, #fbbc05 25% 50%, #34a853 50% 75%, #4285f4 75% 100%);
+}
+.provider-logo.oci { background: #c74634; color: #fff; }
+.provider-logo.ibm { background: #052fad; color: #fff; }
+.provider-logo.alibaba { background: #ff6a00; color: #fff; }
+.provider-logo.huawei { background: #cf0a2c; color: #fff; }
+.provider-logo.multi { background: #5a5a8a; color: #fff; }
+
+/* ── GROUP E: HEALTH + RECOMMENDATIONS ── */
+.health-wrap {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.health-banner {
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--light);
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.health-banner.awaiting { border-color: var(--border); }
+.health-banner.green {
+  border-color: #009e73;
+  background: rgba(0,158,115,0.08);
+}
+.health-banner.yellow {
+  border-color: #e69f00;
+  background: rgba(230,159,0,0.08);
+}
+.health-banner.red {
+  border-color: #d55e00;
+  background: rgba(213,94,0,0.08);
+}
+.health-zone-title {
+  font-size: clamp(14px, 1.7vw, 18px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.health-zone-desc {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: clamp(11px, 1.3vw, 13px);
+  line-height: 1.55;
+  max-width: 760px;
+}
+.health-score {
+  min-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.health-score-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  color: var(--muted);
+}
+.health-score-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rec-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+.rec-card {
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  background: #fbfaf8;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rec-card.high { border-left: 4px solid #d55e00; }
+.rec-card.medium { border-left: 4px solid #e69f00; }
+.rec-card.low { border-left: 4px solid #009e73; }
+
+.rec-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rec-icon { font-size: 15px; }
+.rec-title {
+  font-size: clamp(12px, 1.35vw, 13px);
+  font-weight: 600;
+  color: var(--text);
+}
+.rec-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: #fff;
+}
+.rec-tag.priority-high { color: #d55e00; border-color: rgba(213,94,0,0.4); background: rgba(213,94,0,0.1); }
+.rec-tag.priority-medium { color: #b07800; border-color: rgba(176,120,0,0.4); background: rgba(230,159,0,0.1); }
+.rec-tag.priority-low { color: #009e73; border-color: rgba(0,158,115,0.4); background: rgba(0,158,115,0.1); }
+
+.rec-desc {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+.rec-action {
+  font-size: 11px;
+  color: #2a2f44;
+  line-height: 1.45;
+}
+.rec-empty {
+  grid-column: 1 / -1;
+  padding: 11px 12px;
+  border-radius: 9px;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  background: #faf9f7;
+}
+
+
 /* ─── FORMULA CARD TOOLTIPS ─────────────────────────────────────── */
 .formula-card {
   position: relative;
@@ -853,11 +1371,76 @@ body {
 <body>
 <div class="paper">
 
+  <!-- LANDING INTRO -->
+  <section class="landing-intro">
+    <div class="landing-kicker">FinOps &amp; Cloud Economics Calculator by Duksh</div>
+    <h1 class="landing-title">A practical FinOps calculator to quantify break-even, pricing floor, and cloud efficiency before you scale.</h1>
+    <p class="landing-subtitle">
+      This page combines a live calculator and an interactive economics visualization to help teams convert cloud spend into clear operating decisions.
+      Enter a few inputs and immediately see viability thresholds, contribution margin, CCER posture, and recommendation-driven next actions.
+    </p>
+
+    <div class="landing-grid">
+      <article class="landing-card">
+        <h2 class="landing-card-title">What this tool provides</h2>
+        <ul class="landing-card-list">
+          <li>Instant break-even and minimum viable client projections.</li>
+          <li>Per-client cost and minimum pricing guardrails.</li>
+          <li>Provider-aware recommendations based on health zone signals.</li>
+        </ul>
+        <a class="landing-card-link" href="#calculator-section">Go to Calculator &darr;</a>
+      </article>
+
+      <article class="landing-card">
+        <h2 class="landing-card-title">Features &amp; advantages</h2>
+        <ul class="landing-card-list">
+          <li>Real-time recalculation with no refresh cycle or tooling setup.</li>
+          <li>Zone-based visual storytelling for strategy and stakeholder alignment.</li>
+          <li>Academic formula transparency to support credibility and governance.</li>
+        </ul>
+        <a class="landing-card-link features" href="#chart-section">Go to Chart &darr;</a>
+      </article>
+
+      <article class="landing-card">
+        <h2 class="landing-card-title">Target users</h2>
+        <ul class="landing-card-list">
+          <li>FinOps practitioners and cloud cost optimization teams.</li>
+          <li>SaaS founders, product leaders, and cloud solution architects.</li>
+          <li>CTOs, CFOs, and operations teams validating unit economics at scale.</li>
+        </ul>
+        <a class="landing-card-link users" href="#formulas-section">Go to Formulas &darr;</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- CREDIBILITY -->
+  <section class="credibility-section">
+    <div class="cred-avatar">
+      <img src="https://avatars.githubusercontent.com/u/586947?v=4" alt="Duksh Koonjoobeeharry profile photo">
+    </div>
+    <div class="cred-content">
+      <div class="cred-kicker">Built by</div>
+      <h2 class="cred-title">Duksh Koonjoobeeharry — FinOps &amp; AWS/GCP Cloud Solution Developer, DBA Researcher</h2>
+      <p class="cred-text">
+        I design cloud-financial models and architecture strategies that connect technical decisions to business outcomes.
+        This calculator reflects practical FinOps implementation, multi-cloud design thinking, and research-backed cost modelling for real-world decision support.
+      </p>
+      <div class="cred-links">
+        <a class="cred-link" href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer">LinkedIn · duksh</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <button class="cta-btn" onclick="document.getElementById('calculator-section').scrollIntoView({behavior:'smooth', block:'start'})">Get Started — Open the FinOps Calculator</button>
+  </div>
+
   <!-- HEADER -->
   <div class="fig-header">
-    <div class="fig-label">Figure 1 · Cloud Economics Framework · FinOps DBA Research</div>
-    <h1 class="fig-title">Client Volume, Cost Structure &amp; Profitability in Cloud-Native Service Delivery</h1>
-    <p class="fig-caption">A conceptual model illustrating the relationship between client scale, development cost economies, infrastructure scaling, and the optimal pricing threshold for cloud service providers. Hover over the chart to explore values at any client volume.</p>
+    <div class="fig-label">Figure 1 · Interactive Cost &amp; Profitability Curves</div>
+    <h1 class="fig-title">Cloud Economics Visualization — Explore Scale, Cost Curves, and Profitability Thresholds</h1>
+    <p class="fig-caption">Use this section after filling the calculator to inspect how development decay, infrastructure growth, CUD effects, and pricing floors evolve across client volume. Hover over the chart to inspect values at any point.</p>
   </div>
 
   <!-- CONTROLS -->
@@ -867,6 +1450,7 @@ body {
       <button class="toggle-btn" id="btn-dev"       onclick="toggle('dev')"       style="color:var(--dev);      border-color:var(--dev)"><span class="swatch" style="background:var(--dev)"></span>Dev Cost / Client</button>
       <button class="toggle-btn" id="btn-infra-raw" onclick="toggle('infra-raw')" style="color:var(--infra-raw);border-color:var(--infra-raw)"><span class="swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</button>
       <button class="toggle-btn" id="btn-infra-cud" onclick="toggle('infra-cud')" style="color:var(--infra-cud);border-color:var(--infra-cud)"><span class="swatch" style="background:linear-gradient(90deg,var(--infra-cud) 55%,transparent 55%) repeat-x left/9px 3px"></span>Infra (With CUDs)</button>
+      <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / Client</button>
       <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue</button>
       <button class="toggle-btn" id="btn-profit"    onclick="toggle('profit')"    style="color:var(--profit);   border-color:var(--profit)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI</button>
       <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Min. Price / Client</button>
@@ -874,7 +1458,7 @@ body {
   </div>
 
   <!-- CHART + SIDE PANEL -->
-  <div class="chart-section">
+  <div class="chart-section" id="chart-section">
     <div class="chart-container" id="chart-container">
       <svg id="chart"></svg>
     </div>
@@ -902,6 +1486,10 @@ body {
         <div class="readout-row">
           <div class="readout-label"><span class="readout-swatch" style="background:var(--infra-cud)"></span>Infra (CUDs)</div>
           <div class="readout-val" id="sp-infra-cud">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--total)"></span>Total Cost / Client</div>
+          <div class="readout-val" id="sp-total">—</div>
         </div>
         <div class="readout-row">
           <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue</div>
@@ -949,12 +1537,12 @@ body {
   </div>
 
   <!-- ═══ LIVE CALCULATOR ════════════════════════════════════════ -->
-  <div class="calc-section">
+  <div class="calc-section" id="calculator-section">
     <div class="calc-header">
       <div class="calc-title-row">
         <div>
           <div class="fig-label" style="margin-bottom:5px">⚙︎ Interactive Model — Live Parameter Calculator</div>
-          <h2 class="calc-title">Enter what you know. We calculate the rest.</h2>
+          <h2 class="calc-title">Enter what you know. I'll calculate the rest for you.</h2>
           <p class="calc-subtitle">Type in any business figure and the model instantly derives all other parameters and <strong>redraws the chart</strong>. Fields show <span class="badge-calc">calculated</span> when auto-derived from your inputs.</p>
         </div>
         <button class="reset-btn" onclick="resetModel()">
@@ -1038,10 +1626,10 @@ body {
           <div class="calc-field" id="field-cudPct">
             <label class="calc-label" for="inp-cudPct">
               CUD Discount
-              <span class="ftag" style="color:var(--infra-cud);border-color:var(--infra-cud);background:rgba(0,153,204,0.06)">-- dashed blue</span>
+              <span class="ftag" style="color:var(--infra-cud);border-color:var(--infra-cud);background:rgba(0,158,115,0.08)">-- dashed green</span>
             </label>
             <div class="calc-input-wrap">
-              <input type="number" id="inp-cudPct" inputmode="numeric" min="0" max="80" step="1" placeholder="32" oninput="onInput('cudPct')">
+              <input type="number" id="inp-cudPct" inputmode="numeric" min="0" max="100" step="1" placeholder="32" oninput="onInput('cudPct')">
               <span class="calc-unit">%</span>
             </div>
             <div class="calc-hint">Your CUD / Savings Plan rate. Default: 32%. GCP typically 20–55%.</div>
@@ -1140,11 +1728,54 @@ body {
 
       </div>
 
+      <!-- ── GROUP D ──────────────────────────────────────────── -->
+      <div class="calc-group">
+        <div class="calc-group-title">
+          <span class="calc-group-num" style="background:#5a5a8a">D</span>
+          <span class="calc-group-label">Your Cloud Provider(s)</span>
+          <span class="calc-group-hint">Select one or more providers to personalise recommendations</span>
+        </div>
+        <div class="provider-grid">
+          <button class="provider-btn" data-provider="aws" onclick="toggleProvider('aws')"><span class="provider-logo aws" aria-hidden="true">aws</span><span class="provider-label">AWS</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="azure" onclick="toggleProvider('azure')"><span class="provider-logo azure" aria-hidden="true">az</span><span class="provider-label">Microsoft Azure</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="gcp" onclick="toggleProvider('gcp')"><span class="provider-logo gcp" aria-hidden="true">gcp</span><span class="provider-label">Google Cloud (GCP)</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="oci" onclick="toggleProvider('oci')"><span class="provider-logo oci" aria-hidden="true">oci</span><span class="provider-label">Oracle Cloud (OCI)</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="ibm" onclick="toggleProvider('ibm')"><span class="provider-logo ibm" aria-hidden="true">ibm</span><span class="provider-label">IBM Cloud</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="alibaba" onclick="toggleProvider('alibaba')"><span class="provider-logo alibaba" aria-hidden="true">ali</span><span class="provider-label">Alibaba Cloud</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="huawei" onclick="toggleProvider('huawei')"><span class="provider-logo huawei" aria-hidden="true">hw</span><span class="provider-label">Huawei Cloud</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="multi" onclick="toggleProvider('multi')"><span class="provider-logo multi" aria-hidden="true">∞</span><span class="provider-label">Multi-Cloud</span><span class="check">✓</span></button>
+        </div>
+      </div>
+
+      <!-- ── GROUP E ──────────────────────────────────────────── -->
+      <div class="calc-group" id="group-health">
+        <div class="calc-group-title" id="health-title-row">
+          <span class="calc-group-num" id="health-group-num" style="background:#7a7a8c">E</span>
+          <span class="calc-group-label">Health Zone &amp; Recommendations</span>
+          <span class="calc-group-hint">Live FinOps posture based on break-even, CCER, contribution margin, and commitment coverage</span>
+        </div>
+        <div class="health-wrap">
+          <div class="health-banner awaiting" id="health-banner">
+            <div>
+              <div class="health-zone-title" id="health-zone-title">Awaiting Inputs</div>
+              <div class="health-zone-desc" id="health-zone-desc">Add at least Infra Cost and ARPU to compute your FinOps health zone and recommendations.</div>
+            </div>
+            <div class="health-score">
+              <span class="health-score-label">HEALTH SCORE</span>
+              <span class="health-score-value" id="health-score-value">—</span>
+            </div>
+          </div>
+          <div class="rec-list" id="rec-list">
+            <div class="rec-empty">Recommendations will appear here once enough data is available.</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- FORMULAS -->
-  <div class="formulas-section">
+  <div class="formulas-section" id="formulas-section">
     <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
     <div class="formulas-grid">
 
@@ -1203,10 +1834,10 @@ body {
       <div class="formula-card" onclick="toggleTip(this)">
         <span class="info-btn">i</span>
         <div class="f-label">Infra Cost — With CUDs</div>
-        <div class="f-eq">IC<span class="hl">cud</span>(n) = γ · IC(n),  γ &lt; 1</div>
+        <div class="f-eq">IC<span class="hl">cud</span>(n) = γ · c · n<sup>β·0.96</sup></div>
         <div class="ftip">
           <div class="ftip-title">Infrastructure Cost with Committed Use Discounts (CUDs)</div>
-          <div class="ftip-desc">By committing to a certain level of cloud resource usage over 1 or 3 years, providers receive significant discounts (typically 20–55% depending on the platform and resource type). This shifts the entire infrastructure cost curve downward — extending the ROI sweet spot to the right. This is the dashed blue curve in the chart.</div>
+          <div class="ftip-desc">By committing to a certain level of cloud resource usage over 1 or 3 years, providers receive significant discounts (typically 20–55% depending on the platform and resource type). This shifts the entire infrastructure cost curve downward — extending the ROI sweet spot to the right. This is the dashed green curve in the chart.</div>
           <div class="ftip-vars">
             <div class="ftip-var"><span class="ftip-sym hl2">IC<sub>cud</sub>(n)</span><span class="ftip-def">Infrastructure cost at n clients after applying CUD/Reserved Instance discounts</span></div>
             <div class="ftip-var"><span class="ftip-sym">IC(n)</span><span class="ftip-def">Baseline on-demand infrastructure cost (from the formula above)</span></div>
@@ -1220,13 +1851,13 @@ body {
       <div class="formula-card" onclick="toggleTip(this)">
         <span class="info-btn">i</span>
         <div class="f-label">Minimum Price per Client</div>
-        <div class="f-eq">P<span class="hl">min</span> = TC(n) ÷ n + <span class="hl2">m</span></div>
+        <div class="f-eq">MP(n) = TC(n) · (1 + <span class="hl2">m</span>)</div>
         <div class="ftip">
           <div class="ftip-title">Minimum Price per Client (P<sub>min</sub>)</div>
-          <div class="ftip-desc">The floor price a provider must charge each client to remain profitable at a given scale. Pricing below this level leads to operating losses. As n increases, TC(n)/n decreases — meaning the provider can lower prices competitively while protecting margins. This is the dotted black line in the chart.</div>
+          <div class="ftip-desc">The floor price a provider must charge each client to remain profitable at a given scale. Pricing below this level leads to operating losses. As n increases, TC(n) often declines in this model due to development cost decay, enabling more competitive pricing while protecting margins. This is the dotted black line in the chart.</div>
           <div class="ftip-vars">
-            <div class="ftip-var"><span class="ftip-sym">P<sub>min</sub></span><span class="ftip-def">Minimum monthly price per client to achieve break-even plus target margin</span></div>
-            <div class="ftip-var"><span class="ftip-sym">TC(n)</span><span class="ftip-def">Total Cost of Service at n clients — the sum of development cost and infrastructure cost</span></div>
+            <div class="ftip-var"><span class="ftip-sym">MP(n)</span><span class="ftip-def">Minimum monthly price per client to achieve break-even plus target margin</span></div>
+            <div class="ftip-var"><span class="ftip-sym">TC(n)</span><span class="ftip-def">Total cost per client at n clients — the sum of development and infrastructure components</span></div>
             <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Current number of clients — as this grows, per-client cost falls</span></div>
             <div class="ftip-var"><span class="ftip-sym hl2">m</span><span class="ftip-def">Target profit margin per client — added on top of cost recovery to ensure profitability (e.g. 15% margin)</span></div>
           </div>
@@ -1262,7 +1893,12 @@ body {
         FinOps framework principles follow the FinOps Foundation standard [3][4]. CUD discount modelling based on Google Cloud documentation [7] and comparative cloud pricing research [8].
         All parameter values are illustrative and for research purposes only.
       </span>
-      <span class="fig-note">DK Koonjoobeeharry · DBA Research · Open University of Mauritius</span>
+      <span class="fig-note">
+        <a class="fig-note-link" href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer" aria-label="DK Koonjoobeeharry on LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.74v20.52C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
+          <span>DK Koonjoobeeharry · DBA Research · Open University of Mauritius</span>
+        </a>
+      </span>
     </div>
 
     <div class="fig-refs">
@@ -1378,7 +2014,7 @@ function toggle(id) {
 }
 
 // ─── MODEL PARAMS (live, updated by calculator) ──────────────────
-let MODEL = { K:8500, a:0.52, c:0.95, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
+let MODEL = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
 
 // ─── DATA MODEL ─────────────────────────────────────────────────
 function buildData() {
@@ -1390,9 +2026,9 @@ function buildData() {
     const infraRaw = c * Math.pow(n, b);
     const infraCud = g * c * Math.pow(n, b * 0.96);
     const total    = dev + infraRaw;
-    const revenue  = ARPU * n;
+    const revenue  = ARPU;
     const profit   = revenue - total;
-    const priceMin = (total / n) * (1 + m);
+    const priceMin = total * (1 + m);
     return { n, dev, infraRaw, infraCud, total, revenue, profit, priceMin };
   });
 }
@@ -1413,7 +2049,7 @@ function zoneFor(n, beN, ssEnd) {
     insight: 'Increase client acquisition or reduce fixed costs. Minimum viable price is above current ARPU.'
   };
   if (n < ssEnd) return {
-    name: 'Zone III · ROI Sweet Spot', color: '#b07800',
+    name: 'Zone III · ROI Sweet Spot', color: '#009e73',
     desc: 'Economies of scale reducing dev cost per client. Infrastructure scaling is still manageable.',
     insight: 'Optimal zone for FinOps governance. Lock in CUDs now to extend this zone further right.'
   };
@@ -1427,8 +2063,9 @@ function zoneFor(n, beN, ssEnd) {
 // ─── DRAW ────────────────────────────────────────────────────────
 function draw() {
   const container = document.getElementById('chart-container');
+  const { nMax } = MODEL;
   const W = container.clientWidth;
-  const H = Math.round(Math.min(Math.max(W * 0.52, 260), 440));
+  const H = Math.round(Math.min(Math.max(W * (9/16), 320), 560));
 
   const M = {
     top:    28,
@@ -1448,23 +2085,22 @@ function draw() {
   currentPts = pts;
 
   // Inflection points
-  const be   = pts.find(d => d.revenue >= d.total) || pts[50];
-  const beN  = be.n;
+  const be = pts.find(d => d.revenue >= d.total) || null;
+  const beN = be ? be.n : Number.POSITIVE_INFINITY;
   const ssEnd = (() => {
-    for (let i = 1; i < pts.length - 2; i++) {
-      const dRev = pts[i+1].revenue  - pts[i].revenue;
-      const dInf = pts[i+1].infraRaw - pts[i].infraRaw;
-      if (dInf > dRev * 0.85 && pts[i].n > beN + 50) return pts[i].n;
-    }
-    return beN + 350;
+    if (!be) return nMax;
+    const minTotalPt = pts.reduce((minD, d) => d.total < minD.total ? d : minD, pts[0]);
+    const lowerBound = beN + (nMax * 0.06);
+    const candidate = Math.max(minTotalPt.n, lowerBound);
+    return Math.min(nMax, candidate > beN ? candidate : beN + Math.max(120, nMax * 0.35));
   })();
 
   // Scales
-  const xSc = d3.scaleLinear().domain([0, 1000]).range([0, iW]);
+  const xSc = d3.scaleLinear().domain([0, nMax]).range([0, iW]);
   const yMax = d3.max(pts, d => Math.max(d.total, d.revenue)) * 1.08;
   const yMin = d3.min(pts, d => d.profit) * 1.1;
   const ySc  = d3.scaleLinear().domain([yMin, yMax]).range([iH, 0]);
-  currentScales = { xSc, ySc, beN, ssEnd };
+  currentScales = { xSc, ySc, beN: isFinite(beN) ? beN : null, ssEnd };
 
   // Defs
   const defs = svg.append('defs');
@@ -1474,22 +2110,26 @@ function draw() {
       .attr('refX', 3).attr('refY', 3).attr('orient', 'auto');
     m.append('path').attr('d', 'M0,0 L6,3 L0,6 Z').attr('fill', color);
   };
-  mkArrow('arrowCudUp', '#0099cc');
-  mkArrow('arrowCudDn', '#0099cc');
+  mkArrow('arrowCudUp', '#009e73');
+  mkArrow('arrowCudDn', '#009e73');
 
   // Zone backgrounds
+  const beX = be ? xSc(beN) : iW;
+  const ssX = xSc(ssEnd);
   g.append('rect').attr('x', xSc(0)).attr('y', 0)
-    .attr('width', xSc(beN)).attr('height', iH)
+    .attr('width', beX).attr('height', iH)
     .attr('fill', 'rgba(213,94,0,0.05)');
-  g.append('rect').attr('x', xSc(beN)).attr('y', 0)
-    .attr('width', xSc(ssEnd) - xSc(beN)).attr('height', iH)
-    .attr('fill', 'rgba(230,159,0,0.07)');
-  g.append('rect').attr('x', xSc(ssEnd)).attr('y', 0)
-    .attr('width', iW - xSc(ssEnd)).attr('height', iH)
-    .attr('fill', 'rgba(0,114,178,0.05)');
+  if (be) {
+    g.append('rect').attr('x', beX).attr('y', 0)
+      .attr('width', Math.max(0, ssX - beX)).attr('height', iH)
+      .attr('fill', 'rgba(0,158,115,0.07)');
+    g.append('rect').attr('x', ssX).attr('y', 0)
+      .attr('width', Math.max(0, iW - ssX)).attr('height', iH)
+      .attr('fill', 'rgba(0,114,178,0.05)');
+  }
 
   // Zone dividers
-  [beN, ssEnd].forEach(nx => {
+  [be ? beN : null, be ? ssEnd : null].filter(nx => nx !== null && nx <= nMax).forEach(nx => {
     g.append('line')
       .attr('x1', xSc(nx)).attr('x2', xSc(nx))
       .attr('y1', 0).attr('y2', iH)
@@ -1499,11 +2139,16 @@ function draw() {
 
   // Zone top labels
   const zLabelY = -10;
-  [
-    { cx: (0 + beN) / 2,          text: 'I · LOSS',        color: '#d55e00' },
-    { cx: (beN + ssEnd) / 2,      text: 'III · SWEET SPOT', color: '#b07800' },
-    { cx: (ssEnd + 1000) / 2,     text: 'IV · COMPRESSION', color: '#0072b2' },
-  ].forEach(l => {
+  const zoneLabels = be
+    ? [
+        { cx: (0 + beN) / 2,      text: 'I · LOSS',         color: '#d55e00' },
+        { cx: (beN + ssEnd) / 2,  text: 'III · SWEET SPOT', color: '#009e73' },
+        { cx: (ssEnd + nMax) / 2, text: 'IV · COMPRESSION', color: '#0072b2' },
+      ]
+    : [
+        { cx: nMax / 2, text: 'I · LOSS', color: '#d55e00' },
+      ];
+  zoneLabels.forEach(l => {
     const lx = xSc(l.cx);
     if (lx < 0 || lx > iW) return;
     g.append('text')
@@ -1537,10 +2182,11 @@ function draw() {
   const curveDefs = [
     { id: 'dev',       key: 'dev',      color: '#d55e00', dash: null,  w: 2.5, label: 'Dev Cost/Client' },
     { id: 'infra-raw', key: 'infraRaw', color: '#009e73', dash: null,  w: 2.5, label: 'Infra (On-Demand)' },
-    { id: 'infra-cud', key: 'infraCud', color: '#0099cc', dash: '7,4', w: 2,   label: 'Infra (CUDs)' },
+    { id: 'infra-cud', key: 'infraCud', color: '#009e73', dash: '7,4', w: 2,   label: 'Infra (CUDs)' },
+    { id: 'total',     key: 'total',    color: '#444444', dash: null,  w: 2.2, label: 'Total Cost/Client' },
     { id: 'revenue',   key: 'revenue',  color: '#0072b2', dash: null,  w: 2.5, label: 'Revenue' },
-    { id: 'profit',    key: 'profit',   color: '#e69f00', dash: '6,3', w: 2,   label: 'Profit / ROI' },
-    { id: 'price-min', key: 'priceMin', color: '#333333', dash: '3,4', w: 1.5, label: 'Min Price/Client' },
+    { id: 'profit',    key: 'profit',   color: '#7b2d8b', dash: '6,3', w: 2,   label: 'Profit / ROI' },
+    { id: 'price-min', key: 'priceMin', color: '#555555', dash: '3,4', w: 1.5, label: 'Min Price/Client' },
   ];
 
   const lineGen = key => d3.line()
@@ -1588,28 +2234,30 @@ function draw() {
   });
 
   // Break-even annotation
-  const beXp = xSc(beN);
-  const beYp = ySc(be.revenue);
-  g.append('circle')
-    .attr('cx', beXp).attr('cy', beYp).attr('r', 6)
-    .attr('fill','white').attr('stroke','#cc79a7').attr('stroke-width', 2.2);
-  const beCalloutX = Math.max(4, beXp - 72);
-  const beCallout  = g.append('g').attr('transform', `translate(${beCalloutX},${Math.max(4, beYp - 44)})`);
-  beCallout.append('rect')
-    .attr('rx', 5).attr('width', 70).attr('height', 20)
-    .attr('fill', 'white').attr('stroke', '#cc79a7').attr('stroke-width', 1.5);
-  beCallout.append('text')
-    .attr('x', 35).attr('y', 14).attr('text-anchor', 'middle')
-    .attr('fill', '#cc79a7').attr('font-size', 9)
-    .attr('font-family', 'JetBrains Mono').attr('font-weight', '500')
-    .text('BREAK-EVEN');
-  g.append('line')
-    .attr('x1', beCalloutX + 35).attr('y1', Math.max(4, beYp - 44) + 20)
-    .attr('x2', beXp).attr('y2', beYp - 7)
-    .attr('stroke', '#cc79a7').attr('stroke-width', 1).attr('stroke-dasharray', '3,2');
+  if (be) {
+    const beXp = xSc(beN);
+    const beYp = ySc(be.revenue);
+    g.append('circle')
+      .attr('cx', beXp).attr('cy', beYp).attr('r', 6)
+      .attr('fill','white').attr('stroke','#cc79a7').attr('stroke-width', 2.2);
+    const beCalloutX = Math.max(4, beXp - 72);
+    const beCallout  = g.append('g').attr('transform', `translate(${beCalloutX},${Math.max(4, beYp - 44)})`);
+    beCallout.append('rect')
+      .attr('rx', 5).attr('width', 70).attr('height', 20)
+      .attr('fill', 'white').attr('stroke', '#cc79a7').attr('stroke-width', 1.5);
+    beCallout.append('text')
+      .attr('x', 35).attr('y', 14).attr('text-anchor', 'middle')
+      .attr('fill', '#cc79a7').attr('font-size', 9)
+      .attr('font-family', 'JetBrains Mono').attr('font-weight', '500')
+      .text('BREAK-EVEN');
+    g.append('line')
+      .attr('x1', beCalloutX + 35).attr('y1', Math.max(4, beYp - 44) + 20)
+      .attr('x2', beXp).attr('y2', beYp - 7)
+      .attr('stroke', '#cc79a7').attr('stroke-width', 1).attr('stroke-dasharray', '3,2');
+  }
 
   // CUD savings bracket
-  const cudN  = Math.min(600, 1000 * 0.62);
+  const cudN  = Math.max(20, nMax * 0.62);
   const cudPt = pts.find(d => d.n >= cudN) || pts[Math.floor(pts.length * 0.6)];
   const y1 = ySc(cudPt.infraRaw), y2 = ySc(cudPt.infraCud);
   const cx = xSc(cudPt.n);
@@ -1617,11 +2265,11 @@ function draw() {
     g.append('line')
       .attr('x1', cx + 12).attr('x2', cx + 12)
       .attr('y1', y2 + 2).attr('y2', y1 - 2)
-      .attr('stroke', '#0099cc').attr('stroke-width', 1.5)
+      .attr('stroke', '#009e73').attr('stroke-width', 1.5)
       .attr('marker-end', 'url(#arrowCudUp)');
     g.append('text')
       .attr('x', cx + 16).attr('y', (y1 + y2) / 2 + 4)
-      .attr('fill', '#0099cc').attr('font-size', Math.max(8, W * 0.009))
+      .attr('fill', '#009e73').attr('font-size', Math.max(8, W * 0.009))
       .attr('font-family', 'JetBrains Mono').text('CUD savings');
   }
 
@@ -1644,13 +2292,13 @@ function draw() {
     .attr('x', M.left + iW / 2).attr('y', H - 8)
     .attr('text-anchor', 'middle').attr('fill', '#888')
     .attr('font-size', axisLabelSize).attr('font-family', 'JetBrains Mono')
-    .text('Number of Clients (n) →');
+    .text('Number of Clients (n)');
   svg.append('text')
     .attr('transform', 'rotate(-90)')
     .attr('x', -(M.top + iH / 2)).attr('y', 14)
     .attr('text-anchor', 'middle').attr('fill', '#888')
     .attr('font-size', axisLabelSize).attr('font-family', 'JetBrains Mono')
-    .text('€ Cost / Revenue →');
+    .text('Cost / Revenue (€ per client)');
 
   // Hover dots
   hoverDots = {};
@@ -1697,6 +2345,7 @@ function draw() {
       document.getElementById('sp-dev').textContent       = fmt(d.dev);
       document.getElementById('sp-infra-raw').textContent = fmt(d.infraRaw);
       document.getElementById('sp-infra-cud').textContent = fmt(d.infraCud);
+      document.getElementById('sp-total').textContent     = fmt(d.total);
       document.getElementById('sp-revenue').textContent   = fmt(d.revenue);
 
       const profEl = document.getElementById('sp-profit');
@@ -1721,10 +2370,12 @@ function draw() {
 
 // ─── RESPONSIVE REDRAW ───────────────────────────────────────────
 let resizeTimer;
-window.addEventListener('resize', () => {
+const chartResizeObserver = new ResizeObserver(() => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(draw, 120);
+  resizeTimer = setTimeout(draw, 80);
 });
+const chartContainerEl = document.getElementById('chart-container');
+if (chartContainerEl) chartResizeObserver.observe(chartContainerEl);
 
 // Initial draw
 draw();
@@ -1732,13 +2383,189 @@ draw();
 // ─── CALCULATOR LOGIC ────────────────────────────────────────────
 
 // Default MODEL values for reset
-const MODEL_DEFAULTS = { K:8500, a:0.52, c:0.95, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
+const MODEL_DEFAULTS = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
 
 // Track what the user has explicitly provided
 const USER_PROVIDED = { nRef:false, devPerClient:false, infraTotal:false, ARPU:false, cudPct:false, margin:false, nMax:false };
 
 // Smart default n when user hasn't told us their scale yet
 const DEFAULT_N_REF = 100;
+const selectedProviders = new Set();
+let lastInputs = {
+  nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+  cudPct: null, margin: null, nMax: null
+};
+
+const RECOMMENDATIONS = [
+  { icon:'⚠️', title:'You are below break-even', desc:'Current client volume is below the minimum viable threshold; fixed and variable costs are not yet recovered.', action:'Action: Review pricing page and sales funnel conversion. Prioritise moving n above N_min within the next planning cycle.', providers:[], zones:['red'], priority:'high' },
+  { icon:'📉', title:'CCER below 3×', desc:'Cloud Cost Efficiency Ratio is below FinOps benchmark. Revenue generated per euro of cloud spend is under target.', action:'Action: In your billing console, isolate top cost drivers and enforce unit economics guardrails per service.', providers:[], zones:['red','yellow'], priority:'high' },
+  { icon:'🛑', title:'Contribution margin is negative', desc:'VCPU is equal to or higher than ARPU. Every incremental client currently destroys value.', action:'Action: Increase package price floor or reduce per-client infra usage before scaling customer acquisition.', providers:[], zones:['red'], priority:'high' },
+  { icon:'💳', title:'CUDs/Savings Plans not fully applied', desc:'Discount gap is still material versus committed pricing options. Commitment strategy is likely under-utilised.', action:'Action: Review 12-month steady-state usage and map eligible workloads to commitment instruments.', providers:[], zones:['green','yellow','red'], priority:'medium' },
+  { icon:'🏷️', title:'Implement FinOps cost allocation tagging', desc:'Without consistent tags, accountability and optimisation loops remain weak across teams.', action:'Action: Enforce mandatory tags for owner, environment, product, and cost-center in IaC and policy checks.', providers:[], zones:['green'], priority:'low' },
+  { icon:'🔮', title:'Set up 12-month cost forecasting', desc:'Proactive forecasting improves commitment timing, budget confidence, and board-level planning.', action:'Action: Build monthly forecast scenarios (base/growth/stress) and review variance at each month close.', providers:[], zones:['green'], priority:'low' },
+  { icon:'🧾', title:'AWS Savings Plans coverage', desc:'Compute Savings Plans can reduce eligible compute spend significantly when baseline usage is stable.', action:'Action: AWS Console → Billing and Cost Management → Savings Plans → Recommendations.', providers:['aws'], zones:['green','yellow','red'], priority:'medium' },
+  { icon:'📏', title:'AWS right-sizing opportunities', desc:'Idle and oversized resources create avoidable waste in EC2, EBS, and managed services.', action:'Action: AWS Cost Explorer → Rightsizing Recommendations; prioritise top monthly impact accounts.', providers:['aws'], zones:['yellow','red'], priority:'medium' },
+  { icon:'⚡', title:'Use Spot for fault-tolerant workloads', desc:'Spot capacity can materially reduce non-critical compute costs for resilient jobs.', action:'Action: EC2 Auto Scaling Groups → Mixed Instances Policy with Spot allocation strategies.', providers:['aws'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🚨', title:'Enable Cost Anomaly Detection', desc:'Unexpected spikes should be detected rapidly to reduce financial blast radius.', action:'Action: AWS Console → Cost Management → Cost Anomaly Detection → Create monitor and alerts.', providers:['aws'], zones:['green','yellow','red'], priority:'high' },
+  { icon:'🗄️', title:'S3 Intelligent-Tiering for cold data', desc:'Automatically shifting infrequently accessed objects reduces storage spend with minimal effort.', action:'Action: S3 Bucket → Management → Lifecycle rules and Intelligent-Tiering transition policy.', providers:['aws'], zones:['green'], priority:'low' },
+  { icon:'📦', title:'Azure Reservations + Hybrid Benefit', desc:'Reserved capacity and license benefits can materially reduce long-running VM/database costs.', action:'Action: Azure Portal → Cost Management + Billing → Reservations → Purchase recommendations.', providers:['azure'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🧠', title:'Azure Advisor cost recommendations', desc:'Advisor identifies right-size, idle shutdown, and architecture-level cost opportunities.', action:'Action: Azure Portal → Advisor → Cost tab; export recommendations into remediation backlog.', providers:['azure'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🚨', title:'Azure budget alerts and controls', desc:'Budget and anomaly alerting strengthens accountability before overruns become systemic.', action:'Action: Azure Portal → Cost Management → Budgets → Create budget with action groups.', providers:['azure'], zones:['green','yellow','red'], priority:'high' },
+  { icon:'🏷️', title:'Azure Spot VMs for non-critical jobs', desc:'Spot VMs reduce compute spend for interruption-tolerant processing.', action:'Action: Azure Portal → Virtual Machines → Spot instance deployment for candidate workloads.', providers:['azure'], zones:['yellow','red'], priority:'medium' },
+  { icon:'📉', title:'GCP Resource-based CUDs', desc:'Resource-based commitments can reduce sustained baseline compute spend on eligible workloads.', action:'Action: Google Cloud Console → Billing → Committed Use Discounts → Purchase commitments.', providers:['gcp'], zones:['green','yellow','red'], priority:'medium' },
+  { icon:'🔍', title:'Verify Sustained Use Discounts', desc:'Check whether workloads are reaching expected utilisation to realise automatic discount benefits.', action:'Action: GCP Billing export → BigQuery; validate sustained usage discount effectiveness by SKU.', providers:['gcp'], zones:['green','yellow'], priority:'low' },
+  { icon:'🧹', title:'Use GCP Recommender for idle resources', desc:'Idle resources continue to consume spend without revenue contribution.', action:'Action: GCP Console → Recommender → Cost recommendations and cleanup actions.', providers:['gcp'], zones:['yellow','red'], priority:'high' },
+  { icon:'📨', title:'Set Billing Budget alerts with Pub/Sub', desc:'Automated budget threshold events help trigger operational response workflows quickly.', action:'Action: GCP Console → Billing → Budgets & alerts → Enable Pub/Sub notifications.', providers:['gcp'], zones:['green','yellow','red'], priority:'high' },
+  { icon:'⚙️', title:'BigQuery query cost controls', desc:'Query cost can drift quickly without governance on scan bytes and query patterns.', action:'Action: BigQuery → Reservations/Quotas + max bytes billed + scheduled query audits.', providers:['gcp'], zones:['yellow','red'], priority:'medium' },
+  { icon:'💼', title:'OCI Universal Credits planning', desc:'Universal Credits can improve commitment flexibility when workloads shift across OCI services.', action:'Action: OCI Console → Billing and Cost Management → Usage and Credit Allocation review.', providers:['oci'], zones:['green','yellow','red'], priority:'medium' },
+  { icon:'🆓', title:'OCI Always Free for dev/test', desc:'Move suitable non-production workloads to Always Free resources where practical.', action:'Action: OCI Console → Compute/Storage provisioning templates mapped to Always Free limits.', providers:['oci'], zones:['green'], priority:'low' },
+  { icon:'🧾', title:'IBM Reserved Virtual Servers', desc:'Long-running workloads should be shifted to reservation models for lower unit costs.', action:'Action: IBM Cloud Console → Billing and Usage → Reservation planning for persistent workloads.', providers:['ibm'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🌱', title:'IBM sustainability + cost co-optimisation', desc:'Joint carbon and cost intelligence can identify high-impact remediation opportunities.', action:'Action: IBM Environmental Intelligence Suite + cost reports for optimisation prioritisation.', providers:['ibm'], zones:['green'], priority:'low' },
+  { icon:'📦', title:'Alibaba subscription billing shift', desc:'Subscription billing can materially reduce compute costs versus pay-as-you-go baselines.', action:'Action: Alibaba Console → Billing → Resource Plans / Subscription migration candidates.', providers:['alibaba'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🧾', title:'Huawei ECS Reservations', desc:'Reservation strategies reduce long-run compute cost where workloads are predictable.', action:'Action: Huawei Cloud Console → Billing Center → Reserved Instances for ECS fleet.', providers:['huawei'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🧭', title:'Adopt unified multi-cloud FinOps platform', desc:'Cross-cloud visibility and unit economics governance require a single cost operating model.', action:'Action: Integrate billing exports into a common platform (CloudHealth/OpenCost/warehouse model).', providers:['multi'], zones:['green','yellow','red'], priority:'high' },
+  { icon:'🌐', title:'Control inter-region / inter-cloud egress', desc:'Network egress charges often become hidden margin erosion drivers in multi-cloud topologies.', action:'Action: Build monthly egress map by service path; redesign data flows to reduce charge-heavy hops.', providers:['multi'], zones:['green','yellow','red'], priority:'medium' }
+];
+
+function priorityWeight(priority) {
+  if (priority === 'high') return 0;
+  if (priority === 'medium') return 1;
+  return 2;
+}
+
+function toggleProvider(provider) {
+  const btn = document.querySelector(`[data-provider="${provider}"]`);
+  if (selectedProviders.has(provider)) {
+    selectedProviders.delete(provider);
+    if (btn) btn.classList.remove('selected');
+  } else {
+    selectedProviders.add(provider);
+    if (btn) btn.classList.add('selected');
+  }
+  updateHealthAndRecommendations(lastInputs);
+}
+
+function updateHealthAndRecommendations(inputs) {
+  const { nRef, infraTotal, ARPU: arpuInp } = inputs || {};
+  const nSample  = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
+  const hasInfra = infraTotal !== null && infraTotal !== undefined;
+  const hasARPU  = arpuInp !== null && arpuInp !== undefined && arpuInp > 0;
+
+  const bannerEl = document.getElementById('health-banner');
+  const groupBadgeEl = document.getElementById('health-group-num');
+  const titleEl  = document.getElementById('health-zone-title');
+  const descEl   = document.getElementById('health-zone-desc');
+  const scoreEl  = document.getElementById('health-score-value');
+  const listEl   = document.getElementById('rec-list');
+
+  if (!bannerEl || !titleEl || !descEl || !scoreEl || !listEl) return;
+
+  if (!hasInfra || !hasARPU) {
+    bannerEl.className = 'health-banner awaiting';
+    if (groupBadgeEl) groupBadgeEl.style.background = '#7a7a8c';
+    titleEl.textContent = 'Awaiting Inputs';
+    descEl.textContent = 'Add Total Infra Cost and Revenue / Client (ARPU) to compute health score and recommendations.';
+    scoreEl.textContent = '—';
+    scoreEl.style.color = '#7a7a8c';
+    listEl.innerHTML = '<div class="rec-empty">Recommendations will appear after health scoring data is available.</div>';
+    return;
+  }
+
+  const { K, a, c, b, g, ARPU } = MODEL;
+  const dev      = K * Math.pow(nSample, -a);
+  const infraRaw = c * Math.pow(nSample, b);
+  const infraCud = g * c * Math.pow(nSample, b * 0.96);
+  const total    = dev + infraRaw;
+  const revenue  = ARPU * nSample;
+  const vcpu     = infraRaw / nSample;
+  const contribM = ARPU - vcpu;
+  const ccer     = infraRaw > 0 ? revenue / infraRaw : 0;
+  const cudSaveGapPct = infraRaw > 0 ? ((infraRaw - infraCud) / infraRaw) : 0;
+
+  const pts = buildData();
+  const be = pts.find(d => d.revenue >= d.total);
+  const beN = be ? Math.round(be.n) : null;
+
+  let score = 100;
+  const failed = [];
+
+  if (beN === null) {
+    score -= 35;
+    failed.push('No break-even point exists within the current model range.');
+  } else if (nSample < beN) {
+    score -= 35;
+    failed.push(`Current clients (${Math.round(nSample).toLocaleString()}) are below break-even (${beN.toLocaleString()}).`);
+  }
+  if (ccer < 1) {
+    score -= 30;
+    failed.push(`CCER is ${ccer.toFixed(2)}× (<1×).`);
+  } else if (ccer < 3) {
+    score -= 15;
+    failed.push(`CCER is ${ccer.toFixed(2)}× (below 3× benchmark).`);
+  }
+  if (contribM <= 0) {
+    score -= 20;
+    failed.push(`Contribution margin is negative (${fmtOut(contribM, 2)} / client).`);
+  }
+  if (cudSaveGapPct > 0.15) {
+    score -= 5;
+    failed.push(`Commitment saving gap is ${(cudSaveGapPct * 100).toFixed(1)}% of infra spend.`);
+  }
+
+  score = Math.max(0, Math.min(100, score));
+
+  let zoneKey = 'green';
+  let zoneTitle = '🟢 Green Zone — Healthy Economics';
+  let zoneDesc = failed.length
+    ? failed.join(' ')
+    : 'Unit economics are healthy. Continue optimisation discipline and forecasting cadence.';
+  let zoneColor = '#009e73';
+
+  if (score < 40) {
+    zoneKey = 'red';
+    zoneTitle = '🔴 Red Zone — Critical Action Needed';
+    zoneColor = '#d55e00';
+  } else if (score < 70) {
+    zoneKey = 'yellow';
+    zoneTitle = '🟡 Yellow Zone — Needs Improvement';
+    zoneColor = '#b07800';
+  }
+
+  bannerEl.className = `health-banner ${zoneKey}`;
+  if (groupBadgeEl) groupBadgeEl.style.background = zoneColor;
+  titleEl.textContent = zoneTitle;
+  descEl.textContent = zoneDesc;
+  scoreEl.textContent = String(Math.round(score));
+  scoreEl.style.color = zoneColor;
+
+  const providers = Array.from(selectedProviders);
+  const filtered = RECOMMENDATIONS
+    .filter(rec => rec.zones.includes(zoneKey))
+    .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
+    .sort((a, b) => priorityWeight(a.priority) - priorityWeight(b.priority));
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<div class="rec-empty">No provider-specific recommendations match yet. Select one or more providers in Group D to refine actions.</div>';
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(rec => {
+    const providerTag = rec.providers.length ? rec.providers.join('/').toUpperCase() : 'UNIVERSAL';
+    const priorityTag = rec.priority.toUpperCase();
+    return `
+      <article class="rec-card ${rec.priority}">
+        <div class="rec-head">
+          <span class="rec-icon">${rec.icon}</span>
+          <span class="rec-title">${rec.title}</span>
+          <span class="rec-tag">${providerTag}</span>
+          <span class="rec-tag priority-${rec.priority}">${priorityTag}</span>
+        </div>
+        <p class="rec-desc">${rec.desc}</p>
+        <p class="rec-action">→ ${rec.action}</p>
+      </article>
+    `;
+  }).join('');
+}
 
 function getInp(id) {
   const v = parseFloat(document.getElementById(id).value);
@@ -1835,6 +2662,7 @@ function recalculate() {
   const cudPct       = getInp('inp-cudPct');
   const marginPct    = getInp('inp-margin');
   const nMaxInp      = getInp('inp-nMax');
+  lastInputs = { nRef, devPerClient, infraTotal, ARPU, cudPct, margin: marginPct, nMax: nMaxInp };
 
   let changed = false;
   let derivations = [];
@@ -1865,6 +2693,7 @@ function recalculate() {
 
   if (changed) { draw(); }
   updateOutputCards({ nRef, devPerClient, infraTotal, ARPU, cudPct });
+  updateHealthAndRecommendations(lastInputs);
 
   const text = document.getElementById('calc-status-text');
   if (derivations.length && text) {
@@ -1878,7 +2707,7 @@ function updateOutputCards(inputs) {
 
   // Use actual nRef if provided, otherwise DEFAULT_N_REF for display calculations
   const nSample   = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
-  const hasARPU   = arpuInp !== null || ARPU > 0;  // true if user entered or model default
+  const hasARPU   = arpuInp !== null && arpuInp > 0;
   const hasInfra  = infraTotal !== null;
   const hasDev    = devPerClient !== null;
   const hasNRef   = nRef !== null && nRef > 0;
@@ -1919,9 +2748,9 @@ function updateOutputCards(inputs) {
   } else {
     // Break-even exists but beyond chart range — model might be miscalibrated
     const hint = !hasNRef ? ` · add Client Count for accuracy` : '';
-    setOut('oval-beN', `> ${nMax.toLocaleString()} clients`, 'warn', 'warn');
+    setOut('oval-beN', beN === null ? 'Not reachable' : `> ${nMax.toLocaleString()} clients`, 'warn', 'warn');
     const subEl = document.querySelector('#out-beN .calc-out-sub');
-    if (subEl) subEl.textContent = 'Infra cost exceeds revenue at all scales' + hint;
+    if (subEl) subEl.textContent = 'Revenue per client stays below total cost per client across range' + hint;
   }
 
   // ── MIN PRICE / CLIENT ────────────────────────────────────────
@@ -1951,8 +2780,10 @@ function updateOutputCards(inputs) {
   }
 
   // ── CONTRIBUTION MARGIN ───────────────────────────────────────
-  if (!hasInfra) {
-    setOut('oval-margin', null, '', '', 'Total Infra Cost + Revenue/Client');
+  if (!hasInfra && !hasARPU) {
+    setOut('oval-margin', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU)');
+  } else if (!hasInfra) {
+    setOut('oval-margin', null, '', '', 'Total Infra Cost');
   } else if (!hasARPU || ARPU <= 0) {
     setOut('oval-margin', null, '', '', 'Revenue / Client (ARPU)');
   } else {
@@ -1961,8 +2792,10 @@ function updateOutputCards(inputs) {
   }
 
   // ── CCER ─────────────────────────────────────────────────────
-  if (!hasInfra) {
-    setOut('oval-ccer', null, '', '', 'Total Infra Cost + Revenue/Client');
+  if (!hasInfra && !hasARPU) {
+    setOut('oval-ccer', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU)');
+  } else if (!hasInfra) {
+    setOut('oval-ccer', null, '', '', 'Total Infra Cost');
   } else if (!hasARPU || ARPU <= 0) {
     setOut('oval-ccer', null, '', '', 'Revenue / Client (ARPU)');
   } else if (ccer !== null) {
@@ -1988,6 +2821,12 @@ function updateOutputCards(inputs) {
 function resetModel() {
   Object.assign(MODEL, MODEL_DEFAULTS);
   Object.keys(USER_PROVIDED).forEach(k => USER_PROVIDED[k] = false);
+  selectedProviders.clear();
+  document.querySelectorAll('.provider-btn.selected').forEach(btn => btn.classList.remove('selected'));
+  lastInputs = {
+    nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+    cudPct: null, margin: null, nMax: null
+  };
   const ids = ['inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU','inp-cudPct','inp-margin','inp-nMax'];
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -1999,6 +2838,8 @@ function resetModel() {
     const p = document.getElementById('cp-' + i);
     if (p) p.classList.remove('filled');
   }
+  const prog = document.getElementById('calc-progress');
+  if (prog) prog.style.display = 'none';
   const dot  = document.getElementById('calc-dot');
   const text = document.getElementById('calc-status-text');
   if (dot)  dot.classList.remove('active');
@@ -2013,6 +2854,7 @@ function resetModel() {
     if (valEl) { valEl.textContent = '—'; valEl.className = 'calc-out-val muted'; }
   });
   draw();
+  updateHealthAndRecommendations(lastInputs);
 }
 
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
@@ -2056,6 +2898,9 @@ document.addEventListener('keydown', e => {
     });
   }
 });
+
+cacheSubTexts();
+updateHealthAndRecommendations(lastInputs);
 </script>
 </body>
 </html>
