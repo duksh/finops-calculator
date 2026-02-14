@@ -742,6 +742,24 @@ body {
   line-height: 1.6;
   max-width: 600px;
 }
+.calc-deeplink {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0072b2;
+  text-decoration: none;
+  border: 1px solid rgba(0,114,178,0.25);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: rgba(0,114,178,0.07);
+}
+.calc-deeplink:hover {
+  background: rgba(0,114,178,0.12);
+  border-color: rgba(0,114,178,0.35);
+}
 .badge-calc {
   display: inline-block;
   background: rgba(0,114,178,0.1);
@@ -1546,12 +1564,13 @@ body {
 
   <!-- ═══ LIVE CALCULATOR ════════════════════════════════════════ -->
   <div class="calc-section" id="calculator-section">
-    <div class="calc-header">
+    <div class="calc-header" id="live-calculator">
       <div class="calc-title-row">
         <div>
           <div class="fig-label" style="margin-bottom:5px">⚙︎ Interactive Model — Live Parameter Calculator</div>
           <h2 class="calc-title">Enter what you know. I'll calculate the rest for you.</h2>
           <p class="calc-subtitle">Type in any business figure and the model instantly derives all other parameters and <strong>redraws the chart</strong>. Fields show <span class="badge-calc">calculated</span> when auto-derived from your inputs.</p>
+          <a class="calc-deeplink" href="#live-calculator">🔗 Share this section</a>
         </div>
         <button class="reset-btn" onclick="resetModel()">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
