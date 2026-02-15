@@ -19,12 +19,18 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #f8f7f4;
+  --bg:        #f5f7fc;
   --surface:   #ffffff;
-  --border:    #e2ddd6;
-  --text:      #1a1a2e;
-  --muted:     #7a7a8c;
-  --light:     #f0ede8;
+  --border:    #d6deeb;
+  --text:      #1b2136;
+  --muted:     #5f6b84;
+  --light:     #eef3fb;
+
+  --accent-blue: #0072b2;
+  --accent-cyan: #00a5c8;
+  --accent-green: #009e73;
+  --accent-amber: #e69f00;
+  --accent-rose: #d55e00;
 
   /* Okabe-Ito colorblind-safe */
   --dev:       #d55e00;
@@ -49,11 +55,22 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(86,180,233,0.14) 0%, rgba(86,180,233,0) 28%),
+    radial-gradient(circle at 92% 18%, rgba(0,158,115,0.12) 0%, rgba(0,158,115,0) 30%),
+    radial-gradient(circle at 80% 92%, rgba(230,159,0,0.12) 0%, rgba(230,159,0,0) 28%),
+    linear-gradient(180deg, #f7fbff 0%, var(--bg) 38%, #fff8ef 100%);
   color: var(--text);
   font-family: 'Inter', sans-serif;
   line-height: 1.5;
   padding: calc(var(--page-pad-y) + var(--sticky-nav-h) + 8px) var(--page-pad-x) 48px;
+}
+body.modal-open { overflow: hidden; }
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
 }
 
 .skip-link {
@@ -92,11 +109,11 @@ body {
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border: 1px solid rgba(22, 36, 64, 0.16);
+  border: 1px solid rgba(22, 36, 64, 0.2);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.86);
+  background: linear-gradient(120deg, rgba(255,255,255,0.94) 0%, rgba(241,250,255,0.9) 48%, rgba(244,255,249,0.9) 100%);
   backdrop-filter: blur(7px);
-  box-shadow: 0 8px 20px rgba(18, 30, 55, 0.12);
+  box-shadow: 0 10px 24px rgba(18, 30, 55, 0.16);
 }
 .sticky-top-brand {
   display: inline-flex;
@@ -185,26 +202,37 @@ body {
 .paper {
   max-width: 1200px;
   margin: 0 auto;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+  border: 1px solid rgba(17, 38, 74, 0.12);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 24px 54px rgba(19, 37, 68, 0.14);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+.paper::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-cyan) 30%, var(--accent-green) 62%, var(--accent-amber) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ─── LANDING FLOW ORDER ────────────────────────────────────────── */
 .paper > .landing-intro { order: 1; }
 .paper > .credibility-section { order: 2; }
 .paper > .cta-band { order: 3; }
-.paper > .calc-section { order: 4; }
-.paper > .formulas-section { order: 5; }
+.paper > .mcp-section { order: 4; }
+.paper > .calc-section { order: 5; }
 .paper > .fig-header { order: 6; }
 .paper > .controls { order: 7; }
 .paper > .chart-section { order: 8; }
 .paper > .zones-strip { order: 9; }
-.paper > .fig-footer { order: 10; }
+.paper > .formulas-section { order: 10; }
+.paper > .fig-footer { order: 11; }
 
 /* ─── LANDING INTRO ─────────────────────────────────────────────── */
 .landing-intro {
@@ -215,7 +243,7 @@ body {
     radial-gradient(circle at 88% 8%, rgba(0,114,178,0.22) 0%, transparent 40%),
     radial-gradient(circle at 8% 88%, rgba(0,158,115,0.22) 0%, transparent 38%),
     linear-gradient(135deg, #eef7ff 0%, #f3fbf7 45%, #fff4ea 100%);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(30, 59, 105, 0.12);
 }
 .landing-intro::before,
 .landing-intro::after {
@@ -458,17 +486,26 @@ body {
 /* ─── CTA BAND ──────────────────────────────────────────────────── */
 .cta-band {
   padding: 14px clamp(16px, 4vw, 36px) 18px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(30, 59, 105, 0.12);
   background:
-    radial-gradient(circle at 86% 50%, rgba(0,114,178,0.14) 0%, rgba(0,114,178,0) 38%),
-    linear-gradient(180deg, #fff8f0 0%, #f4f7fb 100%);
+    radial-gradient(circle at 86% 50%, rgba(0,114,178,0.2) 0%, rgba(0,114,178,0) 38%),
+    radial-gradient(circle at 12% 20%, rgba(0,158,115,0.12) 0%, rgba(0,158,115,0) 36%),
+    linear-gradient(180deg, #fff7ec 0%, #f1f8ff 100%);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 10px;
 }
 .cta-btn {
   border: none;
   border-radius: 999px;
-  background: linear-gradient(90deg, #0072b2 0%, #009e73 52%, #00a5c8 100%);
+  background: linear-gradient(92deg, var(--accent-blue) 0%, var(--accent-cyan) 45%, var(--accent-green) 100%);
   color: #fff;
   padding: 12px 20px;
   font-size: 13px;
@@ -483,11 +520,241 @@ body {
   box-shadow: 0 14px 28px rgba(0,114,178,0.34);
   filter: brightness(1.03);
 }
+.cta-btn.cta-btn-secondary {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,114,178,0.28);
+  color: #005a8f;
+  box-shadow: 0 7px 18px rgba(24, 41, 70, 0.12);
+}
+.cta-note {
+  font-size: 12px;
+  color: #43506a;
+  text-align: center;
+  max-width: 740px;
+}
+
+/* ─── MCP SECTION ──────────────────────────────────────────────── */
+.mcp-section {
+  border-bottom: 1px solid rgba(30, 59, 105, 0.12);
+  padding: clamp(16px, 3vw, 28px) clamp(16px, 4vw, 36px);
+  background:
+    radial-gradient(circle at 10% 15%, rgba(86,180,233,0.2) 0%, rgba(86,180,233,0) 40%),
+    radial-gradient(circle at 92% 22%, rgba(0,158,115,0.12) 0%, rgba(0,158,115,0) 35%),
+    linear-gradient(145deg, #f5fbff 0%, #f0fff8 52%, #fff8eb 100%);
+}
+.mcp-shell {
+  border: 1px solid rgba(24, 41, 71, 0.14);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 16px 34px rgba(17, 35, 66, 0.1);
+  padding: clamp(14px, 2.5vw, 24px);
+}
+.mcp-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.mcp-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0f6789;
+}
+.mcp-title {
+  margin-top: 6px;
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(19px, 2.6vw, 30px);
+  font-weight: 400;
+  line-height: 1.18;
+  color: #16213e;
+}
+.mcp-subtitle {
+  margin-top: 8px;
+  color: #445067;
+  font-size: clamp(12px, 1.5vw, 14px);
+  line-height: 1.62;
+  max-width: 760px;
+}
+.mcp-head-actions {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mcp-chip-btn {
+  border: 1px solid rgba(0,114,178,0.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  color: #005a8f;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+.mcp-chip-btn:hover { background: rgba(0,114,178,0.08); }
+.mcp-chip-link {
+  border: 1px solid rgba(0,158,115,0.35);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  color: #0f7358;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 12px;
+  text-decoration: none;
+}
+.mcp-chip-link:hover { background: rgba(0,158,115,0.08); }
+.mcp-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 920px) {
+  .mcp-grid { grid-template-columns: 1fr; }
+}
+.mcp-card {
+  border: 1px solid rgba(25, 40, 68, 0.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.96);
+  padding: 12px 13px;
+}
+.mcp-card h3 {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #1e3458;
+  margin-bottom: 7px;
+}
+.mcp-list {
+  list-style: none;
+  display: grid;
+  gap: 7px;
+}
+.mcp-list li {
+  font-size: 12px;
+  color: #42506a;
+  line-height: 1.5;
+}
+.mcp-list code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #005a8f;
+  background: rgba(0,114,178,0.08);
+  border: 1px solid rgba(0,114,178,0.16);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+/* ─── MCP MODAL ─────────────────────────────────────────────────── */
+.mcp-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 170;
+  display: none;
+}
+.mcp-modal.is-open { display: block; }
+.mcp-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 25, 45, 0.58);
+  backdrop-filter: blur(3px);
+}
+.mcp-modal-dialog {
+  position: relative;
+  max-width: min(820px, calc(100vw - 28px));
+  margin: clamp(16px, 5vh, 52px) auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 60%, #f6fff9 100%);
+  box-shadow: 0 30px 60px rgba(8, 21, 44, 0.35);
+  padding: clamp(16px, 2.6vw, 24px);
+  max-height: calc(100vh - 28px);
+  overflow: auto;
+}
+.mcp-modal-dialog:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.mcp-modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  border: 1px solid rgba(20, 39, 68, 0.16);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  color: #2c3954;
+  cursor: pointer;
+  font-size: 19px;
+  line-height: 1;
+}
+.mcp-modal-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #17223f;
+  margin-bottom: 6px;
+}
+.mcp-modal-subtitle {
+  font-size: 13px;
+  color: #45516a;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.mcp-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 740px) {
+  .mcp-modal-grid { grid-template-columns: 1fr; }
+}
+.mcp-modal-card {
+  border: 1px solid rgba(22, 38, 67, 0.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.96);
+  padding: 11px 12px;
+}
+.mcp-modal-card h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #1e3458;
+  margin-bottom: 6px;
+}
+.mcp-modal-card ul {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.mcp-modal-card li {
+  font-size: 12px;
+  color: #43506b;
+  line-height: 1.55;
+}
+.mcp-modal-card code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #005a8f;
+  background: rgba(0,114,178,0.08);
+  border: 1px solid rgba(0,114,178,0.15);
+  border-radius: 5px;
+  padding: 1px 4px;
+}
 
 /* ─── FIGURE HEADER ─────────────────────────────────────────────── */
 .fig-header {
   padding: clamp(16px, 3vw, 28px) clamp(16px, 4vw, 36px) clamp(14px, 2vw, 20px);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid rgba(30, 59, 105, 0.1);
+  border-bottom: 1px solid rgba(30, 59, 105, 0.1);
+  background:
+    linear-gradient(180deg, rgba(0,114,178,0.05) 0%, rgba(255,255,255,0.9) 100%);
 }
 .fig-label {
   font-family: 'JetBrains Mono', monospace;
@@ -519,7 +786,7 @@ body {
   align-items: center;
   gap: 8px;
   padding: clamp(10px, 1.5vw, 14px) clamp(16px, 4vw, 36px);
-  background: var(--light);
+  background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
   border-bottom: 1px solid var(--border);
 }
 .controls-label {
@@ -565,6 +832,7 @@ body {
 .chart-section {
   display: grid;
   grid-template-columns: 1fr 210px;
+  background: linear-gradient(180deg, #fcfdff 0%, #f9fcff 100%);
 }
 @media (max-width: 660px) {
   .chart-section {
@@ -670,6 +938,7 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(0,114,178,0.04), rgba(0,158,115,0.04));
 }
 @media (max-width: 580px) {
   .zones-strip { grid-template-columns: repeat(2, 1fr); }
@@ -681,6 +950,10 @@ body {
   padding: clamp(10px, 1.5vw, 14px) clamp(12px, 2vw, 16px);
   border-right: 1px solid var(--border);
 }
+.zone-cell:nth-child(1) { background: rgba(213,94,0,0.045); }
+.zone-cell:nth-child(2) { background: rgba(120,120,120,0.03); }
+.zone-cell:nth-child(3) { background: rgba(0,158,115,0.05); }
+.zone-cell:nth-child(4) { background: rgba(0,114,178,0.05); }
 .zone-cell:last-child { border-right: none; }
 .zone-num {
   font-family: 'JetBrains Mono', monospace;
@@ -705,7 +978,7 @@ body {
 .formulas-section {
   padding: clamp(16px, 2.5vw, 20px) clamp(16px, 4vw, 36px) clamp(18px, 2.5vw, 24px);
   border-top: 1px solid var(--border);
-  background: var(--light);
+  background: linear-gradient(180deg, #f0f6ff 0%, #f7fbff 100%);
 }
 .formulas-header {
   font-family: 'JetBrains Mono', monospace;
@@ -744,7 +1017,7 @@ body {
 .fig-footer {
   padding: clamp(14px, 2vw, 20px) clamp(16px, 4vw, 36px);
   border-top: 2px solid var(--border);
-  background: var(--light);
+  background: linear-gradient(180deg, #edf4ff 0%, #e9f2ff 100%);
   border-radius: 0 0 12px 12px;
 }
 .fig-footer-top {
@@ -841,13 +1114,13 @@ body {
 
 /* ─── CALCULATOR SECTION ────────────────────────────────────────── */
 .calc-section {
-  border-top: 2px solid var(--border);
+  border-top: 2px solid rgba(0,114,178,0.2);
 }
 
 /* Header */
 .calc-header {
   padding: clamp(16px,2.5vw,24px) clamp(16px,4vw,36px) clamp(12px,1.8vw,18px);
-  background: var(--surface);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
   border-bottom: 1px solid var(--border);
 }
 .calc-title-row {
@@ -964,7 +1237,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #f4f2ee;
+  background: linear-gradient(180deg, #eef5ff 0%, #f6fbff 52%, #fff8ef 100%);
 }
 
 /* ── Step groups ── */
@@ -973,14 +1246,14 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 10px 22px rgba(14, 35, 72, 0.06);
 }
 .calc-group-title {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 11px 18px;
-  background: var(--light);
+  background: linear-gradient(180deg, #f2f7ff 0%, #edf4ff 100%);
   border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
 }
@@ -1177,7 +1450,7 @@ body {
 @media (max-width: 420px) { .calc-outputs { grid-template-columns: 1fr; } }
 
 .calc-out-card {
-  background: var(--light);
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
   border: 1.5px solid var(--border);
   border-radius: 10px;
   padding: 13px 14px 11px;
@@ -1310,7 +1583,7 @@ body {
   padding: 0 11px;
   border: 1.5px solid var(--border);
   border-radius: 10px;
-  background: #faf9f7;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8ff 100%);
   color: #575b66;
   font-size: clamp(11px, 1.25vw, 13px);
   font-weight: 500;
@@ -1384,7 +1657,7 @@ body {
 .health-banner {
   border: 1.5px solid var(--border);
   border-radius: 12px;
-  background: var(--light);
+  background: linear-gradient(180deg, #f7fbff 0%, #eef5ff 100%);
   padding: 14px;
   display: flex;
   justify-content: space-between;
@@ -1444,7 +1717,7 @@ body {
 .rec-card {
   border: 1.5px solid var(--border);
   border-radius: 11px;
-  background: #fbfaf8;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -1618,6 +1891,15 @@ body {
   color: var(--muted);
   line-height: 1.45;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1631,11 +1913,12 @@ body {
           <path d="M12 7.7v7.2M9.6 12.5 12 15l2.4-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </span>
-      <span class="sticky-top-brand-text">FinOps Calcultor by Duksh</span>
+      <span class="sticky-top-brand-text">FinOps Calculator by Duksh</span>
     </a>
     <ul class="sticky-top-nav-list">
       <li><a class="sticky-top-nav-link" data-nav-link href="#introduction-section">Overview</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#about-section">About</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#mcp-section">MCP</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#calculator-section">Calculator</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#group-health">Health</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#chart-section">Chart</a></li>
@@ -1708,108 +1991,61 @@ body {
 
   <!-- CTA -->
   <div class="cta-band">
-    <button class="cta-btn" onclick="document.getElementById('calculator-section').scrollIntoView({behavior:'smooth', block:'start'})">Get Started — Open the FinOps Calculator</button>
+    <div class="cta-actions">
+      <button class="cta-btn" onclick="document.getElementById('calculator-section').scrollIntoView({behavior:'smooth', block:'start'})">Get Started — Open the FinOps Calculator</button>
+      <button class="cta-btn cta-btn-secondary" type="button" data-mcp-open aria-haspopup="dialog" aria-controls="mcp-modal">Learn more about FinOps MCP</button>
+    </div>
+    <p class="cta-note">Need agent-ready workflows? The same calculator model is available as MCP tools that assistants can call directly.</p>
   </div>
 
-  <!-- HEADER -->
-  <div class="fig-header">
-    <div class="fig-label">Figure 1 · Interactive Cost &amp; Profitability Curves</div>
-    <h1 class="fig-title">Cloud Economics Visualization — Explore Scale, Cost Curves, and Profitability Thresholds</h1>
-    <p class="fig-caption">Use this section after filling the calculator to inspect how development decay, infrastructure growth, CUD effects, and pricing floors evolve across client volume. Hover over the chart to inspect values at any point.</p>
-  </div>
+  <!-- MCP OVERVIEW -->
+  <section class="mcp-section section-anchor" id="mcp-section" aria-labelledby="mcp-section-title">
+    <div class="mcp-shell">
+      <div class="mcp-head">
+        <div>
+          <div class="mcp-kicker">FinOps Calculator MCP</div>
+          <h2 class="mcp-title" id="mcp-section-title">Use this model from AI assistants, not just from the browser UI.</h2>
+          <p class="mcp-subtitle">
+            The FinOps calculator is also available as a Model Context Protocol (MCP) server so teams can request break-even, health, and recommendation outputs programmatically from Cursor, Windsurf, Claude Desktop, and other MCP-capable tools.
+          </p>
+        </div>
+        <div class="mcp-head-actions">
+          <button class="mcp-chip-btn" type="button" data-mcp-open aria-haspopup="dialog" aria-controls="mcp-modal">Learn more</button>
+          <a class="mcp-chip-link" href="https://github.com/duksh/finops-calculator-mcp" target="_blank" rel="noopener noreferrer">Open MCP Repo ↗</a>
+        </div>
+      </div>
 
-  <!-- CONTROLS -->
-  <div class="controls">
-    <span class="controls-label">SHOW/HIDE:</span>
-    <div class="btns-wrap">
-      <button class="toggle-btn" id="btn-dev"       onclick="toggle('dev')"       style="color:var(--dev);      border-color:var(--dev)"><span class="swatch" style="background:var(--dev)"></span>Dev Cost / Client</button>
-      <button class="toggle-btn" id="btn-infra-raw" onclick="toggle('infra-raw')" style="color:var(--infra-raw);border-color:var(--infra-raw)"><span class="swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</button>
-      <button class="toggle-btn" id="btn-infra-cud" onclick="toggle('infra-cud')" style="color:var(--infra-cud);border-color:var(--infra-cud)"><span class="swatch" style="background:linear-gradient(90deg,var(--infra-cud) 55%,transparent 55%) repeat-x left/9px 3px"></span>Infra (With CUDs)</button>
-      <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / Client</button>
-      <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue</button>
-      <button class="toggle-btn" id="btn-profit"    onclick="toggle('profit')"    style="color:var(--profit);   border-color:var(--profit)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI</button>
-      <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Min. Price / Client</button>
-    </div>
-  </div>
+      <div class="mcp-grid">
+        <article class="mcp-card">
+          <h3>Available tools</h3>
+          <ul class="mcp-list">
+            <li><code>finops.calculate</code> returns normalized inputs, outputs, health, and recommendations.</li>
+            <li><code>finops.health</code> returns zone, score, and failed checks only.</li>
+            <li><code>finops.recommend</code> returns prioritized actions by zone/provider.</li>
+            <li><code>finops.state.encode</code> / <code>finops.state.decode</code> handles shareable state tokens.</li>
+          </ul>
+        </article>
 
-  <!-- CHART + SIDE PANEL -->
-  <div class="chart-section section-anchor" id="chart-section">
-    <div class="chart-container" id="chart-container">
-      <svg id="chart"></svg>
-    </div>
-    <div class="side-panel">
-      <div>
-        <div class="panel-title">Client Count</div>
-        <div class="readout-n" id="sp-n">— clients</div>
-      </div>
-      <div class="divider"></div>
-      <div>
-        <div class="panel-title">Current Zone</div>
-        <div id="sp-zone-badge" class="zone-badge">Hover chart →</div>
-        <div id="sp-zone-desc" class="zone-desc-text"></div>
-      </div>
-      <div class="divider"></div>
-      <div class="readout-grid">
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--dev)"></span>Dev Cost / Client</div>
-          <div class="readout-val" id="sp-dev">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</div>
-          <div class="readout-val" id="sp-infra-raw">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--infra-cud)"></span>Infra (CUDs)</div>
-          <div class="readout-val" id="sp-infra-cud">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--total)"></span>Total Cost / Client</div>
-          <div class="readout-val" id="sp-total">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue</div>
-          <div class="readout-val" id="sp-revenue">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--profit)"></span>Profit / Loss</div>
-          <div class="readout-val" id="sp-profit">—</div>
-        </div>
-        <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--price-min);border:1px solid #bbb"></span>Min. Price / Client</div>
-          <div class="readout-val" id="sp-price-min">—</div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="insight-box">
-        <div class="insight-label">Key Insight</div>
-        <div id="sp-insight" class="zone-desc-text">Move cursor over chart to see contextual insights.</div>
-      </div>
-    </div>
-  </div>
+        <article class="mcp-card">
+          <h3>How to connect</h3>
+          <ul class="mcp-list">
+            <li>Clone the MCP repo and run <code>npm run test</code> in <code>server/</code>.</li>
+            <li>Register server command: <code>node .../server/index.js</code> in your MCP client config.</li>
+            <li>Reload your assistant and verify all five FinOps tools appear.</li>
+          </ul>
+        </article>
 
-  <!-- ZONES STRIP -->
-  <div class="zones-strip">
-    <div class="zone-cell">
-      <div class="zone-num">Zone I</div>
-      <div class="zone-cell-title" style="color:var(--dev)">Loss Zone</div>
-      <div class="zone-cell-desc">Fixed costs dominate. Revenue cannot cover total cost of service. Below minimum viable scale.</div>
+        <article class="mcp-card">
+          <h3>Best-fit use cases</h3>
+          <ul class="mcp-list">
+            <li>Turn pricing and cloud assumptions into quick scenario comparisons.</li>
+            <li>Embed FinOps checks in architecture reviews and governance workflows.</li>
+            <li>Generate recommendation summaries without re-entering calculator inputs.</li>
+          </ul>
+        </article>
+      </div>
     </div>
-    <div class="zone-cell">
-      <div class="zone-num">Threshold</div>
-      <div class="zone-cell-title" style="color:var(--total)">Break-Even</div>
-      <div class="zone-cell-desc">N<sub>min</sub> = Fixed Cost ÷ (ARPU − VCPU). Minimum clients for sustainable operations.</div>
-    </div>
-    <div class="zone-cell">
-      <div class="zone-num">Zone III</div>
-      <div class="zone-cell-title" style="color:var(--profit)">ROI Sweet Spot</div>
-      <div class="zone-cell-desc">Economies of scale reduce per-client dev cost while infra scales efficiently with CUDs.</div>
-    </div>
-    <div class="zone-cell">
-      <div class="zone-num">Zone IV</div>
-      <div class="zone-cell-title" style="color:var(--revenue)">Margin Compression</div>
-      <div class="zone-cell-desc">Infra cost growth outpaces revenue. Trigger: CUD renegotiation, right-sizing, or architecture review.</div>
-    </div>
-  </div>
+  </section>
 
   <!-- ═══ LIVE CALCULATOR ════════════════════════════════════════ -->
   <div class="calc-section section-anchor" id="calculator-section">
@@ -2114,6 +2350,106 @@ body {
     </div>
   </div>
 
+  <!-- HEADER -->
+  <div class="fig-header">
+    <div class="fig-label">Figure 1 · Interactive Cost &amp; Profitability Curves</div>
+    <h2 class="fig-title">Cloud Economics Visualization — Explore Scale, Cost Curves, and Profitability Thresholds</h2>
+    <p class="fig-caption">Use this section after filling the calculator to inspect how development decay, infrastructure growth, CUD effects, and pricing floors evolve across client volume. Hover over the chart to inspect values at any point.</p>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <span class="controls-label">SHOW/HIDE:</span>
+    <div class="btns-wrap">
+      <button class="toggle-btn" id="btn-dev"       onclick="toggle('dev')"       style="color:var(--dev);      border-color:var(--dev)"><span class="swatch" style="background:var(--dev)"></span>Dev Cost / Client</button>
+      <button class="toggle-btn" id="btn-infra-raw" onclick="toggle('infra-raw')" style="color:var(--infra-raw);border-color:var(--infra-raw)"><span class="swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</button>
+      <button class="toggle-btn" id="btn-infra-cud" onclick="toggle('infra-cud')" style="color:var(--infra-cud);border-color:var(--infra-cud)"><span class="swatch" style="background:linear-gradient(90deg,var(--infra-cud) 55%,transparent 55%) repeat-x left/9px 3px"></span>Infra (With CUDs)</button>
+      <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / Client</button>
+      <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue</button>
+      <button class="toggle-btn" id="btn-profit"    onclick="toggle('profit')"    style="color:var(--profit);   border-color:var(--profit)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI</button>
+      <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Min. Price / Client</button>
+    </div>
+  </div>
+
+  <!-- CHART + SIDE PANEL -->
+  <div class="chart-section section-anchor" id="chart-section">
+    <div class="chart-container" id="chart-container">
+      <svg id="chart"></svg>
+    </div>
+    <div class="side-panel">
+      <div>
+        <div class="panel-title">Client Count</div>
+        <div class="readout-n" id="sp-n">— clients</div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="panel-title">Current Zone</div>
+        <div id="sp-zone-badge" class="zone-badge">Hover chart →</div>
+        <div id="sp-zone-desc" class="zone-desc-text"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="readout-grid">
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--dev)"></span>Dev Cost / Client</div>
+          <div class="readout-val" id="sp-dev">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</div>
+          <div class="readout-val" id="sp-infra-raw">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--infra-cud)"></span>Infra (CUDs)</div>
+          <div class="readout-val" id="sp-infra-cud">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--total)"></span>Total Cost / Client</div>
+          <div class="readout-val" id="sp-total">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue</div>
+          <div class="readout-val" id="sp-revenue">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--profit)"></span>Profit / Loss</div>
+          <div class="readout-val" id="sp-profit">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--price-min);border:1px solid #bbb"></span>Min. Price / Client</div>
+          <div class="readout-val" id="sp-price-min">—</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="insight-box">
+        <div class="insight-label">Key Insight</div>
+        <div id="sp-insight" class="zone-desc-text">Move cursor over chart to see contextual insights.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONES STRIP -->
+  <div class="zones-strip">
+    <div class="zone-cell">
+      <div class="zone-num">Zone I</div>
+      <div class="zone-cell-title" style="color:var(--dev)">Loss Zone</div>
+      <div class="zone-cell-desc">Fixed costs dominate. Revenue cannot cover total cost of service. Below minimum viable scale.</div>
+    </div>
+    <div class="zone-cell">
+      <div class="zone-num">Threshold</div>
+      <div class="zone-cell-title" style="color:var(--total)">Break-Even</div>
+      <div class="zone-cell-desc">N<sub>min</sub> = Fixed Cost ÷ (ARPU − VCPU). Minimum clients for sustainable operations.</div>
+    </div>
+    <div class="zone-cell">
+      <div class="zone-num">Zone III</div>
+      <div class="zone-cell-title" style="color:var(--profit)">ROI Sweet Spot</div>
+      <div class="zone-cell-desc">Economies of scale reduce per-client dev cost while infra scales efficiently with CUDs.</div>
+    </div>
+    <div class="zone-cell">
+      <div class="zone-num">Zone IV</div>
+      <div class="zone-cell-title" style="color:var(--revenue)">Margin Compression</div>
+      <div class="zone-cell-desc">Infra cost growth outpaces revenue. Trigger: CUD renegotiation, right-sizing, or architecture review.</div>
+    </div>
+  </div>
+
   <!-- FORMULAS -->
   <div class="formulas-section section-anchor" id="formulas-section">
     <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
@@ -2334,6 +2670,55 @@ body {
 
 </div><!-- /.paper -->
 
+<div class="mcp-modal" id="mcp-modal" aria-hidden="true">
+  <div class="mcp-modal-backdrop" data-mcp-close></div>
+  <div class="mcp-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="mcp-modal-title" tabindex="-1">
+    <button class="mcp-modal-close" type="button" data-mcp-close aria-label="Close MCP details">×</button>
+    <h2 class="mcp-modal-title" id="mcp-modal-title">FinOps Calculator MCP — Quick Guide</h2>
+    <p class="mcp-modal-subtitle">
+      This MCP exposes the same FinOps logic used on this page, so agents can compute outputs and recommendations in automation flows.
+    </p>
+
+    <div class="mcp-modal-grid">
+      <article class="mcp-modal-card">
+        <h4>Install</h4>
+        <ul>
+          <li>Clone <code>github.com/duksh/finops-calculator-mcp</code>.</li>
+          <li>Run <code>npm run check</code> and <code>npm run test</code> in <code>server/</code>.</li>
+          <li>Start server via <code>npm run start</code>.</li>
+        </ul>
+      </article>
+
+      <article class="mcp-modal-card">
+        <h4>Connect</h4>
+        <ul>
+          <li>Add MCP config with command <code>node</code>.</li>
+          <li>Set args to absolute path ending in <code>/server/index.js</code>.</li>
+          <li>Reload client and confirm tools are discovered.</li>
+        </ul>
+      </article>
+
+      <article class="mcp-modal-card">
+        <h4>Key tools</h4>
+        <ul>
+          <li><code>finops.calculate</code> for full scenario outputs.</li>
+          <li><code>finops.health</code> for score-only checks in workflows.</li>
+          <li><code>finops.recommend</code> for zone/provider action plans.</li>
+        </ul>
+      </article>
+
+      <article class="mcp-modal-card">
+        <h4>Example prompts</h4>
+        <ul>
+          <li>"Run <code>finops.calculate</code> for ARPU 35, infra 2400, dev 500."</li>
+          <li>"Run <code>finops.health</code> and explain why zone is yellow."</li>
+          <li>"Encode this state and return a share token."</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── STATE ──────────────────────────────────────────────────────
 const hidden = new Set();
@@ -2346,6 +2731,10 @@ const SHAREABLE_INPUT_KEYS = [
 ];
 const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
 let shareFeedbackTimer = null;
+const mcpModalEl = document.getElementById('mcp-modal');
+const mcpModalDialogEl = mcpModalEl ? mcpModalEl.querySelector('.mcp-modal-dialog') : null;
+const mcpModalOpeners = Array.from(document.querySelectorAll('[data-mcp-open]'));
+let lastMcpModalTrigger = null;
 
 // ─── TOGGLE ─────────────────────────────────────────────────────
 function toggle(id) {
@@ -2431,6 +2820,7 @@ function buildShareStateUrl() {
 
   const url = new URL(window.location.href);
   url.searchParams.set('state', encoded);
+  url.hash = 'group-health';
   return url;
 }
 
@@ -2515,6 +2905,23 @@ function applySharedState(state) {
   return true;
 }
 
+function scrollToHealthSectionFromSharedState() {
+  const healthSection = document.getElementById('group-health');
+  if (!healthSection) return;
+
+  const url = new URL(window.location.href);
+  if (url.hash !== '#group-health') {
+    const replacePath = `${url.pathname}${url.search}#group-health`;
+    window.history.replaceState({}, '', replacePath);
+  }
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      healthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
 function loadSharedStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get('state');
@@ -2527,7 +2934,10 @@ function loadSharedStateFromUrl() {
   }
 
   const applied = applySharedState(decoded);
-  if (applied) writeShareFeedback('Shared calculator state loaded.', false);
+  if (applied) {
+    writeShareFeedback('Shared calculator state loaded. Jumped to Health & Recommendations.', false);
+    scrollToHealthSectionFromSharedState();
+  }
   return applied;
 }
 
@@ -3545,6 +3955,38 @@ function resetModel() {
   writeShareFeedback('');
 }
 
+// ─── MCP MODAL LOGIC ────────────────────────────────────────────
+function openMcpModal(triggerEl) {
+  if (!mcpModalEl || !mcpModalDialogEl) return;
+  lastMcpModalTrigger = triggerEl || document.activeElement;
+  mcpModalEl.classList.add('is-open');
+  mcpModalEl.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  window.requestAnimationFrame(() => mcpModalDialogEl.focus());
+}
+
+function closeMcpModal() {
+  if (!mcpModalEl || !mcpModalDialogEl) return;
+  mcpModalEl.classList.remove('is-open');
+  mcpModalEl.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  if (lastMcpModalTrigger && typeof lastMcpModalTrigger.focus === 'function') {
+    lastMcpModalTrigger.focus();
+  }
+}
+
+function initMcpModal() {
+  if (!mcpModalEl || !mcpModalDialogEl || !mcpModalOpeners.length) return;
+
+  mcpModalOpeners.forEach(btn => {
+    btn.addEventListener('click', () => openMcpModal(btn));
+  });
+
+  mcpModalEl.querySelectorAll('[data-mcp-close]').forEach(el => {
+    el.addEventListener('click', closeMcpModal);
+  });
+}
+
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
 function toggleTip(card) {
   const tip    = card.querySelector('.ftip');
@@ -3580,6 +4022,7 @@ document.addEventListener('click', e => {
 // Close tooltip on Escape key
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    closeMcpModal();
     document.querySelectorAll('.formula-card.active').forEach(c => {
       c.classList.remove('active');
       c.querySelector('.ftip').classList.remove('open');
@@ -3639,6 +4082,7 @@ function initSectionNav() {
 }
 
 cacheSubTexts();
+initMcpModal();
 initSectionNav();
 if (!loadSharedStateFromUrl()) {
   updateHealthAndRecommendations(lastInputs);
