@@ -853,8 +853,10 @@ body {
 .calc-field:last-child { border-right: none; }
 @media (max-width: 600px) { .calc-field { border-right: none; } }
 
-.calc-field.has-value { background: rgba(0,114,178,0.025); }
-.calc-field.has-value::before {
+.calc-field.has-value,
+.startup-field.has-value { background: rgba(0,114,178,0.025); }
+.calc-field.has-value::before,
+.startup-field.has-value::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
@@ -937,7 +939,59 @@ body {
   margin-top: 7px;
   font-size: 10.5px;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.45;
+}
+
+/* Startup planner (ARPU unknown) */
+.startup-planner {
+  border-top: 1px dashed var(--border);
+  background: linear-gradient(180deg, rgba(0,114,178,0.03), rgba(0,158,115,0.03));
+}
+.startup-title {
+  padding: 10px 18px 8px;
+  font-size: 11px;
+  color: #2f415f;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.startup-help {
+  margin: 0 18px 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px dashed rgba(0, 114, 178, 0.32);
+  background: rgba(255,255,255,0.78);
+}
+.startup-help-title {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #005a8f;
+  margin-bottom: 6px;
+}
+.startup-help-list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: #4b5263;
+  line-height: 1.5;
+}
+.startup-help-list li { margin: 2px 0; }
+.startup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.startup-field {
+  padding: clamp(14px,2vw,18px) clamp(14px,1.8vw,18px);
+  border-right: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  position: relative;
+  transition: background 0.2s;
+}
+.startup-field:last-child { border-right: none; }
+@media (max-width: 600px) {
+  .startup-field { border-right: none; }
 }
 
 /* ── Output cards ── */
@@ -1635,9 +1689,46 @@ body {
               <input type="number" id="inp-ARPU" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 30" oninput="onInput('ARPU')">
               <span class="calc-unit">€ / client</span>
             </div>
-            <div class="calc-hint">Average monthly revenue per client. Shifts the entire revenue line.</div>
+            <div class="calc-hint">Average monthly revenue per client. If unknown, leave blank and use Startup Planning below.</div>
           </div>
 
+        </div>
+
+        <div class="startup-planner">
+          <div class="startup-title">Startup planning mode (if ARPU is unknown) — fill either option</div>
+          <div class="startup-help">
+            <div class="startup-help-title">How to use (new entrepreneur)</div>
+            <ul class="startup-help-list">
+              <li><strong>Option A:</strong> enter a realistic market price to estimate how many clients you need.</li>
+              <li><strong>Option B:</strong> enter your acquisition target to estimate the minimum price per client.</li>
+              <li>You can fill both options to compare scenarios and set a safer revenue target.</li>
+            </ul>
+          </div>
+          <div class="startup-grid">
+            <div class="startup-field" id="field-startupTargetPrice">
+              <label class="calc-label" for="inp-startupTargetPrice">
+                Option A — Target Price / Client
+                <span class="ftag" style="color:#0072b2;border-color:#0072b2;background:rgba(0,114,178,0.06)">price-first</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-startupTargetPrice" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 35" oninput="onInput('startupTargetPrice')">
+                <span class="calc-unit">€ / client</span>
+              </div>
+              <div class="calc-hint">If you know what the market can pay, we estimate how many clients you need to hit profitability.</div>
+            </div>
+
+            <div class="startup-field" id="field-startupTargetClients">
+              <label class="calc-label" for="inp-startupTargetClients">
+                Option B — Target Clients
+                <span class="ftag" style="color:#009e73;border-color:#009e73;background:rgba(0,158,115,0.06)">clients-first</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-startupTargetClients" inputmode="numeric" min="1" step="1" placeholder="e.g. 80" oninput="onInput('startupTargetClients')">
+                <span class="calc-unit">clients</span>
+              </div>
+              <div class="calc-hint">If you know your acquisition target, we estimate the minimum viable price and monthly revenue target.</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1735,6 +1826,24 @@ body {
             <div class="calc-out-sub">On-demand vs committed at n</div>
           </div>
 
+          <div class="calc-out-card" id="out-reqClients">
+            <div class="calc-out-label">Required Clients @ Target Price</div>
+            <div class="calc-out-val muted" id="oval-reqClients">—</div>
+            <div class="calc-out-sub">Use Option A to estimate client volume needed for profitability</div>
+          </div>
+
+          <div class="calc-out-card" id="out-reqPrice">
+            <div class="calc-out-label">Required Price @ Target Clients</div>
+            <div class="calc-out-val muted" id="oval-reqPrice">—</div>
+            <div class="calc-out-sub">Use Option B to estimate minimum price per client</div>
+          </div>
+
+          <div class="calc-out-card" id="out-targetRevenue">
+            <div class="calc-out-label">Target Monthly Revenue</div>
+            <div class="calc-out-val muted" id="oval-targetRevenue">—</div>
+            <div class="calc-out-sub">Revenue level implied by your startup planning assumptions</div>
+          </div>
+
         </div>
 
         <!-- Progress + status bar -->
@@ -1747,6 +1856,8 @@ body {
           <div class="cp-pill" id="cp-4"></div>
           <div class="cp-pill" id="cp-5"></div>
           <div class="cp-pill" id="cp-6"></div>
+          <div class="cp-pill" id="cp-7"></div>
+          <div class="cp-pill" id="cp-8"></div>
         </div>
         <div class="calc-status-bar" id="calc-status-bar">
           <div class="calc-status-dot" id="calc-dot"></div>
@@ -2413,13 +2524,19 @@ draw();
 const MODEL_DEFAULTS = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
 
 // Track what the user has explicitly provided
-const USER_PROVIDED = { nRef:false, devPerClient:false, infraTotal:false, ARPU:false, cudPct:false, margin:false, nMax:false };
+const USER_PROVIDED = {
+  nRef:false, devPerClient:false, infraTotal:false, ARPU:false,
+  startupTargetPrice:false, startupTargetClients:false,
+  cudPct:false, margin:false, nMax:false
+};
 
 // Smart default n when user hasn't told us their scale yet
 const DEFAULT_N_REF = 100;
 const selectedProviders = new Set();
 let lastInputs = {
   nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+  startupTargetPrice: null, startupTargetClients: null,
+  effectiveARPU: null, arpuMode: 'missing',
   cudPct: null, margin: null, nMax: null
 };
 
@@ -2473,10 +2590,13 @@ function toggleProvider(provider) {
 }
 
 function updateHealthAndRecommendations(inputs) {
-  const { nRef, infraTotal, ARPU: arpuInp } = inputs || {};
+  const { nRef, infraTotal, ARPU: arpuInp, effectiveARPU, arpuMode } = inputs || {};
   const nSample  = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
   const hasInfra = infraTotal !== null && infraTotal !== undefined;
-  const hasARPU  = arpuInp !== null && arpuInp !== undefined && arpuInp > 0;
+  const arpuUsed = (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0)
+    ? effectiveARPU
+    : ((arpuInp !== null && arpuInp !== undefined && arpuInp > 0) ? arpuInp : null);
+  const hasARPU  = arpuUsed !== null;
 
   const bannerEl = document.getElementById('health-banner');
   const groupBadgeEl = document.getElementById('health-group-num');
@@ -2491,21 +2611,21 @@ function updateHealthAndRecommendations(inputs) {
     bannerEl.className = 'health-banner awaiting';
     if (groupBadgeEl) groupBadgeEl.style.background = '#7a7a8c';
     titleEl.textContent = 'Awaiting Inputs';
-    descEl.textContent = 'Add Total Infra Cost and Revenue / Client (ARPU) to compute health score and recommendations.';
+    descEl.textContent = 'Add Total Infra Cost and Revenue / Client (ARPU), or use Startup Planning (Target Price / Target Clients) to compute health score and recommendations.';
     scoreEl.textContent = '—';
     scoreEl.style.color = '#7a7a8c';
     listEl.innerHTML = '<div class="rec-empty">Recommendations will appear after health scoring data is available.</div>';
     return;
   }
 
-  const { K, a, c, b, g, ARPU } = MODEL;
+  const { K, a, c, b, g } = MODEL;
   const dev      = K * Math.pow(nSample, -a);
   const infraRaw = c * Math.pow(nSample, b);
   const infraCud = g * c * Math.pow(nSample, b * 0.96);
   const total    = dev + infraRaw;
-  const revenue  = ARPU * nSample;
+  const revenue  = arpuUsed * nSample;
   const vcpu     = infraRaw / nSample;
-  const contribM = ARPU - vcpu;
+  const contribM = arpuUsed - vcpu;
   const ccer     = infraRaw > 0 ? revenue / infraRaw : 0;
   const cudSaveGapPct = infraRaw > 0 ? ((infraRaw - infraCud) / infraRaw) : 0;
 
@@ -2558,6 +2678,12 @@ function updateHealthAndRecommendations(inputs) {
     zoneColor = '#b07800';
   }
 
+  if (arpuMode === 'startup-price') {
+    zoneDesc += ' Planning mode: ARPU estimated from your target price assumption.';
+  } else if (arpuMode === 'startup-clients') {
+    zoneDesc += ' Planning mode: ARPU estimated from your target clients assumption.';
+  }
+
   bannerEl.className = `health-banner ${zoneKey}`;
   if (groupBadgeEl) groupBadgeEl.style.background = zoneColor;
   titleEl.textContent = zoneTitle;
@@ -2606,6 +2732,21 @@ function fmtOut(v, decimals=0) {
   return v < 0 ? `−${str}` : str;
 }
 
+function minPriceAtClients(n, model = MODEL) {
+  const safeN = Math.max(1, n);
+  const total = model.K * Math.pow(safeN, -model.a) + model.c * Math.pow(safeN, model.b);
+  return (total / safeN) * (1 + model.m);
+}
+
+function findRequiredClientsForTargetPrice(targetPrice, maxN, model = MODEL) {
+  if (!(targetPrice > 0)) return null;
+  const limit = Math.max(1, Math.round(maxN));
+  for (let n = 1; n <= limit; n++) {
+    if (minPriceAtClients(n, model) <= targetPrice) return n;
+  }
+  return null;
+}
+
 // Set output card — val=null means "needs more data", val=string is a result
 function setOut(id, val, cls='', cardState='', missingMsg='') {
   const el   = document.getElementById(id);
@@ -2647,7 +2788,8 @@ function onInput(fieldId) {
   const input = document.getElementById('inp-' + fieldId);
   if (input) {
     const filled = input.value.trim() !== '';
-    input.closest('.calc-field').classList.toggle('has-value', filled);
+    const fieldWrap = input.closest('.calc-field, .startup-field');
+    if (fieldWrap) fieldWrap.classList.toggle('has-value', filled);
     USER_PROVIDED[fieldId] = filled;
   }
   recalculate();
@@ -2655,7 +2797,11 @@ function onInput(fieldId) {
 }
 
 function updateProgressPills() {
-  const ids = ['inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU','inp-cudPct','inp-margin','inp-nMax'];
+  const ids = [
+    'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
+    'inp-startupTargetPrice','inp-startupTargetClients',
+    'inp-cudPct','inp-margin','inp-nMax'
+  ];
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'flex';
   let filled = 0;
@@ -2686,16 +2832,18 @@ function recalculate() {
   const devPerClient = getInp('inp-devPerClient');
   const infraTotal   = getInp('inp-infraTotal');
   const ARPU         = getInp('inp-ARPU');
+  const startupTargetPrice   = getInp('inp-startupTargetPrice');
+  const startupTargetClients = getInp('inp-startupTargetClients');
   const cudPct       = getInp('inp-cudPct');
   const marginPct    = getInp('inp-margin');
   const nMaxInp      = getInp('inp-nMax');
-  lastInputs = { nRef, devPerClient, infraTotal, ARPU, cudPct, margin: marginPct, nMax: nMaxInp };
 
   let changed = false;
   let derivations = [];
+  let effectiveARPU = null;
+  let arpuMode = 'missing';
 
   // ── Always-applicable fields ──────────────────────────────────
-  if (ARPU !== null && ARPU > 0)        { MODEL.ARPU = ARPU; changed = true; }
   if (nMaxInp !== null && nMaxInp >= 10) { MODEL.nMax = nMaxInp; changed = true; }
   if (marginPct !== null)               { MODEL.m = Math.max(0, marginPct / 100); changed = true; }
   if (cudPct !== null)                  { MODEL.g = Math.max(0.01, 1 - cudPct / 100); changed = true; derivations.push(`γ=${MODEL.g.toFixed(2)}`); }
@@ -2718,8 +2866,38 @@ function recalculate() {
     derivations.push(`c=${MODEL.c.toFixed(4)} @ n=${n}`);
   }
 
+  // ── ARPU source: manual OR startup planning assumptions ────────
+  if (ARPU !== null && ARPU > 0) {
+    MODEL.ARPU = ARPU;
+    effectiveARPU = ARPU;
+    arpuMode = 'manual';
+    changed = true;
+  } else if (startupTargetPrice !== null && startupTargetPrice > 0) {
+    MODEL.ARPU = startupTargetPrice;
+    effectiveARPU = startupTargetPrice;
+    arpuMode = 'startup-price';
+    changed = true;
+    derivations.push(`ARPU≈${MODEL.ARPU.toFixed(2)} (price target)`);
+  } else if (
+    startupTargetClients !== null && startupTargetClients > 0 &&
+    ((devPerClient !== null && devPerClient > 0) || (infraTotal !== null && infraTotal > 0))
+  ) {
+    MODEL.ARPU = minPriceAtClients(startupTargetClients, MODEL);
+    effectiveARPU = MODEL.ARPU;
+    arpuMode = 'startup-clients';
+    changed = true;
+    derivations.push(`ARPU≈${MODEL.ARPU.toFixed(2)} @ ${Math.round(startupTargetClients)} clients`);
+  }
+
+  lastInputs = {
+    nRef, devPerClient, infraTotal, ARPU,
+    startupTargetPrice, startupTargetClients,
+    effectiveARPU, arpuMode,
+    cudPct, margin: marginPct, nMax: nMaxInp
+  };
+
   if (changed) { draw(); }
-  updateOutputCards({ nRef, devPerClient, infraTotal, ARPU, cudPct });
+  updateOutputCards(lastInputs);
   updateHealthAndRecommendations(lastInputs);
 
   const text = document.getElementById('calc-status-text');
@@ -2729,26 +2907,45 @@ function recalculate() {
 }
 
 function updateOutputCards(inputs) {
-  const { nRef, devPerClient, infraTotal, ARPU: arpuInp, cudPct } = inputs;
-  const { K, a, c, b, g, ARPU, m, nMax } = MODEL;
+  const {
+    nRef, devPerClient, infraTotal, ARPU: arpuInp, cudPct,
+    startupTargetPrice, startupTargetClients, effectiveARPU, arpuMode
+  } = inputs;
+  const { K, a, c, b, g, m, nMax } = MODEL;
 
   // Use actual nRef if provided, otherwise DEFAULT_N_REF for display calculations
   const nSample   = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
-  const hasARPU   = arpuInp !== null && arpuInp > 0;
+  const arpuUsed  = (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0)
+    ? effectiveARPU
+    : ((arpuInp !== null && arpuInp > 0) ? arpuInp : null);
+  const hasARPU   = arpuUsed !== null;
   const hasInfra  = infraTotal !== null;
   const hasDev    = devPerClient !== null;
   const hasNRef   = nRef !== null && nRef > 0;
+  const hasStartupPrice   = startupTargetPrice !== null && startupTargetPrice > 0;
+  const hasStartupClients = startupTargetClients !== null && startupTargetClients > 0;
+  const hasAnyCostInput = hasInfra || hasDev;
 
   const dev      = K * Math.pow(nSample, -a);
   const infraRaw = c * Math.pow(nSample, b);
   const infraCud = g * c * Math.pow(nSample, b * 0.96);
   const total    = dev + infraRaw;
-  const revenue  = ARPU * nSample;
+  const revenue  = hasARPU ? arpuUsed * nSample : 0;
   const vcpu     = infraRaw / nSample;
-  const contribM = ARPU - vcpu;
+  const contribM = hasARPU ? (arpuUsed - vcpu) : null;
   const priceMin = (total / nSample) * (1 + m);
   const ccer     = infraRaw > 0 ? (revenue / infraRaw) : null;
   const cudSave  = infraRaw - infraCud;
+  const searchMax = Math.max(20000, nMax);
+  const reqClients = (hasStartupPrice && hasAnyCostInput)
+    ? findRequiredClientsForTargetPrice(startupTargetPrice, searchMax, MODEL)
+    : null;
+  const reqPriceAtClients = (hasStartupClients && hasAnyCostInput)
+    ? minPriceAtClients(startupTargetClients, MODEL)
+    : null;
+  const reqClientsFromClientsMode = (arpuMode === 'startup-clients' && reqPriceAtClients !== null)
+    ? findRequiredClientsForTargetPrice(reqPriceAtClients, searchMax, MODEL)
+    : null;
 
   // Break-even search
   const pts = buildData();
@@ -2758,15 +2955,25 @@ function updateOutputCards(inputs) {
   // ── BREAK-EVEN ───────────────────────────────────────────────
   // Needs: at least one cost input (infra OR dev) AND ARPU
   // Without ARPU there is no revenue line; without any cost there's no cost line
-  const beNeedsArpu  = !hasARPU || ARPU <= 0;
+  const beNeedsArpu  = !hasARPU;
   const beNeedsCost  = !hasInfra && !hasDev;
 
   if (beNeedsArpu && beNeedsCost) {
-    setOut('oval-beN', null, '', '', 'Revenue/Client (ARPU) + one cost figure');
+    setOut('oval-beN', null, '', '', 'Revenue/Client (ARPU) or Startup Target + one cost figure');
   } else if (beNeedsArpu) {
-    setOut('oval-beN', null, '', '', 'Revenue/Client (ARPU)');
+    setOut('oval-beN', null, '', '', 'Revenue/Client (ARPU) or Startup Target Price / Target Clients');
   } else if (beNeedsCost) {
     setOut('oval-beN', null, '', '', 'Dev Cost or Infra Cost');
+  } else if (arpuMode === 'startup-price' && reqClients !== null) {
+    const beClass = reqClients <= nSample ? 'good' : 'warn';
+    setOut('oval-beN', `${reqClients.toLocaleString()} clients (startup est.)`, beClass, beClass === 'warn' ? 'warn' : '');
+    const subEl = document.querySelector('#out-beN .calc-out-sub');
+    if (subEl) subEl.textContent = 'Estimated clients needed at your target price (includes margin target)';
+  } else if (arpuMode === 'startup-clients' && reqClientsFromClientsMode !== null) {
+    const beClass = reqClientsFromClientsMode <= nSample ? 'good' : 'warn';
+    setOut('oval-beN', `${reqClientsFromClientsMode.toLocaleString()} clients (startup est.)`, beClass, beClass === 'warn' ? 'warn' : '');
+    const subEl = document.querySelector('#out-beN .calc-out-sub');
+    if (subEl) subEl.textContent = 'Estimated clients needed based on your target clients pricing requirement';
   } else if (beN && beN <= nMax) {
     const beClass = beN <= nSample ? 'good' : 'warn';
     const beCard  = beN <= nSample ? '' : 'warn';
@@ -2785,7 +2992,7 @@ function updateOutputCards(inputs) {
     setOut('oval-minPrice', null, '', '', 'Dev Cost or Infra Cost');
   } else {
     const note    = !hasNRef ? ` · est. @ n=${DEFAULT_N_REF}` : '';
-    const mpOk    = ARPU > 0 && priceMin < ARPU;
+    const mpOk    = hasARPU && priceMin < arpuUsed;
     const mpClass = mpOk ? 'good' : 'bad';
     setOut('oval-minPrice', fmtOut(priceMin, 2) + ' / client', mpClass, mpClass === 'bad' ? 'bad' : '');
     if (note) {
@@ -2808,23 +3015,23 @@ function updateOutputCards(inputs) {
 
   // ── CONTRIBUTION MARGIN ───────────────────────────────────────
   if (!hasInfra && !hasARPU) {
-    setOut('oval-margin', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU)');
+    setOut('oval-margin', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU) or Startup Target');
   } else if (!hasInfra) {
     setOut('oval-margin', null, '', '', 'Total Infra Cost');
-  } else if (!hasARPU || ARPU <= 0) {
-    setOut('oval-margin', null, '', '', 'Revenue / Client (ARPU)');
+  } else if (!hasARPU) {
+    setOut('oval-margin', null, '', '', 'Revenue / Client (ARPU) or Startup Target');
   } else {
-    const cmClass = contribM > 0 ? 'good' : 'bad';
+    const cmClass = contribM !== null && contribM > 0 ? 'good' : 'bad';
     setOut('oval-margin', fmtOut(contribM, 2) + ' / client', cmClass, cmClass === 'bad' ? 'bad' : '');
   }
 
   // ── CCER ─────────────────────────────────────────────────────
   if (!hasInfra && !hasARPU) {
-    setOut('oval-ccer', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU)');
+    setOut('oval-ccer', null, '', '', 'Total Infra Cost + Revenue / Client (ARPU) or Startup Target');
   } else if (!hasInfra) {
     setOut('oval-ccer', null, '', '', 'Total Infra Cost');
-  } else if (!hasARPU || ARPU <= 0) {
-    setOut('oval-ccer', null, '', '', 'Revenue / Client (ARPU)');
+  } else if (!hasARPU) {
+    setOut('oval-ccer', null, '', '', 'Revenue / Client (ARPU) or Startup Target');
   } else if (ccer !== null) {
     const cc = ccer >= 3 ? 'good' : ccer >= 1 ? 'warn' : 'bad';
     setOut('oval-ccer', ccer.toFixed(2) + '×', cc, cc);
@@ -2843,6 +3050,64 @@ function updateOutputCards(inputs) {
       if (subEl) subEl.textContent = subEl.dataset.orig + note;
     }
   }
+
+  // ── STARTUP OPTION A: REQUIRED CLIENTS @ TARGET PRICE ─────────
+  if (!hasStartupPrice && !hasARPU) {
+    setOut('oval-reqClients', null, '', '', 'Option A: Target Price / Client');
+  } else if (!hasAnyCostInput) {
+    setOut('oval-reqClients', null, '', '', 'Dev Cost or Infra Cost');
+  } else if (!hasStartupPrice) {
+    setOut('oval-reqClients', null, '', '', 'Option A: Target Price / Client');
+  } else if (reqClients === null) {
+    setOut('oval-reqClients', `> ${searchMax.toLocaleString()} clients`, 'warn', 'warn');
+    const subEl = document.querySelector('#out-reqClients .calc-out-sub');
+    if (subEl) subEl.textContent = 'Target price appears too low for profitability in current range';
+  } else {
+    const cls = reqClients <= nSample ? 'good' : 'warn';
+    setOut('oval-reqClients', `${reqClients.toLocaleString()} clients`, cls, cls === 'warn' ? 'warn' : '');
+  }
+
+  // ── STARTUP OPTION B: REQUIRED PRICE @ TARGET CLIENTS ─────────
+  if (!hasStartupClients && !hasARPU) {
+    setOut('oval-reqPrice', null, '', '', 'Option B: Target Clients');
+  } else if (!hasAnyCostInput) {
+    setOut('oval-reqPrice', null, '', '', 'Dev Cost or Infra Cost');
+  } else if (!hasStartupClients) {
+    setOut('oval-reqPrice', null, '', '', 'Option B: Target Clients');
+  } else {
+    const cls = hasStartupPrice && startupTargetPrice >= reqPriceAtClients ? 'good' : 'warn';
+    setOut('oval-reqPrice', fmtOut(reqPriceAtClients, 2) + ' / client', cls, cls === 'warn' ? 'warn' : '');
+  }
+
+  // ── STARTUP REVENUE TARGET ─────────────────────────────────────
+  let revenueTarget = null;
+  if (hasStartupClients && reqPriceAtClients !== null) {
+    const priceForRevenue = hasStartupPrice ? startupTargetPrice : reqPriceAtClients;
+    revenueTarget = priceForRevenue * startupTargetClients;
+  } else if (hasStartupPrice && reqClients !== null) {
+    revenueTarget = startupTargetPrice * reqClients;
+  }
+
+  if (!hasAnyCostInput) {
+    setOut('oval-targetRevenue', null, '', '', 'Dev Cost or Infra Cost');
+  } else if (revenueTarget === null) {
+    setOut('oval-targetRevenue', null, '', '', 'Option A or Option B startup input');
+  } else {
+    setOut('oval-targetRevenue', fmtOut(revenueTarget, 0) + ' / mo', 'good', '');
+    const subEl = document.querySelector('#out-targetRevenue .calc-out-sub');
+    if (subEl) {
+      if (hasStartupPrice && hasStartupClients) {
+        subEl.textContent = 'Based on your own target price and target clients assumptions';
+      } else if (hasStartupPrice) {
+        subEl.textContent = 'Based on your target price and computed required client count';
+      } else {
+        subEl.textContent = 'Based on your target clients and computed required price';
+      }
+      if (arpuMode === 'startup-clients' || arpuMode === 'startup-price') {
+        subEl.textContent += ' (startup estimate mode)';
+      }
+    }
+  }
 }
 
 function resetModel() {
@@ -2852,16 +3117,22 @@ function resetModel() {
   document.querySelectorAll('.provider-btn.selected').forEach(btn => btn.classList.remove('selected'));
   lastInputs = {
     nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+    startupTargetPrice: null, startupTargetClients: null,
+    effectiveARPU: null, arpuMode: 'missing',
     cudPct: null, margin: null, nMax: null
   };
-  const ids = ['inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU','inp-cudPct','inp-margin','inp-nMax'];
+  const ids = [
+    'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
+    'inp-startupTargetPrice','inp-startupTargetClients',
+    'inp-cudPct','inp-margin','inp-nMax'
+  ];
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
-    const field = el && el.closest('.calc-field');
+    const field = el && el.closest('.calc-field, .startup-field');
     if (field) field.classList.remove('has-value');
   });
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < ids.length; i++) {
     const p = document.getElementById('cp-' + i);
     if (p) p.classList.remove('filled');
   }
