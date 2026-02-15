@@ -35,6 +35,9 @@
   --profit:    #7b2d8b;
   --price-min: #555555;
 
+  --page-pad-x: clamp(10px, 3vw, 24px);
+  --page-pad-y: clamp(12px, 3vw, 40px);
+  --sticky-nav-h: 54px;
   --radius: 8px;
   --shadow: 0 2px 16px rgba(0,0,0,0.07);
 }
@@ -42,6 +45,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--sticky-nav-h) + 18px);
 }
 
 body {
@@ -49,8 +53,133 @@ body {
   color: var(--text);
   font-family: 'Inter', sans-serif;
   line-height: 1.5;
-  padding: clamp(12px, 3vw, 40px) clamp(10px, 3vw, 24px) 48px;
+  padding: calc(var(--page-pad-y) + var(--sticky-nav-h) + 8px) var(--page-pad-x) 48px;
 }
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: var(--page-pad-x);
+  z-index: 120;
+  transform: translateY(-140%);
+  background: #0e3358;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: transform 0.18s ease;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+
+.sticky-top-nav {
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top));
+  left: var(--page-pad-x);
+  right: var(--page-pad-x);
+  z-index: 110;
+}
+.sticky-top-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: var(--sticky-nav-h);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(22, 36, 64, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 8px 20px rgba(18, 30, 55, 0.12);
+}
+.sticky-top-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 4px 7px;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+.sticky-top-brand:hover { background: rgba(0, 114, 178, 0.08); }
+.sticky-top-brand:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.sticky-top-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, #0072b2 0%, #009e73 100%);
+  box-shadow: 0 2px 6px rgba(0, 84, 128, 0.35);
+}
+.sticky-top-logo svg {
+  width: 14px;
+  height: 14px;
+}
+.sticky-top-brand-text {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #27425c;
+}
+.sticky-top-nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 1px;
+  margin: 0;
+  scrollbar-width: none;
+}
+.sticky-top-nav-list::-webkit-scrollbar { display: none; }
+.sticky-top-nav-link {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: #33405b;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 6px 11px;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.sticky-top-nav-link:hover {
+  background: rgba(0, 114, 178, 0.08);
+  color: #005b90;
+}
+.sticky-top-nav-link.is-active,
+.sticky-top-nav-link[aria-current='page'] {
+  border-color: rgba(0, 114, 178, 0.35);
+  background: rgba(0, 114, 178, 0.12);
+  color: #00507d;
+}
+.sticky-top-nav-link:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+@media (max-width: 780px) {
+  .sticky-top-brand-text { display: none; }
+  .sticky-top-nav-inner { padding: 7px 8px; }
+}
+
+.section-anchor { scroll-margin-top: calc(var(--sticky-nav-h) + 22px); }
 
 /* ─── PAPER ─────────────────────────────────────────────────────── */
 .paper {
@@ -1449,10 +1578,33 @@ body {
 </style>
 </head>
 <body>
+<a class="skip-link" href="#calculator-section">Skip to calculator</a>
+<nav class="sticky-top-nav" aria-label="Quick section navigation">
+  <div class="sticky-top-nav-inner">
+    <a class="sticky-top-brand" href="#introduction-section" aria-label="Go to page overview">
+      <span class="sticky-top-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+          <path d="M7.6 17.5H17a3.2 3.2 0 0 0 .8-6.3 5 5 0 0 0-9.7-.7A3.5 3.5 0 0 0 7.6 17.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 7.7v7.2M9.6 12.5 12 15l2.4-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="sticky-top-brand-text">FinOps Calcultor by Duksh</span>
+    </a>
+    <ul class="sticky-top-nav-list">
+      <li><a class="sticky-top-nav-link" data-nav-link href="#introduction-section">Overview</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#about-section">About</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#calculator-section">Calculator</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#group-health">Health</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#chart-section">Chart</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#formulas-section">Formulas</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#references-section">References</a></li>
+    </ul>
+  </div>
+</nav>
 <div class="paper">
 
   <!-- LANDING INTRO -->
-  <section class="landing-intro">
+  <section class="landing-intro section-anchor" id="introduction-section">
     <div class="landing-kicker">FinOps &amp; Cloud Economics Calculator by Duksh</div>
     <h1 class="landing-title">A practical FinOps calculator to quantify break-even, pricing floor, and cloud efficiency before you scale.</h1>
     <p class="landing-subtitle">
@@ -1494,7 +1646,7 @@ body {
   </section>
 
   <!-- CREDIBILITY -->
-  <section class="credibility-section">
+  <section class="credibility-section section-anchor" id="about-section">
     <div class="cred-avatar">
       <img src="https://avatars.githubusercontent.com/u/586947?v=4" alt="Duksh Koonjoobeeharry profile photo">
     </div>
@@ -1538,7 +1690,7 @@ body {
   </div>
 
   <!-- CHART + SIDE PANEL -->
-  <div class="chart-section" id="chart-section">
+  <div class="chart-section section-anchor" id="chart-section">
     <div class="chart-container" id="chart-container">
       <svg id="chart"></svg>
     </div>
@@ -1617,7 +1769,7 @@ body {
   </div>
 
   <!-- ═══ LIVE CALCULATOR ════════════════════════════════════════ -->
-  <div class="calc-section" id="calculator-section">
+  <div class="calc-section section-anchor" id="calculator-section">
     <div class="calc-header" id="live-calculator">
       <div class="calc-title-row">
         <div>
@@ -1886,7 +2038,7 @@ body {
       </div>
 
       <!-- ── GROUP E ──────────────────────────────────────────── -->
-      <div class="calc-group" id="group-health">
+      <div class="calc-group section-anchor" id="group-health">
         <div class="calc-group-title" id="health-title-row">
           <span class="calc-group-num" id="health-group-num" style="background:#7a7a8c">E</span>
           <span class="calc-group-label">Health Zone &amp; Recommendations</span>
@@ -1913,7 +2065,7 @@ body {
   </div>
 
   <!-- FORMULAS -->
-  <div class="formulas-section" id="formulas-section">
+  <div class="formulas-section section-anchor" id="formulas-section">
     <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
     <div class="formulas-grid">
 
@@ -2023,7 +2175,7 @@ body {
   </div>
 
   <!-- FOOTER WITH ACADEMIC REFERENCES -->
-  <div class="fig-footer">
+  <div class="fig-footer section-anchor" id="references-section">
     <div class="fig-footer-top">
       <span class="fig-source">
         <strong>Source:</strong> Conceptual model derived from cloud economics literature and empirical FinOps practice.
@@ -3197,7 +3349,59 @@ document.addEventListener('keydown', e => {
   }
 });
 
+function initSectionNav() {
+  const links = Array.from(document.querySelectorAll('[data-nav-link]'));
+  if (!links.length) return;
+
+  const items = links
+    .map(link => {
+      const href = link.getAttribute('href') || '';
+      if (!href.startsWith('#')) return null;
+      const target = document.querySelector(href);
+      if (!target) return null;
+      return { link, target };
+    })
+    .filter(Boolean);
+
+  if (!items.length) return;
+
+  function setActive(id) {
+    items.forEach(({ link, target }) => {
+      const active = target.id === id;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  const hashTarget = window.location.hash ? window.location.hash.slice(1) : '';
+  const initialId = items.some(({ target }) => target.id === hashTarget)
+    ? hashTarget
+    : items[0].target.id;
+  setActive(initialId);
+
+  if (typeof IntersectionObserver === 'undefined') return;
+
+  const visible = new Map();
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) visible.set(entry.target.id, entry.intersectionRatio);
+      else visible.delete(entry.target.id);
+    });
+
+    if (!visible.size) return;
+    const top = Array.from(visible.entries()).sort((a, b) => b[1] - a[1])[0][0];
+    setActive(top);
+  }, {
+    rootMargin: '-32% 0px -52% 0px',
+    threshold: [0.2, 0.4, 0.6]
+  });
+
+  items.forEach(({ target }) => observer.observe(target));
+}
+
 cacheSubTexts();
+initSectionNav();
 updateHealthAndRecommendations(lastInputs);
 </script>
 </body>
