@@ -1458,9 +1458,12 @@ a:focus-visible {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
+  position: relative;
 }
+.calc-out-card.tip-enabled { cursor: pointer; }
+.calc-out-card.tip-open { z-index: 8; }
 .calc-out-card.live {
   border-color: #009e73;
   background: rgba(0,158,115,0.05);
@@ -1483,9 +1486,91 @@ a:focus-visible {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
+  padding-right: 26px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.calc-out-tip-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,114,178,0.34);
+  background: rgba(255,255,255,0.95);
+  color: #005a8f;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(13, 31, 60, 0.12);
+}
+.calc-out-tip-btn:hover { background: rgba(0,114,178,0.1); }
+.calc-out-tip-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 1px;
+}
+
+.calc-out-tip {
+  position: absolute;
+  top: 30px;
+  right: 8px;
+  width: min(340px, calc(100vw - 54px));
+  border: 1px solid rgba(0,114,178,0.3);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f9ff 100%);
+  box-shadow: 0 16px 34px rgba(11, 28, 58, 0.24);
+  padding: 10px 11px;
+  display: none;
+  z-index: 20;
+}
+.calc-out-card.tip-open .calc-out-tip { display: block; }
+.calc-out-tip-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 14px;
+  color: #16213e;
+  line-height: 1.25;
+}
+.calc-out-tip-what {
+  margin-top: 5px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #405070;
+}
+.calc-out-tip-sub {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #005a8f;
+}
+.calc-out-tip-list {
+  margin-top: 6px;
+  padding-left: 14px;
+  display: grid;
+  gap: 4px;
+}
+.calc-out-tip-list li {
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: #2f3c57;
+}
+.calc-out-tip code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #005a8f;
+  background: rgba(0,114,178,0.08);
+  border: 1px solid rgba(0,114,178,0.14);
+  border-radius: 4px;
+  padding: 1px 4px;
 }
 
 /* THE FIX: value can never overflow its box */
@@ -2735,6 +2820,90 @@ const mcpModalEl = document.getElementById('mcp-modal');
 const mcpModalDialogEl = mcpModalEl ? mcpModalEl.querySelector('.mcp-modal-dialog') : null;
 const mcpModalOpeners = Array.from(document.querySelectorAll('[data-mcp-open]'));
 let lastMcpModalTrigger = null;
+const OUTPUT_TOOLTIP_CONTENT = {
+  'out-beN': {
+    title: 'Break-Even Clients',
+    what: 'This shows the first client volume where the model turns sustainable (revenue meets/exceeds total monthly cost).',
+    how: [
+      'Model scans client counts and finds the first <code>n</code> where <code>Revenue(n) >= TotalCost(n)</code>.',
+      '<code>Revenue(n) = ARPU × n</code> (manual ARPU or startup-derived ARPU).',
+      '<code>TotalCost(n) = DevCost(n) + InfraCost(n)</code>.'
+    ]
+  },
+  'out-minPrice': {
+    title: 'Minimum Price per Client',
+    what: 'This is the minimum monthly unit price needed at current scale to recover cost and hit target margin.',
+    how: [
+      'Calculated at current client count <code>n</code> (or default estimate when n is missing).',
+      '<code>MinPrice(n) = (TotalCost(n) / n) × (1 + margin)</code>.',
+      'If ARPU is below this number, margin pressure appears.'
+    ]
+  },
+  'out-vcpu': {
+    title: 'VCPU at n',
+    what: 'This is variable cloud cost per client at the current scale.',
+    how: [
+      'Uses current infra cost curve at selected <code>n</code>.',
+      '<code>VCPU = InfraCost(n) / n</code>.',
+      'It is used directly in contribution margin and break-even logic.'
+    ]
+  },
+  'out-margin': {
+    title: 'Contribution Margin',
+    what: 'This shows unit economics headroom per client after variable cloud cost.',
+    how: [
+      '<code>ContributionMargin = ARPU − VCPU</code>.',
+      'Positive margin means each additional client contributes toward fixed+growth costs.',
+      'Negative margin means each new client currently destroys margin.'
+    ]
+  },
+  'out-ccer': {
+    title: 'CCER at n',
+    what: 'Cloud Cost Efficiency Ratio compares generated revenue against cloud spend at the same scale.',
+    how: [
+      '<code>CCER = Revenue / InfraCost</code>.',
+      '<code>Revenue = ARPU × n</code>.',
+      'A common benchmark is <code>> 3×</code> for healthy cloud efficiency.'
+    ]
+  },
+  'out-cudSave': {
+    title: 'CUD Monthly Saving',
+    what: 'Estimated monthly savings from commitment discounts versus on-demand infra pricing.',
+    how: [
+      '<code>Saving = InfraOnDemand(n) − InfraWithCUD(n)</code>.',
+      'Infra with CUD uses your discount % input through commitment factor <code>γ</code>.',
+      'Higher discounts and larger scale usually increase this saving.'
+    ]
+  },
+  'out-reqClients': {
+    title: 'Required Clients @ Target Price',
+    what: 'Given Option A target price, this estimates how many clients are needed to become viable.',
+    how: [
+      'Model scans upward and finds smallest <code>n</code> where <code>MinPrice(n) <= TargetPrice</code>.',
+      'Uses your current cost calibration + margin target.',
+      'If not reachable in range, it returns a warning threshold.'
+    ]
+  },
+  'out-reqPrice': {
+    title: 'Required Price @ Target Clients',
+    what: 'Given Option B target clients, this is the minimum viable unit price.',
+    how: [
+      'Computed directly at your target client count.',
+      '<code>RequiredPrice = MinPrice(targetClients)</code>.',
+      'This helps validate go-to-market price assumptions.'
+    ]
+  },
+  'out-targetRevenue': {
+    title: 'Target Monthly Revenue',
+    what: 'This is the monthly revenue level implied by your startup planning assumptions.',
+    how: [
+      'If both target price and target clients are provided: <code>RevenueTarget = price × clients</code>.',
+      'If only one startup option is provided, missing value is derived from model first.',
+      'Reflects the current calibration of cost, scale, and margin settings.'
+    ]
+  }
+};
+let activeOutputTipCard = null;
 
 // ─── TOGGLE ─────────────────────────────────────────────────────
 function toggle(id) {
@@ -3582,6 +3751,96 @@ function cacheSubTexts() {
   });
 }
 
+function buildOutputTooltipHtml(config) {
+  const items = config.how.map(item => `<li>${item}</li>`).join('');
+  return `
+    <div class="calc-out-tip-title">${config.title}</div>
+    <p class="calc-out-tip-what">${config.what}</p>
+    <div class="calc-out-tip-sub">How this is calculated</div>
+    <ul class="calc-out-tip-list">${items}</ul>
+  `;
+}
+
+function closeOutputCardTooltip(card) {
+  if (!card) return;
+  card.classList.remove('tip-open');
+  const btn = card.querySelector('.calc-out-tip-btn');
+  const panel = card.querySelector('.calc-out-tip');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+  if (panel) panel.setAttribute('aria-hidden', 'true');
+  if (activeOutputTipCard === card) activeOutputTipCard = null;
+}
+
+function closeAllOutputCardTooltips() {
+  document.querySelectorAll('.calc-out-card.tip-open').forEach(closeOutputCardTooltip);
+}
+
+function toggleOutputCardTooltip(card) {
+  if (!card) return;
+  const isOpen = card.classList.contains('tip-open');
+  if (isOpen) {
+    closeOutputCardTooltip(card);
+    return;
+  }
+
+  closeAllOutputCardTooltips();
+  card.classList.add('tip-open');
+  const btn = card.querySelector('.calc-out-tip-btn');
+  const panel = card.querySelector('.calc-out-tip');
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+  if (panel) panel.setAttribute('aria-hidden', 'false');
+  activeOutputTipCard = card;
+}
+
+function initOutputCardTooltips() {
+  const cards = Array.from(document.querySelectorAll('.calc-out-card'));
+  if (!cards.length) return;
+
+  cards.forEach(card => {
+    const config = OUTPUT_TOOLTIP_CONTENT[card.id];
+    if (!config) return;
+
+    card.classList.add('tip-enabled');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'calc-out-tip-btn';
+    btn.textContent = 'i';
+    btn.setAttribute('aria-label', `Explain ${config.title}`);
+    btn.setAttribute('aria-expanded', 'false');
+
+    const panel = document.createElement('div');
+    panel.className = 'calc-out-tip';
+    panel.id = `tip-${card.id}`;
+    panel.setAttribute('role', 'tooltip');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.innerHTML = buildOutputTooltipHtml(config);
+
+    btn.setAttribute('aria-controls', panel.id);
+    card.appendChild(btn);
+    card.appendChild(panel);
+
+    btn.addEventListener('click', event => {
+      event.stopPropagation();
+      toggleOutputCardTooltip(card);
+    });
+
+    card.addEventListener('click', event => {
+      if (event.target.closest('.calc-out-tip-btn') || event.target.closest('.calc-out-tip')) return;
+      toggleOutputCardTooltip(card);
+    });
+
+    panel.addEventListener('click', event => {
+      event.stopPropagation();
+    });
+  });
+
+  document.addEventListener('click', event => {
+    if (event.target.closest('.calc-out-card.tip-enabled')) return;
+    closeAllOutputCardTooltips();
+  });
+}
+
 function onInput(fieldId) {
   const input = document.getElementById('inp-' + fieldId);
   if (input) {
@@ -4023,6 +4282,7 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeMcpModal();
+    closeAllOutputCardTooltips();
     document.querySelectorAll('.formula-card.active').forEach(c => {
       c.classList.remove('active');
       c.querySelector('.ftip').classList.remove('open');
@@ -4081,6 +4341,7 @@ function initSectionNav() {
   items.forEach(({ target }) => observer.observe(target));
 }
 
+initOutputCardTooltips();
 cacheSubTexts();
 initMcpModal();
 initSectionNav();
