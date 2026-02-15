@@ -871,6 +871,13 @@ body {
   line-height: 1.6;
   max-width: 600px;
 }
+.share-feedback {
+  margin-top: 8px;
+  min-height: 16px;
+  font-size: 11px;
+  color: #0f7358;
+}
+.share-feedback.error { color: #a64300; }
 .calc-deeplink {
   margin-top: 8px;
   display: inline-flex;
@@ -899,6 +906,35 @@ body {
   font-weight: 600;
   font-family: 'JetBrains Mono', monospace;
 }
+.calc-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.share-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1.5px solid rgba(0,114,178,0.35);
+  border-radius: 8px;
+  background: rgba(0,114,178,0.08);
+  color: #005a8f;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.share-btn:hover { background: rgba(0,114,178,0.13); border-color: rgba(0,114,178,0.5); }
+.share-btn:focus-visible,
+.reset-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
 .reset-btn {
   flex-shrink: 0;
   padding: 8px 16px;
@@ -914,6 +950,13 @@ body {
   display: flex; align-items: center; gap: 6px;
 }
 .reset-btn:hover { border-color: #d55e00; color: #d55e00; background: rgba(213,94,0,0.04); }
+@media (max-width: 680px) {
+  .calc-actions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
 
 /* Body wrapper */
 .calc-body {
@@ -1772,16 +1815,23 @@ body {
   <div class="calc-section section-anchor" id="calculator-section">
     <div class="calc-header" id="live-calculator">
       <div class="calc-title-row">
-        <div>
+        <div class="calc-title-main">
           <div class="fig-label" style="margin-bottom:5px">⚙︎ Interactive Model — Live Parameter Calculator</div>
           <h2 class="calc-title">Enter what you know. I'll calculate the rest for you.</h2>
           <p class="calc-subtitle">Type in any business figure and the model instantly derives all other parameters and <strong>redraws the chart</strong>. Fields show <span class="badge-calc">calculated</span> when auto-derived from your inputs.</p>
           <a class="calc-deeplink" href="#live-calculator">🔗 Share this section</a>
+          <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
         </div>
-        <button class="reset-btn" onclick="resetModel()">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
-          Reset defaults
-        </button>
+        <div class="calc-actions">
+          <button class="share-btn" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
+            Copy state link
+          </button>
+          <button class="reset-btn" type="button" onclick="resetModel()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
+            Reset defaults
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2288,6 +2338,14 @@ body {
 // ─── STATE ──────────────────────────────────────────────────────
 const hidden = new Set();
 let paths = {}, hoverDots = {}, currentPts = [], currentScales = {};
+const SHARE_STATE_VERSION = 1;
+const SHAREABLE_INPUT_KEYS = [
+  'nRef', 'devPerClient', 'infraTotal', 'ARPU',
+  'startupTargetPrice', 'startupTargetClients',
+  'cudPct', 'margin', 'nMax'
+];
+const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
+let shareFeedbackTimer = null;
 
 // ─── TOGGLE ─────────────────────────────────────────────────────
 function toggle(id) {
@@ -2301,6 +2359,184 @@ function toggle(id) {
     if (paths[id]) paths[id].attr('opacity', 0);
     btn.classList.add('off');
   }
+}
+
+function encodeShareState(payload) {
+  try {
+    const json = JSON.stringify(payload);
+    const bytes = new TextEncoder().encode(json);
+    let bin = '';
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  } catch (err) {
+    return null;
+  }
+}
+
+function decodeShareState(encoded) {
+  try {
+    const base = String(encoded || '').replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base + '='.repeat((4 - (base.length % 4)) % 4);
+    const bin = atob(padded);
+    const bytes = Uint8Array.from(bin, ch => ch.charCodeAt(0));
+    const parsed = JSON.parse(new TextDecoder().decode(bytes));
+    return (parsed && typeof parsed === 'object') ? parsed : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function writeShareFeedback(message, isError = false) {
+  const el = document.getElementById('share-feedback');
+  if (!el) return;
+  if (shareFeedbackTimer) {
+    clearTimeout(shareFeedbackTimer);
+    shareFeedbackTimer = null;
+  }
+  el.textContent = message || '';
+  el.classList.toggle('error', !!isError);
+  if (message) {
+    shareFeedbackTimer = setTimeout(() => {
+      el.textContent = '';
+      el.classList.remove('error');
+      shareFeedbackTimer = null;
+    }, isError ? 5500 : 3200);
+  }
+}
+
+function collectShareState() {
+  const inputState = {};
+  SHAREABLE_INPUT_KEYS.forEach(key => {
+    const el = document.getElementById(`inp-${key}`);
+    if (!el) return;
+    const value = el.value.trim();
+    if (value !== '') inputState[key] = value;
+  });
+
+  return {
+    v: SHARE_STATE_VERSION,
+    i: inputState,
+    p: Array.from(selectedProviders),
+    h: Array.from(hidden).filter(id => SHAREABLE_CURVE_KEYS.includes(id))
+  };
+}
+
+function buildShareStateUrl() {
+  const state = collectShareState();
+  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0;
+  if (!hasData) return null;
+
+  const encoded = encodeShareState(state);
+  if (!encoded) return null;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('state', encoded);
+  return url;
+}
+
+function copyShareStateLink() {
+  const urlObj = buildShareStateUrl();
+  if (!urlObj) {
+    writeShareFeedback('Add at least one value before creating a share link.', true);
+    return;
+  }
+
+  const shareUrl = urlObj.toString();
+  const replacePath = `${urlObj.pathname}${urlObj.search}${urlObj.hash}`;
+  window.history.replaceState({}, '', replacePath);
+
+  const fallback = () => {
+    window.prompt('Copy this calculator state link:', shareUrl);
+    writeShareFeedback('Share link ready. Copy it from the dialog.', false);
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => writeShareFeedback('Share link copied. Your colleague will open the same state.', false))
+      .catch(fallback);
+  } else {
+    fallback();
+  }
+}
+
+function normaliseSharedInput(el, rawValue) {
+  if (!el) return '';
+  const value = String(rawValue ?? '').trim();
+  if (!value) return '';
+  const num = Number(value);
+  if (!isFinite(num)) return '';
+
+  const min = el.getAttribute('min');
+  const max = el.getAttribute('max');
+  if (min !== null && min !== '' && num < Number(min)) return '';
+  if (max !== null && max !== '' && num > Number(max)) return '';
+  return value;
+}
+
+function applySharedState(state) {
+  if (!state || typeof state !== 'object') return false;
+
+  const inputState = (state.i && typeof state.i === 'object') ? state.i : {};
+  SHAREABLE_INPUT_KEYS.forEach(key => {
+    const el = document.getElementById(`inp-${key}`);
+    if (!el) return;
+    const hasKey = Object.prototype.hasOwnProperty.call(inputState, key);
+    const safeValue = hasKey ? normaliseSharedInput(el, inputState[key]) : '';
+    el.value = safeValue;
+    USER_PROVIDED[key] = safeValue !== '';
+    const wrap = el.closest('.calc-field, .startup-field');
+    if (wrap) wrap.classList.toggle('has-value', safeValue !== '');
+  });
+
+  const validProviders = new Set(Array.from(document.querySelectorAll('.provider-btn')).map(btn => btn.dataset.provider));
+  selectedProviders.clear();
+  document.querySelectorAll('.provider-btn.selected').forEach(btn => btn.classList.remove('selected'));
+  if (Array.isArray(state.p)) {
+    state.p.forEach(provider => {
+      if (!validProviders.has(provider)) return;
+      selectedProviders.add(provider);
+      const btn = document.querySelector(`[data-provider="${provider}"]`);
+      if (btn) btn.classList.add('selected');
+    });
+  }
+
+  const hiddenFromState = Array.isArray(state.h) ? state.h : [];
+  hidden.clear();
+  SHAREABLE_CURVE_KEYS.forEach(curveId => {
+    const shouldHide = hiddenFromState.includes(curveId);
+    if (shouldHide) hidden.add(curveId);
+    const btn = document.getElementById(`btn-${curveId}`);
+    if (btn) btn.classList.toggle('off', shouldHide);
+  });
+
+  recalculate();
+  updateProgressPills();
+  draw();
+  return true;
+}
+
+function loadSharedStateFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get('state');
+  if (!encoded) return false;
+
+  const decoded = decodeShareState(encoded);
+  if (!decoded) {
+    writeShareFeedback('Shared state link is invalid or corrupted.', true);
+    return false;
+  }
+
+  const applied = applySharedState(decoded);
+  if (applied) writeShareFeedback('Shared calculator state loaded.', false);
+  return applied;
+}
+
+function clearShareStateParam() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has('state')) return;
+  url.searchParams.delete('state');
+  const replacePath = `${url.pathname}${url.search}${url.hash}`;
+  window.history.replaceState({}, '', replacePath);
 }
 
 // ─── MODEL PARAMS (live, updated by calculator) ──────────────────
@@ -3305,6 +3541,8 @@ function resetModel() {
   });
   draw();
   updateHealthAndRecommendations(lastInputs);
+  clearShareStateParam();
+  writeShareFeedback('');
 }
 
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
@@ -3402,7 +3640,9 @@ function initSectionNav() {
 
 cacheSubTexts();
 initSectionNav();
-updateHealthAndRecommendations(lastInputs);
+if (!loadSharedStateFromUrl()) {
+  updateHealthAndRecommendations(lastInputs);
+}
 </script>
 </body>
 </html>
