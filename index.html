@@ -1129,6 +1129,21 @@ a:focus-visible {
   height: 13px;
   fill: currentColor;
 }
+.fig-page-meta {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0, 114, 178, 0.22);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(8.8px, 1vw, 10px);
+  color: #55647d;
+}
+.fig-page-meta strong {
+  color: #2f4668;
+  font-weight: 600;
+}
 
 /* References section */
 .fig-refs {
@@ -2832,6 +2847,11 @@ a:focus-visible {
         </div>
 
       </div>
+    </div>
+
+    <div class="fig-page-meta" aria-label="Page metadata">
+      <span><strong>Last updated:</strong> <time datetime="2026-02-16T14:15:00+04:00">16 Feb 2026, 14:15 (UTC+04:00)</time></span>
+      <span><strong>Version ID:</strong> v2026.02.16-01</span>
     </div>
   </div>
 

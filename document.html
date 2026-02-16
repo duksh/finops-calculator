@@ -372,6 +372,23 @@
     color: #44546f;
   }
 
+  .doc-page-meta {
+    margin-top: 8px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #5d6c85;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 12px;
+  }
+
+  .doc-page-meta strong {
+    color: #3c4f6d;
+    font-weight: 600;
+  }
+
   @media (max-width: 980px) {
     .hero-grid,
     .split { grid-template-columns: 1fr; }
@@ -691,6 +708,10 @@ node /absolute/path/to/mcp/server/index.js
       </section>
 
       <p class="footer-note">This documentation page is intended as both a business user guide and technical handoff reference for teams integrating the FinOps calculator in human and assistant workflows.</p>
+      <div class="doc-page-meta" aria-label="Page metadata">
+        <span><strong>Last updated:</strong> <time datetime="2026-02-16T14:15:00+04:00">16 Feb 2026, 14:15 (UTC+04:00)</time></span>
+        <span><strong>Version ID:</strong> v2026.02.16-01</span>
+      </div>
       <p class="doc-author-ref">Reference author: Duksh Koonjoobeeharry (FinOps &amp; AWS/GCP Cloud Solution Developer, DBA Researcher) · <a href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
     </div>
   </div>
