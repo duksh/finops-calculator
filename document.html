@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinOps Calculator Documentation - User Guide and Technical Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f7fc;
+    --surface: #ffffff;
+    --border: #d6deeb;
+    --text: #1b2136;
+    --muted: #4c5872;
+    --accent-blue: #0072b2;
+    --accent-cyan: #00a5c8;
+    --accent-green: #009e73;
+    --accent-amber: #e69f00;
+    --accent-rose: #d55e00;
+    --shadow: 0 12px 28px rgba(17, 35, 66, 0.1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 84px;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+    background:
+      radial-gradient(circle at 4% 4%, rgba(86,180,233,0.12) 0%, rgba(86,180,233,0) 34%),
+      radial-gradient(circle at 96% 8%, rgba(0,158,115,0.11) 0%, rgba(0,158,115,0) 35%),
+      linear-gradient(180deg, #f8fbff 0%, var(--bg) 60%, #fff9f1 100%);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 12px;
+    top: -80px;
+    z-index: 1000;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #fff;
+    background: #0f2a48;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 12px;
+    outline: 2px solid #56b4e9;
+    outline-offset: 2px;
+  }
+
+  .docs-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(22, 36, 64, 0.16);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+  }
+
+  .docs-topbar-inner {
+    width: min(1200px, 100% - 28px);
+    margin: 0 auto;
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .brand-link {
+    text-decoration: none;
+    color: #1d3153;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+
+  .brand-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+    box-shadow: 0 4px 12px rgba(0, 114, 178, 0.32);
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .top-link {
+    text-decoration: none;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 114, 178, 0.3);
+    color: #00557f;
+    background: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .top-link.primary {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(92deg, var(--accent-blue), var(--accent-cyan), var(--accent-green));
+  }
+
+  .top-link:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #56b4e9;
+    outline-offset: 2px;
+  }
+
+  main {
+    width: min(1200px, 100% - 28px);
+    margin: 18px auto 34px;
+  }
+
+  .hero {
+    border: 1px solid rgba(24, 41, 70, 0.14);
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(0,114,178,0.16) 0%, rgba(0,114,178,0) 36%),
+      radial-gradient(circle at 88% 28%, rgba(0,158,115,0.13) 0%, rgba(0,158,115,0) 34%),
+      linear-gradient(145deg, #ffffff 0%, #f2f8ff 100%);
+    padding: clamp(20px, 3vw, 34px);
+    box-shadow: var(--shadow);
+  }
+
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #0f6789;
+  }
+
+  h1 {
+    margin: 8px 0 10px;
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .hero p {
+    margin: 0;
+    max-width: 74ch;
+    color: #36445f;
+    font-size: clamp(16px, 1.5vw, 20px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .hero-card {
+    border-radius: 14px;
+    border: 1px solid rgba(24, 41, 70, 0.13);
+    background: rgba(255, 255, 255, 0.86);
+    padding: 12px;
+  }
+
+  .hero-card h2 {
+    margin: 0 0 5px;
+    font-size: 15px;
+    color: #183252;
+  }
+
+  .hero-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #3b4a64;
+  }
+
+  .docs-layout {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .toc {
+    position: sticky;
+    top: 78px;
+    align-self: start;
+    border: 1px solid rgba(24, 41, 70, 0.12);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 10px 22px rgba(17, 35, 66, 0.08);
+    padding: 12px;
+  }
+
+  .toc h2 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #395172;
+  }
+
+  .toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: #284160;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .toc a:hover {
+    border-color: rgba(0,114,178,0.24);
+    background: rgba(0,114,178,0.06);
+  }
+
+  .doc-section {
+    border: 1px solid rgba(24, 41, 70, 0.14);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: var(--shadow);
+    padding: clamp(16px, 2.4vw, 24px);
+  }
+
+  .doc-section + .doc-section { margin-top: 12px; }
+
+  .doc-section h2 {
+    margin: 0 0 8px;
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(25px, 2.8vw, 34px);
+    line-height: 1.15;
+    color: #1a2b48;
+  }
+
+  .doc-section h3 {
+    margin: 14px 0 6px;
+    font-size: 16px;
+    color: #133f64;
+  }
+
+  .doc-section p { margin: 0; color: #32435f; }
+
+  .doc-section ul,
+  .doc-section ol {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    color: #32435f;
+  }
+
+  .doc-section li + li { margin-top: 6px; }
+
+  .split {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .mini-card {
+    border: 1px solid rgba(24, 41, 70, 0.12);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.94);
+    padding: 12px;
+  }
+
+  .mini-card h4 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: #1c3657;
+  }
+
+  .mini-card p { margin: 0; font-size: 14px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  th, td {
+    border: 1px solid rgba(24, 41, 70, 0.14);
+    padding: 9px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: rgba(0,114,178,0.08);
+    color: #123a5f;
+    font-weight: 700;
+  }
+
+  pre {
+    margin: 10px 0 0;
+    background: #0f1f35;
+    color: #d6e7ff;
+    padding: 12px;
+    border-radius: 12px;
+    overflow-x: auto;
+    border: 1px solid rgba(86,180,233,0.4);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95em;
+  }
+
+  .callout {
+    margin-top: 10px;
+    border-left: 4px solid var(--accent-green);
+    border-radius: 10px;
+    border: 1px solid rgba(0,158,115,0.2);
+    background: rgba(0,158,115,0.08);
+    padding: 10px 12px;
+    color: #214b41;
+  }
+
+  .footer-note {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px dashed rgba(0,114,178,0.3);
+    color: #365071;
+    background: rgba(255,255,255,0.78);
+  }
+
+  .doc-author-ref {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #66738b;
+  }
+
+  .doc-author-ref a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(102, 115, 139, 0.65);
+  }
+
+  .doc-author-ref a:hover {
+    color: #44546f;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid,
+    .split { grid-template-columns: 1fr; }
+
+    .docs-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .toc {
+      position: static;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to documentation content</a>
+<header class="docs-topbar" aria-label="Documentation page header">
+  <div class="docs-topbar-inner">
+    <a class="brand-link" href="index.html">
+      <span class="brand-pill" aria-hidden="true">F</span>
+      <span>FinOps Calculator Docs</span>
+    </a>
+    <div class="top-actions">
+      <a class="top-link primary" href="index.html#calculator-section">Open Calculator</a>
+      <a class="top-link" href="index.html#mcp-section">MCP Overview</a>
+      <a class="top-link" href="https://github.com/duksh/finops-calculator-mcp" target="_blank" rel="noopener noreferrer">MCP Repo</a>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+  <section class="hero" aria-labelledby="doc-hero-title">
+    <p class="kicker">User guide and technical reference</p>
+    <h1 id="doc-hero-title">Documentation for the FinOps and Cloud Economics Calculator + MCP</h1>
+    <p>This document explains what each part of the calculator does, how the model derives outputs, and how to use the MCP server for assistant-driven workflows and automations.</p>
+
+    <div class="hero-grid">
+      <article class="hero-card">
+        <h2>Who this is for</h2>
+        <p>FinOps teams, SaaS founders, engineering leaders, and anyone validating cloud unit economics before scaling.</p>
+      </article>
+      <article class="hero-card">
+        <h2>What is covered</h2>
+        <p>Calculator sections, formulas, health logic, recommendations, share-state links, and MCP tools.</p>
+      </article>
+      <article class="hero-card">
+        <h2>How to use this page</h2>
+        <p>Start with Quick Start, then move through calculator usage, then MCP setup and examples.</p>
+      </article>
+    </div>
+  </section>
+
+  <div class="docs-layout">
+    <nav class="toc" aria-label="Table of contents">
+      <h2>On this page</h2>
+      <ul>
+        <li><a href="#quick-start">Quick start</a></li>
+        <li><a href="#calculator-parts">Calculator sections explained</a></li>
+        <li><a href="#calculation-logic">How calculations work</a></li>
+        <li><a href="#usage-workflow">How to use the calculator</a></li>
+        <li><a href="#health-recommendations">Health and recommendations</a></li>
+        <li><a href="#share-state">Share state links</a></li>
+        <li><a href="#mcp-overview">MCP overview</a></li>
+        <li><a href="#mcp-tools">MCP tools and contracts</a></li>
+        <li><a href="#mcp-setup">MCP setup</a></li>
+        <li><a href="#mcp-example">MCP call example</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <section class="doc-section" id="quick-start" aria-labelledby="quick-start-title">
+        <h2 id="quick-start-title">Quick start</h2>
+        <ol>
+          <li>Open the calculator page and complete Group A inputs (client volume, costs, and ARPU or startup planning fields).</li>
+          <li>Optionally tune Group B inputs (CUD discount, target margin, and chart scale).</li>
+          <li>Review Group C auto-calculated outputs. Use the info tooltips on each output for formula context.</li>
+          <li>Check Group E health status and recommendation cards for priority actions.</li>
+          <li>Use the chart section to inspect cost/revenue/profit curves across scale.</li>
+        </ol>
+        <div class="callout">
+          Tip: For scenario planning, adjust one assumption at a time (ARPU, CUD, or client volume) and compare impact on break-even, CCER, and margin.
+        </div>
+      </section>
+
+      <section class="doc-section" id="calculator-parts" aria-labelledby="calculator-parts-title">
+        <h2 id="calculator-parts-title">Calculator sections explained</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>What you provide</th>
+              <th>What the model computes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Group A - Core Inputs</td>
+              <td>Current clients (n), dev cost/month, infra cost/month, ARPU, and startup planning alternatives.</td>
+              <td>Normalizes baseline assumptions for all downstream calculations.</td>
+            </tr>
+            <tr>
+              <td>Group B - Optional Tuning</td>
+              <td>CUD discount %, target margin %, and maximum clients shown on chart.</td>
+              <td>Applies commitment savings and pricing floor constraints.</td>
+            </tr>
+            <tr>
+              <td>Group C - Auto Outputs</td>
+              <td>No direct input; values are derived from Groups A/B.</td>
+              <td>Break-even clients, min price, contribution margin, CCER, CUD savings, and target scenario outputs.</td>
+            </tr>
+            <tr>
+              <td>Group D - Provider Curves</td>
+              <td>Select cloud provider scenarios and visible lines.</td>
+              <td>Compares scaling behavior across cost and revenue lines.</td>
+            </tr>
+            <tr>
+              <td>Group E - Health + Recommendations</td>
+              <td>Derived from current assumptions.</td>
+              <td>Zone score and prioritized FinOps actions based on current posture.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" id="calculation-logic" aria-labelledby="calculation-logic-title">
+        <h2 id="calculation-logic-title">How calculations work</h2>
+        <p>The calculator uses deterministic formulas and scan-based thresholds to derive business viability metrics from your inputs.</p>
+
+        <div class="split">
+          <article class="mini-card">
+            <h4>Core equations</h4>
+            <ul>
+              <li><code>Revenue(n) = ARPU * n</code></li>
+              <li><code>TotalCost(n) = DevCost(n) + InfraCost(n)</code></li>
+              <li><code>BreakEven = first n where Revenue(n) >= TotalCost(n)</code></li>
+              <li><code>ContributionMargin% = ((Revenue - TotalCost) / Revenue) * 100</code></li>
+              <li><code>CCER = Revenue / CloudSpend</code></li>
+            </ul>
+          </article>
+          <article class="mini-card">
+            <h4>Derived output behavior</h4>
+            <ul>
+              <li>Min price/client responds to total unit cost and target margin.</li>
+              <li>CUD monthly saving shows on-demand infra minus committed infra at current scale.</li>
+              <li>Target fields estimate required clients for a target price and required price for a target client volume.</li>
+              <li>Target monthly revenue is derived from target price and required clients scenario values.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="doc-section" id="usage-workflow" aria-labelledby="usage-workflow-title">
+        <h2 id="usage-workflow-title">How to use the calculator effectively</h2>
+        <h3>Recommended workflow</h3>
+        <ol>
+          <li>Start with realistic current values. If ARPU is uncertain, use startup planning options.</li>
+          <li>Set a conservative CUD percentage first, then refine after observing sensitivity.</li>
+          <li>Use output tooltips to validate assumptions behind each metric.</li>
+          <li>Cross-check with chart curves for where margins compress at higher client counts.</li>
+          <li>Use health recommendations to prioritize short-term vs strategic actions.</li>
+        </ol>
+
+        <h3>Scenario comparison approach</h3>
+        <ul>
+          <li>Scenario A: current assumptions.</li>
+          <li>Scenario B: improved commitment discount.</li>
+          <li>Scenario C: revised target margin and market price.</li>
+          <li>Compare break-even, CCER, and contribution margin across the three scenarios.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="health-recommendations" aria-labelledby="health-recommendations-title">
+        <h2 id="health-recommendations-title">Health zone and recommendations</h2>
+        <p>The Health section continuously evaluates your model posture and labels it as a zone with an associated score and guidance.</p>
+        <ul>
+          <li>Signals include break-even behavior, efficiency posture (CCER), margin quality, and commitment coverage.</li>
+          <li>Recommendation cards are prioritized to guide near-term and medium-term FinOps actions.</li>
+          <li>Provider filters help tailor actions to cloud-specific optimization opportunities.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="share-state" aria-labelledby="share-state-title">
+        <h2 id="share-state-title">Share-state links</h2>
+        <p>The calculator can generate a URL that captures the current model state so colleagues can open the same assumptions without re-entering inputs.</p>
+        <ul>
+          <li>Includes normalized inputs, selected provider state, and curve visibility toggles.</li>
+          <li>The URL contains an encoded <code>?state=</code> token.</li>
+          <li>On load, the app decodes and validates this state, then recalculates outputs, chart, health, and recommendations.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="mcp-overview" aria-labelledby="mcp-overview-title">
+        <h2 id="mcp-overview-title">MCP overview</h2>
+        <p>The same FinOps model is available through a Model Context Protocol server so AI assistants can call the model directly in workflows, audits, and planning automations.</p>
+        <ul>
+          <li>Transport: JSON-RPC over stdio in the current implementation.</li>
+          <li>Core logic is shared between browser model behavior and MCP tool handlers.</li>
+          <li>Useful for repeatable analysis, not just manual UI interactions.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="mcp-tools" aria-labelledby="mcp-tools-title">
+        <h2 id="mcp-tools-title">MCP tools and contracts</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Purpose</th>
+              <th>Typical output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>finops.calculate</code></td>
+              <td>Full model execution with normalized inputs.</td>
+              <td>Calculated outputs, health, and recommendations.</td>
+            </tr>
+            <tr>
+              <td><code>finops.health</code></td>
+              <td>Posture-only analysis for the same assumptions.</td>
+              <td>Zone, score, and failed checks.</td>
+            </tr>
+            <tr>
+              <td><code>finops.recommend</code></td>
+              <td>Action planning output.</td>
+              <td>Prioritized recommendations filtered by zone/provider.</td>
+            </tr>
+            <tr>
+              <td><code>finops.state.encode</code></td>
+              <td>Create share-state tokens from assumptions.</td>
+              <td>Encoded token for URL embedding.</td>
+            </tr>
+            <tr>
+              <td><code>finops.state.decode</code></td>
+              <td>Decode and validate share-state tokens.</td>
+              <td>Restored assumptions payload.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" id="mcp-setup" aria-labelledby="mcp-setup-title">
+        <h2 id="mcp-setup-title">MCP setup and usage</h2>
+        <h3>Local setup</h3>
+        <ol>
+          <li>Clone <code>finops-calculator</code> or <code>finops-calculator-mcp</code>.</li>
+          <li>Install dependencies in the MCP workspace.</li>
+          <li>Run tests to verify contract/protocol behavior.</li>
+          <li>Register MCP server command in your client config.</li>
+        </ol>
+
+<pre><code># Example command path for MCP client config
+node /absolute/path/to/mcp/server/index.js
+</code></pre>
+
+        <h3>Client connection references</h3>
+        <p>Use the configuration examples in <code>mcp/client-config-examples.md</code> for Cursor, Windsurf, and Claude Desktop integration.</p>
+      </section>
+
+      <section class="doc-section" id="mcp-example" aria-labelledby="mcp-example-title">
+        <h2 id="mcp-example-title">Example MCP request/response shape</h2>
+<pre><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "finops.calculate",
+    "arguments": {
+      "clients": 120,
+      "devCost": 26000,
+      "infraCost": 18000,
+      "arpu": 420,
+      "cudPct": 32,
+      "margin": 25
+    }
+  }
+}
+</code></pre>
+
+<pre><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "outputs": {
+      "breakEvenClients": 51,
+      "minPrice": 310.2
+    },
+    "health": {
+      "zone": "yellow",
+      "score": 72
+    }
+  }
+}
+</code></pre>
+      </section>
+
+      <section class="doc-section" id="troubleshooting" aria-labelledby="troubleshooting-title">
+        <h2 id="troubleshooting-title">Troubleshooting</h2>
+        <h3>Calculator page issues</h3>
+        <ul>
+          <li><strong>Unexpected output values:</strong> verify units (monthly costs, not annual).</li>
+          <li><strong>Chart looks flat:</strong> increase chart scale or adjust ARPU/cost assumptions.</li>
+          <li><strong>Shared link does not restore:</strong> ensure full URL including <code>?state=</code> is copied.</li>
+        </ul>
+
+        <h3>MCP issues</h3>
+        <ul>
+          <li><strong>Tools not visible:</strong> confirm server command path and restart the MCP client.</li>
+          <li><strong>Tool call errors:</strong> validate argument types against schema examples in <code>mcp/schemas/</code>.</li>
+          <li><strong>Unexpected decode errors:</strong> ensure the token is complete and unmodified.</li>
+        </ul>
+      </section>
+
+      <p class="footer-note">This documentation page is intended as both a business user guide and technical handoff reference for teams integrating the FinOps calculator in human and assistant workflows.</p>
+      <p class="doc-author-ref">Reference author: Duksh Koonjoobeeharry (FinOps &amp; AWS/GCP Cloud Solution Developer, DBA Researcher) · <a href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
