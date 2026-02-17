@@ -1073,13 +1073,21 @@ a:focus-visible {
   border-top: 1px solid var(--border);
   background: linear-gradient(180deg, #f0f6ff 0%, #f7fbff 100%);
 }
+.formulas-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
 .formulas-header {
   font-family: 'JetBrains Mono', monospace;
   font-size: clamp(9px, 1.1vw, 10px);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 14px;
+  margin-bottom: 0;
 }
 .formulas-grid {
   display: grid;
@@ -1312,7 +1320,8 @@ a:focus-visible {
 }
 .share-btn:hover { background: rgba(0,114,178,0.13); border-color: rgba(0,114,178,0.5); }
 .share-btn:focus-visible,
-.reset-btn:focus-visible {
+.reset-btn:focus-visible,
+.feature-request-btn:focus-visible {
   outline: 2px solid #56b4e9;
   outline-offset: 2px;
 }
@@ -1331,10 +1340,37 @@ a:focus-visible {
   display: flex; align-items: center; gap: 6px;
 }
 .reset-btn:hover { border-color: #d55e00; color: #d55e00; background: rgba(213,94,0,0.04); }
+.feature-request-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1.5px solid rgba(213,94,0,0.35);
+  border-radius: 8px;
+  background: rgba(213,94,0,0.08);
+  color: #8a3d00;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.feature-request-btn:hover {
+  background: rgba(213,94,0,0.14);
+  border-color: rgba(213,94,0,0.55);
+}
+.feature-request-btn-compact {
+  padding: 6px 12px;
+  font-size: 11px;
+}
 @media (max-width: 680px) {
   .calc-actions {
     width: 100%;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-end;
   }
 }
@@ -2311,6 +2347,9 @@ a:focus-visible {
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
             Copy state link
           </button>
+          <button class="feature-request-btn" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a new calculator feature on GitHub">
+            Request a feature
+          </button>
           <button class="reset-btn" type="button" onclick="resetModel()">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
             Reset defaults
@@ -2700,7 +2739,10 @@ a:focus-visible {
 
   <!-- FORMULAS -->
   <div class="formulas-section section-anchor" id="formulas-section">
-    <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
+    <div class="formulas-header-row">
+      <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
+      <button class="feature-request-btn feature-request-btn-compact" type="button" onclick="requestFeature('Formulas Section')" aria-label="Request a formulas-related feature on GitHub">Request a feature</button>
+    </div>
     <div class="formulas-grid">
 
       <!-- 1 -->
@@ -3128,6 +3170,47 @@ function writeShareFeedback(message, isError = false) {
       shareFeedbackTimer = null;
     }, isError ? 5500 : 3200);
   }
+}
+
+function requestFeature(sourceSection) {
+  const source = sourceSection || 'General';
+  const issueBody = [
+    '## Feedback source',
+    '- Source type: internal',
+    `- Source detail: ${source}`,
+    '- Date captured: ',
+    '',
+    '## What was requested',
+    '',
+    '',
+    '## Current workaround',
+    '',
+    '',
+    '## Expected value if solved',
+    '- [ ] Better usability',
+    '- [ ] Better trust',
+    '- [ ] Better economics accuracy',
+    '- [x] Faster decisions',
+    '- [ ] Other: ',
+    '',
+    '## Suggested next action',
+    '- [ ] Close (not actionable)',
+    '- [x] Convert to story',
+    '- [ ] Needs research spike',
+    '',
+    '## Links',
+    `- Page: ${window.location.origin}${window.location.pathname}`,
+    `- Section: ${source}`
+  ].join('\n');
+
+  const params = new URLSearchParams({
+    template: 'feedback.md',
+    title: '[FEEDBACK] Feature Request: ',
+    labels: 'type:feedback',
+    body: issueBody
+  });
+
+  window.open(`https://github.com/duksh/finops-calculator/issues/new?${params.toString()}`, '_blank', 'noopener,noreferrer');
 }
 
 function collectShareState() {
