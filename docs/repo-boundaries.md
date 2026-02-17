@@ -37,16 +37,25 @@ Current public roadmap page:
 
 No issue templates, internal planning docs, or MCP source code should live here.
 
+## Local checkout to remote mapping
+
+Use these directories as the canonical local checkouts:
+
+- `/Users/duksh/Library/CloudStorage/GoogleDrive-d.koonjoobeeharry@providus.mu/My Drive/FinOps@Providus/finops-calculator`
+  - remote: `https://github.com/duksh/finops-calculator.git`
+  - working branch: `main`
+- `/Users/duksh/Library/CloudStorage/GoogleDrive-d.koonjoobeeharry@providus.mu/My Drive/FinOps@Providus/finops-calculator-mcp`
+  - remote: `https://github.com/duksh/finops-calculator-mcp.git`
+  - working branch: `main`
+- `/Users/duksh/Library/CloudStorage/GoogleDrive-arkadux14@gmail.com/My Drive/duksh@github.io/duksh.github.io`
+  - remote: `https://github.com/duksh/duksh.github.io.git`
+  - working branch: `main`
+
 ## Branch strategy
 
-Target strategy for all three repos: **`main` only** for active development and publishing.
+All three repos are now standardized on **`main` only** for active development and publishing.
 
-For `duksh.github.io`, `master` currently still exists remotely. Use this migration sequence:
-
-1. Ensure latest website content exists on `main`.
-2. In GitHub repository settings, change default branch to `main`.
-3. In GitHub Pages settings, set publishing branch to `main`.
-4. After verification, delete `master`.
+`duksh.github.io` default branch and remote HEAD are now `main`.
 
 ## Publishing flow
 
@@ -59,3 +68,4 @@ For `duksh.github.io`, `master` currently still exists remotely. Use this migrat
 - Before each push, run `git status` and confirm only intended files are staged.
 - Keep commits scoped per repository responsibility.
 - Avoid copying MCP workspace into `finops-calculator` unless intentionally vendoring with explicit documentation.
+- Keep non-repository scratch files (screenshots, temporary exports, duplicate folders) outside repository roots.

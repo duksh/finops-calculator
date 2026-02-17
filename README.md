@@ -122,3 +122,9 @@ Duksh Koonjoobeeharry
 
 - This calculator is intended for decision support and scenario modeling.
 - Inputs and outputs should be validated against your actual billing, unit economics, and pricing data before operational decisions.
+
+---
+
+## License
+
+Apache-2.0. See `LICENSE`.
