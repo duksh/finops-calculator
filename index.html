@@ -4528,7 +4528,8 @@ function draw() {
 
   // Break-even annotation
   if (be) {
-    const beXp = xSc(beN);
+    const beXpRaw = xSc(beN);
+    const beXp = Math.min(iW - 7, Math.max(7, beXpRaw));
     const beYp = ySc(be.revenue);
     g.append('circle')
       .attr('cx', beXp).attr('cy', beYp).attr('r', 6)
@@ -4547,6 +4548,24 @@ function draw() {
       .attr('x1', beCalloutX + 35).attr('y1', Math.max(4, beYp - 44) + 20)
       .attr('x2', beXp).attr('y2', beYp - 7)
       .attr('stroke', '#cc79a7').attr('stroke-width', 1).attr('stroke-dasharray', '3,2');
+  } else {
+    const nx = Math.max(28, iW - 124);
+    const ny = Math.max(18, iH * 0.18);
+    const callout = g.append('g').attr('transform', `translate(${nx},${ny})`);
+    callout.append('circle')
+      .attr('cx', 8).attr('cy', 8).attr('r', 7)
+      .attr('fill', '#fff').attr('stroke', '#d55e00').attr('stroke-width', 1.8);
+    callout.append('line')
+      .attr('x1', 3.8).attr('y1', 12.2)
+      .attr('x2', 12.2).attr('y2', 3.8)
+      .attr('stroke', '#d55e00').attr('stroke-width', 1.5);
+    callout.append('text')
+      .attr('x', 22).attr('y', 11)
+      .attr('fill', '#d55e00')
+      .attr('font-size', Math.max(8, W * 0.0092))
+      .attr('font-family', 'JetBrains Mono')
+      .attr('letter-spacing', '0.05em')
+      .text('No break-even in range');
   }
 
   // CUD savings bracket
@@ -4737,6 +4756,60 @@ function priorityWeight(priority) {
   return 2;
 }
 
+function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCostN, minCostPerClient }) {
+  if (!zoneKey || arpuUsed === null || arpuUsed === undefined || !isFinite(arpuUsed)) return [];
+
+  const strategic = [];
+  const minCostGap = Math.max(0, minCostPerClient - arpuUsed);
+  const upliftPct = arpuUsed > 0 ? (minCostGap / arpuUsed) * 100 : 0;
+
+  if (beN === null && minCostGap > 0) {
+    strategic.push({
+      icon: '💸',
+      title: 'Raise realised ARPU above cost floor',
+      desc: `Current ARPU (${fmtOut(arpuUsed, 2)} / client) is below the model floor (${fmtOut(minCostPerClient, 2)} / client near n≈${minCostN.toLocaleString()}).`,
+      action: `Action: Improve realised price by at least ${fmtOut(minCostGap, 2)} / client (${upliftPct.toFixed(1)}%) via packaging tiers, add-ons, annual commit discounts, or selective fee increases.`,
+      providers: [],
+      zones: [zoneKey],
+      priority: 'high'
+    });
+    strategic.push({
+      icon: '📣',
+      title: 'Marketing + funnel acceleration toward efficient scale',
+      desc: `Client volume still matters: unit cost bottoms near n≈${minCostN.toLocaleString()}. Demand generation should be aligned with this operating band.`,
+      action: 'Action: Run a 90-day growth motion (paid + partner + referral), improve MQL→SQL→Win conversion in CRM, and review CAC payback against the ARPU gap weekly.',
+      providers: [],
+      zones: [zoneKey],
+      priority: 'medium'
+    });
+    strategic.push({
+      icon: '🤝',
+      title: 'CRM retention and expansion revenue playbook',
+      desc: 'When cost cuts are near limit, expansion and retention become the fastest margin levers.',
+      action: `Action: Launch upsell/cross-sell journeys, contract renewals, and churn-prevention triggers to add at least ${fmtOut(minCostGap, 2)} / client in net revenue over the next cycle.`,
+      providers: [],
+      zones: [zoneKey],
+      priority: 'high'
+    });
+    return strategic;
+  }
+
+  if (beN !== null && nSample < beN) {
+    const gapClients = Math.max(1, Math.round(beN - nSample));
+    strategic.push({
+      icon: '🚀',
+      title: 'Close break-even client gap with GTM execution',
+      desc: `You are ${gapClients.toLocaleString()} clients below break-even volume (${beN.toLocaleString()}).`,
+      action: 'Action: Prioritise pipeline quality, onboarding speed, and CRM conversion stages to move qualified demand into paying clients faster while protecting margin.',
+      providers: [],
+      zones: [zoneKey],
+      priority: 'high'
+    });
+  }
+
+  return strategic;
+}
+
 function toggleProvider(provider) {
   const btn = document.querySelector(`[data-provider="${provider}"]`);
   if (selectedProviders.has(provider)) {
@@ -4792,6 +4865,9 @@ function updateHealthAndRecommendations(inputs) {
   const pts = buildData();
   const be = pts.find(d => d.revenue >= d.total);
   const beN = be ? Math.round(be.n) : null;
+  const minCostPoint = pts.reduce((minPt, point) => (point.total < minPt.total ? point : minPt), pts[0]);
+  const minCostN = Math.max(1, Math.round(minCostPoint.n));
+  const minCostPerClient = minCostPoint.total;
 
   let score = 100;
   const failed = [];
@@ -4852,7 +4928,15 @@ function updateHealthAndRecommendations(inputs) {
   scoreEl.style.color = zoneColor;
 
   const providers = Array.from(selectedProviders);
-  const filtered = RECOMMENDATIONS
+  const strategicRecommendations = buildStrategicRecommendations({
+    zoneKey,
+    nSample,
+    beN,
+    arpuUsed,
+    minCostN,
+    minCostPerClient
+  });
+  const filtered = [...strategicRecommendations, ...RECOMMENDATIONS]
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
     .sort((a, b) => priorityWeight(a.priority) - priorityWeight(b.priority));
