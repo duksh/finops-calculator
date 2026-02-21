@@ -2143,9 +2143,187 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: var(--muted);
   font-size: 10.5px;
 }
+.qbv-dashboard {
+  margin: 0 18px 18px;
+  border: 1px solid rgba(0,114,178,0.2);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(245,251,255,0.96) 0%, rgba(239,248,255,0.94) 100%);
+  overflow: hidden;
+}
+.qbv-dashboard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(0,114,178,0.2);
+  background: rgba(0,114,178,0.08);
+}
+.qbv-dashboard-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f4f7f;
+}
+.qbv-dashboard-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #3a5a7d;
+}
+.qbv-export-btn {
+  border: 1px solid rgba(0,114,178,0.35);
+  background: rgba(255,255,255,0.92);
+  color: #0f4f78;
+  border-radius: 999px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.qbv-export-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.qbv-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 12px;
+}
+.qbv-panel {
+  border: 1px solid rgba(30, 75, 118, 0.16);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+}
+.qbv-panel h4 {
+  margin: 0 0 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #215280;
+}
+.qbv-panel-sub {
+  margin: 0 0 8px;
+  font-size: 10px;
+  color: #587290;
+}
+.qbv-placeholder {
+  font-size: 10px;
+  color: #6a7c95;
+}
+.qbv-bar-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 88px;
+  align-items: center;
+  gap: 6px;
+}
+.qbv-bar-row + .qbv-bar-row { margin-top: 6px; }
+.qbv-bar-label {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #55708f;
+}
+.qbv-bar-stack {
+  display: grid;
+  gap: 4px;
+}
+.qbv-bar-track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(36, 65, 102, 0.12);
+  overflow: hidden;
+}
+.qbv-bar-fill { display: block; height: 100%; border-radius: 999px; }
+.qbv-bar-fill.budget { background: rgba(0,114,178,0.65); }
+.qbv-bar-fill.cost { background: rgba(213,94,0,0.65); }
+.qbv-bar-meta {
+  text-align: right;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #335774;
+}
+.qbv-forecast-svg {
+  width: 100%;
+  height: 170px;
+  border: 1px solid rgba(0,114,178,0.18);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,251,255,0.94) 100%);
+}
+.qbv-forecast-legend {
+  margin-top: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #4a688a;
+}
+.qbv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 4px;
+}
+.qbv-dot.best { background: #009e73; }
+.qbv-dot.base { background: #0072b2; }
+.qbv-dot.worst { background: #d55e00; }
+.qbv-realization-meter {
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0,114,178,0.12);
+}
+.qbv-realization-meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #009e73 0%, #00a58d 100%);
+  transition: width 0.25s ease;
+}
+.qbv-realization-summary {
+  margin-top: 7px;
+  font-size: 10px;
+  color: #3f607f;
+}
+.qbv-realization-bars { margin-top: 8px; }
+.qbv-table-wrap {
+  padding: 0 12px 10px;
+  overflow-x: auto;
+}
+.qbv-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+  font-size: 10px;
+}
+.qbv-table th,
+.qbv-table td {
+  border: 1px solid rgba(30,56,94,0.14);
+  padding: 6px 7px;
+  text-align: left;
+  white-space: nowrap;
+}
+.qbv-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #244f7a;
+  background: rgba(0,114,178,0.08);
+}
+.qbv-dashboard-note {
+  border-top: 1px dashed rgba(0,114,178,0.22);
+  padding: 8px 12px 10px;
+  font-size: 10px;
+  color: #3d5d80;
+}
 @media (max-width: 900px) {
   .portfolio-row { grid-template-columns: 1.2fr 0.8fr 0.9fr; }
   .portfolio-row .focus-col { display: none; }
+  .qbv-dashboard-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Output cards ── */
@@ -3556,6 +3734,63 @@ body.chart-focus-open #chart-section .chart-focus-close {
           </div>
         </div>
 
+        <div class="qbv-dashboard" id="qbv-dashboard">
+          <div class="qbv-dashboard-head">
+            <div>
+              <div class="qbv-dashboard-title">CFO Forecast Dashboard</div>
+              <div class="qbv-dashboard-sub">12-month visual plan for budgeting, scenario forecasting, and value realization tracking</div>
+            </div>
+            <button class="qbv-export-btn" id="qbv-export-csv" type="button" disabled>Export CFO CSV</button>
+          </div>
+
+          <div class="qbv-dashboard-grid">
+            <article class="qbv-panel">
+              <h4>Budgeting view</h4>
+              <p class="qbv-panel-sub">Budget vs modeled monthly cost checkpoints (M1, M6, M12)</p>
+              <div id="qbv-budget-bars" class="qbv-placeholder">Provide monthly budget to render budgeting comparison bars.</div>
+            </article>
+
+            <article class="qbv-panel">
+              <h4>Forecast fan view</h4>
+              <p class="qbv-panel-sub">Best/base/worst margin trajectory for the next 12 months</p>
+              <svg id="qbv-forecast-svg" class="qbv-forecast-svg" viewBox="0 0 520 170" aria-label="Forecast margin scenario fan chart"></svg>
+              <div id="qbv-forecast-legend" class="qbv-forecast-legend"></div>
+            </article>
+
+            <article class="qbv-panel">
+              <h4>Value realization ledger</h4>
+              <p class="qbv-panel-sub">Burn-up of identified target vs realized + avoided value</p>
+              <div class="qbv-realization-meter">
+                <div id="qbv-realization-meter-fill" class="qbv-realization-meter-fill"></div>
+              </div>
+              <div id="qbv-realization-summary" class="qbv-realization-summary">Add realization inputs to compute burn-up status.</div>
+              <div id="qbv-realization-bars" class="qbv-realization-bars qbv-placeholder"></div>
+            </article>
+          </div>
+
+          <div class="qbv-table-wrap">
+            <table class="qbv-table" aria-label="CFO month-by-month planning table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Clients</th>
+                  <th>Modeled Cost</th>
+                  <th>Budget Variance</th>
+                  <th>Base Margin</th>
+                  <th>Best Margin</th>
+                  <th>Worst Margin</th>
+                  <th>Cumulative Value Gap</th>
+                </tr>
+              </thead>
+              <tbody id="qbv-table-body">
+                <tr><td colspan="8" class="qbv-placeholder">Add cost inputs to generate your 12-month CFO planning view.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="qbv-dashboard-note" id="qbv-dashboard-note">Add cost inputs to activate CFO visual planning outputs.</div>
+        </div>
+
       </div>
 
       <!-- ── GROUP D ──────────────────────────────────────────── -->
@@ -4077,9 +4312,11 @@ const chartSectionFocusEl = document.getElementById('chart-section');
 const chartFocusToggleBtnEl = document.getElementById('chart-focus-btn');
 const chartFocusToggleTextEl = chartFocusToggleBtnEl ? chartFocusToggleBtnEl.querySelector('.chart-focus-btn-text') : null;
 const chartFocusCloseBtnEl = document.getElementById('chart-focus-close');
-let restoreChartFocusOnExit = false;
-let lastChartFocusTrigger = null;
+const qbvExportBtnEl = document.getElementById('qbv-export-csv');
 let lastMcpModalTrigger = null;
+let lastChartFocusTrigger = null;
+let restoreChartFocusOnExit = false;
+let qbvDashboardRows = [];
 const OUTPUT_TOOLTIP_CONTENT = {
   'out-beN': {
     title: 'Break-Even Clients',
@@ -6005,6 +6242,9 @@ function updateOutputCards(inputs) {
   // ── FORECASTING BAND ───────────────────────────────────────────
   const hasForecastSignal = [forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct]
     .some(v => v !== null && v !== 0);
+  const growthPct = forecastGrowthPct !== null ? forecastGrowthPct : 0;
+  const bestEfficiencyPct = Math.max(0, Math.min(95, forecastBestEfficiencyPct !== null ? forecastBestEfficiencyPct : 0));
+  const worstDriftPct = Math.max(0, forecastWorstDriftPct !== null ? forecastWorstDriftPct : 0);
 
   if (!hasAnyCostInput || !hasARPU) {
     setOut('oval-forecastBand', null, '', '', 'Cost inputs + Revenue / Client (ARPU or startup mode)');
@@ -6013,9 +6253,6 @@ function updateOutputCards(inputs) {
     setOut('oval-forecastBand', null, '', '', 'Forecast Growth or Best/Worst scenario assumptions');
     setOut('oval-forecastSpread', null, '', '', 'Forecast Growth or Best/Worst scenario assumptions');
   } else {
-    const growthPct = forecastGrowthPct !== null ? forecastGrowthPct : 0;
-    const bestEfficiencyPct = Math.max(0, Math.min(95, forecastBestEfficiencyPct !== null ? forecastBestEfficiencyPct : 0));
-    const worstDriftPct = Math.max(0, forecastWorstDriftPct !== null ? forecastWorstDriftPct : 0);
     const forecastN = Math.max(1, Math.round(nSample * (1 + growthPct / 100)));
     const forecastDev = K * Math.pow(forecastN, -a);
     const forecastInfra = c * Math.pow(forecastN, b);
@@ -6052,17 +6289,16 @@ function updateOutputCards(inputs) {
 
   // ── VALUE REALIZATION LEDGER ───────────────────────────────────
   const hasRealizationSignal = [savingsIdentified, savingsRealized, costAvoidance].some(v => v !== null);
+  const realizedSavingsUsed = savingsRealized !== null ? savingsRealized : 0;
+  const costAvoidanceUsed = costAvoidance !== null ? costAvoidance : 0;
+  const identifiedUsed = savingsIdentified !== null ? savingsIdentified : null;
+  const totalRealizedValue = realizedSavingsUsed + costAvoidanceUsed;
 
   if (!hasRealizationSignal) {
     setOut('oval-realizedValue', null, '', '', 'Realized Savings and/or Cost Avoidance');
     setOut('oval-realizationRatio', null, '', '', 'Identified Savings Target + realized value inputs');
     setOut('oval-realizationGap', null, '', '', 'Identified Savings Target + realized value inputs');
   } else {
-    const realizedSavingsUsed = savingsRealized !== null ? savingsRealized : 0;
-    const costAvoidanceUsed = costAvoidance !== null ? costAvoidance : 0;
-    const identifiedUsed = savingsIdentified !== null ? savingsIdentified : null;
-    const totalRealizedValue = realizedSavingsUsed + costAvoidanceUsed;
-
     const valueClass = totalRealizedValue > 0 ? 'good' : 'warn';
     setOut('oval-realizedValue', `${fmtOut(totalRealizedValue, 0)} / mo`, valueClass, valueClass === 'good' ? '' : 'warn');
 
@@ -6120,6 +6356,304 @@ function updateOutputCards(inputs) {
     hasBudget,
     hasForecastSignal,
     hasRealizationSignal
+  });
+  renderCfoForecastDashboard({
+    hasAnyCostInput,
+    hasARPU,
+    hasBudget,
+    hasForecastSignal,
+    hasRealizationSignal,
+    nSample,
+    arpuUsed,
+    budgetMonthly,
+    budgetBasisCost,
+    growthPct,
+    bestEfficiencyPct,
+    worstDriftPct,
+    identifiedUsed,
+    totalRealizedValue,
+    totalCoreCost: total,
+    model: { K, a, c, b }
+  });
+}
+
+function createCfoProjectionRows(state) {
+  if (!state || !state.hasAnyCostInput) return [];
+  const months = 12;
+  const rows = [];
+  const annualGrowthFactor = Math.max(0.05, 1 + (state.growthPct / 100));
+  const growthIntervals = months - 1;
+  const monthGrowth = growthIntervals > 0
+    ? Math.pow(annualGrowthFactor, 1 / growthIntervals) - 1
+    : 0;
+  const scopeMultiplier = state.totalCoreCost > 0
+    ? (state.budgetBasisCost / state.totalCoreCost)
+    : 1;
+  const identifiedMonthly = state.identifiedUsed !== null && state.identifiedUsed > 0 ? state.identifiedUsed : null;
+
+  for (let idx = 1; idx <= months; idx++) {
+    const clients = Math.max(1, state.nSample * Math.pow(1 + monthGrowth, idx - 1));
+    const dev = state.model.K * Math.pow(clients, -state.model.a);
+    const infra = state.model.c * Math.pow(clients, state.model.b);
+    const modeledCost = (dev + infra) * scopeMultiplier;
+    const budgetVariance = state.hasBudget ? state.budgetMonthly - modeledCost : null;
+    const budgetVariancePct = state.hasBudget && state.budgetMonthly > 0
+      ? (budgetVariance / state.budgetMonthly) * 100
+      : null;
+    const revenue = state.hasARPU ? state.arpuUsed * clients : null;
+    const baseMargin = state.hasARPU ? revenue - modeledCost : null;
+    const bestMargin = state.hasARPU
+      ? revenue - (modeledCost * (1 - (state.bestEfficiencyPct / 100)))
+      : null;
+    const worstMargin = state.hasARPU
+      ? revenue - (modeledCost * (1 + (state.worstDriftPct / 100)))
+      : null;
+    const cumulativeTarget = identifiedMonthly !== null ? identifiedMonthly * idx : null;
+    const cumulativeRealized = state.totalRealizedValue * idx;
+    const cumulativeGap = cumulativeTarget !== null ? cumulativeTarget - cumulativeRealized : null;
+
+    rows.push({
+      month: idx,
+      clients,
+      modeledCost,
+      budgetVariance,
+      budgetVariancePct,
+      revenue,
+      baseMargin,
+      bestMargin,
+      worstMargin,
+      cumulativeTarget,
+      cumulativeRealized,
+      cumulativeGap
+    });
+  }
+
+  return rows;
+}
+
+function renderCfoBudgetPanel(rows, state) {
+  const budgetBarsEl = document.getElementById('qbv-budget-bars');
+  if (!budgetBarsEl) return;
+
+  if (!state.hasBudget || !(state.budgetMonthly > 0)) {
+    budgetBarsEl.innerHTML = '<div class="qbv-placeholder">Provide Monthly Technology Budget to render budget vs modeled cost checkpoints.</div>';
+    return;
+  }
+
+  const checkpoints = [rows[0], rows[5], rows[11]].filter(Boolean);
+  const maxValue = Math.max(state.budgetMonthly, ...checkpoints.map(row => row.modeledCost));
+  budgetBarsEl.innerHTML = checkpoints.map(row => {
+    const budgetWidth = Math.max(2, (state.budgetMonthly / maxValue) * 100);
+    const costWidth = Math.max(2, (row.modeledCost / maxValue) * 100);
+    const varianceClass = row.budgetVariance >= 0 ? 'good' : 'bad';
+    return `
+      <div class="qbv-bar-row">
+        <div class="qbv-bar-label">M${row.month}</div>
+        <div class="qbv-bar-stack" title="Budget ${fmtOut(state.budgetMonthly, 0)} · Modeled ${fmtOut(row.modeledCost, 0)}">
+          <div class="qbv-bar-track"><span class="qbv-bar-fill budget" style="width:${budgetWidth}%;"></span></div>
+          <div class="qbv-bar-track"><span class="qbv-bar-fill cost" style="width:${costWidth}%;"></span></div>
+        </div>
+        <div class="qbv-bar-meta ${varianceClass}">${fmtOut(row.budgetVariance, 0)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCfoForecastPanel(rows, state) {
+  const svgEl = document.getElementById('qbv-forecast-svg');
+  const legendEl = document.getElementById('qbv-forecast-legend');
+  if (!svgEl || !legendEl) return;
+
+  if (!state.hasARPU || !state.hasForecastSignal) {
+    svgEl.innerHTML = '<text x="14" y="28" fill="#5d7290" font-size="11">Add ARPU/startup assumptions and forecast controls to render fan chart.</text>';
+    legendEl.innerHTML = '<span class="qbv-placeholder">Forecast fan chart inactive until revenue and scenario assumptions are available.</span>';
+    return;
+  }
+
+  const base = rows.map(row => row.baseMargin || 0);
+  const best = rows.map(row => row.bestMargin || 0);
+  const worst = rows.map(row => row.worstMargin || 0);
+  const values = [...base, ...best, ...worst, 0];
+  const minV = Math.min(...values);
+  const maxV = Math.max(...values);
+  const padX = 26;
+  const padY = 16;
+  const width = 520;
+  const height = 170;
+  const spanX = width - (padX * 2);
+  const spanY = height - (padY * 2);
+  const den = maxV - minV || 1;
+
+  const toPoint = (value, idx) => {
+    const x = padX + ((idx / (rows.length - 1 || 1)) * spanX);
+    const y = height - padY - (((value - minV) / den) * spanY);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  };
+
+  const bestPts = best.map((v, idx) => toPoint(v, idx)).join(' ');
+  const basePts = base.map((v, idx) => toPoint(v, idx)).join(' ');
+  const worstPts = worst.map((v, idx) => toPoint(v, idx)).join(' ');
+  const zeroY = (0 >= minV && 0 <= maxV)
+    ? (height - padY - (((0 - minV) / den) * spanY)).toFixed(1)
+    : null;
+
+  svgEl.innerHTML = `
+    ${zeroY !== null ? `<line x1="${padX}" y1="${zeroY}" x2="${width - padX}" y2="${zeroY}" stroke="rgba(30,56,94,0.22)" stroke-dasharray="4 4"></line>` : ''}
+    <polyline fill="none" stroke="#009e73" stroke-width="2" points="${bestPts}"></polyline>
+    <polyline fill="none" stroke="#0072b2" stroke-width="2" points="${basePts}"></polyline>
+    <polyline fill="none" stroke="#d55e00" stroke-width="2" points="${worstPts}"></polyline>
+  `;
+  legendEl.innerHTML = `
+    <span><span class="qbv-dot best"></span>Best margin</span>
+    <span><span class="qbv-dot base"></span>Baseline margin</span>
+    <span><span class="qbv-dot worst"></span>Worst margin</span>
+  `;
+}
+
+function renderCfoRealizationPanel(rows, state) {
+  const meterFillEl = document.getElementById('qbv-realization-meter-fill');
+  const summaryEl = document.getElementById('qbv-realization-summary');
+  const barsEl = document.getElementById('qbv-realization-bars');
+  if (!meterFillEl || !summaryEl || !barsEl) return;
+
+  if (!state.hasRealizationSignal) {
+    meterFillEl.style.width = '0%';
+    summaryEl.textContent = 'Add identified/realized/avoidance values to activate the burn-up ledger.';
+    barsEl.innerHTML = '<div class="qbv-placeholder">No value realization checkpoints yet.</div>';
+    return;
+  }
+
+  const annualTarget = state.identifiedUsed !== null && state.identifiedUsed > 0 ? state.identifiedUsed * 12 : null;
+  const annualRealized = state.totalRealizedValue * 12;
+  const pct = annualTarget !== null && annualTarget > 0 ? (annualRealized / annualTarget) * 100 : null;
+  meterFillEl.style.width = pct !== null ? `${Math.min(100, Math.max(0, pct)).toFixed(1)}%` : '100%';
+  summaryEl.textContent = annualTarget !== null
+    ? `Annualized realization ${fmtOut(annualRealized, 0)} vs target ${fmtOut(annualTarget, 0)} (${pct.toFixed(1)}%)`
+    : `Annualized realized value ${fmtOut(annualRealized, 0)} (set Identified Savings Target for completion ratio).`;
+
+  const checkpoints = [rows[2], rows[5], rows[8], rows[11]].filter(Boolean);
+  const maxValue = Math.max(
+    1,
+    ...checkpoints.map(row => row.cumulativeRealized || 0),
+    ...checkpoints.map(row => row.cumulativeTarget || 0)
+  );
+
+  barsEl.innerHTML = checkpoints.map(row => {
+    const target = row.cumulativeTarget || 0;
+    const realized = row.cumulativeRealized || 0;
+    const targetWidth = (target / maxValue) * 100;
+    const realizedWidth = (realized / maxValue) * 100;
+    return `
+      <div class="qbv-bar-row">
+        <div class="qbv-bar-label">M${row.month}</div>
+        <div class="qbv-bar-stack">
+          <div class="qbv-bar-track"><span class="qbv-bar-fill budget" style="width:${Math.max(2, targetWidth)}%;"></span></div>
+          <div class="qbv-bar-track"><span class="qbv-bar-fill cost" style="width:${Math.max(2, realizedWidth)}%; background:rgba(0,158,115,0.65);"></span></div>
+        </div>
+        <div class="qbv-bar-meta">${row.cumulativeGap !== null ? fmtOut(row.cumulativeGap, 0) : '—'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCfoPlanningTable(rows, state) {
+  const tableBodyEl = document.getElementById('qbv-table-body');
+  if (!tableBodyEl) return;
+
+  if (!rows.length) {
+    tableBodyEl.innerHTML = '<tr><td colspan="8" class="qbv-placeholder">Add cost inputs to generate your 12-month CFO planning view.</td></tr>';
+    return;
+  }
+
+  tableBodyEl.innerHTML = rows.map(row => `
+    <tr>
+      <td>M${row.month}</td>
+      <td>${Math.round(row.clients).toLocaleString()}</td>
+      <td>${fmtOut(row.modeledCost, 0)} / mo</td>
+      <td>${row.budgetVariance !== null ? `${fmtOut(row.budgetVariance, 0)} (${row.budgetVariancePct.toFixed(1)}%)` : '—'}</td>
+      <td>${row.baseMargin !== null ? `${fmtOut(row.baseMargin, 0)} / mo` : '—'}</td>
+      <td>${row.bestMargin !== null ? `${fmtOut(row.bestMargin, 0)} / mo` : '—'}</td>
+      <td>${row.worstMargin !== null ? `${fmtOut(row.worstMargin, 0)} / mo` : '—'}</td>
+      <td>${row.cumulativeGap !== null ? `${fmtOut(row.cumulativeGap, 0)}` : '—'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderCfoForecastDashboard(state) {
+  const noteEl = document.getElementById('qbv-dashboard-note');
+  if (!noteEl) return;
+
+  if (!state || !state.hasAnyCostInput) {
+    qbvDashboardRows = [];
+    renderCfoBudgetPanel([], { hasBudget: false, budgetMonthly: null });
+    renderCfoForecastPanel([], { hasARPU: false, hasForecastSignal: false });
+    renderCfoRealizationPanel([], { hasRealizationSignal: false, identifiedUsed: null, totalRealizedValue: 0 });
+    renderCfoPlanningTable([], {});
+    noteEl.textContent = 'Add Dev Cost or Infra Cost to activate CFO visual planning outputs.';
+    if (qbvExportBtnEl) qbvExportBtnEl.disabled = true;
+    return;
+  }
+
+  const rows = createCfoProjectionRows(state);
+  qbvDashboardRows = rows;
+  renderCfoBudgetPanel(rows, state);
+  renderCfoForecastPanel(rows, state);
+  renderCfoRealizationPanel(rows, state);
+  renderCfoPlanningTable(rows, state);
+
+  if (!state.hasBudget) {
+    noteEl.textContent = 'Set Monthly Technology Budget to unlock variance tracking in the CFO planning dashboard.';
+  } else if (!state.hasARPU || !state.hasForecastSignal) {
+    noteEl.textContent = 'Budgeting is active. Add ARPU and forecast assumptions to render best/base/worst margin scenarios.';
+  } else {
+    noteEl.textContent = 'CFO dashboard active: use Month 1/6/12 budget checkpoints, scenario fan chart, and cumulative value gap to prepare forecast packs.';
+  }
+
+  if (qbvExportBtnEl) qbvExportBtnEl.disabled = rows.length === 0;
+}
+
+function initCfoDashboardExport() {
+  if (!qbvExportBtnEl) return;
+  qbvExportBtnEl.addEventListener('click', () => {
+    if (!qbvDashboardRows.length) return;
+    const headers = [
+      'month',
+      'clients',
+      'modeled_cost',
+      'budget_variance',
+      'budget_variance_pct',
+      'revenue',
+      'base_margin',
+      'best_margin',
+      'worst_margin',
+      'cumulative_target',
+      'cumulative_realized',
+      'cumulative_gap'
+    ];
+    const lines = qbvDashboardRows.map(row => [
+      row.month,
+      Math.round(row.clients),
+      row.modeledCost.toFixed(2),
+      row.budgetVariance !== null ? row.budgetVariance.toFixed(2) : '',
+      row.budgetVariancePct !== null ? row.budgetVariancePct.toFixed(2) : '',
+      row.revenue !== null ? row.revenue.toFixed(2) : '',
+      row.baseMargin !== null ? row.baseMargin.toFixed(2) : '',
+      row.bestMargin !== null ? row.bestMargin.toFixed(2) : '',
+      row.worstMargin !== null ? row.worstMargin.toFixed(2) : '',
+      row.cumulativeTarget !== null ? row.cumulativeTarget.toFixed(2) : '',
+      row.cumulativeRealized.toFixed(2),
+      row.cumulativeGap !== null ? row.cumulativeGap.toFixed(2) : ''
+    ].join(','));
+    const csv = [headers.join(','), ...lines].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cfo-forecast-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   });
 }
 
@@ -6212,6 +6746,7 @@ function resetModel() {
   renderPortfolioSummary(buildNormalizationSnapshot(lastInputs));
   updateNormalizationGuardrail(buildNormalizationSnapshot(lastInputs));
   updateValueGuardrail({ hasAnyCostInput: false, hasARPU: false, hasBudget: false, hasForecastSignal: false, hasRealizationSignal: false });
+  renderCfoForecastDashboard(null);
   updateHealthAndRecommendations(lastInputs);
   clearShareStateParam();
   writeShareFeedback('');
@@ -6662,9 +7197,11 @@ applyInformationIcons();
 updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
+initCfoDashboardExport();
 initMcpModal();
 initChartFocusMode();
 initSectionNav();
+renderCfoForecastDashboard(null);
 if (!loadSharedStateFromUrl()) {
   updateHealthAndRecommendations(lastInputs);
 }
