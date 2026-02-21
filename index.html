@@ -1260,6 +1260,39 @@ a:focus-visible {
   line-height: 1.6;
   max-width: 600px;
 }
+.calc-release-note {
+  margin-top: 10px;
+  display: grid;
+  gap: 5px;
+  max-width: 720px;
+  border: 1px solid rgba(0,158,115,0.28);
+  border-radius: 9px;
+  background: rgba(0,158,115,0.08);
+  padding: 8px 10px;
+}
+.calc-release-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #006d4d;
+}
+.calc-release-text {
+  font-size: 11px;
+  color: #234055;
+  line-height: 1.45;
+}
+.calc-release-link {
+  width: fit-content;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #006d4d;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(0,109,77,0.4);
+}
+.calc-release-link:hover {
+  border-bottom-color: rgba(0,109,77,0.8);
+}
 .share-feedback {
   margin-top: 8px;
   min-height: 16px;
@@ -1628,6 +1661,35 @@ a:focus-visible {
   color: #006d4d;
   background: rgba(0,158,115,0.08);
 }
+.portfolio-report-note {
+  padding: 0 18px 11px;
+  font-size: 10px;
+}
+.portfolio-report-note a {
+  color: #005a8f;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(0,90,143,0.35);
+}
+.portfolio-report-note a:hover {
+  border-bottom-color: rgba(0,90,143,0.7);
+}
+.calc-inline-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #005a8f;
+  border: 1px solid rgba(0,114,178,0.35);
+  background: rgba(0,114,178,0.08);
+  text-decoration: none;
+  line-height: 1;
+}
+.calc-inline-help:hover { background: rgba(0,114,178,0.16); }
 
 .portfolio-summary {
   margin: 0 18px 16px;
@@ -1826,11 +1888,24 @@ a:focus-visible {
   border-radius: 4px;
   padding: 1px 4px;
 }
+.calc-out-tip-link {
+  margin-top: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #005a8f;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(0,90,143,0.4);
+}
+.calc-out-tip-link:hover {
+  border-bottom-color: rgba(0,90,143,0.8);
+}
 
-/* THE FIX: value can never overflow its box */
 .calc-out-val {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: clamp(15px, 2vw, 18px);
   font-weight: 700;
   color: var(--text);
   line-height: 1.2;
@@ -2449,6 +2524,11 @@ a:focus-visible {
           <div class="fig-label" style="margin-bottom:5px">⚙︎ Interactive Model — Live Parameter Calculator</div>
           <h2 class="calc-title">Enter what you know. I'll calculate the rest for you.</h2>
           <p class="calc-subtitle">Type in any business figure and the model instantly derives all other parameters and <strong>redraws the chart</strong>. Fields show <span class="badge-calc">calculated</span> when auto-derived from your inputs.</p>
+          <div class="calc-release-note" role="note" aria-label="Release 2 FinOps 2026 alignment note">
+            <span class="calc-release-title">Release 2 update</span>
+            <span class="calc-release-text">This version already reflects State of FinOps 2026 priorities: broader multi-technology scope, normalized dimensions, and confidence guardrails for portfolio-level decisions.</span>
+            <a class="calc-release-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">Open State of FinOps 2026 report ↗</a>
+          </div>
           <a class="calc-deeplink" href="#live-calculator">🔗 Share this section</a>
           <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
         </div>
@@ -2531,6 +2611,7 @@ a:focus-visible {
             <label class="calc-label" for="inp-techDomain">
               Primary Technology Domain
               <span class="ftag">R2 wave 1</span>
+              <a class="calc-inline-help" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="State of FinOps 2026 emphasizes extending FinOps practices beyond pure cloud into broader technology spend categories.">?</a>
             </label>
             <div class="calc-input-wrap calc-select-wrap">
               <select id="inp-techDomain" data-default-value="cloud" onchange="onInput('techDomain')">
@@ -2697,6 +2778,7 @@ a:focus-visible {
             </div>
           </div>
           <div class="portfolio-guardrail" id="portfolio-guardrail">Add at least one non-cloud domain cost to activate multi-technology normalization insights.</div>
+          <div class="portfolio-report-note"><a href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the online State of FinOps 2026 report">Why this matters in State of FinOps 2026 ↗</a></div>
         </div>
       </div>
 
@@ -3244,6 +3326,7 @@ a:focus-visible {
 // ─── STATE ──────────────────────────────────────────────────────
 const hidden = new Set();
 let paths = {}, hoverDots = {}, currentPts = [], currentScales = {};
+const FINOPS_2026_REPORT_URL = 'https://data.finops.org';
 const SHARE_STATE_VERSION = 1;
 const SHAREABLE_INPUT_KEYS = [
   'nRef', 'devPerClient', 'infraTotal', 'ARPU',
@@ -3345,6 +3428,33 @@ const OUTPUT_TOOLTIP_CONTENT = {
       'If both target price and target clients are provided: <code>RevenueTarget = price × clients</code>.',
       'If only one startup option is provided, missing value is derived from model first.',
       'Reflects the current calibration of cost, scale, and margin settings.'
+    ]
+  },
+  'out-techCoverage': {
+    title: 'Coverage Across Domains',
+    what: 'Shows how much of the canonical multi-technology schema currently has monthly cost data.',
+    how: [
+      'Coverage = <code>provided domains / tracked domains</code>.',
+      'Domains tracked in this release: Cloud, SaaS, Licensing, Private Cloud, Data Center, Labor.',
+      'Higher coverage improves trust in portfolio-level optimization decisions.'
+    ]
+  },
+  'out-techNorm': {
+    title: 'Normalized Tech Cost / Client',
+    what: 'Unifies all tracked technology costs into one per-client burden for cross-domain comparability.',
+    how: [
+      '<code>TotalTrackedMonthlyCost = sum(domain monthly costs)</code>.',
+      '<code>NormalizedTechCost = TotalTrackedMonthlyCost / client count</code>.',
+      'If client count is missing, the calculator uses a default baseline until real n is provided.'
+    ]
+  },
+  'out-focusMaturity': {
+    title: 'Normalization Confidence',
+    what: 'Indicates how reliable cross-domain comparisons are based on completeness and quality of the current inputs.',
+    how: [
+      'Confidence tier depends on domain coverage and whether non-cloud categories are represented.',
+      '<code>High</code>: broad domain coverage + non-cloud spend present.',
+      '<code>Medium/Low</code>: partial or cloud-only coverage; more domain data needed.'
     ]
   }
 };
@@ -4369,6 +4479,7 @@ function buildOutputTooltipHtml(config) {
     <p class="calc-out-tip-what">${config.what}</p>
     <div class="calc-out-tip-sub">How this is calculated</div>
     <ul class="calc-out-tip-list">${items}</ul>
+    <a class="calc-out-tip-link" href="${FINOPS_2026_REPORT_URL}" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">State of FinOps 2026 context ↗</a>
   `;
 }
 
