@@ -2521,6 +2521,43 @@ body.chart-focus-open #chart-section .chart-focus-close {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 10px;
 }
+.rec-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rec-filters-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rec-filter-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: #33405f;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.rec-filter-btn:hover {
+  border-color: rgba(0,114,178,0.45);
+  background: rgba(0,114,178,0.07);
+}
+.rec-filter-btn.is-active,
+.rec-filter-btn[aria-pressed="true"] {
+  background: rgba(0,114,178,0.12);
+  border-color: rgba(0,114,178,0.52);
+  color: #0f4e76;
+}
 .rec-card {
   border: 1.5px solid var(--border);
   border-radius: 11px;
@@ -2560,6 +2597,11 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .rec-tag.priority-high { color: #d55e00; border-color: rgba(213,94,0,0.4); background: rgba(213,94,0,0.1); }
 .rec-tag.priority-medium { color: #b07800; border-color: rgba(176,120,0,0.4); background: rgba(230,159,0,0.1); }
 .rec-tag.priority-low { color: #009e73; border-color: rgba(0,158,115,0.4); background: rgba(0,158,115,0.1); }
+.rec-tag.category-infrastructure { color: #0f4e76; border-color: rgba(0,114,178,0.4); background: rgba(0,114,178,0.1); }
+.rec-tag.category-pricing { color: #995d00; border-color: rgba(230,159,0,0.45); background: rgba(230,159,0,0.12); }
+.rec-tag.category-marketing { color: #005a6f; border-color: rgba(0,158,115,0.4); background: rgba(0,158,115,0.12); }
+.rec-tag.category-crm { color: #6f3a9a; border-color: rgba(123,45,139,0.4); background: rgba(123,45,139,0.12); }
+.rec-tag.category-governance { color: #595f73; border-color: rgba(96,103,122,0.45); background: rgba(96,103,122,0.12); }
 
 .rec-desc {
   color: var(--muted);
@@ -3376,6 +3418,15 @@ body.chart-focus-open #chart-section .chart-focus-close {
               <span class="health-score-label">HEALTH SCORE</span>
               <span class="health-score-value" id="health-score-value">—</span>
             </div>
+          </div>
+          <div class="rec-filters" id="rec-filters" role="group" aria-label="Filter recommendations by category">
+            <span class="rec-filters-label">Category</span>
+            <button class="rec-filter-btn is-active" type="button" data-rec-category="all" aria-pressed="true">All</button>
+            <button class="rec-filter-btn" type="button" data-rec-category="infrastructure" aria-pressed="false">Infrastructure</button>
+            <button class="rec-filter-btn" type="button" data-rec-category="pricing" aria-pressed="false">Pricing</button>
+            <button class="rec-filter-btn" type="button" data-rec-category="marketing" aria-pressed="false">Marketing</button>
+            <button class="rec-filter-btn" type="button" data-rec-category="crm" aria-pressed="false">CRM</button>
+            <button class="rec-filter-btn" type="button" data-rec-category="governance" aria-pressed="false">Governance</button>
           </div>
           <div class="rec-list" id="rec-list">
             <div class="rec-empty">Recommendations will appear here once enough data is available.</div>
@@ -4709,6 +4760,15 @@ const USER_PROVIDED = {
 // Smart default n when user hasn't told us their scale yet
 const DEFAULT_N_REF = 100;
 const selectedProviders = new Set();
+let selectedRecommendationCategory = 'all';
+const RECOMMENDATION_CATEGORY_LABELS = {
+  all: 'All',
+  infrastructure: 'Infrastructure',
+  pricing: 'Pricing',
+  marketing: 'Marketing',
+  crm: 'CRM',
+  governance: 'Governance'
+};
 const selectedTechDomains = new Set(DEFAULT_TECH_DOMAINS);
 let lastInputs = {
   nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
@@ -4756,6 +4816,53 @@ function priorityWeight(priority) {
   return 2;
 }
 
+function normalizeRecommendationCategory(category) {
+  return Object.prototype.hasOwnProperty.call(RECOMMENDATION_CATEGORY_LABELS, category)
+    ? category
+    : 'infrastructure';
+}
+
+function recommendationCategoryLabel(category) {
+  const normalized = normalizeRecommendationCategory(category);
+  return RECOMMENDATION_CATEGORY_LABELS[normalized] || RECOMMENDATION_CATEGORY_LABELS.infrastructure;
+}
+
+function inferRecommendationCategory(rec) {
+  if (rec && rec.category) return normalizeRecommendationCategory(rec.category);
+  const haystack = `${rec?.title || ''} ${rec?.desc || ''} ${rec?.action || ''}`.toLowerCase();
+
+  if (/(crm|churn|renewal|upsell|cross-sell|retention)/.test(haystack)) return 'crm';
+  if (/(pricing|price floor|arpu|package|fee increase|realised price)/.test(haystack)) return 'pricing';
+  if (/(marketing|funnel|mql|sql|cac|demand generation|acquisition|sales motion)/.test(haystack)) return 'marketing';
+  if (/(tagging|forecast|budget|anomaly|governance|allocation|guardrail|policy)/.test(haystack)) return 'governance';
+
+  return 'infrastructure';
+}
+
+function updateRecommendationFilterButtons() {
+  document.querySelectorAll('.rec-filter-btn').forEach(btn => {
+    const key = btn.dataset.recCategory || 'all';
+    const active = key === selectedRecommendationCategory;
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+}
+
+function setRecommendationCategory(category) {
+  selectedRecommendationCategory = normalizeRecommendationCategory(category || 'all');
+  updateRecommendationFilterButtons();
+  updateHealthAndRecommendations(lastInputs);
+}
+
+function initRecommendationCategoryFilters() {
+  const filterButtons = Array.from(document.querySelectorAll('.rec-filter-btn'));
+  if (!filterButtons.length) return;
+  updateRecommendationFilterButtons();
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => setRecommendationCategory(btn.dataset.recCategory || 'all'));
+  });
+}
+
 function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCostN, minCostPerClient }) {
   if (!zoneKey || arpuUsed === null || arpuUsed === undefined || !isFinite(arpuUsed)) return [];
 
@@ -4769,6 +4876,7 @@ function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCos
       title: 'Raise realised ARPU above cost floor',
       desc: `Current ARPU (${fmtOut(arpuUsed, 2)} / client) is below the model floor (${fmtOut(minCostPerClient, 2)} / client near n≈${minCostN.toLocaleString()}).`,
       action: `Action: Improve realised price by at least ${fmtOut(minCostGap, 2)} / client (${upliftPct.toFixed(1)}%) via packaging tiers, add-ons, annual commit discounts, or selective fee increases.`,
+      category: 'pricing',
       providers: [],
       zones: [zoneKey],
       priority: 'high'
@@ -4778,6 +4886,7 @@ function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCos
       title: 'Marketing + funnel acceleration toward efficient scale',
       desc: `Client volume still matters: unit cost bottoms near n≈${minCostN.toLocaleString()}. Demand generation should be aligned with this operating band.`,
       action: 'Action: Run a 90-day growth motion (paid + partner + referral), improve MQL→SQL→Win conversion in CRM, and review CAC payback against the ARPU gap weekly.',
+      category: 'marketing',
       providers: [],
       zones: [zoneKey],
       priority: 'medium'
@@ -4787,6 +4896,7 @@ function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCos
       title: 'CRM retention and expansion revenue playbook',
       desc: 'When cost cuts are near limit, expansion and retention become the fastest margin levers.',
       action: `Action: Launch upsell/cross-sell journeys, contract renewals, and churn-prevention triggers to add at least ${fmtOut(minCostGap, 2)} / client in net revenue over the next cycle.`,
+      category: 'crm',
       providers: [],
       zones: [zoneKey],
       priority: 'high'
@@ -4801,6 +4911,7 @@ function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCos
       title: 'Close break-even client gap with GTM execution',
       desc: `You are ${gapClients.toLocaleString()} clients below break-even volume (${beN.toLocaleString()}).`,
       action: 'Action: Prioritise pipeline quality, onboarding speed, and CRM conversion stages to move qualified demand into paying clients faster while protecting margin.',
+      category: 'marketing',
       providers: [],
       zones: [zoneKey],
       priority: 'high'
@@ -4936,24 +5047,37 @@ function updateHealthAndRecommendations(inputs) {
     minCostN,
     minCostPerClient
   });
-  const filtered = [...strategicRecommendations, ...RECOMMENDATIONS]
+  const scoped = [...strategicRecommendations, ...RECOMMENDATIONS]
+    .map(rec => ({ ...rec, categoryKey: inferRecommendationCategory(rec) }))
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
     .sort((a, b) => priorityWeight(a.priority) - priorityWeight(b.priority));
 
+  const filtered = scoped.filter(rec => {
+    if (selectedRecommendationCategory === 'all') return true;
+    return rec.categoryKey === selectedRecommendationCategory;
+  });
+
   if (!filtered.length) {
-    listEl.innerHTML = '<div class="rec-empty">No provider-specific recommendations match yet. Select one or more providers in Group D to refine actions.</div>';
+    const selectedLabel = recommendationCategoryLabel(selectedRecommendationCategory).toLowerCase();
+    if (selectedRecommendationCategory === 'all') {
+      listEl.innerHTML = '<div class="rec-empty">No provider-specific recommendations match yet. Select one or more providers in Group D to refine actions.</div>';
+    } else {
+      listEl.innerHTML = `<div class="rec-empty">No ${selectedLabel} recommendations match your current zone/provider context. Try another category or switch back to All.</div>`;
+    }
     return;
   }
 
   listEl.innerHTML = filtered.map(rec => {
     const providerTag = rec.providers.length ? rec.providers.join('/').toUpperCase() : 'UNIVERSAL';
     const priorityTag = rec.priority.toUpperCase();
+    const categoryLabel = recommendationCategoryLabel(rec.categoryKey);
     return `
       <article class="rec-card ${rec.priority}">
         <div class="rec-head">
           <span class="rec-icon">${rec.icon}</span>
           <span class="rec-title">${rec.title}</span>
+          <span class="rec-tag category-${rec.categoryKey}">${categoryLabel}</span>
           <span class="rec-tag">${providerTag}</span>
           <span class="rec-tag priority-${rec.priority}">${priorityTag}</span>
         </div>
@@ -6046,6 +6170,7 @@ initOutputCardTooltips();
 cacheSubTexts();
 applyInformationIcons();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
+initRecommendationCategoryFilters();
 initMcpModal();
 initChartFocusMode();
 initSectionNav();
