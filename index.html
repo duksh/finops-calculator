@@ -3825,8 +3825,8 @@ body.chart-focus-open #chart-section .chart-focus-close {
     </div>
 
     <div class="fig-page-meta" aria-label="Page metadata">
-      <span><strong>Last updated:</strong> <time datetime="2026-02-16T14:15:00+04:00">16 Feb 2026, 14:15 (UTC+04:00)</time></span>
-      <span><strong>Version ID:</strong> v2026.02.16-01</span>
+      <span><strong>Last updated:</strong> <time id="page-last-updated" datetime="2026-02-16T14:15:00+04:00">16 Feb 2026, 14:15 (UTC+04:00)</time></span>
+      <span><strong>Version ID:</strong> <span id="page-version-id">v2026.02.16-01</span></span>
     </div>
   </div>
 
@@ -6182,9 +6182,93 @@ function applyInformationIcons() {
   });
 }
 
+function formatPageMetaDate(isoString) {
+  const d = new Date(isoString);
+  if (!Number.isFinite(d.getTime())) return null;
+  const base = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'UTC'
+  }).format(d);
+  return `${base} (UTC)`;
+}
+
+function buildVersionIdFromCommit(isoString, sha) {
+  const d = new Date(isoString);
+  if (!Number.isFinite(d.getTime())) return null;
+  const yyyy = d.getUTCFullYear();
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(d.getUTCDate()).padStart(2, '0');
+  const shortSha = typeof sha === 'string' && sha.length >= 7 ? sha.slice(0, 7) : 'unknown';
+  return `gh-${yyyy}.${mm}.${dd}-${shortSha}`;
+}
+
+function resolvePageMetaSource() {
+  const host = String(window.location.hostname || '').toLowerCase();
+  const pathname = String(window.location.pathname || '/').replace(/^\/+/, '') || 'index.html';
+
+  if (host === 'duksh.github.io' || host.endsWith('.github.io')) {
+    return { owner: 'duksh', repo: 'duksh.github.io', path: pathname };
+  }
+
+  return { owner: 'duksh', repo: 'finops-calculator', path: 'index.html' };
+}
+
+async function updatePageMetadataFromGitHub() {
+  const timeEl = document.getElementById('page-last-updated');
+  const versionEl = document.getElementById('page-version-id');
+  if (!timeEl || !versionEl) return;
+
+  const applyFallback = () => {
+    const fallbackDate = new Date(document.lastModified);
+    if (!Number.isFinite(fallbackDate.getTime())) return;
+    const iso = fallbackDate.toISOString();
+    const formatted = formatPageMetaDate(iso);
+    const fallbackVersion = buildVersionIdFromCommit(iso, 'local');
+    if (formatted) {
+      timeEl.textContent = formatted;
+      timeEl.setAttribute('datetime', iso);
+    }
+    if (fallbackVersion) versionEl.textContent = fallbackVersion;
+  };
+
+  try {
+    const source = resolvePageMetaSource();
+    const apiUrl = `https://api.github.com/repos/${source.owner}/${source.repo}/commits?path=${encodeURIComponent(source.path)}&per_page=1&page=1`;
+    const res = await fetch(apiUrl, {
+      headers: {
+        'Accept': 'application/vnd.github+json'
+      }
+    });
+    if (!res.ok) throw new Error(`GitHub commit lookup failed: ${res.status}`);
+    const data = await res.json();
+    const latest = Array.isArray(data) ? data[0] : null;
+    const iso = latest?.commit?.committer?.date;
+    const sha = latest?.sha;
+    const formatted = formatPageMetaDate(iso);
+    const versionId = buildVersionIdFromCommit(iso, sha);
+
+    if (!formatted || !versionId) {
+      applyFallback();
+      return;
+    }
+
+    timeEl.textContent = formatted;
+    timeEl.setAttribute('datetime', iso);
+    versionEl.textContent = versionId;
+  } catch (err) {
+    applyFallback();
+  }
+}
+
 initOutputCardTooltips();
 cacheSubTexts();
 applyInformationIcons();
+updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
 initMcpModal();
