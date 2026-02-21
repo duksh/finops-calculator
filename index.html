@@ -1690,6 +1690,66 @@ a:focus-visible {
   line-height: 1;
 }
 .calc-inline-help:hover { background: rgba(0,114,178,0.16); }
+.tech-domain-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.tech-domain-chip {
+  border: 1px solid rgba(0, 114, 178, 0.25);
+  background: rgba(255,255,255,0.86);
+  color: #35506f;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+  padding: 6px 9px;
+  cursor: pointer;
+  transition: all 0.16s;
+}
+.tech-domain-chip.selected {
+  border-color: rgba(0,158,115,0.5);
+  background: rgba(0,158,115,0.12);
+  color: #006d4d;
+  box-shadow: 0 0 0 1px rgba(0,158,115,0.15);
+}
+.tech-domain-chip:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 1px;
+}
+.tech-domain-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tech-domain-link-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #005a8f;
+  cursor: pointer;
+  border-bottom: 1px dashed rgba(0,90,143,0.35);
+}
+.tech-domain-link-btn:hover { border-bottom-color: rgba(0,90,143,0.7); }
+.tech-domain-formula {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #445266;
+  line-height: 1.5;
+}
+.tech-domain-formula code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: #005a8f;
+  background: rgba(0,114,178,0.08);
+  border: 1px solid rgba(0,114,178,0.14);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
 
 .portfolio-summary {
   margin: 0 18px 16px;
@@ -1732,6 +1792,12 @@ a:focus-visible {
 .portfolio-row.is-primary {
   background: rgba(0,114,178,0.04);
 }
+.portfolio-row.in-scope {
+  background: rgba(0,114,178,0.05);
+}
+.portfolio-row.out-of-scope {
+  opacity: 0.58;
+}
 .portfolio-row.total {
   background: rgba(0,158,115,0.08);
   font-weight: 600;
@@ -1744,6 +1810,11 @@ a:focus-visible {
   border: 1px solid rgba(0,114,178,0.24);
   border-radius: 999px;
   padding: 1px 6px;
+}
+.portfolio-tag.scope {
+  color: #006d4d;
+  border-color: rgba(0,158,115,0.32);
+  background: rgba(0,158,115,0.12);
 }
 .portfolio-empty {
   padding: 12px;
@@ -2608,23 +2679,36 @@ a:focus-visible {
           </div>
 
           <div class="calc-field" id="field-techDomain">
-            <label class="calc-label" for="inp-techDomain">
-              Primary Technology Domain
+            <label class="calc-label" for="inp-techDomains">
+              Technology Domains in Scope
               <span class="ftag">R2 wave 1</span>
-              <a class="calc-inline-help" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="State of FinOps 2026 emphasizes extending FinOps practices beyond pure cloud into broader technology spend categories.">?</a>
+              <a class="calc-inline-help" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="State of FinOps 2026 emphasizes extending FinOps beyond cloud-only optimization into broader technology spend governance.">?</a>
             </label>
-            <div class="calc-input-wrap calc-select-wrap">
-              <select id="inp-techDomain" data-default-value="cloud" onchange="onInput('techDomain')">
-                <option value="cloud">Cloud</option>
-                <option value="saas">SaaS</option>
-                <option value="licensing">Licensing</option>
-                <option value="private-cloud">Private Cloud</option>
-                <option value="data-center">Data Center</option>
-                <option value="labor">Labor</option>
-              </select>
-              <span class="calc-unit">scope</span>
+            <input type="hidden" id="inp-techDomains" value="cloud" data-default-value="cloud">
+            <div class="tech-domain-controls" id="tech-domain-controls" role="group" aria-label="Select one or more technology domains">
+              <button type="button" class="tech-domain-chip selected" data-domain="cloud" aria-pressed="true" onclick="toggleTechDomain('cloud')">Cloud</button>
+              <button type="button" class="tech-domain-chip" data-domain="saas" aria-pressed="false" onclick="toggleTechDomain('saas')">SaaS</button>
+              <button type="button" class="tech-domain-chip" data-domain="licensing" aria-pressed="false" onclick="toggleTechDomain('licensing')">Licensing</button>
+              <button type="button" class="tech-domain-chip" data-domain="private-cloud" aria-pressed="false" onclick="toggleTechDomain('private-cloud')">Private Cloud</button>
+              <button type="button" class="tech-domain-chip" data-domain="data-center" aria-pressed="false" onclick="toggleTechDomain('data-center')">Data Center</button>
+              <button type="button" class="tech-domain-chip" data-domain="labor" aria-pressed="false" onclick="toggleTechDomain('labor')">Labor</button>
             </div>
-            <div class="calc-hint">Marks the current dominant spend domain for decision context and portfolio summary focus.</div>
+            <div class="tech-domain-actions">
+              <button type="button" class="tech-domain-link-btn" onclick="setTechDomainPreset('all')">Select all domains</button>
+              <button type="button" class="tech-domain-link-btn" onclick="setTechDomainPreset('cloud-only')">Cloud only</button>
+            </div>
+            <div class="calc-hint">Choose one domain (single-focus mode) or multiple domains (portfolio mode). Scope directly drives coverage and normalized outputs.</div>
+            <div class="tech-domain-formula">
+              Academic basis (ABC/TDABC-style pooled costing):
+              <code>NTC/client = Σ(αᵈ × Cᵈ) / n</code>, where default <code>αᵈ = 1</code> until custom allocation weights are defined.
+            </div>
+            <div class="portfolio-report-note">
+              <a href="https://data.finops.org" target="_blank" rel="noopener noreferrer">State of FinOps 2026 ↗</a>
+              ·
+              <a href="https://hbr.org/2004/11/time-driven-activity-based-costing" target="_blank" rel="noopener noreferrer">TDABC reference ↗</a>
+              ·
+              <a href="https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf" target="_blank" rel="noopener noreferrer">Composite indicator handbook ↗</a>
+            </div>
           </div>
 
         </div>
@@ -2849,19 +2933,19 @@ a:focus-visible {
           <div class="calc-out-card" id="out-techCoverage">
             <div class="calc-out-label">Coverage Across Domains</div>
             <div class="calc-out-val muted" id="oval-techCoverage">—</div>
-            <div class="calc-out-sub">How much of the canonical technology schema is currently costed</div>
+            <div class="calc-out-sub">Coverage inside your selected scope (single or multi-domain)</div>
           </div>
 
           <div class="calc-out-card" id="out-techNorm">
             <div class="calc-out-label">Normalized Tech Cost / Client</div>
             <div class="calc-out-val muted" id="oval-techNorm">—</div>
-            <div class="calc-out-sub">Unified monthly technology burden divided by current client base</div>
+            <div class="calc-out-sub">Scoped cost aggregation normalized per client using selected domains</div>
           </div>
 
           <div class="calc-out-card" id="out-focusMaturity">
             <div class="calc-out-label">Normalization Confidence</div>
             <div class="calc-out-val muted" id="oval-focusMaturity">—</div>
-            <div class="calc-out-sub">Readiness quality for cross-domain FinOps comparability</div>
+            <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
           </div>
 
         </div>
@@ -3327,12 +3411,14 @@ a:focus-visible {
 const hidden = new Set();
 let paths = {}, hoverDots = {}, currentPts = [], currentScales = {};
 const FINOPS_2026_REPORT_URL = 'https://data.finops.org';
+const TDABC_REFERENCE_URL = 'https://hbr.org/2004/11/time-driven-activity-based-costing';
+const COMPOSITE_INDEX_REFERENCE_URL = 'https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf';
 const SHARE_STATE_VERSION = 1;
 const SHAREABLE_INPUT_KEYS = [
   'nRef', 'devPerClient', 'infraTotal', 'ARPU',
   'startupTargetPrice', 'startupTargetClients',
   'cudPct', 'margin', 'nMax',
-  'techDomain', 'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor'
+  'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor'
 ];
 const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
 const TECH_DOMAIN_SCHEMA = [
@@ -3343,6 +3429,8 @@ const TECH_DOMAIN_SCHEMA = [
   { key: 'data-center', inputKey: 'costDataCenter', label: 'Data Center', focusDimension: 'Facility-backed infra' },
   { key: 'labor', inputKey: 'costLabor', label: 'Labor', focusDimension: 'People cost overlay' }
 ];
+const DEFAULT_TECH_DOMAINS = ['cloud'];
+const VALID_TECH_DOMAIN_KEYS = TECH_DOMAIN_SCHEMA.map(item => item.key);
 let shareFeedbackTimer = null;
 const mcpModalEl = document.getElementById('mcp-modal');
 const mcpModalDialogEl = mcpModalEl ? mcpModalEl.querySelector('.mcp-modal-dialog') : null;
@@ -3432,20 +3520,26 @@ const OUTPUT_TOOLTIP_CONTENT = {
   },
   'out-techCoverage': {
     title: 'Coverage Across Domains',
-    what: 'Shows how much of the canonical multi-technology schema currently has monthly cost data.',
+    what: 'Shows completeness of your selected scope (single or multi-domain).',
     how: [
-      'Coverage = <code>provided domains / tracked domains</code>.',
-      'Domains tracked in this release: Cloud, SaaS, Licensing, Private Cloud, Data Center, Labor.',
-      'Higher coverage improves trust in portfolio-level optimization decisions.'
+      'Coverage = <code>domains with cost in selected scope / selected domains</code>.',
+      'You can keep one domain selected (single-focus mode) or many (portfolio mode).',
+      'Higher scoped coverage improves reliability of downstream normalization signals.'
+    ],
+    refs: [
+      { label: 'Composite indicators (JRC)', url: COMPOSITE_INDEX_REFERENCE_URL }
     ]
   },
   'out-techNorm': {
     title: 'Normalized Tech Cost / Client',
-    what: 'Unifies all tracked technology costs into one per-client burden for cross-domain comparability.',
+    what: 'Aggregates selected-domain monthly technology costs into one comparable per-client metric.',
     how: [
-      '<code>TotalTrackedMonthlyCost = sum(domain monthly costs)</code>.',
-      '<code>NormalizedTechCost = TotalTrackedMonthlyCost / client count</code>.',
-      'If client count is missing, the calculator uses a default baseline until real n is provided.'
+      '<code>NTC/client = Σ(αᵈ × Cᵈ) / n</code>.',
+      '<code>Cᵈ</code> is monthly cost for domain d, and <code>n</code> is client count.',
+      'Default allocation coefficient is <code>αᵈ = 1</code> (TDABC/ABC-inspired pooled costing) until custom weights are introduced.'
+    ],
+    refs: [
+      { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
     ]
   },
   'out-focusMaturity': {
@@ -3455,10 +3549,19 @@ const OUTPUT_TOOLTIP_CONTENT = {
       'Confidence tier depends on domain coverage and whether non-cloud categories are represented.',
       '<code>High</code>: broad domain coverage + non-cloud spend present.',
       '<code>Medium/Low</code>: partial or cloud-only coverage; more domain data needed.'
+    ],
+    refs: [
+      { label: 'State of FinOps report', url: FINOPS_2026_REPORT_URL }
     ]
   }
 };
 let activeOutputTipCard = null;
+
+function normalizeTechDomainSelection(list) {
+  const input = Array.isArray(list) ? list : [];
+  const deduped = Array.from(new Set(input.filter(key => VALID_TECH_DOMAIN_KEYS.includes(key))));
+  return deduped.length ? deduped : [...DEFAULT_TECH_DOMAINS];
+}
 
 // ─── TOGGLE ─────────────────────────────────────────────────────
 function toggle(id) {
@@ -3558,6 +3661,59 @@ function requestFeature(sourceSection) {
   window.open(`https://github.com/duksh/finops-calculator/issues/new?${params.toString()}`, '_blank', 'noopener,noreferrer');
 }
 
+function getSelectedTechDomains() {
+  const selected = VALID_TECH_DOMAIN_KEYS.filter(key => selectedTechDomains.has(key));
+  return selected.length ? selected : [...DEFAULT_TECH_DOMAINS];
+}
+
+function syncTechDomainSelectionUi() {
+  const selected = new Set(getSelectedTechDomains());
+  const hiddenInput = document.getElementById('inp-techDomains');
+  if (hiddenInput) hiddenInput.value = Array.from(selected).join(',');
+
+  document.querySelectorAll('.tech-domain-chip').forEach(btn => {
+    const domain = btn.dataset.domain;
+    const isSelected = selected.has(domain);
+    btn.classList.toggle('selected', isSelected);
+    btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+  });
+
+  const field = document.getElementById('field-techDomain');
+  if (field) field.classList.toggle('has-value', selected.size > 0);
+  USER_PROVIDED.techDomains = selected.size > 0;
+}
+
+function setTechDomainSelection(domains, recalcAfter = true) {
+  const normalized = normalizeTechDomainSelection(domains);
+  selectedTechDomains.clear();
+  normalized.forEach(domain => selectedTechDomains.add(domain));
+  syncTechDomainSelectionUi();
+  if (recalcAfter) {
+    recalculate();
+    updateProgressPills();
+  }
+}
+
+function toggleTechDomain(domain) {
+  if (!VALID_TECH_DOMAIN_KEYS.includes(domain)) return;
+  const next = new Set(getSelectedTechDomains());
+  if (next.has(domain)) {
+    if (next.size === 1) return;
+    next.delete(domain);
+  } else {
+    next.add(domain);
+  }
+  setTechDomainSelection(Array.from(next));
+}
+
+function setTechDomainPreset(mode) {
+  if (mode === 'all') {
+    setTechDomainSelection(VALID_TECH_DOMAIN_KEYS);
+    return;
+  }
+  setTechDomainSelection(DEFAULT_TECH_DOMAINS);
+}
+
 function collectShareState() {
   const inputState = {};
   SHAREABLE_INPUT_KEYS.forEach(key => {
@@ -3570,6 +3726,7 @@ function collectShareState() {
   return {
     v: SHARE_STATE_VERSION,
     i: inputState,
+    td: getSelectedTechDomains(),
     p: Array.from(selectedProviders),
     h: Array.from(hidden).filter(id => SHAREABLE_CURVE_KEYS.includes(id))
   };
@@ -3577,7 +3734,9 @@ function collectShareState() {
 
 function buildShareStateUrl() {
   const state = collectShareState();
-  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0;
+  const defaultScope = DEFAULT_TECH_DOMAINS.join(',');
+  const hasCustomScope = state.td.join(',') !== defaultScope;
+  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope;
   if (!hasData) return null;
 
   const encoded = encodeShareState(state);
@@ -3651,6 +3810,10 @@ function applySharedState(state) {
     const wrap = el.closest('.calc-field, .startup-field');
     if (wrap) wrap.classList.toggle('has-value', safeValue !== '');
   });
+
+  const legacyPrimary = (typeof inputState.techDomain === 'string') ? [inputState.techDomain] : [];
+  const scopedDomains = Array.isArray(state.td) ? state.td : [];
+  setTechDomainSelection(scopedDomains.length ? scopedDomains : legacyPrimary, false);
 
   const validProviders = new Set(Array.from(document.querySelectorAll('.provider-btn')).map(btn => btn.dataset.provider));
   selectedProviders.clear();
@@ -4100,19 +4263,20 @@ const USER_PROVIDED = {
   nRef:false, devPerClient:false, infraTotal:false, ARPU:false,
   startupTargetPrice:false, startupTargetClients:false,
   cudPct:false, margin:false, nMax:false,
-  techDomain:false, costSaaS:false, costLicensing:false,
+  techDomains:false, costSaaS:false, costLicensing:false,
   costPrivateCloud:false, costDataCenter:false, costLabor:false
 };
 
 // Smart default n when user hasn't told us their scale yet
 const DEFAULT_N_REF = 100;
 const selectedProviders = new Set();
+const selectedTechDomains = new Set(DEFAULT_TECH_DOMAINS);
 let lastInputs = {
   nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
   startupTargetPrice: null, startupTargetClients: null,
   effectiveARPU: null, arpuMode: 'missing',
   cudPct: null, margin: null, nMax: null,
-  techDomain: 'cloud',
+  techDomains: [...DEFAULT_TECH_DOMAINS],
   costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
 };
 
@@ -4332,48 +4496,70 @@ function findRequiredClientsForTargetPrice(targetPrice, maxN, model = MODEL) {
 
 function buildNormalizationSnapshot(inputs) {
   const nSample = (inputs.nRef && inputs.nRef > 0) ? inputs.nRef : DEFAULT_N_REF;
+  const selectedDomains = normalizeTechDomainSelection(inputs.techDomains);
+  const selectedSet = new Set(selectedDomains);
+
   const rows = TECH_DOMAIN_SCHEMA.map(def => {
     const raw = inputs[def.inputKey];
     const provided = raw !== null && raw !== undefined && raw > 0;
     const monthly = provided ? raw : 0;
     const normalized = monthly / nSample;
-    return { ...def, provided, monthly, normalized };
+    const inScope = selectedSet.has(def.key);
+    return { ...def, provided, monthly, normalized, inScope };
   });
 
+  const inScopeRows = rows.filter(row => row.inScope);
   const providedCount = rows.filter(row => row.provided).length;
+  const providedInScopeCount = inScopeRows.filter(row => row.provided).length;
   const nonCloudProvidedCount = rows.filter(row => row.key !== 'cloud' && row.provided).length;
+  const nonCloudInScope = inScopeRows.some(row => row.key !== 'cloud');
+  const nonCloudProvidedInScope = inScopeRows.some(row => row.key !== 'cloud' && row.provided);
   const totalTrackedDomains = rows.length;
-  const coveragePct = (providedCount / totalTrackedDomains) * 100;
-  const totalMonthly = rows.reduce((sum, row) => sum + row.monthly, 0);
-  const normalizedTotal = totalMonthly / nSample;
+  const selectedCount = inScopeRows.length;
+  const schemaCoveragePct = (providedCount / totalTrackedDomains) * 100;
+  const coveragePct = selectedCount > 0 ? (providedInScopeCount / selectedCount) * 100 : 0;
+  const totalMonthly = inScopeRows.reduce((sum, row) => sum + row.monthly, 0);
+  const normalizedTotal = selectedCount > 0 ? (totalMonthly / nSample) : 0;
 
   let confidence = 'Low';
-  if (coveragePct >= 67 && nonCloudProvidedCount >= 2) confidence = 'High';
-  else if (coveragePct >= 34 && nonCloudProvidedCount >= 1) confidence = 'Medium';
+  if (coveragePct >= 80 && selectedCount >= 2 && nonCloudProvidedInScope) confidence = 'High';
+  else if (coveragePct >= 50) confidence = 'Medium';
 
   const warnings = [];
+  const advisories = [];
   if (!(inputs.nRef && inputs.nRef > 0) && totalMonthly > 0) {
     warnings.push(`Normalization uses default client baseline n=${DEFAULT_N_REF}. Add Current Client Count for exact unit cost comparability.`);
   }
-  if (nonCloudProvidedCount === 0) {
-    warnings.push('Add at least one non-cloud domain cost (SaaS, Licensing, Private Cloud, Data Center, Labor) to activate multi-technology comparability.');
+  if (selectedCount === 1) {
+    advisories.push('Single-domain mode is active. Select additional domains when you need portfolio comparability.');
   }
-  const primaryDomain = rows.find(row => row.key === inputs.techDomain);
-  if (primaryDomain && !primaryDomain.provided) {
-    warnings.push(`Primary domain '${primaryDomain.label}' is selected but has no monthly cost input yet.`);
+  if (!nonCloudInScope) {
+    advisories.push('Only Cloud is in scope. Add SaaS/Licensing/Private Cloud/Data Center/Labor for broader FinOps 2026 alignment.');
+  }
+  if (selectedCount > 0 && providedInScopeCount < selectedCount) {
+    const missingDomains = inScopeRows.filter(row => !row.provided).map(row => row.label);
+    warnings.push(`Selected scope missing costs for: ${missingDomains.join(', ')}.`);
   }
 
   return {
     rows,
+    inScopeRows,
+    selectedDomains,
     nSample,
     providedCount,
+    providedInScopeCount,
     nonCloudProvidedCount,
+    nonCloudProvidedInScope,
     totalTrackedDomains,
+    selectedCount,
+    schemaCoveragePct,
     coveragePct,
     totalMonthly,
     normalizedTotal,
     confidence,
-    warnings
+    warnings,
+    advisories,
+    formula: 'NTC/client = Σ(αᵈ × Cᵈ) / n (default αᵈ=1)'
   };
 }
 
@@ -4382,8 +4568,12 @@ function updateNormalizationGuardrail(snapshot) {
   if (!guardrailEl) return;
 
   guardrailEl.classList.remove('warn', 'good');
+  if (!snapshot.selectedCount) {
+    guardrailEl.textContent = 'Select at least one technology domain to compute scoped normalization.';
+    return;
+  }
   if (!snapshot.totalMonthly) {
-    guardrailEl.textContent = 'Add at least one non-cloud domain cost to activate multi-technology normalization insights.';
+    guardrailEl.textContent = 'Add monthly cost inputs for your selected scope to activate multi-technology normalization insights.';
     return;
   }
 
@@ -4393,24 +4583,31 @@ function updateNormalizationGuardrail(snapshot) {
     return;
   }
 
+  const advisoryText = snapshot.advisories.length ? ` ${snapshot.advisories.join(' ')}` : '';
   guardrailEl.classList.add('good');
-  guardrailEl.textContent = `Normalization confidence is ${snapshot.confidence}. Coverage ${(snapshot.coveragePct).toFixed(0)}% across canonical domains.`;
+  guardrailEl.textContent = `Normalization confidence is ${snapshot.confidence}. Scoped coverage ${(snapshot.coveragePct).toFixed(0)}% (${snapshot.providedInScopeCount}/${snapshot.selectedCount}) using ${snapshot.formula}.${advisoryText}`;
 }
 
-function renderPortfolioSummary(snapshot, primaryDomainKey) {
+function renderPortfolioSummary(snapshot) {
   const bodyEl = document.getElementById('portfolio-summary-body');
   if (!bodyEl) return;
 
+  if (!snapshot.selectedCount) {
+    bodyEl.innerHTML = '<div class="portfolio-empty">Select at least one domain in scope to build portfolio normalization summary.</div>';
+    return;
+  }
+
   if (!snapshot.totalMonthly) {
-    bodyEl.innerHTML = '<div class="portfolio-empty">Enter Infra Cost and at least one additional domain cost to compare normalized technology dimensions.</div>';
+    bodyEl.innerHTML = '<div class="portfolio-empty">Enter cost values for selected domains to compute scoped normalization and confidence.</div>';
     return;
   }
 
   const rowsHtml = snapshot.rows.map(row => {
-    const isPrimary = row.key === primaryDomainKey;
+    const scopeTag = row.inScope ? '<span class="portfolio-tag scope">in scope</span>' : '';
+    const rowClass = row.inScope ? 'in-scope' : 'out-of-scope';
     return `
-      <div class="portfolio-row ${isPrimary ? 'is-primary' : ''}">
-        <span>${row.label}${isPrimary ? '<span class="portfolio-tag">primary</span>' : ''}</span>
+      <div class="portfolio-row ${rowClass}">
+        <span>${row.label}${scopeTag}</span>
         <span>${fmtOut(row.monthly, 0)} / mo</span>
         <span>${fmtOut(row.normalized, 2)} / client</span>
         <span class="focus-col">${row.focusDimension}</span>
@@ -4427,10 +4624,10 @@ function renderPortfolioSummary(snapshot, primaryDomainKey) {
     </div>
     ${rowsHtml}
     <div class="portfolio-row total">
-      <span>Total tracked</span>
+      <span>Total selected scope</span>
       <span>${fmtOut(snapshot.totalMonthly, 0)} / mo</span>
       <span>${fmtOut(snapshot.normalizedTotal, 2)} / client</span>
-      <span class="focus-col">coverage ${(snapshot.coveragePct).toFixed(0)}%</span>
+      <span class="focus-col">coverage ${(snapshot.coveragePct).toFixed(0)}% · schema ${(snapshot.schemaCoveragePct).toFixed(0)}%</span>
     </div>
   `;
 }
@@ -4474,12 +4671,14 @@ function cacheSubTexts() {
 
 function buildOutputTooltipHtml(config) {
   const items = config.how.map(item => `<li>${item}</li>`).join('');
+  const refs = [{ label: 'State of FinOps 2026 context', url: FINOPS_2026_REPORT_URL }, ...(config.refs || [])];
+  const links = refs.map(ref => `<a class="calc-out-tip-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('');
   return `
     <div class="calc-out-tip-title">${config.title}</div>
     <p class="calc-out-tip-what">${config.what}</p>
     <div class="calc-out-tip-sub">How this is calculated</div>
     <ul class="calc-out-tip-list">${items}</ul>
-    <a class="calc-out-tip-link" href="${FINOPS_2026_REPORT_URL}" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">State of FinOps 2026 context ↗</a>
+    ${links}
   `;
 }
 
@@ -4580,7 +4779,7 @@ function updateProgressPills() {
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
-    'inp-techDomain','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
+    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
   ];
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'flex';
@@ -4617,7 +4816,7 @@ function recalculate() {
   const cudPct       = getInp('inp-cudPct');
   const marginPct    = getInp('inp-margin');
   const nMaxInp      = getInp('inp-nMax');
-  const techDomain   = getInputString('inp-techDomain', 'cloud');
+  const techDomains  = getSelectedTechDomains();
   const costSaaS        = getInp('inp-costSaaS');
   const costLicensing   = getInp('inp-costLicensing');
   const costPrivateCloud= getInp('inp-costPrivateCloud');
@@ -4680,7 +4879,7 @@ function recalculate() {
     startupTargetPrice, startupTargetClients,
     effectiveARPU, arpuMode,
     cudPct, margin: marginPct, nMax: nMaxInp,
-    techDomain,
+    techDomains,
     costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
   };
 
@@ -4698,7 +4897,7 @@ function updateOutputCards(inputs) {
   const {
     nRef, devPerClient, infraTotal, ARPU: arpuInp, cudPct,
     startupTargetPrice, startupTargetClients, effectiveARPU, arpuMode,
-    techDomain, costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
+    techDomains, costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
   } = inputs;
   const { K, a, c, b, g, m, nMax } = MODEL;
 
@@ -4736,7 +4935,7 @@ function updateOutputCards(inputs) {
     ? findRequiredClientsForTargetPrice(reqPriceAtClients, searchMax, MODEL)
     : null;
   const normalization = buildNormalizationSnapshot({
-    nRef, infraTotal, techDomain,
+    nRef, infraTotal, techDomains,
     costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
   });
 
@@ -4903,20 +5102,20 @@ function updateOutputCards(inputs) {
   }
 
   // ── R2 WAVE 1: MULTI-TECH NORMALIZATION OUTPUTS ───────────────
-  const coverageClass = normalization.coveragePct >= 67
+  const coverageClass = normalization.coveragePct >= 80
     ? 'good'
-    : (normalization.coveragePct >= 34 ? 'warn' : 'bad');
+    : (normalization.coveragePct >= 50 ? 'warn' : 'bad');
   const coverageCardState = coverageClass === 'good' ? '' : (coverageClass === 'warn' ? 'warn' : 'bad');
   setOut(
     'oval-techCoverage',
-    `${Math.round(normalization.coveragePct)}% (${normalization.providedCount}/${normalization.totalTrackedDomains})`,
+    `${Math.round(normalization.coveragePct)}% (${normalization.providedInScopeCount}/${normalization.selectedCount})`,
     coverageClass,
     coverageCardState
   );
 
-  if (normalization.totalMonthly <= 0) {
-    setOut('oval-techNorm', null, '', '', 'Infra Cost plus at least one additional domain monthly cost');
-    setOut('oval-focusMaturity', null, '', '', 'Domain cost coverage to assess normalization quality');
+  if (normalization.totalMonthly <= 0 || normalization.selectedCount <= 0) {
+    setOut('oval-techNorm', null, '', '', 'Monthly costs for selected domain scope');
+    setOut('oval-focusMaturity', null, '', '', 'Selected-domain completeness for confidence scoring');
   } else {
     setOut('oval-techNorm', `${fmtOut(normalization.normalizedTotal, 2)} / client`, 'good', '');
     const confidenceClass = normalization.confidence === 'High'
@@ -4926,7 +5125,7 @@ function updateOutputCards(inputs) {
     setOut('oval-focusMaturity', normalization.confidence, confidenceClass, confidenceCardState);
   }
 
-  renderPortfolioSummary(normalization, techDomain);
+  renderPortfolioSummary(normalization);
   updateNormalizationGuardrail(normalization);
 }
 
@@ -4940,20 +5139,20 @@ function resetModel() {
     startupTargetPrice: null, startupTargetClients: null,
     effectiveARPU: null, arpuMode: 'missing',
     cudPct: null, margin: null, nMax: null,
-    techDomain: 'cloud',
+    techDomains: [...DEFAULT_TECH_DOMAINS],
     costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
   };
   const ids = [
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
-    'inp-techDomain','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
+    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
-      if (el.tagName === 'SELECT') {
-        el.value = el.dataset.defaultValue || (el.options[0] ? el.options[0].value : '');
+      if (el.type === 'hidden') {
+        el.value = el.dataset.defaultValue || '';
       } else {
         el.value = '';
       }
@@ -4980,8 +5179,9 @@ function resetModel() {
     const valEl = card.querySelector('.calc-out-val');
     if (valEl) { valEl.textContent = '—'; valEl.className = 'calc-out-val muted'; }
   });
+  setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
   draw();
-  renderPortfolioSummary(buildNormalizationSnapshot(lastInputs), lastInputs.techDomain);
+  renderPortfolioSummary(buildNormalizationSnapshot(lastInputs));
   updateNormalizationGuardrail(buildNormalizationSnapshot(lastInputs));
   updateHealthAndRecommendations(lastInputs);
   clearShareStateParam();
@@ -5117,6 +5317,7 @@ function initSectionNav() {
 
 initOutputCardTooltips();
 cacheSubTexts();
+setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initMcpModal();
 initSectionNav();
 if (!loadSharedStateFromUrl()) {
