@@ -1735,21 +1735,6 @@ a:focus-visible {
   border-bottom: 1px dashed rgba(0,90,143,0.35);
 }
 .tech-domain-link-btn:hover { border-bottom-color: rgba(0,90,143,0.7); }
-.tech-domain-formula {
-  margin-top: 8px;
-  font-size: 10px;
-  color: #445266;
-  line-height: 1.5;
-}
-.tech-domain-formula code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px;
-  color: #005a8f;
-  background: rgba(0,114,178,0.08);
-  border: 1px solid rgba(0,114,178,0.14);
-  border-radius: 4px;
-  padding: 1px 4px;
-}
 
 .portfolio-summary {
   margin: 0 18px 16px;
@@ -2682,7 +2667,7 @@ a:focus-visible {
             <label class="calc-label" for="inp-techDomains">
               Technology Domains in Scope
               <span class="ftag">R2 wave 1</span>
-              <a class="calc-inline-help" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="State of FinOps 2026 emphasizes extending FinOps beyond cloud-only optimization into broader technology spend governance.">?</a>
+              <a class="calc-inline-help" href="#formulas-section" title="Select one or more domains. Full formula and references are in Core FinOps Equations.">?</a>
             </label>
             <input type="hidden" id="inp-techDomains" value="cloud" data-default-value="cloud">
             <div class="tech-domain-controls" id="tech-domain-controls" role="group" aria-label="Select one or more technology domains">
@@ -2697,18 +2682,7 @@ a:focus-visible {
               <button type="button" class="tech-domain-link-btn" onclick="setTechDomainPreset('all')">Select all domains</button>
               <button type="button" class="tech-domain-link-btn" onclick="setTechDomainPreset('cloud-only')">Cloud only</button>
             </div>
-            <div class="calc-hint">Choose one domain (single-focus mode) or multiple domains (portfolio mode). Scope directly drives coverage and normalized outputs.</div>
-            <div class="tech-domain-formula">
-              Academic basis (ABC/TDABC-style pooled costing):
-              <code>NTC/client = Σ(αᵈ × Cᵈ) / n</code>, where default <code>αᵈ = 1</code> until custom allocation weights are defined.
-            </div>
-            <div class="portfolio-report-note">
-              <a href="https://data.finops.org" target="_blank" rel="noopener noreferrer">State of FinOps 2026 ↗</a>
-              ·
-              <a href="https://hbr.org/2004/11/time-driven-activity-based-costing" target="_blank" rel="noopener noreferrer">TDABC reference ↗</a>
-              ·
-              <a href="https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf" target="_blank" rel="noopener noreferrer">Composite indicator handbook ↗</a>
-            </div>
+            <div class="calc-hint">Choose one domain (single-focus mode) or multiple domains (portfolio mode). See Core FinOps Equations for the normalization formula.</div>
           </div>
 
         </div>
@@ -3239,6 +3213,24 @@ a:focus-visible {
         </div>
       </div>
 
+      <!-- 7 -->
+      <div class="formula-card" onclick="toggleTip(this)">
+        <span class="info-btn">i</span>
+        <div class="f-label">Multi-Domain Normalized Tech Cost</div>
+        <div class="f-eq">NTC/client = Σ(α<sub>d</sub> · C<sub>d</sub>) ÷ n</div>
+        <div class="ftip">
+          <div class="ftip-title">Scoped Multi-Domain Normalization</div>
+          <div class="ftip-desc">This extends cloud-only costing to a selected technology scope. It aggregates monthly cost from selected domains and normalizes to a per-client comparable unit.</div>
+          <div class="ftip-vars">
+            <div class="ftip-var"><span class="ftip-sym">NTC/client</span><span class="ftip-def">Normalized technology cost per client for the selected scope</span></div>
+            <div class="ftip-var"><span class="ftip-sym">C<sub>d</sub></span><span class="ftip-def">Monthly cost of domain d (Cloud, SaaS, Licensing, Private Cloud, Data Center, Labor)</span></div>
+            <div class="ftip-var"><span class="ftip-sym">α<sub>d</sub></span><span class="ftip-def">Allocation weight for domain d (default α<sub>d</sub>=1 in this release)</span></div>
+            <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Client count used to normalize the pooled monthly cost</span></div>
+            <div class="ftip-var"><span class="ftip-sym">Refs</span><span class="ftip-def">See Academic &amp; Primary References [6], [9], [10]</span></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -3320,7 +3312,7 @@ a:focus-visible {
           <span class="fig-ref-num">[6]</span>
           <span class="fig-ref-text">
             <span class="ref-tag finops">FINOPS</span>
-            FinOps Foundation. (2024). <em>State of FinOps Report</em>. Annual practitioner survey (700+ respondents).
+            FinOps Foundation. (2026). <em>State of FinOps Report</em>. Annual practitioner survey (700+ respondents).
             Industry benchmark for cloud cost efficiency metrics, CCER thresholds, and FinOps maturity adoption rates cited in this model.
             <br><a href="https://data.finops.org/" target="_blank">↗ data.finops.org</a>
           </span>
@@ -3343,6 +3335,26 @@ a:focus-visible {
             GSA / ITVMO. (2023). <em>Cloud Optimization Through Discounts and Consolidated Billing</em>. U.S. General Services Administration.
             Government-published comparative analysis of AWS Savings Plans, Azure Reservations, and GCP CUDs — supports the cross-cloud CUD benchmarking in this model.
             <br><a href="https://itvmo.gsa.gov/assets/files/FinOps-Optimization-Through-Discounts.pdf" target="_blank">↗ itvmo.gsa.gov · FinOps-Optimization-Through-Discounts.pdf</a>
+          </span>
+        </div>
+
+        <div class="fig-ref-item">
+          <span class="fig-ref-num">[9]</span>
+          <span class="fig-ref-text">
+            <span class="ref-tag econ">ECON</span>
+            Kaplan, R.S. &amp; Anderson, S.R. (2004). <em>Time-Driven Activity-Based Costing</em>. Harvard Business Review.
+            Foundational cost-allocation method supporting pooled cost normalization with explicit allocation coefficients.
+            <br><a href="https://hbr.org/2004/11/time-driven-activity-based-costing" target="_blank">↗ hbr.org/time-driven-activity-based-costing</a>
+          </span>
+        </div>
+
+        <div class="fig-ref-item">
+          <span class="fig-ref-num">[10]</span>
+          <span class="fig-ref-text">
+            <span class="ref-tag econ">ECON</span>
+            Nardo, M. et al. (2008). <em>Handbook on Constructing Composite Indicators</em>. OECD / European Commission JRC.
+            Methodological basis for completeness and confidence scoring used with aggregated multi-domain indicators.
+            <br><a href="https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf" target="_blank">↗ JRC Handbook on Composite Indicators</a>
           </span>
         </div>
 
