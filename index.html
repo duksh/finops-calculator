@@ -2667,7 +2667,7 @@ a:focus-visible {
             <label class="calc-label" for="inp-techDomains">
               Technology Domains in Scope
               <span class="ftag">R2 wave 1</span>
-              <a class="calc-inline-help" href="#formulas-section" title="Select one or more domains. Full formula and references are in Core FinOps Equations.">?</a>
+              <a class="calc-inline-help" href="#formulas-section" title="Select one or more domains. Formula, references, and weighting policy are in Core FinOps Equations.">?</a>
             </label>
             <input type="hidden" id="inp-techDomains" value="cloud" data-default-value="cloud">
             <div class="tech-domain-controls" id="tech-domain-controls" role="group" aria-label="Select one or more technology domains">
@@ -3224,8 +3224,10 @@ a:focus-visible {
           <div class="ftip-vars">
             <div class="ftip-var"><span class="ftip-sym">NTC/client</span><span class="ftip-def">Normalized technology cost per client for the selected scope</span></div>
             <div class="ftip-var"><span class="ftip-sym">C<sub>d</sub></span><span class="ftip-def">Monthly cost of domain d (Cloud, SaaS, Licensing, Private Cloud, Data Center, Labor)</span></div>
-            <div class="ftip-var"><span class="ftip-sym">α<sub>d</sub></span><span class="ftip-def">Allocation weight for domain d (default α<sub>d</sub>=1 in this release)</span></div>
+            <div class="ftip-var"><span class="ftip-sym">α<sub>d</sub></span><span class="ftip-def">Allocation factor for domain d. Financial Truth mode: α<sub>d</sub>=1 if selected, else 0 (default).</span></div>
+            <div class="ftip-var"><span class="ftip-sym">w<sub>d</sub></span><span class="ftip-def">Optional Priority Index weights where Σw<sub>d</sub>=1. Suggested bands: Cloud 0.25–0.45, SaaS 0.15–0.30, Licensing 0.08–0.20, Private Cloud 0.05–0.20, Data Center 0.03–0.15, Labor 0.08–0.20.</span></div>
             <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Client count used to normalize the pooled monthly cost</span></div>
+            <div class="ftip-var"><span class="ftip-sym">Default</span><span class="ftip-def">Balanced policy profile (optional): Cloud 0.35, SaaS 0.20, Licensing 0.12, Private Cloud 0.13, Data Center 0.08, Labor 0.12.</span></div>
             <div class="ftip-var"><span class="ftip-sym">Refs</span><span class="ftip-def">See Academic &amp; Primary References [6], [9], [10]</span></div>
           </div>
         </div>
@@ -3548,7 +3550,9 @@ const OUTPUT_TOOLTIP_CONTENT = {
     how: [
       '<code>NTC/client = Σ(αᵈ × Cᵈ) / n</code>.',
       '<code>Cᵈ</code> is monthly cost for domain d, and <code>n</code> is client count.',
-      'Default allocation coefficient is <code>αᵈ = 1</code> (TDABC/ABC-inspired pooled costing) until custom weights are introduced.'
+      '<strong>Financial Truth mode (recommended):</strong> <code>αᵈ ∈ {0,1}</code> based on scope selection (in/out).',
+      '<strong>Priority Index mode (optional):</strong> use <code>Σwᵈ=1</code> with policy bands — Cloud 0.25–0.45, SaaS 0.15–0.30, Licensing 0.08–0.20, Private Cloud 0.05–0.20, Data Center 0.03–0.15, Labor 0.08–0.20.',
+      'Balanced default profile: Cloud 0.35, SaaS 0.20, Licensing 0.12, Private Cloud 0.13, Data Center 0.08, Labor 0.12.'
     ],
     refs: [
       { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
