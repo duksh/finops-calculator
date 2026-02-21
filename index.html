@@ -82,8 +82,10 @@ body {
   padding: calc(var(--page-pad-y) + var(--sticky-nav-h) + 8px) var(--page-pad-x) 48px;
 }
 body.modal-open,
-body.chart-focus-open { overflow: hidden; }
-body.chart-focus-open::before {
+body.chart-focus-open,
+body.cfo-focus-open { overflow: hidden; }
+body.chart-focus-open::before,
+body.cfo-focus-open::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -1052,7 +1054,8 @@ a:focus-visible {
   max-width: 680px;
   line-height: 1.6;
 }
-.chart-focus-btn {
+.chart-focus-btn,
+.cfo-focus-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -1070,16 +1073,19 @@ a:focus-visible {
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.chart-focus-btn:hover {
+.chart-focus-btn:hover,
+.cfo-focus-btn:hover {
   background: rgba(0,114,178,0.16);
   border-color: rgba(0,114,178,0.52);
 }
-.chart-focus-btn[aria-pressed="true"] {
+.chart-focus-btn[aria-pressed="true"],
+.cfo-focus-btn[aria-pressed="true"] {
   background: rgba(0,158,115,0.14);
   border-color: rgba(0,158,115,0.5);
   color: #0c664f;
 }
-.chart-focus-btn svg {
+.chart-focus-btn svg,
+.cfo-focus-btn svg {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
@@ -1089,7 +1095,8 @@ a:focus-visible {
     flex-direction: column;
     align-items: stretch;
   }
-  .chart-focus-btn {
+  .chart-focus-btn,
+  .cfo-focus-btn {
     align-self: flex-start;
   }
 }
@@ -2159,6 +2166,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-bottom: 1px solid rgba(0,114,178,0.2);
   background: rgba(0,114,178,0.08);
 }
+.qbv-dashboard-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 .qbv-dashboard-title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -2196,6 +2210,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-radius: 10px;
   background: rgba(255,255,255,0.9);
   padding: 10px;
+  position: relative;
+}
+.cfo-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 .qbv-panel h4 {
   margin: 0 0 3px;
@@ -2204,6 +2225,56 @@ body.chart-focus-open #chart-section .chart-focus-close {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #215280;
+}
+.cfo-panel-tip {
+  position: relative;
+}
+.cfo-panel-tip > summary {
+  list-style: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,114,178,0.35);
+  background: rgba(0,114,178,0.08);
+  color: #0f4e76;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  user-select: none;
+}
+.cfo-panel-tip > summary::-webkit-details-marker { display: none; }
+.cfo-panel-tip[open] > summary {
+  background: rgba(0,158,115,0.14);
+  border-color: rgba(0,158,115,0.45);
+  color: #0c664f;
+}
+.cfo-panel-tip-popover {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  width: min(340px, calc(100vw - 72px));
+  z-index: 8;
+  border: 1px solid rgba(0,114,178,0.28);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 14px 26px rgba(15,40,74,0.18);
+  padding: 9px 10px;
+  font-size: 10px;
+  color: #2f4f72;
+  line-height: 1.45;
+}
+.cfo-panel-tip-popover strong {
+  color: #1b4e7d;
+  font-weight: 700;
+}
+.cfo-panel-tip-popover p {
+  margin: 0;
+}
+.cfo-panel-tip-popover p + p {
+  margin-top: 6px;
 }
 .qbv-panel-sub {
   margin: 0 0 8px;
@@ -2319,6 +2390,51 @@ body.chart-focus-open #chart-section .chart-focus-close {
   padding: 8px 12px 10px;
   font-size: 10px;
   color: #3d5d80;
+}
+.cfo-focus-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(17, 38, 74, 0.2);
+  background: rgba(255,255,255,0.95);
+  color: #1d2c49;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#qbv-dashboard:fullscreen,
+#qbv-dashboard:-webkit-full-screen,
+body.cfo-focus-open #qbv-dashboard {
+  background: linear-gradient(180deg, #f4f8ff 0%, #fafdff 100%);
+}
+#qbv-dashboard:fullscreen,
+#qbv-dashboard:-webkit-full-screen {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+body.cfo-focus-open #qbv-dashboard {
+  position: fixed;
+  inset: clamp(10px, 2vw, 18px);
+  z-index: 170;
+  margin: 0;
+  border: 1px solid rgba(17, 38, 74, 0.22);
+  border-radius: 12px;
+  box-shadow: 0 24px 56px rgba(11, 28, 55, 0.36);
+  overflow: auto;
+}
+#qbv-dashboard:fullscreen .cfo-focus-close,
+#qbv-dashboard:-webkit-full-screen .cfo-focus-close,
+body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
+  display: inline-flex;
 }
 @media (max-width: 900px) {
   .portfolio-row { grid-template-columns: 1.2fr 0.8fr 0.9fr; }
@@ -3735,30 +3851,69 @@ body.chart-focus-open #chart-section .chart-focus-close {
         </div>
 
         <div class="qbv-dashboard" id="qbv-dashboard">
+          <button class="cfo-focus-close" id="qbv-focus-close" type="button" aria-label="Exit expanded CFO dashboard view">Exit focus view</button>
           <div class="qbv-dashboard-head">
             <div>
               <div class="qbv-dashboard-title">CFO Forecast Dashboard</div>
               <div class="qbv-dashboard-sub">12-month visual plan for budgeting, scenario forecasting, and value realization tracking</div>
             </div>
-            <button class="qbv-export-btn" id="qbv-export-csv" type="button" disabled>Export CFO CSV</button>
+            <div class="qbv-dashboard-head-actions">
+              <button class="cfo-focus-btn" id="qbv-focus-btn" type="button" aria-controls="qbv-dashboard" aria-pressed="false" aria-label="Expand CFO dashboard view">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 2.5H2.5V6M10 2.5h3.5V6M6 13.5H2.5V10M10 13.5h3.5V10"></path>
+                </svg>
+                <span id="qbv-focus-btn-text">Expand dashboard</span>
+              </button>
+              <button class="qbv-export-btn" id="qbv-export-csv" type="button" disabled>Export CFO CSV</button>
+            </div>
           </div>
 
           <div class="qbv-dashboard-grid">
             <article class="qbv-panel">
-              <h4>Budgeting view</h4>
+              <div class="cfo-panel-head">
+                <h4>Budgeting view</h4>
+                <details class="cfo-panel-tip">
+                  <summary aria-label="Learn more about Budgeting view">?</summary>
+                  <div class="cfo-panel-tip-popover">
+                    <p><strong>What:</strong> Compares your declared monthly budget against modeled technology cost at key planning checkpoints (M1, M6, M12).</p>
+                    <p><strong>How calculated:</strong> <code>Budget variance = Budget - ModeledCost</code>. Modeled cost uses the active model curves and selected scope basis.</p>
+                    <p><strong>Why it matters:</strong> Gives CFO-ready early warning on headroom vs overrun before month-end closes.</p>
+                  </div>
+                </details>
+              </div>
               <p class="qbv-panel-sub">Budget vs modeled monthly cost checkpoints (M1, M6, M12)</p>
               <div id="qbv-budget-bars" class="qbv-placeholder">Provide monthly budget to render budgeting comparison bars.</div>
             </article>
 
             <article class="qbv-panel">
-              <h4>Forecast fan view</h4>
+              <div class="cfo-panel-head">
+                <h4>Forecast fan view</h4>
+                <details class="cfo-panel-tip">
+                  <summary aria-label="Learn more about Forecast fan view">?</summary>
+                  <div class="cfo-panel-tip-popover">
+                    <p><strong>What:</strong> Shows best, baseline, and worst monthly margin trajectories over a 12-month horizon.</p>
+                    <p><strong>How calculated:</strong> Baseline uses projected clients and modeled cost; best/worst apply your efficiency and drift percentages to forecast cost.</p>
+                    <p><strong>Why it matters:</strong> Helps finance teams quantify uncertainty bands and build board-grade forecast narratives.</p>
+                  </div>
+                </details>
+              </div>
               <p class="qbv-panel-sub">Best/base/worst margin trajectory for the next 12 months</p>
               <svg id="qbv-forecast-svg" class="qbv-forecast-svg" viewBox="0 0 520 170" aria-label="Forecast margin scenario fan chart"></svg>
               <div id="qbv-forecast-legend" class="qbv-forecast-legend"></div>
             </article>
 
             <article class="qbv-panel">
-              <h4>Value realization ledger</h4>
+              <div class="cfo-panel-head">
+                <h4>Value realization ledger</h4>
+                <details class="cfo-panel-tip">
+                  <summary aria-label="Learn more about Value realization ledger">?</summary>
+                  <div class="cfo-panel-tip-popover">
+                    <p><strong>What:</strong> Tracks progress from identified value target to delivered value (realized savings + cost avoidance).</p>
+                    <p><strong>How calculated:</strong> <code>Total realized value = RealizedSavings + CostAvoidance</code>; cumulative gap compares target run-rate against delivered run-rate over months.</p>
+                    <p><strong>Why it matters:</strong> Makes benefits tracking auditable and supports finance governance on value delivery.</p>
+                  </div>
+                </details>
+              </div>
               <p class="qbv-panel-sub">Burn-up of identified target vs realized + avoided value</p>
               <div class="qbv-realization-meter">
                 <div id="qbv-realization-meter-fill" class="qbv-realization-meter-fill"></div>
@@ -4312,10 +4467,16 @@ const chartSectionFocusEl = document.getElementById('chart-section');
 const chartFocusToggleBtnEl = document.getElementById('chart-focus-btn');
 const chartFocusToggleTextEl = chartFocusToggleBtnEl ? chartFocusToggleBtnEl.querySelector('.chart-focus-btn-text') : null;
 const chartFocusCloseBtnEl = document.getElementById('chart-focus-close');
+const qbvDashboardEl = document.getElementById('qbv-dashboard');
+const qbvFocusToggleBtnEl = document.getElementById('qbv-focus-btn');
+const qbvFocusToggleTextEl = document.getElementById('qbv-focus-btn-text');
+const qbvFocusCloseBtnEl = document.getElementById('qbv-focus-close');
 const qbvExportBtnEl = document.getElementById('qbv-export-csv');
 let lastMcpModalTrigger = null;
 let lastChartFocusTrigger = null;
+let lastQbvFocusTrigger = null;
 let restoreChartFocusOnExit = false;
+let restoreQbvFocusOnExit = false;
 let qbvDashboardRows = [];
 const OUTPUT_TOOLTIP_CONTENT = {
   'out-beN': {
@@ -6910,6 +7071,114 @@ function initChartFocusMode() {
   });
 }
 
+// ─── CFO DASHBOARD FOCUS MODE ─────────────────────────────────────
+function isQbvInFocusMode() {
+  const isFullscreen = qbvDashboardEl && fullscreenElement() === qbvDashboardEl;
+  return !!isFullscreen || document.body.classList.contains('cfo-focus-open');
+}
+
+function syncQbvFocusButtonState(active) {
+  if (!qbvFocusToggleBtnEl) return;
+  qbvFocusToggleBtnEl.setAttribute('aria-pressed', active ? 'true' : 'false');
+  qbvFocusToggleBtnEl.setAttribute('aria-label', active ? 'Exit expanded CFO dashboard view' : 'Expand CFO dashboard view');
+  if (qbvFocusToggleTextEl) qbvFocusToggleTextEl.textContent = active ? 'Exit dashboard view' : 'Expand dashboard';
+}
+
+function openQbvFocusMode(triggerEl) {
+  if (!qbvDashboardEl) return;
+  lastQbvFocusTrigger = triggerEl || document.activeElement;
+
+  const openFallback = () => {
+    document.body.classList.add('cfo-focus-open');
+    syncQbvFocusButtonState(true);
+    if (qbvFocusCloseBtnEl) window.requestAnimationFrame(() => qbvFocusCloseBtnEl.focus());
+  };
+
+  const requestFullscreenFn = qbvDashboardEl.requestFullscreen || qbvDashboardEl.webkitRequestFullscreen;
+  if (!requestFullscreenFn) {
+    openFallback();
+    return;
+  }
+
+  try {
+    const maybePromise = requestFullscreenFn.call(qbvDashboardEl);
+    if (maybePromise && typeof maybePromise.then === 'function') {
+      maybePromise
+        .then(() => {
+          syncQbvFocusButtonState(true);
+          if (qbvFocusCloseBtnEl) window.requestAnimationFrame(() => qbvFocusCloseBtnEl.focus());
+        })
+        .catch(openFallback);
+    } else {
+      syncQbvFocusButtonState(true);
+      if (qbvFocusCloseBtnEl) window.requestAnimationFrame(() => qbvFocusCloseBtnEl.focus());
+    }
+  } catch (_err) {
+    openFallback();
+  }
+}
+
+function closeQbvFocusMode({ restoreFocus = true } = {}) {
+  const activeFullscreen = qbvDashboardEl && fullscreenElement() === qbvDashboardEl;
+  document.body.classList.remove('cfo-focus-open');
+
+  if (activeFullscreen) {
+    restoreQbvFocusOnExit = restoreFocus;
+    const exitFullscreenFn = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exitFullscreenFn) {
+      const maybePromise = exitFullscreenFn.call(document);
+      if (maybePromise && typeof maybePromise.catch === 'function') {
+        maybePromise.catch(() => syncQbvFocusButtonState(false));
+      }
+    }
+    return;
+  }
+
+  syncQbvFocusButtonState(false);
+  if (restoreFocus && lastQbvFocusTrigger && typeof lastQbvFocusTrigger.focus === 'function') {
+    lastQbvFocusTrigger.focus();
+  }
+}
+
+function handleQbvFocusFullscreenChange() {
+  const active = qbvDashboardEl && fullscreenElement() === qbvDashboardEl;
+  if (active) {
+    document.body.classList.remove('cfo-focus-open');
+    syncQbvFocusButtonState(true);
+    if (qbvFocusCloseBtnEl) window.requestAnimationFrame(() => qbvFocusCloseBtnEl.focus());
+    return;
+  }
+
+  syncQbvFocusButtonState(document.body.classList.contains('cfo-focus-open'));
+  if (restoreQbvFocusOnExit && lastQbvFocusTrigger && typeof lastQbvFocusTrigger.focus === 'function') {
+    lastQbvFocusTrigger.focus();
+  }
+  restoreQbvFocusOnExit = false;
+}
+
+function initQbvFocusMode() {
+  if (!qbvDashboardEl || !qbvFocusToggleBtnEl || !qbvFocusCloseBtnEl) return;
+  syncQbvFocusButtonState(false);
+
+  qbvFocusToggleBtnEl.addEventListener('click', () => {
+    if (isQbvInFocusMode()) closeQbvFocusMode();
+    else openQbvFocusMode(qbvFocusToggleBtnEl);
+  });
+
+  qbvFocusCloseBtnEl.addEventListener('click', () => {
+    closeQbvFocusMode();
+  });
+
+  document.addEventListener('fullscreenchange', handleQbvFocusFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleQbvFocusFullscreenChange);
+
+  document.addEventListener('click', (event) => {
+    if (!document.body.classList.contains('cfo-focus-open')) return;
+    if (qbvDashboardEl.contains(event.target) || qbvFocusToggleBtnEl.contains(event.target)) return;
+    closeQbvFocusMode({ restoreFocus: false });
+  });
+}
+
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
 function toggleTip(card) {
   const tip    = card.querySelector('.ftip');
@@ -6946,6 +7215,7 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeChartFocusMode();
+    closeQbvFocusMode();
     closeMcpModal();
     closeAllOutputCardTooltips();
     document.querySelectorAll('.formula-card.active').forEach(c => {
@@ -7198,6 +7468,7 @@ updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
 initCfoDashboardExport();
+initQbvFocusMode();
 initMcpModal();
 initChartFocusMode();
 initSectionNav();
