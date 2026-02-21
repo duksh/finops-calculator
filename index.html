@@ -1931,6 +1931,26 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-top: 1px dashed var(--border);
   background: linear-gradient(180deg, rgba(0,114,178,0.02), rgba(0,158,115,0.02));
 }
+.value-overlay {
+  border-top: 1px dashed rgba(0,114,178,0.3);
+  border-left: 3px solid rgba(0,114,178,0.4);
+  background: linear-gradient(180deg, rgba(86,180,233,0.07), rgba(0,114,178,0.03));
+}
+.value-overlay .calc-field {
+  background: linear-gradient(180deg, rgba(240,248,255,0.86) 0%, rgba(248,252,255,0.94) 100%);
+  border-top-color: rgba(0,114,178,0.2);
+}
+.value-overlay .calc-label {
+  color: #1d4c7b;
+}
+.value-overlay .ftag {
+  border-color: rgba(0,114,178,0.34);
+  background: rgba(86,180,233,0.1);
+  color: #0f4e76;
+}
+.value-guardrail {
+  border-top: 1px dashed rgba(0,114,178,0.28);
+}
 .finops-2026-highlight {
   position: relative;
   border-top: 1px dashed rgba(0,158,115,0.42);
@@ -2172,6 +2192,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
   background: linear-gradient(180deg, rgba(238,255,248,0.92) 0%, rgba(241,249,255,0.9) 100%);
 }
 .finops-2026-card .calc-out-label { color: #0f6f57; }
+.qbv-card {
+  border-color: rgba(0,114,178,0.28);
+  background: linear-gradient(180deg, rgba(241,249,255,0.95) 0%, rgba(236,247,255,0.92) 100%);
+}
+.qbv-card .calc-out-label {
+  color: #1c507f;
+}
 .calc-out-card.tip-enabled { cursor: pointer; }
 .calc-out-card.tip-open { z-index: 8; }
 .calc-out-card.live {
@@ -3212,6 +3239,96 @@ body.chart-focus-open #chart-section .chart-focus-close {
 
         </div>
 
+        <div class="value-overlay">
+          <div class="startup-title">Quantify business value controls<span class="finops-2026-pill">Forecasting · Budgeting · Realization</span></div>
+          <div class="calc-fields">
+            <div class="calc-field" id="field-budgetMonthly">
+              <label class="calc-label" for="inp-budgetMonthly">
+                Monthly Technology Budget
+                <span class="ftag">budgeting</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-budgetMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 4500" oninput="onInput('budgetMonthly')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Compare modeled monthly cost against approved budget to track overrun risk early.</div>
+            </div>
+
+            <div class="calc-field" id="field-forecastGrowthPct">
+              <label class="calc-label" for="inp-forecastGrowthPct">
+                Forecast Client Growth
+                <span class="ftag">planning</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-forecastGrowthPct" inputmode="decimal" min="-95" max="500" step="0.1" placeholder="e.g. 12" oninput="onInput('forecastGrowthPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Expected client growth for the next planning cycle (baseline scenario).</div>
+            </div>
+
+            <div class="calc-field" id="field-forecastBestEfficiencyPct">
+              <label class="calc-label" for="inp-forecastBestEfficiencyPct">
+                Best-case Cost Efficiency
+                <span class="ftag">scenario</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-forecastBestEfficiencyPct" inputmode="decimal" min="0" max="95" step="0.1" placeholder="e.g. 8" oninput="onInput('forecastBestEfficiencyPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Potential cost-down from optimization execution in a positive scenario.</div>
+            </div>
+
+            <div class="calc-field" id="field-forecastWorstDriftPct">
+              <label class="calc-label" for="inp-forecastWorstDriftPct">
+                Worst-case Cost Drift
+                <span class="ftag">scenario</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-forecastWorstDriftPct" inputmode="decimal" min="0" max="200" step="0.1" placeholder="e.g. 12" oninput="onInput('forecastWorstDriftPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Potential cost-up pressure from demand spikes, creep, or execution delay.</div>
+            </div>
+
+            <div class="calc-field" id="field-savingsIdentified">
+              <label class="calc-label" for="inp-savingsIdentified">
+                Identified Savings Target
+                <span class="ftag">ledger</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-savingsIdentified" inputmode="decimal" min="0" step="1" placeholder="e.g. 1200" oninput="onInput('savingsIdentified')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Savings opportunity identified in planning and optimization backlog.</div>
+            </div>
+
+            <div class="calc-field" id="field-savingsRealized">
+              <label class="calc-label" for="inp-savingsRealized">
+                Realized Savings
+                <span class="ftag">ledger</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-savingsRealized" inputmode="decimal" min="0" step="1" placeholder="e.g. 700" oninput="onInput('savingsRealized')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Savings already captured and verified from delivered actions.</div>
+            </div>
+
+            <div class="calc-field" id="field-costAvoidance">
+              <label class="calc-label" for="inp-costAvoidance">
+                Cost Avoidance
+                <span class="ftag">shift-left</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-costAvoidance" inputmode="decimal" min="0" step="1" placeholder="e.g. 300" oninput="onInput('costAvoidance')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Cost prevented before spend landed (architecture/design/governance actions).</div>
+            </div>
+          </div>
+          <div class="portfolio-guardrail value-guardrail" id="value-guardrail">Set budget and at least one forecasting or realization input to activate Quantify Business Value controls.</div>
+        </div>
+
         <div class="portfolio-overlay finops-2026-highlight">
           <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
           <div class="calc-fields">
@@ -3345,6 +3462,42 @@ body.chart-focus-open #chart-section .chart-focus-close {
             <div class="calc-out-sub">Revenue level implied by your startup planning assumptions</div>
           </div>
 
+          <div class="calc-out-card qbv-card" id="out-budgetVariance">
+            <div class="calc-out-label">Budget Variance</div>
+            <div class="calc-out-val muted" id="oval-budgetVariance">—</div>
+            <div class="calc-out-sub">Headroom or overrun versus monthly technology budget</div>
+          </div>
+
+          <div class="calc-out-card qbv-card" id="out-forecastBand">
+            <div class="calc-out-label">Forecast Margin Band</div>
+            <div class="calc-out-val muted" id="oval-forecastBand">—</div>
+            <div class="calc-out-sub">Baseline, best, and worst monthly margin for next cycle</div>
+          </div>
+
+          <div class="calc-out-card qbv-card" id="out-forecastSpread">
+            <div class="calc-out-label">Forecast Confidence Band</div>
+            <div class="calc-out-val muted" id="oval-forecastSpread">—</div>
+            <div class="calc-out-sub">Spread width between best and worst scenarios (narrower is stronger)</div>
+          </div>
+
+          <div class="calc-out-card qbv-card" id="out-realizedValue">
+            <div class="calc-out-label">Total Realized Value</div>
+            <div class="calc-out-val muted" id="oval-realizedValue">—</div>
+            <div class="calc-out-sub">Realized savings plus cost avoidance captured this cycle</div>
+          </div>
+
+          <div class="calc-out-card qbv-card" id="out-realizationRatio">
+            <div class="calc-out-label">Savings Realization Ratio</div>
+            <div class="calc-out-val muted" id="oval-realizationRatio">—</div>
+            <div class="calc-out-sub">Total realized value divided by identified savings target</div>
+          </div>
+
+          <div class="calc-out-card qbv-card" id="out-realizationGap">
+            <div class="calc-out-label">Residual Value Gap</div>
+            <div class="calc-out-val muted" id="oval-realizationGap">—</div>
+            <div class="calc-out-sub">Remaining value to realize (or exceeded target)</div>
+          </div>
+
           <div class="calc-out-card finops-2026-card" id="out-techCoverage">
             <div class="calc-out-label">Coverage Across Domains</div>
             <div class="calc-out-val muted" id="oval-techCoverage">—</div>
@@ -3383,6 +3536,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
           <div class="cp-pill" id="cp-12"></div>
           <div class="cp-pill" id="cp-13"></div>
           <div class="cp-pill" id="cp-14"></div>
+          <div class="cp-pill" id="cp-15"></div>
+          <div class="cp-pill" id="cp-16"></div>
+          <div class="cp-pill" id="cp-17"></div>
+          <div class="cp-pill" id="cp-18"></div>
+          <div class="cp-pill" id="cp-19"></div>
+          <div class="cp-pill" id="cp-20"></div>
+          <div class="cp-pill" id="cp-21"></div>
         </div>
         <div class="calc-status-bar" id="calc-status-bar">
           <div class="calc-status-dot" id="calc-dot"></div>
@@ -3894,6 +4054,8 @@ const SHAREABLE_INPUT_KEYS = [
   'nRef', 'devPerClient', 'infraTotal', 'ARPU',
   'startupTargetPrice', 'startupTargetClients',
   'cudPct', 'margin', 'nMax',
+  'budgetMonthly', 'forecastGrowthPct', 'forecastBestEfficiencyPct', 'forecastWorstDriftPct',
+  'savingsIdentified', 'savingsRealized', 'costAvoidance',
   'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor'
 ];
 const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
@@ -3998,6 +4160,60 @@ const OUTPUT_TOOLTIP_CONTENT = {
       'If both target price and target clients are provided: <code>RevenueTarget = price × clients</code>.',
       'If only one startup option is provided, missing value is derived from model first.',
       'Reflects the current calibration of cost, scale, and margin settings.'
+    ]
+  },
+  'out-budgetVariance': {
+    title: 'Budget Variance',
+    what: 'Compares your modeled monthly technology cost against the declared monthly budget to show headroom or overrun.',
+    how: [
+      'Budget basis uses selected-domain monthly scope when available, otherwise modeled core cost.',
+      '<code>Variance = Budget - ModeledCost</code>. Positive = headroom, negative = overrun.',
+      'Variance % is normalized by budget to make periods comparable.'
+    ]
+  },
+  'out-forecastBand': {
+    title: 'Forecast Margin Band',
+    what: 'Shows baseline, best-case, and worst-case monthly margin for the next cycle using your forecast assumptions.',
+    how: [
+      'Forecast client count: <code>n_f = n × (1 + growth%)</code>.',
+      'Baseline margin: <code>Revenue(n_f) - Cost(n_f)</code>.',
+      'Best/Worst margins apply your efficiency and drift assumptions to forecast cost.'
+    ]
+  },
+  'out-forecastSpread': {
+    title: 'Forecast Confidence Band',
+    what: 'Quantifies uncertainty by measuring the spread between best and worst scenarios.',
+    how: [
+      '<code>Spread = BestMargin - WorstMargin</code>.',
+      'Spread is also expressed as % of forecast revenue for comparability.',
+      'Narrower spread indicates stronger confidence in expected value realization.'
+    ]
+  },
+  'out-realizedValue': {
+    title: 'Total Realized Value',
+    what: 'Represents value captured this cycle by combining realized savings and cost avoidance.',
+    how: [
+      '<code>TotalRealized = RealizedSavings + CostAvoidance</code>.',
+      'Realized savings = value already captured in spend run-rate.',
+      'Cost avoidance = value prevented before spend occurred (shift-left decisions).'
+    ]
+  },
+  'out-realizationRatio': {
+    title: 'Savings Realization Ratio',
+    what: 'Tracks execution effectiveness by comparing total realized value against identified savings target.',
+    how: [
+      '<code>RealizationRatio = TotalRealized / IdentifiedSavings</code>.',
+      'Above 100% means value captured exceeds identified target for the cycle.',
+      'Low ratio indicates delivery gap between planning and realized outcomes.'
+    ]
+  },
+  'out-realizationGap': {
+    title: 'Residual Value Gap',
+    what: 'Shows how much value remains to be realized (or whether target has been exceeded).',
+    how: [
+      '<code>ResidualGap = IdentifiedSavings - TotalRealized</code>.',
+      'Positive gap = pending realization; negative gap = exceeded target.',
+      'Use with realization ratio to prioritize follow-up actions.'
     ]
   },
   'out-techCoverage': {
@@ -4769,6 +4985,8 @@ const USER_PROVIDED = {
   nRef:false, devPerClient:false, infraTotal:false, ARPU:false,
   startupTargetPrice:false, startupTargetClients:false,
   cudPct:false, margin:false, nMax:false,
+  budgetMonthly:false, forecastGrowthPct:false, forecastBestEfficiencyPct:false, forecastWorstDriftPct:false,
+  savingsIdentified:false, savingsRealized:false, costAvoidance:false,
   techDomains:false, costSaaS:false, costLicensing:false,
   costPrivateCloud:false, costDataCenter:false, costLabor:false
 };
@@ -4791,6 +5009,8 @@ let lastInputs = {
   startupTargetPrice: null, startupTargetClients: null,
   effectiveARPU: null, arpuMode: 'missing',
   cudPct: null, margin: null, nMax: null,
+  budgetMonthly: null, forecastGrowthPct: null, forecastBestEfficiencyPct: null, forecastWorstDriftPct: null,
+  savingsIdentified: null, savingsRealized: null, costAvoidance: null,
   techDomains: [...DEFAULT_TECH_DOMAINS],
   costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
 };
@@ -5423,6 +5643,8 @@ function updateProgressPills() {
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
+    'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
+    'inp-savingsIdentified','inp-savingsRealized','inp-costAvoidance',
     'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
   ];
   const prog = document.getElementById('calc-progress');
@@ -5460,6 +5682,13 @@ function recalculate() {
   const cudPct       = getInp('inp-cudPct');
   const marginPct    = getInp('inp-margin');
   const nMaxInp      = getInp('inp-nMax');
+  const budgetMonthly = getInp('inp-budgetMonthly');
+  const forecastGrowthPct = getInp('inp-forecastGrowthPct');
+  const forecastBestEfficiencyPct = getInp('inp-forecastBestEfficiencyPct');
+  const forecastWorstDriftPct = getInp('inp-forecastWorstDriftPct');
+  const savingsIdentified = getInp('inp-savingsIdentified');
+  const savingsRealized = getInp('inp-savingsRealized');
+  const costAvoidance = getInp('inp-costAvoidance');
   const techDomains  = getSelectedTechDomains();
   const costSaaS        = getInp('inp-costSaaS');
   const costLicensing   = getInp('inp-costLicensing');
@@ -5523,6 +5752,8 @@ function recalculate() {
     startupTargetPrice, startupTargetClients,
     effectiveARPU, arpuMode,
     cudPct, margin: marginPct, nMax: nMaxInp,
+    budgetMonthly, forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct,
+    savingsIdentified, savingsRealized, costAvoidance,
     techDomains,
     costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
   };
@@ -5541,6 +5772,8 @@ function updateOutputCards(inputs) {
   const {
     nRef, devPerClient, infraTotal, ARPU: arpuInp, cudPct,
     startupTargetPrice, startupTargetClients, effectiveARPU, arpuMode,
+    budgetMonthly, forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct,
+    savingsIdentified, savingsRealized, costAvoidance,
     techDomains, costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
   } = inputs;
   const { K, a, c, b, g, m, nMax } = MODEL;
@@ -5745,6 +5978,116 @@ function updateOutputCards(inputs) {
     }
   }
 
+  // ── BUDGET VARIANCE ────────────────────────────────────────────
+  const budgetBasisCost = normalization.totalMonthly > 0 ? normalization.totalMonthly : total;
+  const hasBudget = budgetMonthly !== null && budgetMonthly >= 0;
+
+  if (!hasAnyCostInput) {
+    setOut('oval-budgetVariance', null, '', '', 'Dev Cost or Infra Cost (plus optional multi-domain scope)');
+  } else if (!hasBudget) {
+    setOut('oval-budgetVariance', null, '', '', 'Monthly Technology Budget');
+  } else if (!(budgetMonthly > 0)) {
+    setOut('oval-budgetVariance', null, '', '', 'Monthly Technology Budget > 0');
+  } else {
+    const variance = budgetMonthly - budgetBasisCost;
+    const variancePct = (variance / budgetMonthly) * 100;
+    const cls = variance >= 0 ? 'good' : (variancePct >= -10 ? 'warn' : 'bad');
+    const cardState = cls === 'good' ? '' : cls;
+    const direction = variance >= 0 ? 'headroom' : 'overrun';
+    setOut('oval-budgetVariance', `${fmtOut(variance, 0)} (${variancePct.toFixed(1)}%)`, cls, cardState);
+    const subEl = document.querySelector('#out-budgetVariance .calc-out-sub');
+    if (subEl) {
+      const basisLabel = normalization.totalMonthly > 0 ? 'selected-domain monthly scope' : 'core modeled monthly cost';
+      subEl.textContent = `Budget variance = Budget − Cost (${direction}) using ${basisLabel}`;
+    }
+  }
+
+  // ── FORECASTING BAND ───────────────────────────────────────────
+  const hasForecastSignal = [forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct]
+    .some(v => v !== null && v !== 0);
+
+  if (!hasAnyCostInput || !hasARPU) {
+    setOut('oval-forecastBand', null, '', '', 'Cost inputs + Revenue / Client (ARPU or startup mode)');
+    setOut('oval-forecastSpread', null, '', '', 'Cost inputs + Revenue / Client (ARPU or startup mode)');
+  } else if (!hasForecastSignal) {
+    setOut('oval-forecastBand', null, '', '', 'Forecast Growth or Best/Worst scenario assumptions');
+    setOut('oval-forecastSpread', null, '', '', 'Forecast Growth or Best/Worst scenario assumptions');
+  } else {
+    const growthPct = forecastGrowthPct !== null ? forecastGrowthPct : 0;
+    const bestEfficiencyPct = Math.max(0, Math.min(95, forecastBestEfficiencyPct !== null ? forecastBestEfficiencyPct : 0));
+    const worstDriftPct = Math.max(0, forecastWorstDriftPct !== null ? forecastWorstDriftPct : 0);
+    const forecastN = Math.max(1, Math.round(nSample * (1 + growthPct / 100)));
+    const forecastDev = K * Math.pow(forecastN, -a);
+    const forecastInfra = c * Math.pow(forecastN, b);
+    const forecastTotal = forecastDev + forecastInfra;
+    const forecastRevenue = arpuUsed * forecastN;
+    const baselineMargin = forecastRevenue - forecastTotal;
+    const bestMargin = forecastRevenue - (forecastTotal * (1 - (bestEfficiencyPct / 100)));
+    const worstMargin = forecastRevenue - (forecastTotal * (1 + (worstDriftPct / 100)));
+    const spread = bestMargin - worstMargin;
+    const spreadPct = forecastRevenue > 0 ? (spread / forecastRevenue) * 100 : 0;
+
+    const bandClass = baselineMargin >= 0 ? (worstMargin >= 0 ? 'good' : 'warn') : 'bad';
+    const bandCard = bandClass === 'good' ? '' : bandClass;
+    setOut(
+      'oval-forecastBand',
+      `Base ${fmtOut(baselineMargin, 0)} · Best ${fmtOut(bestMargin, 0)} · Worst ${fmtOut(worstMargin, 0)}`,
+      bandClass,
+      bandCard
+    );
+    const bandSub = document.querySelector('#out-forecastBand .calc-out-sub');
+    if (bandSub) {
+      bandSub.textContent = `Forecast at n=${forecastN.toLocaleString()} (growth ${growthPct.toFixed(1)}%)`;
+    }
+
+    const confidenceTier = spreadPct <= 10 ? 'High' : (spreadPct <= 25 ? 'Medium' : 'Low');
+    const spreadClass = confidenceTier === 'High' ? 'good' : (confidenceTier === 'Medium' ? 'warn' : 'bad');
+    const spreadCard = spreadClass === 'good' ? '' : spreadClass;
+    setOut('oval-forecastSpread', `${fmtOut(spread, 0)} (${spreadPct.toFixed(1)}% rev) · ${confidenceTier}`, spreadClass, spreadCard);
+    const spreadSub = document.querySelector('#out-forecastSpread .calc-out-sub');
+    if (spreadSub) {
+      spreadSub.textContent = 'Confidence band based on best/worst scenario distance';
+    }
+  }
+
+  // ── VALUE REALIZATION LEDGER ───────────────────────────────────
+  const hasRealizationSignal = [savingsIdentified, savingsRealized, costAvoidance].some(v => v !== null);
+
+  if (!hasRealizationSignal) {
+    setOut('oval-realizedValue', null, '', '', 'Realized Savings and/or Cost Avoidance');
+    setOut('oval-realizationRatio', null, '', '', 'Identified Savings Target + realized value inputs');
+    setOut('oval-realizationGap', null, '', '', 'Identified Savings Target + realized value inputs');
+  } else {
+    const realizedSavingsUsed = savingsRealized !== null ? savingsRealized : 0;
+    const costAvoidanceUsed = costAvoidance !== null ? costAvoidance : 0;
+    const identifiedUsed = savingsIdentified !== null ? savingsIdentified : null;
+    const totalRealizedValue = realizedSavingsUsed + costAvoidanceUsed;
+
+    const valueClass = totalRealizedValue > 0 ? 'good' : 'warn';
+    setOut('oval-realizedValue', `${fmtOut(totalRealizedValue, 0)} / mo`, valueClass, valueClass === 'good' ? '' : 'warn');
+
+    if (!(identifiedUsed !== null && identifiedUsed > 0)) {
+      setOut('oval-realizationRatio', null, '', '', 'Identified Savings Target > 0');
+      setOut('oval-realizationGap', null, '', '', 'Identified Savings Target > 0');
+    } else {
+      const ratioPct = (totalRealizedValue / identifiedUsed) * 100;
+      const ratioClass = ratioPct >= 100 ? 'good' : (ratioPct >= 70 ? 'warn' : 'bad');
+      const ratioCard = ratioClass === 'good' ? '' : ratioClass;
+      setOut('oval-realizationRatio', `${ratioPct.toFixed(1)}%`, ratioClass, ratioCard);
+
+      const residualGap = identifiedUsed - totalRealizedValue;
+      const gapClass = residualGap <= 0 ? 'good' : (residualGap <= identifiedUsed * 0.2 ? 'warn' : 'bad');
+      const gapCard = gapClass === 'good' ? '' : gapClass;
+      setOut('oval-realizationGap', `${fmtOut(residualGap, 0)} / mo`, gapClass, gapCard);
+      const gapSub = document.querySelector('#out-realizationGap .calc-out-sub');
+      if (gapSub) {
+        gapSub.textContent = residualGap <= 0
+          ? 'Target exceeded — value captured above identified baseline'
+          : 'Positive gap indicates value still to realize';
+      }
+    }
+  }
+
   // ── R2 WAVE 1: MULTI-TECH NORMALIZATION OUTPUTS ───────────────
   const coverageClass = normalization.coveragePct >= 80
     ? 'good'
@@ -5771,6 +6114,43 @@ function updateOutputCards(inputs) {
 
   renderPortfolioSummary(normalization);
   updateNormalizationGuardrail(normalization);
+  updateValueGuardrail({
+    hasAnyCostInput,
+    hasARPU,
+    hasBudget,
+    hasForecastSignal,
+    hasRealizationSignal
+  });
+}
+
+function updateValueGuardrail(state) {
+  const guardrailEl = document.getElementById('value-guardrail');
+  if (!guardrailEl) return;
+
+  const {
+    hasAnyCostInput = false,
+    hasARPU = false,
+    hasBudget = false,
+    hasForecastSignal = false,
+    hasRealizationSignal = false
+  } = state || {};
+
+  if (!hasAnyCostInput) {
+    guardrailEl.textContent = 'Add Dev Cost or Infra Cost first to enable budget and forecast value calculations.';
+    return;
+  }
+
+  if (!hasBudget && !hasForecastSignal && !hasRealizationSignal) {
+    guardrailEl.textContent = 'Set budget and at least one forecasting or realization input to activate Quantify Business Value controls.';
+    return;
+  }
+
+  if (hasForecastSignal && !hasARPU) {
+    guardrailEl.textContent = 'Forecast scenarios are configured. Add ARPU or startup planning assumptions to compute margin bands.';
+    return;
+  }
+
+  guardrailEl.textContent = 'Quantify Business Value controls active: budgeting variance, forecast confidence band, and savings realization ledger are being updated live.';
 }
 
 function resetModel() {
@@ -5783,6 +6163,8 @@ function resetModel() {
     startupTargetPrice: null, startupTargetClients: null,
     effectiveARPU: null, arpuMode: 'missing',
     cudPct: null, margin: null, nMax: null,
+    budgetMonthly: null, forecastGrowthPct: null, forecastBestEfficiencyPct: null, forecastWorstDriftPct: null,
+    savingsIdentified: null, savingsRealized: null, costAvoidance: null,
     techDomains: [...DEFAULT_TECH_DOMAINS],
     costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
   };
@@ -5790,6 +6172,8 @@ function resetModel() {
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
+    'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
+    'inp-savingsIdentified','inp-savingsRealized','inp-costAvoidance',
     'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
   ];
   ids.forEach(id => {
@@ -5827,6 +6211,7 @@ function resetModel() {
   draw();
   renderPortfolioSummary(buildNormalizationSnapshot(lastInputs));
   updateNormalizationGuardrail(buildNormalizationSnapshot(lastInputs));
+  updateValueGuardrail({ hasAnyCostInput: false, hasARPU: false, hasBudget: false, hasForecastSignal: false, hasRealizationSignal: false });
   updateHealthAndRecommendations(lastInputs);
   clearShareStateParam();
   writeShareFeedback('');
@@ -6155,6 +6540,12 @@ function applyInformationIcons() {
     ['#out-reqClients .calc-out-label', 'users', 'purple'],
     ['#out-reqPrice .calc-out-label', 'coin', 'amber'],
     ['#out-targetRevenue .calc-out-label', 'chart', 'blue'],
+    ['#out-budgetVariance .calc-out-label', 'target', 'blue'],
+    ['#out-forecastBand .calc-out-label', 'chart', 'green'],
+    ['#out-forecastSpread .calc-out-label', 'layers', 'blue'],
+    ['#out-realizedValue .calc-out-label', 'coin', 'green'],
+    ['#out-realizationRatio .calc-out-label', 'gauge', 'green'],
+    ['#out-realizationGap .calc-out-label', 'target', 'amber'],
     ['#out-techCoverage .calc-out-label', 'grid', 'green'],
     ['#out-techNorm .calc-out-label', 'layers', 'green'],
     ['#out-focusMaturity .calc-out-label', 'shield', 'green'],
