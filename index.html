@@ -2505,7 +2505,8 @@ a:focus-visible {
         <article class="mcp-card">
           <h3>How to connect</h3>
           <ul class="mcp-list">
-            <li>Clone the MCP repo and run <code>npm run test</code> in <code>server/</code>.</li>
+            <li>Clone the MCP repo and run <code>npm run check</code>, <code>npm run test</code>, and <code>npm run test:parity</code> in <code>server/</code>.</li>
+            <li><code>test:parity</code> validates contract drift against the latest <code>finops-calculator</code> <code>main/index.html</code>.</li>
             <li>Register server command: <code>node .../server/index.js</code> in your MCP client config.</li>
             <li>Reload your assistant and verify all five FinOps tools appear.</li>
           </ul>
@@ -3385,7 +3386,8 @@ a:focus-visible {
         <h4>Install</h4>
         <ul>
           <li>Clone <code>github.com/duksh/finops-calculator-mcp</code>.</li>
-          <li>Run <code>npm run check</code> and <code>npm run test</code> in <code>server/</code>.</li>
+          <li>Run <code>npm run check</code>, <code>npm run test</code>, and <code>npm run test:parity</code> in <code>server/</code>.</li>
+          <li>Parity check confirms MCP stays synced with the latest calculator logic on <code>main</code>.</li>
           <li>Start server via <code>npm run start</code>.</li>
         </ul>
       </article>
