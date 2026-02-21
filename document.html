@@ -484,13 +484,14 @@
         <h2 id="quick-start-title">Quick start</h2>
         <ol>
           <li>Open the calculator page and complete Group A inputs (client volume, costs, and ARPU or startup planning fields).</li>
-          <li>Optionally tune Group B inputs (CUD discount, target margin, and chart scale).</li>
-          <li>Review Group C auto-calculated outputs. Use the info tooltips on each output for formula context.</li>
+          <li>Use Group B controls for both model tuning and Quantify Business Value inputs: CUD, target margin, budget, forecast assumptions, savings realization, and cost avoidance.</li>
+          <li>Optionally add multi-technology costs (SaaS, licensing, private cloud, data center, labor) and scope domains for normalization.</li>
+          <li>Review Group C auto-calculated outputs. Use the info tooltips on each output for formula context, then validate budget variance, forecast confidence band, and value realization metrics.</li>
           <li>Check Group E health status and recommendation cards for priority actions.</li>
           <li>Use the chart section to inspect cost/revenue/profit curves across scale.</li>
         </ol>
         <div class="callout">
-          Tip: For scenario planning, adjust one assumption at a time (ARPU, CUD, or client volume) and compare impact on break-even, CCER, and margin.
+          Tip: For scenario planning, adjust one assumption at a time (ARPU, growth, efficiency, or budget) and compare impact on break-even, CCER, forecast margin band, and realization ratio.
         </div>
       </section>
 
@@ -512,13 +513,18 @@
             </tr>
             <tr>
               <td>Group B - Optional Tuning</td>
-              <td>CUD discount %, target margin %, and maximum clients shown on chart.</td>
-              <td>Applies commitment savings and pricing floor constraints.</td>
+              <td>CUD discount %, target margin %, max chart clients, monthly budget, forecast growth/efficiency/drift, identified savings, realized savings, and cost avoidance.</td>
+              <td>Applies commitment savings, pricing constraints, budgeting variance checks, forecast scenarios, and value-realization ledger signals.</td>
+            </tr>
+            <tr>
+              <td>Group B - Multi-technology Overlay</td>
+              <td>Tech domain scope plus optional monthly SaaS/licensing/private cloud/data center/labor costs.</td>
+              <td>Computes scoped normalized technology cost, coverage, and confidence to align with multi-domain FinOps analysis.</td>
             </tr>
             <tr>
               <td>Group C - Auto Outputs</td>
               <td>No direct input; values are derived from Groups A/B.</td>
-              <td>Break-even clients, min price, contribution margin, CCER, CUD savings, and target scenario outputs.</td>
+              <td>Break-even clients, min price, contribution margin, CCER, CUD savings, startup targets, budget variance, forecast margin/confidence bands, value realization ratio/gap, and normalization confidence outputs.</td>
             </tr>
             <tr>
               <td>Group D - Provider Curves</td>
@@ -547,6 +553,8 @@
               <li><code>BreakEven = first n where Revenue(n) >= TotalCost(n)</code></li>
               <li><code>ContributionMargin% = ((Revenue - TotalCost) / Revenue) * 100</code></li>
               <li><code>CCER = Revenue / CloudSpend</code></li>
+              <li><code>NTC/client = sum(alpha_d * C_d) / n</code> using selected domain scope</li>
+              <li><code>BudgetVariance = Budget - ModeledCost</code> (headroom if positive)</li>
             </ul>
           </article>
           <article class="mini-card">
@@ -556,9 +564,25 @@
               <li>CUD monthly saving shows on-demand infra minus committed infra at current scale.</li>
               <li>Target fields estimate required clients for a target price and required price for a target client volume.</li>
               <li>Target monthly revenue is derived from target price and required clients scenario values.</li>
+              <li>Forecast margin band computes baseline/best/worst monthly margin using growth + cost efficiency/drift assumptions.</li>
+              <li>Forecast confidence band is the spread between best and worst scenario margin outcomes.</li>
+              <li>Total realized value combines realized savings and cost avoidance.</li>
+              <li>Realization ratio and residual gap compare delivered value against identified savings target.</li>
             </ul>
           </article>
         </div>
+
+        <h3>Quantify Business Value extension formulas</h3>
+        <ul>
+          <li><code>ForecastClients = n * (1 + growth%)</code></li>
+          <li><code>BaselineMargin = ForecastRevenue - ForecastCost</code></li>
+          <li><code>BestMargin = ForecastRevenue - (ForecastCost * (1 - efficiency%))</code></li>
+          <li><code>WorstMargin = ForecastRevenue - (ForecastCost * (1 + drift%))</code></li>
+          <li><code>ForecastSpread = BestMargin - WorstMargin</code></li>
+          <li><code>TotalRealizedValue = RealizedSavings + CostAvoidance</code></li>
+          <li><code>RealizationRatio = TotalRealizedValue / IdentifiedSavings</code></li>
+          <li><code>ResidualValueGap = IdentifiedSavings - TotalRealizedValue</code></li>
+        </ul>
       </section>
 
       <section class="doc-section" id="usage-workflow" aria-labelledby="usage-workflow-title">
@@ -567,17 +591,20 @@
         <ol>
           <li>Start with realistic current values. If ARPU is uncertain, use startup planning options.</li>
           <li>Set a conservative CUD percentage first, then refine after observing sensitivity.</li>
-          <li>Use output tooltips to validate assumptions behind each metric.</li>
-          <li>Cross-check with chart curves for where margins compress at higher client counts.</li>
-          <li>Use health recommendations to prioritize short-term vs strategic actions.</li>
+          <li>Set monthly budget and check Budget Variance to identify immediate overrun/headroom posture.</li>
+          <li>Add forecast growth, best-case efficiency, and worst-case drift to activate the forecast margin/confidence band outputs.</li>
+          <li>Add identified savings, realized savings, and cost avoidance to track realization ratio and residual value gap.</li>
+          <li>Use output tooltips to validate assumptions behind each metric, then cross-check with chart curves for where margins compress at higher client counts.</li>
+          <li>Use health recommendations with category filters to prioritize short-term vs strategic actions.</li>
         </ol>
 
         <h3>Scenario comparison approach</h3>
         <ul>
           <li>Scenario A: current assumptions.</li>
-          <li>Scenario B: improved commitment discount.</li>
+          <li>Scenario B: improved commitment discount and cost optimization execution.</li>
           <li>Scenario C: revised target margin and market price.</li>
-          <li>Compare break-even, CCER, and contribution margin across the three scenarios.</li>
+          <li>Scenario D: growth stress case with higher cost drift.</li>
+          <li>Compare break-even, CCER, contribution margin, budget variance, forecast spread, and realization ratio across scenarios.</li>
         </ul>
       </section>
 
@@ -587,6 +614,8 @@
         <ul>
           <li>Signals include break-even behavior, efficiency posture (CCER), margin quality, and commitment coverage.</li>
           <li>Recommendation cards are prioritized to guide near-term and medium-term FinOps actions.</li>
+          <li>Category filters (<code>All</code>, <code>Infrastructure</code>, <code>Pricing</code>, <code>Marketing</code>, <code>CRM</code>, <code>Governance</code>) let users focus on a specific execution lane.</li>
+          <li>No-break-even conditions now surface strategic guidance beyond pure infra optimization (pricing floor adjustment, funnel acceleration, and CRM retention/expansion actions).</li>
           <li>Provider filters help tailor actions to cloud-specific optimization opportunities.</li>
         </ul>
       </section>
@@ -595,7 +624,8 @@
         <h2 id="share-state-title">Share-state links</h2>
         <p>The calculator can generate a URL that captures the current model state so colleagues can open the same assumptions without re-entering inputs.</p>
         <ul>
-          <li>Includes normalized inputs, selected provider state, and curve visibility toggles.</li>
+          <li>Includes all active numeric inputs, selected tech domains, selected providers, and curve visibility toggles.</li>
+          <li>This now includes Quantify Business Value controls (budget, forecast assumptions, savings realization, cost avoidance).</li>
           <li>The URL contains an encoded <code>?state=</code> token.</li>
           <li>On load, the app decodes and validates this state, then recalculates outputs, chart, health, and recommendations.</li>
         </ul>
@@ -606,7 +636,9 @@
         <p>The same FinOps model is available through a Model Context Protocol server so AI assistants can call the model directly in workflows, audits, and planning automations.</p>
         <ul>
           <li>Transport: JSON-RPC over stdio in the current implementation.</li>
-          <li>Core logic is shared between browser model behavior and MCP tool handlers.</li>
+          <li>Core logic is shared between browser model behavior and MCP tool handlers for unit economics, health scoring, recommendation prioritization, and state encoding/decoding.</li>
+          <li><code>finops.calculate</code> supports multi-technology scope through <code>techDomains</code> and optional non-cloud monthly cost inputs.</li>
+          <li><code>finops.recommend</code> supports category-aware filtering and can include strategic pricing/marketing/CRM recommendations when inputs are supplied.</li>
           <li>Useful for repeatable analysis, not just manual UI interactions.</li>
         </ul>
       </section>
@@ -625,7 +657,7 @@
             <tr>
               <td><code>finops.calculate</code></td>
               <td>Full model execution with normalized inputs.</td>
-              <td>Calculated outputs, health, and recommendations.</td>
+              <td>Calculated outputs (including normalization snapshot), health, recommendations, and optional state token.</td>
             </tr>
             <tr>
               <td><code>finops.health</code></td>
@@ -635,7 +667,7 @@
             <tr>
               <td><code>finops.recommend</code></td>
               <td>Action planning output.</td>
-              <td>Prioritized recommendations filtered by zone/provider.</td>
+              <td>Prioritized recommendations filtered by zone/provider/category, with optional strategic business recommendations when inputs are supplied.</td>
             </tr>
             <tr>
               <td><code>finops.state.encode</code></td>
@@ -678,12 +710,23 @@ node /absolute/path/to/mcp/server/index.js
   "params": {
     "name": "finops.calculate",
     "arguments": {
-      "clients": 120,
-      "devCost": 26000,
-      "infraCost": 18000,
-      "arpu": 420,
-      "cudPct": 32,
-      "margin": 25
+      "inputs": {
+        "nRef": 120,
+        "devPerClient": 500,
+        "infraTotal": 2400,
+        "techDomains": ["cloud", "saas"],
+        "costSaaS": 600,
+        "startupTargetPrice": 35,
+        "cudPct": 30,
+        "margin": 15,
+        "nMax": 2000
+      },
+      "providers": ["aws"],
+      "options": {
+        "includeHealth": true,
+        "includeRecommendations": true,
+        "includeStateToken": true
+      }
     }
   }
 }
@@ -695,11 +738,47 @@ node /absolute/path/to/mcp/server/index.js
   "result": {
     "outputs": {
       "breakEvenClients": 51,
-      "minPrice": 310.2
+      "minPricePerClient": 27.79,
+      "normalization": {
+        "selectedDomains": ["cloud", "saas"],
+        "coveragePct": 100,
+        "normalizedTechCostPerClient": 25,
+        "confidence": "High"
+      }
     },
     "health": {
-      "zone": "yellow",
+      "zoneKey": "yellow",
+      "zoneTitle": "Yellow Zone - Needs Improvement",
       "score": 72
+    },
+    "recommendations": [
+      {
+        "title": "CCER below 3x",
+        "category": "governance",
+        "priority": "high"
+      }
+    ],
+    "stateToken": "..."
+  }
+}
+</code></pre>
+
+        <h3>Recommendation tool with category filter</h3>
+<pre><code>{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "finops.recommend",
+    "arguments": {
+      "zoneKey": "red",
+      "providers": ["aws"],
+      "category": "marketing",
+      "inputs": {
+        "nRef": 80,
+        "infraTotal": 2400,
+        "startupTargetPrice": 35
+      }
     }
   }
 }
@@ -712,6 +791,9 @@ node /absolute/path/to/mcp/server/index.js
         <ul>
           <li><strong>Unexpected output values:</strong> verify units (monthly costs, not annual).</li>
           <li><strong>Chart looks flat:</strong> increase chart scale or adjust ARPU/cost assumptions.</li>
+          <li><strong>Budget Variance remains blank:</strong> provide both modeled cost inputs and a positive monthly budget.</li>
+          <li><strong>Forecast band is missing:</strong> add ARPU (or startup-derived ARPU) and at least one forecast assumption.</li>
+          <li><strong>Realization ratio is missing:</strong> identified savings must be greater than zero to compute ratio/gap.</li>
           <li><strong>Shared link does not restore:</strong> ensure full URL including <code>?state=</code> is copied.</li>
         </ul>
 
@@ -725,8 +807,8 @@ node /absolute/path/to/mcp/server/index.js
 
       <p class="footer-note">This documentation page is intended as both a business user guide and technical handoff reference for teams integrating the FinOps calculator in human and assistant workflows.</p>
       <div class="doc-page-meta" aria-label="Page metadata">
-        <span><strong>Last updated:</strong> <time datetime="2026-02-16T14:15:00+04:00">16 Feb 2026, 14:15 (UTC+04:00)</time></span>
-        <span><strong>Version ID:</strong> v2026.02.16-01</span>
+        <span><strong>Last updated:</strong> <time datetime="2026-02-21T13:10:00+04:00">21 Feb 2026, 13:10 (UTC+04:00)</time></span>
+        <span><strong>Version ID:</strong> v2026.02.21-01</span>
       </div>
       <p class="doc-author-ref">Reference author: Duksh Koonjoobeeharry (FinOps &amp; AWS/GCP Cloud Solution Developer, DBA Researcher) · <a href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
     </div>
