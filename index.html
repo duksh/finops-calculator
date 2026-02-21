@@ -81,7 +81,16 @@ body {
   line-height: 1.5;
   padding: calc(var(--page-pad-y) + var(--sticky-nav-h) + 8px) var(--page-pad-x) 48px;
 }
-body.modal-open { overflow: hidden; }
+body.modal-open,
+body.chart-focus-open { overflow: hidden; }
+body.chart-focus-open::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 158;
+  background: rgba(10, 20, 36, 0.58);
+  backdrop-filter: blur(2px);
+}
 
 button:focus-visible,
 a:focus-visible {
@@ -1000,6 +1009,12 @@ a:focus-visible {
   background:
     linear-gradient(180deg, rgba(0,114,178,0.05) 0%, rgba(255,255,255,0.9) 100%);
 }
+.fig-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
 .fig-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: clamp(9px, 1.2vw, 11px);
@@ -1021,6 +1036,47 @@ a:focus-visible {
   color: var(--muted);
   max-width: 680px;
   line-height: 1.6;
+}
+.chart-focus-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1.5px solid rgba(0,114,178,0.35);
+  border-radius: 999px;
+  background: rgba(0,114,178,0.08);
+  color: #0f4e76;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.chart-focus-btn:hover {
+  background: rgba(0,114,178,0.16);
+  border-color: rgba(0,114,178,0.52);
+}
+.chart-focus-btn[aria-pressed="true"] {
+  background: rgba(0,158,115,0.14);
+  border-color: rgba(0,158,115,0.5);
+  color: #0c664f;
+}
+.chart-focus-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+@media (max-width: 760px) {
+  .fig-header-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .chart-focus-btn {
+    align-self: flex-start;
+  }
 }
 
 /* ─── CONTROLS BAR ──────────────────────────────────────────────── */
@@ -1076,6 +1132,7 @@ a:focus-visible {
 .chart-section {
   display: grid;
   grid-template-columns: 1fr 210px;
+  position: relative;
   background: linear-gradient(180deg, #fcfdff 0%, #f9fcff 100%);
 }
 @media (max-width: 660px) {
@@ -1100,6 +1157,68 @@ a:focus-visible {
   min-width: 0;
 }
 .chart-container svg { display: block; width: 100%; }
+
+.chart-focus-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(17, 38, 74, 0.2);
+  background: rgba(255,255,255,0.95);
+  color: #1d2c49;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.chart-section:fullscreen,
+.chart-section:-webkit-full-screen,
+body.chart-focus-open #chart-section {
+  grid-template-columns: minmax(0, 1fr) clamp(220px, 24vw, 310px);
+  background: linear-gradient(180deg, #f4f8ff 0%, #fafdff 100%);
+}
+.chart-section:fullscreen,
+.chart-section:-webkit-full-screen {
+  padding: 8px;
+}
+body.chart-focus-open #chart-section {
+  position: fixed;
+  inset: clamp(10px, 2vw, 18px);
+  z-index: 165;
+  border: 1px solid rgba(17, 38, 74, 0.22);
+  border-radius: 12px;
+  box-shadow: 0 24px 56px rgba(11, 28, 55, 0.36);
+  overflow: auto;
+}
+.chart-section:fullscreen .chart-container,
+.chart-section:-webkit-full-screen .chart-container,
+body.chart-focus-open #chart-section .chart-container {
+  padding-top: 34px;
+}
+.chart-section:fullscreen .side-panel,
+.chart-section:-webkit-full-screen .side-panel,
+body.chart-focus-open #chart-section .side-panel {
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+}
+.chart-section:fullscreen .chart-focus-close,
+.chart-section:-webkit-full-screen .chart-focus-close,
+body.chart-focus-open #chart-section .chart-focus-close {
+  display: inline-flex;
+}
+@media (max-width: 920px) {
+  .chart-section:fullscreen,
+  .chart-section:-webkit-full-screen,
+  body.chart-focus-open #chart-section {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ─── SIDE PANEL ────────────────────────────────────────────────── */
 .side-panel {
@@ -3269,9 +3388,19 @@ a:focus-visible {
 
   <!-- HEADER -->
   <div class="fig-header">
-    <div class="fig-label">Figure 1 · Interactive Cost &amp; Profitability Curves</div>
-    <h2 class="fig-title">Cloud Economics Visualization — Explore Scale, Cost Curves, and Profitability Thresholds</h2>
-    <p class="fig-caption">Use this section after filling the calculator to inspect how development decay, infrastructure growth, CUD effects, and pricing floors evolve across client volume. Hover over the chart to inspect values at any point.</p>
+    <div class="fig-header-top">
+      <div>
+        <div class="fig-label">Figure 1 · Interactive Cost &amp; Profitability Curves</div>
+        <h2 class="fig-title">Cloud Economics Visualization — Explore Scale, Cost Curves, and Profitability Thresholds</h2>
+        <p class="fig-caption" id="chart-focus-caption">Use this section after filling the calculator to inspect how development decay, infrastructure growth, CUD effects, and pricing floors evolve across client volume. Hover over the chart to inspect values at any point.</p>
+      </div>
+      <button class="chart-focus-btn" id="chart-focus-btn" type="button" aria-controls="chart-section" aria-pressed="false" aria-describedby="chart-focus-caption">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2.5H2.5V6M10 2.5h3.5V6M6 13.5H2.5V10M10 13.5h3.5V10"></path>
+        </svg>
+        <span class="chart-focus-btn-text">Expand chart view</span>
+      </button>
+    </div>
   </div>
 
   <!-- CONTROLS -->
@@ -3290,6 +3419,7 @@ a:focus-visible {
 
   <!-- CHART + SIDE PANEL -->
   <div class="chart-section section-anchor" id="chart-section">
+    <button class="chart-focus-close" id="chart-focus-close" type="button" aria-label="Exit expanded chart view">Exit focus view</button>
     <div class="chart-container" id="chart-container">
       <svg id="chart"></svg>
     </div>
@@ -3714,6 +3844,12 @@ let shareFeedbackTimer = null;
 const mcpModalEl = document.getElementById('mcp-modal');
 const mcpModalDialogEl = mcpModalEl ? mcpModalEl.querySelector('.mcp-modal-dialog') : null;
 const mcpModalOpeners = Array.from(document.querySelectorAll('[data-mcp-open]'));
+const chartSectionFocusEl = document.getElementById('chart-section');
+const chartFocusToggleBtnEl = document.getElementById('chart-focus-btn');
+const chartFocusToggleTextEl = chartFocusToggleBtnEl ? chartFocusToggleBtnEl.querySelector('.chart-focus-btn-text') : null;
+const chartFocusCloseBtnEl = document.getElementById('chart-focus-close');
+let restoreChartFocusOnExit = false;
+let lastChartFocusTrigger = null;
 let lastMcpModalTrigger = null;
 const OUTPUT_TOOLTIP_CONTENT = {
   'out-beN': {
@@ -4219,7 +4355,10 @@ function draw() {
   const container = document.getElementById('chart-container');
   const { nMax } = MODEL;
   const W = container.clientWidth;
-  const H = Math.round(Math.min(Math.max(W * (9/16), 320), 560));
+  const focusMode = isChartInFocusMode();
+  const minHeight = focusMode ? Math.max(420, Math.round(window.innerHeight * 0.58)) : 320;
+  const maxHeight = focusMode ? Math.max(620, window.innerHeight - 120) : 560;
+  const H = Math.round(Math.min(Math.max(W * (9/16), minHeight), maxHeight));
 
   const M = {
     top:    28,
@@ -5501,6 +5640,132 @@ function initMcpModal() {
   });
 }
 
+// ─── CHART FOCUS MODE ─────────────────────────────────────────────
+function fullscreenElement() {
+  return document.fullscreenElement || document.webkitFullscreenElement || null;
+}
+
+function isChartInFocusMode() {
+  const isFullscreen = chartSectionFocusEl && fullscreenElement() === chartSectionFocusEl;
+  return !!isFullscreen || document.body.classList.contains('chart-focus-open');
+}
+
+function syncChartFocusButtonState(active) {
+  if (!chartFocusToggleBtnEl) return;
+  chartFocusToggleBtnEl.setAttribute('aria-pressed', active ? 'true' : 'false');
+  chartFocusToggleBtnEl.setAttribute('aria-label', active ? 'Exit expanded chart view' : 'Expand chart view');
+  if (chartFocusToggleTextEl) {
+    chartFocusToggleTextEl.textContent = active ? 'Exit chart view' : 'Expand chart view';
+  }
+}
+
+function openChartFocusMode(triggerEl) {
+  if (!chartSectionFocusEl) return;
+  lastChartFocusTrigger = triggerEl || document.activeElement;
+
+  const openFallback = () => {
+    document.body.classList.add('chart-focus-open');
+    syncChartFocusButtonState(true);
+    window.requestAnimationFrame(() => {
+      draw();
+      if (chartFocusCloseBtnEl) chartFocusCloseBtnEl.focus();
+    });
+  };
+
+  const requestFullscreenFn = chartSectionFocusEl.requestFullscreen || chartSectionFocusEl.webkitRequestFullscreen;
+  if (!requestFullscreenFn) {
+    openFallback();
+    return;
+  }
+
+  try {
+    const maybePromise = requestFullscreenFn.call(chartSectionFocusEl);
+    if (maybePromise && typeof maybePromise.then === 'function') {
+      maybePromise
+        .then(() => {
+          syncChartFocusButtonState(true);
+          window.requestAnimationFrame(draw);
+        })
+        .catch(openFallback);
+    } else {
+      syncChartFocusButtonState(true);
+      window.requestAnimationFrame(draw);
+    }
+  } catch (_err) {
+    openFallback();
+  }
+}
+
+function closeChartFocusMode({ restoreFocus = true } = {}) {
+  const activeFullscreen = chartSectionFocusEl && fullscreenElement() === chartSectionFocusEl;
+  document.body.classList.remove('chart-focus-open');
+
+  if (activeFullscreen) {
+    restoreChartFocusOnExit = restoreFocus;
+    const exitFullscreenFn = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exitFullscreenFn) {
+      const maybePromise = exitFullscreenFn.call(document);
+      if (maybePromise && typeof maybePromise.catch === 'function') {
+        maybePromise.catch(() => {
+          syncChartFocusButtonState(false);
+          window.requestAnimationFrame(draw);
+        });
+      }
+    }
+    return;
+  }
+
+  syncChartFocusButtonState(false);
+  window.requestAnimationFrame(draw);
+  if (restoreFocus && lastChartFocusTrigger && typeof lastChartFocusTrigger.focus === 'function') {
+    lastChartFocusTrigger.focus();
+  }
+}
+
+function handleChartFocusFullscreenChange() {
+  const active = chartSectionFocusEl && fullscreenElement() === chartSectionFocusEl;
+  if (active) {
+    document.body.classList.remove('chart-focus-open');
+    syncChartFocusButtonState(true);
+    window.requestAnimationFrame(() => {
+      draw();
+      if (chartFocusCloseBtnEl) chartFocusCloseBtnEl.focus();
+    });
+    return;
+  }
+
+  syncChartFocusButtonState(document.body.classList.contains('chart-focus-open'));
+  window.requestAnimationFrame(draw);
+
+  if (restoreChartFocusOnExit && lastChartFocusTrigger && typeof lastChartFocusTrigger.focus === 'function') {
+    lastChartFocusTrigger.focus();
+  }
+  restoreChartFocusOnExit = false;
+}
+
+function initChartFocusMode() {
+  if (!chartSectionFocusEl || !chartFocusToggleBtnEl || !chartFocusCloseBtnEl) return;
+  syncChartFocusButtonState(false);
+
+  chartFocusToggleBtnEl.addEventListener('click', () => {
+    if (isChartInFocusMode()) closeChartFocusMode();
+    else openChartFocusMode(chartFocusToggleBtnEl);
+  });
+
+  chartFocusCloseBtnEl.addEventListener('click', () => {
+    closeChartFocusMode();
+  });
+
+  document.addEventListener('fullscreenchange', handleChartFocusFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleChartFocusFullscreenChange);
+
+  document.addEventListener('click', (event) => {
+    if (!document.body.classList.contains('chart-focus-open')) return;
+    if (chartSectionFocusEl.contains(event.target) || chartFocusToggleBtnEl.contains(event.target)) return;
+    closeChartFocusMode({ restoreFocus: false });
+  });
+}
+
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
 function toggleTip(card) {
   const tip    = card.querySelector('.ftip');
@@ -5536,6 +5801,7 @@ document.addEventListener('click', e => {
 // Close tooltip on Escape key
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    closeChartFocusMode();
     closeMcpModal();
     closeAllOutputCardTooltips();
     document.querySelectorAll('.formula-card.active').forEach(c => {
@@ -5697,6 +5963,7 @@ cacheSubTexts();
 applyInformationIcons();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initMcpModal();
+initChartFocusMode();
 initSectionNav();
 if (!loadSharedStateFromUrl()) {
   updateHealthAndRecommendations(lastInputs);
