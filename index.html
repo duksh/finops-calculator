@@ -239,16 +239,17 @@ a:focus-visible {
 
 /* ─── LANDING FLOW ORDER ────────────────────────────────────────── */
 .paper > .landing-intro { order: 1; }
-.paper > .credibility-section { order: 2; }
-.paper > .cta-band { order: 3; }
-.paper > .mcp-section { order: 4; }
-.paper > .calc-section { order: 5; }
-.paper > .fig-header { order: 6; }
-.paper > .controls { order: 7; }
-.paper > .chart-section { order: 8; }
-.paper > .zones-strip { order: 9; }
-.paper > .formulas-section { order: 10; }
-.paper > .fig-footer { order: 11; }
+.paper > .finops-2026-section { order: 2; }
+.paper > .credibility-section { order: 3; }
+.paper > .cta-band { order: 4; }
+.paper > .mcp-section { order: 5; }
+.paper > .calc-section { order: 6; }
+.paper > .fig-header { order: 7; }
+.paper > .controls { order: 8; }
+.paper > .chart-section { order: 9; }
+.paper > .zones-strip { order: 10; }
+.paper > .formulas-section { order: 11; }
+.paper > .fig-footer { order: 12; }
 
 /* ─── LANDING INTRO ─────────────────────────────────────────────── */
 .landing-intro {
@@ -423,6 +424,108 @@ a:focus-visible {
   border-color: rgba(230,159,0,0.4);
   color: #8f5f00;
 }
+
+/* ─── FINOPS 2026 SECTION ───────────────────────────────────────── */
+.finops-2026-section {
+  padding: clamp(16px, 3vw, 26px) clamp(16px, 4vw, 36px);
+  border-bottom: 1px solid rgba(30, 59, 105, 0.12);
+  background:
+    radial-gradient(circle at 86% 14%, rgba(0,158,115,0.16) 0%, rgba(0,158,115,0) 34%),
+    radial-gradient(circle at 14% 86%, rgba(0,114,178,0.14) 0%, rgba(0,114,178,0) 34%),
+    linear-gradient(150deg, #f3fffa 0%, #eff8ff 52%, #fff8ed 100%);
+}
+.finops-2026-shell {
+  border: 1px solid rgba(13, 94, 74, 0.2);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 14px 28px rgba(15, 49, 83, 0.1);
+  padding: clamp(14px, 2.4vw, 22px);
+}
+.finops-2026-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(0,158,115,0.38);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0c6d55;
+  background: rgba(0,158,115,0.08);
+}
+.finops-2026-title {
+  margin-top: 8px;
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(20px, 2.9vw, 32px);
+  line-height: 1.16;
+  color: #18233f;
+}
+.finops-2026-subtitle {
+  margin-top: 8px;
+  max-width: 880px;
+  font-size: clamp(12px, 1.45vw, 14px);
+  color: #445067;
+  line-height: 1.64;
+}
+.finops-2026-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 920px) {
+  .finops-2026-grid { grid-template-columns: 1fr; }
+}
+.finops-2026-report-card {
+  border: 1px solid rgba(27, 46, 77, 0.13);
+  border-radius: 11px;
+  background: rgba(255,255,255,0.94);
+  padding: 11px 12px;
+}
+.finops-2026-report-card h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1b3d67;
+  margin-bottom: 7px;
+}
+.finops-2026-report-card ul {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.finops-2026-report-card li {
+  font-size: 12px;
+  color: #42506a;
+  line-height: 1.52;
+  position: relative;
+  padding-left: 12px;
+}
+.finops-2026-report-card li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #009e73;
+  font-weight: 700;
+}
+.finops-2026-link {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0c6d55;
+  text-decoration: none;
+  border: 1px solid rgba(0,158,115,0.34);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(0,158,115,0.08);
+}
+.finops-2026-link:hover { background: rgba(0,158,115,0.13); }
 
 /* ─── CREDIBILITY SECTION ───────────────────────────────────────── */
 .credibility-section {
@@ -1646,6 +1749,38 @@ a:focus-visible {
   border-top: 1px dashed var(--border);
   background: linear-gradient(180deg, rgba(0,114,178,0.02), rgba(0,158,115,0.02));
 }
+.finops-2026-highlight {
+  position: relative;
+  border-top: 1px dashed rgba(0,158,115,0.42);
+  border-left: 3px solid rgba(0,158,115,0.5);
+  background:
+    linear-gradient(180deg, rgba(0,158,115,0.06) 0%, rgba(0,114,178,0.03) 100%);
+}
+.finops-2026-highlight .calc-field {
+  background: linear-gradient(180deg, rgba(234,254,246,0.85) 0%, rgba(246,251,255,0.92) 100%);
+  border-top-color: rgba(0,158,115,0.26);
+}
+.finops-2026-highlight .calc-label {
+  color: #0f5f4a;
+}
+.finops-2026-highlight .ftag {
+  border-color: rgba(0,158,115,0.35);
+  background: rgba(0,158,115,0.1);
+  color: #0c6d55;
+}
+.finops-2026-pill {
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(0,158,115,0.4);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #0d6d55;
+  background: rgba(255,255,255,0.78);
+}
 .portfolio-guardrail {
   border-top: 1px dashed var(--border);
   padding: 9px 18px 11px;
@@ -1834,6 +1969,27 @@ a:focus-visible {
   transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
   position: relative;
 }
+.finops-2026-group {
+  border-color: rgba(0,158,115,0.44);
+  box-shadow:
+    0 12px 28px rgba(14, 35, 72, 0.08),
+    0 0 0 1px rgba(0,158,115,0.18);
+}
+.finops-2026-group .calc-group-title {
+  background: linear-gradient(180deg, rgba(0,158,115,0.12) 0%, rgba(86,180,233,0.09) 100%);
+  border-bottom-color: rgba(0,158,115,0.3);
+}
+.finops-2026-group .calc-group-label {
+  color: #0d5f4a;
+}
+.finops-2026-group .calc-group-hint {
+  color: #2f6c61;
+}
+.finops-2026-card {
+  border-color: rgba(0,158,115,0.38);
+  background: linear-gradient(180deg, rgba(238,255,248,0.92) 0%, rgba(241,249,255,0.9) 100%);
+}
+.finops-2026-card .calc-out-label { color: #0f6f57; }
 .calc-out-card.tip-enabled { cursor: pointer; }
 .calc-out-card.tip-open { z-index: 8; }
 .calc-out-card.live {
@@ -2387,6 +2543,7 @@ a:focus-visible {
     </a>
     <ul class="sticky-top-nav-list">
       <li><a class="sticky-top-nav-link" data-nav-link href="#introduction-section">Overview</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#finops2026-section">FinOps 2026</a></li>
       <li><a class="sticky-top-nav-link" href="document.html">Document</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#about-section">About</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#mcp-section">MCP</a></li>
@@ -2440,6 +2597,48 @@ a:focus-visible {
         </ul>
         <a class="landing-card-link users" href="#formulas-section">Go to Formulas &darr;</a>
       </article>
+    </div>
+  </section>
+
+  <!-- FINOPS 2026 FINDINGS -->
+  <section class="finops-2026-section section-anchor" id="finops2026-section" aria-labelledby="finops2026-title">
+    <div class="finops-2026-shell">
+      <span class="finops-2026-kicker">State of FinOps 2026</span>
+      <h2 class="finops-2026-title" id="finops2026-title">2026 report findings translated into calculator features</h2>
+      <p class="finops-2026-subtitle">
+        This section summarizes how the calculator operationalizes FinOps Foundation guidance from the 2026 report,
+        including multi-domain visibility, normalized unit economics, and policy-ready prioritization.
+      </p>
+
+      <div class="finops-2026-grid">
+        <article class="finops-2026-report-card">
+          <h3>Key findings reflected</h3>
+          <ul>
+            <li>Cloud cost decisions must connect to broader technology value and business outcomes.</li>
+            <li>Coverage quality matters: fragmented scope weakens confidence in optimization decisions.</li>
+            <li>FinOps maturity grows when technical metrics are paired with operational governance signals.</li>
+          </ul>
+        </article>
+
+        <article class="finops-2026-report-card">
+          <h3>Implemented in this calculator</h3>
+          <ul>
+            <li>Multi-technology cost inputs (SaaS, Licensing, Private Cloud, Data Center, Labor).</li>
+            <li>Scoped normalization: <code>NTC/client = Σ(αᵈ × Cᵈ) / n</code> for cross-domain comparability.</li>
+            <li>Coverage and confidence outputs for evidence-quality signaling before actioning recommendations.</li>
+          </ul>
+        </article>
+
+        <article class="finops-2026-report-card">
+          <h3>Recommended operating motion</h3>
+          <ul>
+            <li>Start with Financial Truth mode (<code>αᵈ ∈ {0,1}</code>) to anchor baseline reporting.</li>
+            <li>Use Priority Index weights (<code>Σwᵈ=1</code>) only when governance policy requires scenario emphasis.</li>
+            <li>Review normalization confidence before making pricing or commitment decisions.</li>
+          </ul>
+          <a class="finops-2026-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer">Open State of FinOps 2026 ↗</a>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -2773,8 +2972,8 @@ a:focus-visible {
 
         </div>
 
-        <div class="portfolio-overlay">
-          <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)</div>
+        <div class="portfolio-overlay finops-2026-highlight">
+          <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-costSaaS">
               <label class="calc-label" for="inp-costSaaS">
@@ -2842,11 +3041,12 @@ a:focus-visible {
       </div>
 
       <!-- ── GROUP C ──────────────────────────────────────────── -->
-      <div class="calc-group">
+      <div class="calc-group finops-2026-group">
         <div class="calc-group-title">
           <span class="calc-group-num" style="background:#009e73">C</span>
           <span class="calc-group-label">Auto-Calculated Results</span>
           <span class="calc-group-hint">Updates instantly as you type</span>
+          <span class="finops-2026-pill">State of FinOps 2026 aligned outputs</span>
         </div>
 
         <div class="calc-outputs">
@@ -2905,19 +3105,19 @@ a:focus-visible {
             <div class="calc-out-sub">Revenue level implied by your startup planning assumptions</div>
           </div>
 
-          <div class="calc-out-card" id="out-techCoverage">
+          <div class="calc-out-card finops-2026-card" id="out-techCoverage">
             <div class="calc-out-label">Coverage Across Domains</div>
             <div class="calc-out-val muted" id="oval-techCoverage">—</div>
             <div class="calc-out-sub">Coverage inside your selected scope (single or multi-domain)</div>
           </div>
 
-          <div class="calc-out-card" id="out-techNorm">
+          <div class="calc-out-card finops-2026-card" id="out-techNorm">
             <div class="calc-out-label">Normalized Tech Cost / Client</div>
             <div class="calc-out-val muted" id="oval-techNorm">—</div>
             <div class="calc-out-sub">Scoped cost aggregation normalized per client using selected domains</div>
           </div>
 
-          <div class="calc-out-card" id="out-focusMaturity">
+          <div class="calc-out-card finops-2026-card" id="out-focusMaturity">
             <div class="calc-out-label">Normalization Confidence</div>
             <div class="calc-out-val muted" id="oval-focusMaturity">—</div>
             <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
