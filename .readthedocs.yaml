@@ -4,18 +4,15 @@
 # Required
 version: 2
 
-# Set the OS, Python version, and other tools you might need
+# Set the OS for the build environment
 build:
   os: ubuntu-24.04
-  tools:
-    nodejs: "22"
 
   commands:
-    # Install Docusaurus dependencies
-    - cd docs/ && npm install
-    # Build the site
-    - cd docs/ && npm run build
-    # Copy generated files into Read the Docs directory
+    # Publish existing public-facing static assets
     - mkdir --parents $READTHEDOCS_OUTPUT/html/
-    - cp --recursive docs/build/* $READTHEDOCS_OUTPUT/html/
+    - cp document.html $READTHEDOCS_OUTPUT/html/index.html
+    - cp glossary.html $READTHEDOCS_OUTPUT/html/glossary.html
+    - cp index.html $READTHEDOCS_OUTPUT/html/calculator.html
+    - cp github-finops-cal-image-01.jpg $READTHEDOCS_OUTPUT/html/github-finops-cal-image-01.jpg
         
