@@ -226,6 +226,18 @@ a:focus-visible {
   outline: 2px solid #56b4e9;
   outline-offset: 2px;
 }
+.glossary-term-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(0, 114, 178, 0.55);
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+.glossary-term-link:hover {
+  color: #005b90;
+  text-decoration-color: #005b90;
+}
 @media (max-width: 780px) {
   .sticky-top-brand-text { display: none; }
   .sticky-top-nav-inner { padding: 7px 8px; }
@@ -1389,6 +1401,38 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: var(--muted);
   margin-bottom: 0;
 }
+.formulas-header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.glossary-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(0, 114, 178, 0.34);
+  background: rgba(0, 114, 178, 0.1);
+  color: #005a8f;
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+.glossary-link-btn:hover {
+  background: rgba(0, 114, 178, 0.16);
+  border-color: rgba(0, 114, 178, 0.55);
+  transform: translateY(-1px);
+}
+.glossary-link-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
 .formulas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 30%, 200px), 1fr));
@@ -1705,6 +1749,140 @@ body.chart-focus-open #chart-section .chart-focus-close {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-end;
+  }
+}
+
+/* Unified action controls for calculator header */
+.calc-action-btn {
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+.calc-action-btn:hover {
+  transform: translateY(-1px);
+}
+.calc-action-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.calc-action-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+.calc-action-btn--soft {
+  border-color: rgba(0,114,178,0.25);
+  background: rgba(0,114,178,0.07);
+  color: #0072b2;
+}
+.calc-action-btn--soft:hover {
+  border-color: rgba(0,114,178,0.38);
+  background: rgba(0,114,178,0.13);
+}
+.calc-action-btn--primary {
+  border-color: rgba(0,114,178,0.35);
+  background: rgba(0,114,178,0.1);
+  color: #005a8f;
+}
+.calc-action-btn--primary:hover {
+  border-color: rgba(0,114,178,0.52);
+  background: rgba(0,114,178,0.16);
+}
+.calc-action-btn--warning {
+  border-color: rgba(213,94,0,0.35);
+  background: rgba(213,94,0,0.09);
+  color: #8a3d00;
+}
+.calc-action-btn--warning:hover {
+  border-color: rgba(213,94,0,0.52);
+  background: rgba(213,94,0,0.16);
+}
+.calc-action-btn--neutral {
+  border-color: rgba(40,62,95,0.22);
+  background: rgba(255,255,255,0.9);
+  color: #475778;
+}
+.calc-action-btn--neutral:hover {
+  border-color: rgba(40,62,95,0.34);
+  background: #ffffff;
+}
+.calc-action-btn--demo-good {
+  border-color: rgba(0,158,115,0.34);
+  background: rgba(0,158,115,0.1);
+  color: #006d4d;
+}
+.calc-action-btn--demo-good:hover {
+  border-color: rgba(0,158,115,0.5);
+  background: rgba(0,158,115,0.16);
+}
+.calc-action-btn--demo-bad {
+  border-color: rgba(181,76,0,0.34);
+  background: rgba(181,76,0,0.09);
+  color: #8a3d00;
+}
+.calc-action-btn--demo-bad:hover {
+  border-color: rgba(181,76,0,0.5);
+  background: rgba(181,76,0,0.15);
+}
+
+.calc-title-main .calc-deeplink.calc-action-btn {
+  margin-top: 8px;
+  width: fit-content;
+}
+.calc-actions {
+  min-width: 240px;
+  padding: 10px;
+  border: 1px solid rgba(17,71,128,0.18);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(240,247,255,0.8) 100%);
+  box-shadow: 0 8px 18px rgba(15, 44, 82, 0.08);
+}
+.calc-actions-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2e5c8a;
+  margin-bottom: 2px;
+}
+.calc-actions .calc-action-btn {
+  width: 100%;
+}
+
+@media (max-width: 680px) {
+  .calc-actions {
+    min-width: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+  }
+  .calc-actions-hint {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+  .calc-actions .calc-action-btn {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+  .calc-title-main .calc-deeplink.calc-action-btn {
+    width: fit-content;
   }
 }
 
@@ -2639,6 +2817,190 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 .calc-out-tip-link:hover {
   border-bottom-color: rgba(0,90,143,0.8);
 }
+.calc-out-tip-action-btn {
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid rgba(0,114,178,0.32);
+  border-radius: 8px;
+  background: rgba(0,114,178,0.08);
+  color: #045e93;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 9px;
+  cursor: pointer;
+}
+.calc-out-tip-action-btn:hover {
+  background: rgba(0,114,178,0.14);
+}
+.calc-out-tip-action-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+
+.calc-out-solve-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: none;
+}
+.calc-out-solve-modal.open {
+  display: block;
+}
+.calc-out-solve-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 22, 45, 0.48);
+}
+.calc-out-solve-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(760px, calc(100vw - 28px));
+  max-height: min(82vh, 860px);
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(0,114,178,0.26);
+  background: linear-gradient(180deg, #ffffff 0%, #f4f9ff 100%);
+  box-shadow: 0 28px 52px rgba(9, 22, 45, 0.35);
+  padding: 18px 18px 16px;
+}
+.calc-out-solve-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 51, 98, 0.2);
+  background: #ffffff;
+  color: #184b7c;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+.calc-out-solve-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #0f5d93;
+}
+.calc-out-solve-title {
+  margin-top: 4px;
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(24px, 3.1vw, 31px);
+  line-height: 1.1;
+  color: #1a2a4a;
+}
+.calc-out-solve-audience {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.calc-out-solve-audience-btn {
+  border: 1px solid rgba(0, 90, 143, 0.2);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #2f4a70;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.calc-out-solve-audience-btn.active {
+  background: rgba(0,114,178,0.12);
+  border-color: rgba(0,114,178,0.34);
+  color: #045e93;
+}
+.calc-out-solve-audience-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.calc-out-solve-current {
+  margin-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.calc-out-solve-signal {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 3px 9px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.calc-out-solve-signal.good { color: #0f825f; background: rgba(0,158,115,0.12); border-color: rgba(0,158,115,0.25); }
+.calc-out-solve-signal.warn { color: #8f6200; background: rgba(230,159,0,0.16); border-color: rgba(230,159,0,0.3); }
+.calc-out-solve-signal.bad { color: #a34800; background: rgba(213,94,0,0.14); border-color: rgba(213,94,0,0.28); }
+.calc-out-solve-signal.needs { color: #5b6173; background: rgba(122,122,140,0.18); border-color: rgba(122,122,140,0.28); }
+.calc-out-solve-value {
+  font-size: 12px;
+  color: #324365;
+}
+.calc-out-solve-objective {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #2f3f60;
+}
+.calc-out-solve-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.calc-out-solve-card {
+  border: 1px solid rgba(17, 71, 128, 0.16);
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 10px 10px 9px;
+}
+.calc-out-solve-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #005a8f;
+}
+.calc-out-solve-list {
+  margin-top: 6px;
+  padding-left: 15px;
+  display: grid;
+  gap: 4px;
+}
+.calc-out-solve-list li {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #2f3d57;
+}
+@media (max-width: 760px) {
+  .calc-out-solve-dialog {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    width: 100%;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    padding: 16px 14px 14px;
+  }
+  .calc-out-solve-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .calc-out-val {
   font-family: 'JetBrains Mono', monospace;
@@ -3116,7 +3478,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
     <ul class="sticky-top-nav-list">
       <li><a class="sticky-top-nav-link" data-nav-link href="#introduction-section">Overview</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#finops2026-section">FinOps 2026</a></li>
-      <li><a class="sticky-top-nav-link" href="document.html">Document</a></li>
+      <li><a class="sticky-top-nav-link" data-nav-link href="#model-assurance-section">Model Assurance</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#about-section">About</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#mcp-section">MCP</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#roadmap-section">Roadmap</a></li>
@@ -3124,6 +3486,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <li><a class="sticky-top-nav-link" data-nav-link href="#group-health">Health</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#chart-section">Chart</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#formulas-section">Formulas</a></li>
+      <li><a class="sticky-top-nav-link" href="glossary.html">Glossary</a></li>
       <li><a class="sticky-top-nav-link" data-nav-link href="#references-section">References</a></li>
     </ul>
   </div>
@@ -3345,6 +3708,58 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
     </div>
   </section>
 
+  <!-- MODEL ASSURANCE -->
+  <section class="mcp-section section-anchor" id="model-assurance-section" aria-labelledby="model-assurance-title">
+    <div class="mcp-shell">
+      <div class="mcp-head">
+        <div>
+          <div class="mcp-kicker">Model Assurance</div>
+          <h2 class="mcp-title" id="model-assurance-title">What changed in the model and how to validate it quickly</h2>
+          <p class="mcp-subtitle">
+            This section documents recent formula hardening decisions, expected behavior, and a fast verification flow.
+            Use it as a CFO/FinOps quality gate before relying on outputs for pricing, budgeting, or board narrative.
+          </p>
+        </div>
+        <div class="mcp-head-actions">
+          <a class="mcp-chip-link" href="#calculator-section">Run live checks ↓</a>
+          <a class="mcp-chip-link" href="docs/model-risk-and-validation.md" target="_blank" rel="noopener noreferrer">Open detailed notes ↗</a>
+        </div>
+      </div>
+
+      <div class="mcp-grid">
+        <article class="mcp-card">
+          <h3>What was hardened</h3>
+          <ul class="mcp-list">
+            <li>Strategic ARPU guidance now compares <strong>€/client</strong> against <strong>€/client</strong> (unit-consistent floor).</li>
+            <li>Recalculation now rebuilds the model from defaults each run, preventing stale state carry-over.</li>
+            <li>Break-even and minimum unit cost now use a deterministic integer-range scan for consistency.</li>
+            <li>CCER handles zero-infra scenarios as <code>∞</code> when revenue exists, without false penalty.</li>
+          </ul>
+        </article>
+
+        <article class="mcp-card">
+          <h3>2-minute validation run</h3>
+          <ul class="mcp-list">
+            <li><strong>CCER sanity:</strong> set ARPU &gt; 0 and Infra = 0, confirm CCER displays <code>∞</code>.</li>
+            <li><strong>State reset:</strong> set Margin/CUD, then clear them and confirm outputs revert to defaults.</li>
+            <li><strong>Recommendation units:</strong> in unhealthy demo, verify ARPU-gap advice is shown in <code>/client</code>.</li>
+            <li><strong>Break-even stability:</strong> change <code>nMax</code> and confirm break-even remains stable.</li>
+          </ul>
+        </article>
+
+        <article class="mcp-card">
+          <h3>Interpretation guardrails</h3>
+          <ul class="mcp-list">
+            <li>Health score thresholds are policy heuristics, not statistically calibrated confidence estimates.</li>
+            <li>Forecast spread represents deterministic scenario range, not a probabilistic confidence interval.</li>
+            <li>CUD function assumes exponent adjustment; treat as a practical model assumption pending calibration.</li>
+            <li>Use this calculator for decision support; validate major decisions with billing exports and cohort data.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ LIVE CALCULATOR ════════════════════════════════════════ -->
   <div class="calc-section section-anchor" id="calculator-section">
     <div class="calc-header" id="live-calculator">
@@ -3358,20 +3773,32 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <span class="calc-release-text">This version already reflects State of FinOps 2026 priorities: broader multi-technology scope, normalized dimensions, and confidence guardrails for portfolio-level decisions.</span>
             <a class="calc-release-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">Open State of FinOps 2026 report ↗</a>
           </div>
-          <a class="calc-deeplink" href="#live-calculator">🔗 Share this section</a>
+          <a class="calc-deeplink calc-action-btn calc-action-btn--soft" href="#live-calculator">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7.5l3-3"/><path d="M3 9a2 2 0 0 1 0-2.8l1.2-1.2a2 2 0 0 1 2.8 0"/><path d="M9 3a2 2 0 0 1 0 2.8L7.8 7a2 2 0 0 1-2.8 0"/></svg>
+            Share this section
+          </a>
           <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
         </div>
         <div class="calc-actions">
-          <button class="share-btn" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
+          <div class="calc-actions-hint">Quick actions + demos</div>
+          <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
             Copy state link
           </button>
-          <button class="feature-request-btn" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
+          <button class="feature-request-btn calc-action-btn calc-action-btn--warning" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
             Request a feature on Github
           </button>
-          <button class="reset-btn" type="button" onclick="resetModel()">
+          <button class="reset-btn calc-action-btn calc-action-btn--neutral" type="button" onclick="resetModel()">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
             Reset defaults
+          </button>
+          <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load a healthy demo scenario">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
+            Demo healthy
+          </button>
+          <button class="calc-action-btn calc-action-btn--demo-bad" type="button" onclick="loadDemoScenario('unhealthy')" aria-label="Load an unhealthy demo scenario">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 4.2v2.8"/><circle cx="6" cy="8.9" r="0.2" fill="currentColor"/></svg>
+            Demo unhealthy
           </button>
         </div>
       </div>
@@ -4130,7 +4557,10 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   <div class="formulas-section section-anchor" id="formulas-section">
     <div class="formulas-header-row">
       <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card (or press Enter/Space) for a full explanation</span></div>
-      <button class="feature-request-btn feature-request-btn-compact" type="button" onclick="requestFeature('Formulas Section')" aria-label="Request a feature on Github">Request a feature on Github</button>
+      <div class="formulas-header-actions">
+        <a class="glossary-link-btn" href="glossary.html" aria-label="Open glossary page with detailed term explanations">Open glossary ↗</a>
+        <button class="feature-request-btn feature-request-btn-compact" type="button" onclick="requestFeature('Formulas Section')" aria-label="Request a feature on Github">Request a feature on Github</button>
+      </div>
     </div>
     <div class="formulas-grid">
 
@@ -4475,6 +4905,13 @@ const VALID_TECH_DOMAIN_KEYS = TECH_DOMAIN_SCHEMA.map(item => item.key);
 let shareFeedbackTimer = null;
 const mcpModalEl = document.getElementById('mcp-modal');
 const mcpModalDialogEl = mcpModalEl ? mcpModalEl.querySelector('.mcp-modal-dialog') : null;
+let outputSolveModalEl = null;
+let outputSolveDialogEl = null;
+let outputSolveTitleEl = null;
+let outputSolveBodyEl = null;
+let outputSolveAudienceEl = null;
+let outputSolveActiveCardId = null;
+let outputSolveAudienceMode = 'founder';
 const mcpModalOpeners = Array.from(document.querySelectorAll('[data-mcp-open]'));
 const chartSectionFocusEl = document.getElementById('chart-section');
 const chartFocusToggleBtnEl = document.getElementById('chart-focus-btn');
@@ -4666,7 +5103,461 @@ const OUTPUT_TOOLTIP_CONTENT = {
     ]
   }
 };
+
+const OUTPUT_ACTION_GUIDES = {
+  'out-beN': {
+    objective: 'Reach break-even at a client level your team can acquire sustainably.',
+    recommended: [
+      'Raise realized ARPU (packaging, upsell, annual plans) before scaling spend.',
+      'Reduce monthly run-rate on infra and development burden to lower the break-even threshold.',
+      'Use Startup Planning options to test target price vs target clients before commitments.'
+    ],
+    potential: [
+      'Improve activation and retention so more leads convert into paying clients.',
+      'Create tiered offers so high-value clients subsidize lower-entry plans.'
+    ],
+    monitor: ['Break-Even Clients', 'Contribution Margin', 'CCER at n'],
+    inputs: ['Total Infra Cost', 'ARPU or Startup Planning input']
+  },
+  'out-minPrice': {
+    objective: 'Keep your minimum viable price below market-acceptable pricing while preserving margin.',
+    recommended: [
+      'Lower cost drivers first (idle resources, over-provisioning, unused licences).',
+      'Refine margin target if your current target is too aggressive for this growth phase.',
+      'Re-check assumptions at realistic n so pricing decisions are not based on tiny sample sizes.'
+    ],
+    potential: [
+      'Bundle premium features to justify higher ARPU where cost cannot drop quickly.',
+      'Split plans by usage profile to avoid subsidizing high-usage clients.'
+    ],
+    monitor: ['Min. Price / Client', 'Contribution Margin', 'Required Price @ Target Clients'],
+    inputs: ['Client Count (n)', 'Dev Cost', 'Infra Cost']
+  },
+  'out-vcpu': {
+    objective: 'Bring variable cloud cost per client into a stable and predictable band.',
+    recommended: [
+      'Right-size compute and storage by workload profile.',
+      'Apply autoscaling guardrails and schedule non-critical workloads.',
+      'Reduce waste from cross-zone data transfer and duplicate services.'
+    ],
+    potential: [
+      'Refactor heavy paths to cheaper managed services.',
+      'Improve caching to cut repeated expensive calls.'
+    ],
+    monitor: ['VCPU at n', 'Contribution Margin', 'CCER at n'],
+    inputs: ['Infra Cost', 'Client Count (n)']
+  },
+  'out-margin': {
+    objective: 'Maintain positive unit contribution margin before chasing aggressive growth.',
+    recommended: [
+      'Increase ARPU through packaging, retention and expansion motions.',
+      'Lower VCPU via optimization, commitment coverage, and platform efficiencies.',
+      'Pause acquisition channels that bring low-value clients with poor unit economics.'
+    ],
+    potential: [
+      'Introduce add-ons with high gross margin.',
+      'Use customer segmentation to focus on profitable cohorts.'
+    ],
+    monitor: ['Contribution Margin', 'VCPU at n', 'Break-Even Clients'],
+    inputs: ['ARPU or Startup Planning', 'Infra Cost']
+  },
+  'out-ccer': {
+    objective: 'Move cloud efficiency toward or above benchmark range (commonly > 3x).',
+    recommended: [
+      'Prioritize cost optimization on top cloud services by spend concentration.',
+      'Improve monetization per workload (pricing, product usage, expansion).',
+      'Use CUD/Savings Plans where demand is predictable.'
+    ],
+    potential: [
+      'Shift low-value workloads to lower-cost classes or regions where acceptable.',
+      'Implement spend alerts tied to revenue movement.'
+    ],
+    monitor: ['CCER at n', 'CUD Monthly Saving', 'Budget Variance'],
+    inputs: ['ARPU', 'Infra Cost']
+  },
+  'out-cudSave': {
+    objective: 'Capture more commitment-discount value without over-committing risk.',
+    recommended: [
+      'Increase commitment coverage only on stable baseline workloads.',
+      'Review discount assumptions against actual provider offers and term lengths.',
+      'Track realized vs expected commitment savings monthly.'
+    ],
+    potential: [
+      'Use blended commitment portfolios across compute families.',
+      'Negotiate enterprise discount programs if usage volume qualifies.'
+    ],
+    monitor: ['CUD Monthly Saving', 'CCER at n', 'Budget Variance'],
+    inputs: ['CUD %', 'Infra Cost']
+  },
+  'out-reqClients': {
+    objective: 'Validate whether target price is realistic for your acquisition capacity.',
+    recommended: [
+      'If required clients are too high, reduce cost or increase target price.',
+      'Compare required clients to your funnel conversion baseline.',
+      'Run scenarios with conservative and optimistic growth assumptions.'
+    ],
+    potential: [
+      'Boost conversion through onboarding and trial optimization.',
+      'Prioritize channels with stronger CAC payback at current margin.'
+    ],
+    monitor: ['Required Clients @ Target Price', 'Break-Even Clients', 'Target Monthly Revenue'],
+    inputs: ['Startup Target Price', 'Cost inputs']
+  },
+  'out-reqPrice': {
+    objective: 'Set a target price that keeps the model viable at your planned client volume.',
+    recommended: [
+      'If required price is above market tolerance, lower cost envelope first.',
+      'Revisit margin target for your current maturity stage.',
+      'Test multiple pricing structures (flat, tiered, usage-based).'
+    ],
+    potential: [
+      'Use value-based packaging to justify higher plans for advanced segments.',
+      'Offer annual commitments with incentives to improve realized ARPU.'
+    ],
+    monitor: ['Required Price @ Target Clients', 'Min. Price / Client', 'Contribution Margin'],
+    inputs: ['Startup Target Clients', 'Cost inputs']
+  },
+  'out-targetRevenue': {
+    objective: 'Use target revenue as an execution goal tied to feasible pricing and acquisition assumptions.',
+    recommended: [
+      'Break the monthly target into weekly funnel and retention goals.',
+      'Validate if target revenue supports required cost and margin trajectory.',
+      'Track leading indicators (pipeline, conversion, churn) against this target.'
+    ],
+    potential: [
+      'Create scenario-specific GTM plans for best/base/worst paths.',
+      'Attach owner and cadence for revenue target review.'
+    ],
+    monitor: ['Target Monthly Revenue', 'Required Clients @ Target Price', 'Contribution Margin'],
+    inputs: ['Startup Planning options', 'Cost inputs']
+  },
+  'out-budgetVariance': {
+    objective: 'Move from overrun to controllable variance with explicit budget guardrails.',
+    recommended: [
+      'Freeze or defer non-critical spend while root-cause analysis is running.',
+      'Segment variance by domain (cloud, SaaS, licensing, etc.) to isolate drivers.',
+      'Set threshold alerts and owner accountability for each cost domain.'
+    ],
+    potential: [
+      'Adopt rolling forecasts to avoid end-of-cycle surprises.',
+      'Negotiate contract renewals before annual true-up windows.'
+    ],
+    monitor: ['Budget Variance', 'Forecast Margin Band', 'Coverage Across Domains'],
+    inputs: ['Monthly Budget', 'In-scope domain costs']
+  },
+  'out-forecastBand': {
+    objective: 'Reduce downside risk and improve forecasted margin resilience.',
+    recommended: [
+      'Validate growth and efficiency assumptions against recent trend data.',
+      'Prepare mitigation actions for worst-case margin path in advance.',
+      'Use best/base/worst planning in monthly operating reviews.'
+    ],
+    potential: [
+      'Run sensitivity tests on top two cost drivers.',
+      'Create trigger rules that switch to cost-containment mode early.'
+    ],
+    monitor: ['Forecast Margin Band', 'Forecast Confidence Band', 'Budget Variance'],
+    inputs: ['Forecast Growth %', 'Best Efficiency %', 'Worst Drift %']
+  },
+  'out-forecastSpread': {
+    objective: 'Narrow uncertainty spread to improve confidence in expected outcomes.',
+    recommended: [
+      'Improve data quality and refresh assumptions more frequently.',
+      'Prioritize initiatives that reduce volatility in top spend categories.',
+      'Treat wide spread as a risk signal and attach contingency actions.'
+    ],
+    potential: [
+      'Use shorter forecasting cycles in periods of high change.',
+      'Benchmark forecast error against prior cycles.'
+    ],
+    monitor: ['Forecast Confidence Band', 'Forecast Margin Band', 'Normalization Confidence'],
+    inputs: ['Forecast assumptions', 'Reliable ARPU and cost baselines']
+  },
+  'out-realizedValue': {
+    objective: 'Increase value captured in-cycle from delivered FinOps actions.',
+    recommended: [
+      'Track savings and cost avoidance separately to avoid double counting.',
+      'Link each optimization initiative to verified realized value evidence.',
+      'Close execution gaps by assigning owners and due dates per initiative.'
+    ],
+    potential: [
+      'Prioritize high-confidence, high-impact actions first.',
+      'Publish monthly value capture scorecards for leadership review.'
+    ],
+    monitor: ['Total Realized Value', 'Savings Realization Ratio', 'Residual Value Gap'],
+    inputs: ['Savings Identified', 'Savings Realized', 'Cost Avoidance']
+  },
+  'out-realizationRatio': {
+    objective: 'Push realization ratio toward or above target by improving delivery throughput.',
+    recommended: [
+      'Review delayed actions and remove blockers in execution workflow.',
+      'Re-prioritize to initiatives with faster value realization windows.',
+      'Validate identified savings baseline if ratio is distorted by poor scoping.'
+    ],
+    potential: [
+      'Add interim checkpoints and value verification gates.',
+      'Use category-level realization targets to avoid aggregate blind spots.'
+    ],
+    monitor: ['Savings Realization Ratio', 'Total Realized Value', 'Residual Value Gap'],
+    inputs: ['Savings Identified', 'Realized and avoided value']
+  },
+  'out-realizationGap': {
+    objective: 'Close remaining value gap through targeted follow-up actions.',
+    recommended: [
+      'Focus on unexecuted or underperforming initiatives first.',
+      'Convert large unresolved gaps into a dated action backlog.',
+      'Escalate blockers where gap persists across cycles.'
+    ],
+    potential: [
+      'Re-baseline target if original identified savings was materially inaccurate.',
+      'Replicate successful actions from areas with strong realization.'
+    ],
+    monitor: ['Residual Value Gap', 'Savings Realization Ratio', 'Total Realized Value'],
+    inputs: ['Savings Identified', 'Savings Realized', 'Cost Avoidance']
+  },
+  'out-techCoverage': {
+    objective: 'Increase selected-domain coverage so normalized indicators remain decision-grade.',
+    recommended: [
+      'Fill missing cost inputs for all selected domains in scope.',
+      'Expand from cloud-only to multi-domain view when portfolio decisions require it.',
+      'Treat low-coverage snapshots as directional, not final.'
+    ],
+    potential: [
+      'Adopt a recurring data collection cadence per domain owner.',
+      'Set minimum coverage thresholds before executive reporting.'
+    ],
+    monitor: ['Coverage Across Domains', 'Normalization Confidence', 'Normalized Tech Cost / Client'],
+    inputs: ['techDomains selection', 'Domain monthly costs']
+  },
+  'out-techNorm': {
+    objective: 'Use normalized cost as a cross-domain comparability anchor, not just a raw total.',
+    recommended: [
+      'Confirm scope selection reflects what you want to compare.',
+      'Increase domain completeness to improve confidence in normalized value.',
+      'Use per-client normalized trend over time, not one isolated snapshot.'
+    ],
+    potential: [
+      'Compare normalized cost across business units or products.',
+      'Introduce policy thresholds for acceptable normalized ranges.'
+    ],
+    monitor: ['Normalized Tech Cost / Client', 'Coverage Across Domains', 'Normalization Confidence'],
+    inputs: ['Client count n', 'In-scope domain costs']
+  },
+  'out-focusMaturity': {
+    objective: 'Raise confidence tier by improving completeness and balance of in-scope inputs.',
+    recommended: [
+      'Add non-cloud domain costs where currently missing.',
+      'Increase selected-scope coverage before relying on cross-domain comparisons.',
+      'Document assumptions used for missing values and retire them as data matures.'
+    ],
+    potential: [
+      'Move to recurring governance reviews for input quality.',
+      'Track confidence trend as a KPI for FinOps data maturity.'
+    ],
+    monitor: ['Normalization Confidence', 'Coverage Across Domains', 'Budget Variance'],
+    inputs: ['Domain completeness', 'Scope balance across cloud and non-cloud costs']
+  }
+};
+
+const OUTPUT_AUDIENCE_MODES = {
+  founder: {
+    label: 'Founder',
+    framing: 'Focus on viability, growth capacity, and fast corrective moves that protect runway.',
+    sectionLabels: {
+      recommended: 'Recommended moves',
+      potential: 'Growth levers',
+      monitor: 'Watch next',
+      inputs: 'Decision inputs'
+    }
+  },
+  cfo: {
+    label: 'CFO',
+    framing: 'Focus on margin protection, variance control, and finance-grade decision confidence.',
+    sectionLabels: {
+      recommended: 'Recommended controls',
+      potential: 'Financial levers',
+      monitor: 'Watch KPIs',
+      inputs: 'Data required'
+    }
+  },
+  engineer: {
+    label: 'Engineer',
+    framing: 'Focus on technical execution, efficiency drivers, and measurable remediation tasks.',
+    sectionLabels: {
+      recommended: 'Implementation steps',
+      potential: 'Technical levers',
+      monitor: 'Watch signals',
+      inputs: 'Input integrity checks'
+    }
+  }
+};
+
 let activeOutputTipCard = null;
+
+function ensureOutputSolutionPanel() {
+  if (outputSolveModalEl) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'calc-out-solve-modal';
+  wrapper.id = 'calc-out-solve-modal';
+  wrapper.setAttribute('aria-hidden', 'true');
+  wrapper.innerHTML = `
+    <div class="calc-out-solve-backdrop" data-output-solve-close></div>
+    <div class="calc-out-solve-dialog" role="dialog" aria-modal="true" aria-labelledby="calc-out-solve-title" tabindex="-1">
+      <button type="button" class="calc-out-solve-close" data-output-solve-close aria-label="Close guidance panel">×</button>
+      <div class="calc-out-solve-kicker">Indicator action panel</div>
+      <h3 class="calc-out-solve-title" id="calc-out-solve-title">How to address this indicator</h3>
+      <div class="calc-out-solve-audience" id="calc-out-solve-audience"></div>
+      <div id="calc-out-solve-body"></div>
+    </div>
+  `;
+
+  document.body.appendChild(wrapper);
+  outputSolveModalEl = wrapper;
+  outputSolveDialogEl = wrapper.querySelector('.calc-out-solve-dialog');
+  outputSolveTitleEl = wrapper.querySelector('#calc-out-solve-title');
+  outputSolveBodyEl = wrapper.querySelector('#calc-out-solve-body');
+  outputSolveAudienceEl = wrapper.querySelector('#calc-out-solve-audience');
+
+  wrapper.addEventListener('click', event => {
+    const audienceBtn = event.target.closest('[data-output-audience]');
+    if (audienceBtn) {
+      event.preventDefault();
+      setOutputAudienceMode(audienceBtn.dataset.outputAudience);
+      return;
+    }
+    if (!event.target.closest('[data-output-solve-close]')) return;
+    closeOutputSolutionPanel();
+  });
+  if (outputSolveDialogEl) {
+    outputSolveDialogEl.addEventListener('click', event => {
+      if (event.target.closest('[data-output-solve-close]')) return;
+      event.stopPropagation();
+    });
+  }
+
+  renderOutputAudienceButtons();
+}
+
+function closeOutputSolutionPanel() {
+  if (!outputSolveModalEl) return;
+  outputSolveModalEl.classList.remove('open');
+  outputSolveModalEl.setAttribute('aria-hidden', 'true');
+  outputSolveActiveCardId = null;
+}
+
+function getOutputAudienceMode(mode) {
+  return OUTPUT_AUDIENCE_MODES[mode] ? mode : 'founder';
+}
+
+function renderOutputAudienceButtons() {
+  if (!outputSolveAudienceEl) return;
+  outputSolveAudienceEl.innerHTML = Object.entries(OUTPUT_AUDIENCE_MODES).map(([key, cfg]) => `
+    <button
+      type="button"
+      class="calc-out-solve-audience-btn ${key === outputSolveAudienceMode ? 'active' : ''}"
+      data-output-audience="${key}"
+      aria-pressed="${key === outputSolveAudienceMode ? 'true' : 'false'}"
+    >${cfg.label}</button>
+  `).join('');
+}
+
+function setOutputAudienceMode(mode) {
+  const next = getOutputAudienceMode(mode);
+  if (next === outputSolveAudienceMode) return;
+  outputSolveAudienceMode = next;
+  renderOutputAudienceButtons();
+  if (outputSolveActiveCardId) {
+    renderOutputSolutionPanel(outputSolveActiveCardId);
+  }
+}
+
+function getOutputCardSignal(card) {
+  if (!card) {
+    return { key: 'needs', label: 'Data required', cls: 'needs' };
+  }
+  if (card.classList.contains('needs-data')) {
+    return { key: 'needs', label: 'Data required', cls: 'needs' };
+  }
+  if (card.classList.contains('live-bad')) {
+    return { key: 'bad', label: 'Action needed', cls: 'bad' };
+  }
+  if (card.classList.contains('live-warn')) {
+    return { key: 'warn', label: 'Needs attention', cls: 'warn' };
+  }
+  if (card.classList.contains('live')) {
+    return { key: 'good', label: 'Healthy signal', cls: 'good' };
+  }
+  return { key: 'needs', label: 'Review signal', cls: 'needs' };
+}
+
+function buildActionList(items = []) {
+  if (!items.length) {
+    return '<ul class="calc-out-solve-list"><li>No specific actions yet. Use this as a review checkpoint.</li></ul>';
+  }
+  return `<ul class="calc-out-solve-list">${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+}
+
+function renderOutputSolutionPanel(cardId) {
+  const card = document.getElementById(cardId);
+  const config = OUTPUT_TOOLTIP_CONTENT[cardId];
+  if (!card || !config) return;
+
+  const guide = OUTPUT_ACTION_GUIDES[cardId] || {
+    objective: 'Keep this indicator in a stable, decision-ready range.',
+    recommended: ['Review the input assumptions used by this indicator.', 'Compare this signal against adjacent indicators for consistency.'],
+    potential: ['Use scenario testing to evaluate alternative operating paths.'],
+    monitor: ['Re-check this indicator after each assumption update.'],
+    inputs: ['Relevant calculator assumptions for this metric']
+  };
+
+  const signal = getOutputCardSignal(card);
+  const valueText = (card.querySelector('.calc-out-val') || {}).textContent || '—';
+  const needsDataActions = (guide.inputs || []).map(item => `Provide ${item} to unlock reliable recommendations.`);
+  const recommended = signal.key === 'needs' && needsDataActions.length ? needsDataActions : (guide.recommended || []);
+  const audience = OUTPUT_AUDIENCE_MODES[getOutputAudienceMode(outputSolveAudienceMode)];
+  const labels = audience.sectionLabels;
+
+  outputSolveTitleEl.textContent = `${config.title} · How to address this?`;
+  outputSolveBodyEl.innerHTML = `
+    <div class="calc-out-solve-current">
+      <span class="calc-out-solve-signal ${signal.cls}">${signal.label}</span>
+      <span class="calc-out-solve-value">Current value: <strong>${valueText}</strong></span>
+    </div>
+    <p class="calc-out-solve-objective"><strong>Perspective:</strong> ${audience.label} — ${audience.framing}</p>
+    <p class="calc-out-solve-objective"><strong>Goal:</strong> ${guide.objective}</p>
+    <div class="calc-out-solve-grid">
+      <section class="calc-out-solve-card">
+        <div class="calc-out-solve-sub">${labels.recommended}</div>
+        ${buildActionList(recommended)}
+      </section>
+      <section class="calc-out-solve-card">
+        <div class="calc-out-solve-sub">${labels.potential}</div>
+        ${buildActionList(guide.potential || [])}
+      </section>
+      <section class="calc-out-solve-card">
+        <div class="calc-out-solve-sub">${labels.monitor}</div>
+        ${buildActionList(guide.monitor || [])}
+      </section>
+      <section class="calc-out-solve-card">
+        <div class="calc-out-solve-sub">${labels.inputs}</div>
+        ${buildActionList(guide.inputs || [])}
+      </section>
+    </div>
+  `;
+  applyGlossaryAutoLinks(outputSolveBodyEl);
+}
+
+function openOutputSolutionPanel(cardId) {
+  ensureOutputSolutionPanel();
+  outputSolveActiveCardId = cardId;
+  renderOutputAudienceButtons();
+  renderOutputSolutionPanel(cardId);
+
+  outputSolveModalEl.classList.add('open');
+  outputSolveModalEl.setAttribute('aria-hidden', 'false');
+  if (outputSolveDialogEl) outputSolveDialogEl.focus();
+}
 
 function normalizeTechDomainSelection(list) {
   const input = Array.isArray(list) ? list : [];
@@ -4884,6 +5775,33 @@ function copyShareStateLink() {
   }
 }
 
+function loadDemoScenario(scenarioKey) {
+  const preset = DEMO_SCENARIOS[scenarioKey];
+  if (!preset) {
+    writeShareFeedback('Demo preset not found.', true);
+    return;
+  }
+
+  closeOutputSolutionPanel();
+  closeAllOutputCardTooltips();
+
+  const applied = applySharedState(preset.state);
+  if (!applied) {
+    writeShareFeedback('Could not load demo scenario.', true);
+    return;
+  }
+
+  clearShareStateParam();
+  writeShareFeedback(`${preset.label} demo loaded. ${preset.summary}`, false);
+
+  const healthSection = document.getElementById('group-health');
+  if (healthSection) {
+    requestAnimationFrame(() => {
+      healthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+}
+
 function normaliseSharedInput(el, rawValue) {
   if (!el) return '';
   const value = String(rawValue ?? '').trim();
@@ -4968,6 +5886,128 @@ function scrollToHealthSectionFromSharedState() {
       healthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+}
+
+const GLOSSARY_PAGE_PATH = 'glossary.html';
+const GLOSSARY_TERM_ENTRIES = [
+  { id: 'term-modeled-cost', aliases: ['ModeledCost', 'modeled cost', 'modeled_cost'] },
+  { id: 'term-arpu', aliases: ['ARPU', 'Average Revenue Per User'] },
+  { id: 'term-break-even', aliases: ['break-even', 'break even'] },
+  { id: 'term-break-even-clients', aliases: ['Break-Even Clients', 'Minimum Viable Clients'] },
+  { id: 'term-min-price', aliases: ['Min Price', 'Minimum Price'] },
+  { id: 'term-vcpu', aliases: ['VCPU', 'Variable Cost Per User'] },
+  { id: 'term-contribution-margin', aliases: ['Contribution Margin'] },
+  { id: 'term-ccer', aliases: ['CCER', 'Cloud Cost Efficiency Ratio'] },
+  { id: 'term-cud', aliases: ['CUD', 'CUDs', 'Committed Use Discount', 'Committed Use Discounts'] },
+  { id: 'term-savings-plan', aliases: ['Savings Plan', 'Savings Plans'] },
+  { id: 'term-reserved-instances', aliases: ['Reserved Instance', 'Reserved Instances'] },
+  { id: 'term-target-margin', aliases: ['Target Margin', 'margin target'] },
+  { id: 'term-target-revenue', aliases: ['Target Revenue', 'Revenue Target'] },
+  { id: 'term-budget-variance', aliases: ['Budget Variance'] },
+  { id: 'term-forecast-band', aliases: ['Forecast Band'] },
+  { id: 'term-forecast-spread', aliases: ['Forecast Spread'] },
+  { id: 'term-savings-identified', aliases: ['Savings Identified', 'Identified Savings'] },
+  { id: 'term-savings-realized', aliases: ['Savings Realized', 'Savings Realised', 'Realized Savings', 'Realised Savings'] },
+  { id: 'term-cost-avoidance', aliases: ['Cost Avoidance'] },
+  { id: 'term-realization-ratio', aliases: ['Realization Ratio', 'Realisation Ratio'] },
+  { id: 'term-realization-gap', aliases: ['Realization Gap', 'Realisation Gap'] },
+  { id: 'term-normalization', aliases: ['Normalization', 'normalisation'] },
+  { id: 'term-ntc-client', aliases: ['NTC/client', 'Normalized Technology Cost'] },
+  { id: 'term-financial-truth-mode', aliases: ['Financial Truth mode'] },
+  { id: 'term-priority-index', aliases: ['Priority Index'] },
+  { id: 'term-tech-coverage', aliases: ['Tech Coverage'] },
+  { id: 'term-focus-maturity', aliases: ['Focus Maturity'] },
+  { id: 'term-nref', aliases: ['reference n', 'nRef'] },
+  { id: 'term-nmax', aliases: ['nMax'] },
+  { id: 'term-cfo-forecast-dashboard', aliases: ['CFO Forecast Dashboard'] }
+];
+
+const GLOSSARY_ALIAS_TO_ID = new Map();
+const GLOSSARY_MATCH_PARTS = [];
+
+function escapeGlossaryRegex(text) {
+  return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeGlossaryAlias(text) {
+  return String(text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function aliasPattern(alias) {
+  const escaped = escapeGlossaryRegex(alias).replace(/\s+/g, '\\s+');
+  return /^[A-Za-z0-9\-\/ ]+$/.test(alias)
+    ? `\\b${escaped}\\b`
+    : escaped;
+}
+
+GLOSSARY_TERM_ENTRIES.forEach(entry => {
+  entry.aliases.forEach(alias => {
+    const normalized = normalizeGlossaryAlias(alias);
+    GLOSSARY_ALIAS_TO_ID.set(normalized, entry.id);
+    GLOSSARY_MATCH_PARTS.push(aliasPattern(alias));
+  });
+});
+
+GLOSSARY_MATCH_PARTS.sort((a, b) => b.length - a.length);
+const GLOSSARY_TERMS_REGEX = new RegExp(`(${GLOSSARY_MATCH_PARTS.join('|')})`, 'gi');
+
+function shouldSkipGlossaryNode(textNode) {
+  const parent = textNode && textNode.parentElement;
+  if (!parent) return true;
+  return Boolean(parent.closest('a, code, pre, kbd, samp, script, style, textarea, input, button, select, option, [data-no-glossary]'));
+}
+
+function linkGlossaryTermsInRoot(rootEl) {
+  if (!rootEl) return;
+  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node || !node.nodeValue || shouldSkipGlossaryNode(node)) return NodeFilter.FILTER_REJECT;
+      GLOSSARY_TERMS_REGEX.lastIndex = 0;
+      return GLOSSARY_TERMS_REGEX.test(node.nodeValue)
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  const targets = [];
+  while (walker.nextNode()) targets.push(walker.currentNode);
+
+  targets.forEach(node => {
+    const source = node.nodeValue;
+    GLOSSARY_TERMS_REGEX.lastIndex = 0;
+    const updated = source.replace(GLOSSARY_TERMS_REGEX, match => {
+      const key = normalizeGlossaryAlias(match);
+      const id = GLOSSARY_ALIAS_TO_ID.get(key);
+      if (!id) return match;
+      return `<a class="glossary-term-link" href="${GLOSSARY_PAGE_PATH}#${id}" title="Open glossary definition: ${match}">${match}</a>`;
+    });
+
+    if (updated === source) return;
+    const temp = document.createElement('span');
+    temp.innerHTML = updated;
+    const fragment = document.createDocumentFragment();
+    while (temp.firstChild) fragment.appendChild(temp.firstChild);
+    node.parentNode.replaceChild(fragment, node);
+  });
+}
+
+function applyGlossaryAutoLinks(scopeEl = null) {
+  if (!GLOSSARY_MATCH_PARTS.length) return;
+
+  if (scopeEl) {
+    linkGlossaryTermsInRoot(scopeEl);
+    return;
+  }
+
+  const roots = [
+    document.getElementById('finops2026-section'),
+    document.getElementById('model-assurance-section'),
+    document.getElementById('calculator-section'),
+    document.getElementById('group-health'),
+    document.getElementById('formulas-section')
+  ].filter(Boolean);
+
+  roots.forEach(linkGlossaryTermsInRoot);
 }
 
 function loadSharedStateFromUrl() {
@@ -5426,6 +6466,75 @@ let lastInputs = {
   costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
 };
 
+const DEMO_SCENARIOS = {
+  healthy: {
+    label: 'Healthy',
+    summary: 'Review Health Zone, output indicators, and recommendation quality in a positive trajectory.',
+    state: {
+      v: SHARE_STATE_VERSION,
+      i: {
+        nRef: 320,
+        devPerClient: 260,
+        infraTotal: 4200,
+        ARPU: 78,
+        startupTargetPrice: 82,
+        startupTargetClients: 360,
+        cudPct: 34,
+        margin: 18,
+        nMax: 3000,
+        budgetMonthly: 7500,
+        forecastGrowthPct: 16,
+        forecastBestEfficiencyPct: 10,
+        forecastWorstDriftPct: 6,
+        savingsIdentified: 2400,
+        savingsRealized: 1700,
+        costAvoidance: 650,
+        costSaaS: 700,
+        costLicensing: 420,
+        costPrivateCloud: 380,
+        costDataCenter: 250,
+        costLabor: 560
+      },
+      td: [...VALID_TECH_DOMAIN_KEYS],
+      p: ['aws', 'gcp'],
+      h: []
+    }
+  },
+  unhealthy: {
+    label: 'Unhealthy',
+    summary: 'See red-zone behavior, weak unit economics, and remediation guidance in action.',
+    state: {
+      v: SHARE_STATE_VERSION,
+      i: {
+        nRef: 70,
+        devPerClient: 980,
+        infraTotal: 5200,
+        ARPU: 22,
+        startupTargetPrice: 24,
+        startupTargetClients: 120,
+        cudPct: 4,
+        margin: 25,
+        nMax: 1800,
+        budgetMonthly: 4300,
+        forecastGrowthPct: -8,
+        forecastBestEfficiencyPct: 2,
+        forecastWorstDriftPct: 28,
+        savingsIdentified: 3000,
+        savingsRealized: 450,
+        costAvoidance: 120,
+        costSaaS: 1300,
+        costLicensing: 900,
+        costPrivateCloud: 1100,
+        costDataCenter: 760,
+        costLabor: 1400
+      },
+      td: [...VALID_TECH_DOMAIN_KEYS],
+      p: ['multi'],
+      h: []
+    }
+  }
+};
+
 const RECOMMENDATIONS = [
   { icon:'⚠️', title:'You are below break-even', desc:'Current client volume is below the minimum viable threshold; fixed and variable costs are not yet recovered.', action:'Action: Review pricing page and sales funnel conversion. Prioritise moving n above N_min within the next planning cycle.', providers:[], zones:['red'], priority:'high' },
   { icon:'📉', title:'CCER below 3×', desc:'Cloud Cost Efficiency Ratio is below FinOps benchmark. Revenue generated per euro of cloud spend is under target.', action:'Action: In your billing console, isolate top cost drivers and enforce unit economics guardrails per service.', providers:[], zones:['red','yellow'], priority:'high' },
@@ -5510,18 +6619,18 @@ function initRecommendationCategoryFilters() {
   });
 }
 
-function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCostN, minCostPerClient }) {
+function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCostN, minUnitCostPerClient }) {
   if (!zoneKey || arpuUsed === null || arpuUsed === undefined || !isFinite(arpuUsed)) return [];
 
   const strategic = [];
-  const minCostGap = Math.max(0, minCostPerClient - arpuUsed);
+  const minCostGap = Math.max(0, minUnitCostPerClient - arpuUsed);
   const upliftPct = arpuUsed > 0 ? (minCostGap / arpuUsed) * 100 : 0;
 
   if (beN === null && minCostGap > 0) {
     strategic.push({
       icon: '💸',
       title: 'Raise realised ARPU above cost floor',
-      desc: `Current ARPU (${fmtOut(arpuUsed, 2)} / client) is below the model floor (${fmtOut(minCostPerClient, 2)} / client near n≈${minCostN.toLocaleString()}).`,
+      desc: `Current ARPU (${fmtOut(arpuUsed, 2)} / client) is below the model floor (${fmtOut(minUnitCostPerClient, 2)} / client near n≈${minCostN.toLocaleString()}).`,
       action: `Action: Improve realised price by at least ${fmtOut(minCostGap, 2)} / client (${upliftPct.toFixed(1)}%) via packaging tiers, add-ons, annual commit discounts, or selective fee increases.`,
       category: 'pricing',
       providers: [],
@@ -5617,15 +6726,13 @@ function updateHealthAndRecommendations(inputs) {
   const revenue  = arpuUsed * nSample;
   const vcpu     = infraRaw / nSample;
   const contribM = arpuUsed - vcpu;
-  const ccer     = infraRaw > 0 ? revenue / infraRaw : 0;
+  const ccer     = infraRaw > 0 ? revenue / infraRaw : Infinity;
   const cudSaveGapPct = infraRaw > 0 ? ((infraRaw - infraCud) / infraRaw) : 0;
 
-  const pts = buildData();
-  const be = pts.find(d => d.revenue >= d.total);
-  const beN = be ? Math.round(be.n) : null;
-  const minCostPoint = pts.reduce((minPt, point) => (point.total < minPt.total ? point : minPt), pts[0]);
-  const minCostN = Math.max(1, Math.round(minCostPoint.n));
-  const minCostPerClient = minCostPoint.total;
+  const economics = scanEconomicRange(arpuUsed, Math.max(20000, MODEL.nMax), MODEL);
+  const beN = economics.breakEvenN;
+  const minCostN = economics.minUnitCostN;
+  const minUnitCostPerClient = economics.minUnitCostPerClient;
 
   let score = 100;
   const failed = [];
@@ -5637,10 +6744,10 @@ function updateHealthAndRecommendations(inputs) {
     score -= 35;
     failed.push(`Current clients (${Math.round(nSample).toLocaleString()}) are below break-even (${beN.toLocaleString()}).`);
   }
-  if (ccer < 1) {
+  if (isFinite(ccer) && ccer < 1) {
     score -= 30;
     failed.push(`CCER is ${ccer.toFixed(2)}× (<1×).`);
-  } else if (ccer < 3) {
+  } else if (isFinite(ccer) && ccer < 3) {
     score -= 15;
     failed.push(`CCER is ${ccer.toFixed(2)}× (below 3× benchmark).`);
   }
@@ -5692,7 +6799,7 @@ function updateHealthAndRecommendations(inputs) {
     beN,
     arpuUsed,
     minCostN,
-    minCostPerClient
+    minUnitCostPerClient
   });
   const scoped = [...strategicRecommendations, ...RECOMMENDATIONS]
     .map(rec => ({ ...rec, categoryKey: inferRecommendationCategory(rec) }))
@@ -5712,6 +6819,7 @@ function updateHealthAndRecommendations(inputs) {
     } else {
       listEl.innerHTML = `<div class="rec-empty">No ${selectedLabel} recommendations match your current zone/provider context. Try another category or switch back to All.</div>`;
     }
+    applyGlossaryAutoLinks(document.getElementById('group-health'));
     return;
   }
 
@@ -5733,6 +6841,7 @@ function updateHealthAndRecommendations(inputs) {
       </article>
     `;
   }).join('');
+  applyGlossaryAutoLinks(document.getElementById('group-health'));
 }
 
 function getInp(id) {
@@ -5754,9 +6863,42 @@ function fmtOut(v, decimals=0) {
   return v < 0 ? `−${str}` : str;
 }
 
+function totalCostAtClients(n, model = MODEL) {
+  const safeN = Math.max(1, n);
+  return model.K * Math.pow(safeN, -model.a) + model.c * Math.pow(safeN, model.b);
+}
+
+function scanEconomicRange(arpu, maxN, model = MODEL) {
+  const limit = Math.max(1, Math.round(maxN));
+  const hasArpu = arpu !== null && arpu !== undefined && arpu > 0;
+  let breakEvenN = null;
+  let minUnitCost = Infinity;
+  let minUnitCostN = 1;
+
+  for (let n = 1; n <= limit; n++) {
+    const total = totalCostAtClients(n, model);
+    const unitCost = total / n;
+
+    if (unitCost < minUnitCost) {
+      minUnitCost = unitCost;
+      minUnitCostN = n;
+    }
+
+    if (hasArpu && breakEvenN === null && (arpu * n) >= total) {
+      breakEvenN = n;
+    }
+  }
+
+  return {
+    breakEvenN,
+    minUnitCostN,
+    minUnitCostPerClient: isFinite(minUnitCost) ? minUnitCost : null
+  };
+}
+
 function minPriceAtClients(n, model = MODEL) {
   const safeN = Math.max(1, n);
-  const total = model.K * Math.pow(safeN, -model.a) + model.c * Math.pow(safeN, model.b);
+  const total = totalCostAtClients(safeN, model);
   return (total / safeN) * (1 + model.m);
 }
 
@@ -5944,7 +7086,7 @@ function cacheSubTexts() {
   });
 }
 
-function buildOutputTooltipHtml(config) {
+function buildOutputTooltipHtml(cardId, config) {
   const items = config.how.map(item => `<li>${item}</li>`).join('');
   const refs = [{ label: 'State of FinOps 2026 context', url: FINOPS_2026_REPORT_URL }, ...(config.refs || [])];
   const links = refs.map(ref => `<a class="calc-out-tip-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('');
@@ -5954,6 +7096,7 @@ function buildOutputTooltipHtml(config) {
     <div class="calc-out-tip-sub">How this is calculated</div>
     <ul class="calc-out-tip-list">${items}</ul>
     ${links}
+    <button type="button" class="calc-out-tip-action-btn" data-solve-for="${cardId}">How to address this?</button>
   `;
 }
 
@@ -5991,6 +7134,7 @@ function toggleOutputCardTooltip(card) {
 function initOutputCardTooltips() {
   const cards = Array.from(document.querySelectorAll('.calc-out-card'));
   if (!cards.length) return;
+  ensureOutputSolutionPanel();
 
   cards.forEach(card => {
     const config = OUTPUT_TOOLTIP_CONTENT[card.id];
@@ -6010,7 +7154,7 @@ function initOutputCardTooltips() {
     panel.id = `tip-${card.id}`;
     panel.setAttribute('role', 'tooltip');
     panel.setAttribute('aria-hidden', 'true');
-    panel.innerHTML = buildOutputTooltipHtml(config);
+    panel.innerHTML = buildOutputTooltipHtml(card.id, config);
 
     btn.setAttribute('aria-controls', panel.id);
     card.appendChild(btn);
@@ -6029,6 +7173,14 @@ function initOutputCardTooltips() {
     panel.addEventListener('click', event => {
       event.stopPropagation();
     });
+
+    const actionBtn = panel.querySelector('.calc-out-tip-action-btn');
+    if (actionBtn) {
+      actionBtn.addEventListener('click', event => {
+        event.stopPropagation();
+        openOutputSolutionPanel(card.id);
+      });
+    }
   });
 
   document.addEventListener('click', event => {
@@ -6107,56 +7259,57 @@ function recalculate() {
   const costDataCenter  = getInp('inp-costDataCenter');
   const costLabor       = getInp('inp-costLabor');
 
-  let changed = false;
   let derivations = [];
   let effectiveARPU = null;
   let arpuMode = 'missing';
+  const nextModel = { ...MODEL_DEFAULTS };
 
   // ── Always-applicable fields ──────────────────────────────────
-  if (nMaxInp !== null && nMaxInp >= 10) { MODEL.nMax = nMaxInp; changed = true; }
-  if (marginPct !== null)               { MODEL.m = Math.max(0, marginPct / 100); changed = true; }
-  if (cudPct !== null)                  { MODEL.g = Math.max(0.01, 1 - cudPct / 100); changed = true; derivations.push(`γ=${MODEL.g.toFixed(2)}`); }
+  if (nMaxInp !== null && nMaxInp >= 10) { nextModel.nMax = nMaxInp; }
+  if (marginPct !== null) { nextModel.m = Math.max(0, marginPct / 100); }
+  if (cudPct !== null) {
+    nextModel.g = Math.max(0.01, 1 - cudPct / 100);
+    derivations.push(`γ=${nextModel.g.toFixed(2)}`);
+  }
 
   // ── Derive K from devPerClient ────────────────────────────────
   // Use actual nRef if given, otherwise use DEFAULT_N_REF as a calibration assumption
-  if (devPerClient !== null && devPerClient > 0) {
+  if (devPerClient !== null && devPerClient >= 0) {
     const n = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
-    MODEL.K = devPerClient * Math.pow(n, MODEL.a);
-    changed = true;
-    derivations.push(`K=${MODEL.K.toFixed(0)}`);
+    nextModel.K = devPerClient * Math.pow(n, nextModel.a);
+    derivations.push(`K=${nextModel.K.toFixed(0)}`);
   }
 
   // ── Derive c from infraTotal ──────────────────────────────────
   // KEY FIX: never calibrate against n=1 — use nRef or DEFAULT_N_REF
-  if (infraTotal !== null && infraTotal > 0) {
+  if (infraTotal !== null && infraTotal >= 0) {
     const n = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
-    MODEL.c = infraTotal / Math.pow(n, MODEL.b);
-    changed = true;
-    derivations.push(`c=${MODEL.c.toFixed(4)} @ n=${n}`);
+    nextModel.c = infraTotal / Math.pow(n, nextModel.b);
+    derivations.push(`c=${nextModel.c.toFixed(4)} @ n=${n}`);
   }
 
   // ── ARPU source: manual OR startup planning assumptions ────────
   if (ARPU !== null && ARPU > 0) {
-    MODEL.ARPU = ARPU;
+    nextModel.ARPU = ARPU;
     effectiveARPU = ARPU;
     arpuMode = 'manual';
-    changed = true;
   } else if (startupTargetPrice !== null && startupTargetPrice > 0) {
-    MODEL.ARPU = startupTargetPrice;
+    nextModel.ARPU = startupTargetPrice;
     effectiveARPU = startupTargetPrice;
     arpuMode = 'startup-price';
-    changed = true;
-    derivations.push(`ARPU≈${MODEL.ARPU.toFixed(2)} (price target)`);
+    derivations.push(`ARPU≈${nextModel.ARPU.toFixed(2)} (price target)`);
   } else if (
     startupTargetClients !== null && startupTargetClients > 0 &&
-    ((devPerClient !== null && devPerClient > 0) || (infraTotal !== null && infraTotal > 0))
+    ((devPerClient !== null && devPerClient >= 0) || (infraTotal !== null && infraTotal >= 0))
   ) {
-    MODEL.ARPU = minPriceAtClients(startupTargetClients, MODEL);
-    effectiveARPU = MODEL.ARPU;
+    nextModel.ARPU = minPriceAtClients(startupTargetClients, nextModel);
+    effectiveARPU = nextModel.ARPU;
     arpuMode = 'startup-clients';
-    changed = true;
-    derivations.push(`ARPU≈${MODEL.ARPU.toFixed(2)} @ ${Math.round(startupTargetClients)} clients`);
+    derivations.push(`ARPU≈${nextModel.ARPU.toFixed(2)} @ ${Math.round(startupTargetClients)} clients`);
   }
+
+  const changed = Object.keys(nextModel).some(key => Math.abs(nextModel[key] - MODEL[key]) > 1e-9);
+  MODEL = nextModel;
 
   lastInputs = {
     nRef, devPerClient, infraTotal, ARPU,
@@ -6195,8 +7348,8 @@ function updateOutputCards(inputs) {
     ? effectiveARPU
     : ((arpuInp !== null && arpuInp > 0) ? arpuInp : null);
   const hasARPU   = arpuUsed !== null;
-  const hasInfra  = infraTotal !== null;
-  const hasDev    = devPerClient !== null;
+  const hasInfra  = infraTotal !== null && infraTotal >= 0;
+  const hasDev    = devPerClient !== null && devPerClient >= 0;
   const hasNRef   = nRef !== null && nRef > 0;
   const hasStartupPrice   = startupTargetPrice !== null && startupTargetPrice > 0;
   const hasStartupClients = startupTargetClients !== null && startupTargetClients > 0;
@@ -6210,9 +7363,10 @@ function updateOutputCards(inputs) {
   const vcpu     = infraRaw / nSample;
   const contribM = hasARPU ? (arpuUsed - vcpu) : null;
   const priceMin = (total / nSample) * (1 + m);
-  const ccer     = infraRaw > 0 ? (revenue / infraRaw) : null;
+  const ccer     = hasARPU ? (infraRaw > 0 ? (revenue / infraRaw) : Infinity) : null;
   const cudSave  = infraRaw - infraCud;
   const searchMax = Math.max(20000, nMax);
+  const economics = scanEconomicRange(arpuUsed, searchMax, MODEL);
   const reqClients = (hasStartupPrice && hasAnyCostInput)
     ? findRequiredClientsForTargetPrice(startupTargetPrice, searchMax, MODEL)
     : null;
@@ -6228,9 +7382,7 @@ function updateOutputCards(inputs) {
   });
 
   // Break-even search
-  const pts = buildData();
-  const be  = pts.find(d => d.revenue >= d.total);
-  const beN = be ? Math.round(be.n) : null;
+  const beN = economics.breakEvenN;
 
   // ── BREAK-EVEN ───────────────────────────────────────────────
   // Needs: at least one cost input (infra OR dev) AND ARPU
@@ -6312,6 +7464,10 @@ function updateOutputCards(inputs) {
     setOut('oval-ccer', null, '', '', 'Total Infra Cost');
   } else if (!hasARPU) {
     setOut('oval-ccer', null, '', '', 'Revenue / Client (ARPU) or Startup Target');
+  } else if (ccer === Infinity) {
+    setOut('oval-ccer', '∞', 'good', '');
+    const subEl = document.querySelector('#out-ccer .calc-out-sub');
+    if (subEl) subEl.textContent = 'Infra cost is zero at current assumptions; cloud efficiency is effectively unbounded';
   } else if (ccer !== null) {
     const cc = ccer >= 3 ? 'good' : ccer >= 1 ? 'warn' : 'bad';
     setOut('oval-ccer', ccer.toFixed(2) + '×', cc, cc);
@@ -7263,6 +8419,7 @@ function initFormulaCardTooltips() {
 // Close tooltip on Escape key
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    closeOutputSolutionPanel();
     closeChartFocusMode();
     closeQbvFocusMode();
     closeMcpModal();
@@ -7369,12 +8526,16 @@ function applyInformationIcons() {
 
     ['#mcp-section-title', 'plug', 'blue'],
     ['#roadmap-section-title', 'roadmap', 'green'],
+    ['#model-assurance-title', 'shield', 'purple'],
     ['#mcp-section .mcp-card:nth-child(1) h3', 'toolbox', 'blue'],
     ['#mcp-section .mcp-card:nth-child(2) h3', 'plug', 'green'],
     ['#mcp-section .mcp-card:nth-child(3) h3', 'briefcase', 'amber'],
     ['#roadmap-section .mcp-card:nth-child(1) h3', 'insights', 'blue'],
     ['#roadmap-section .mcp-card:nth-child(2) h3', 'target', 'amber'],
     ['#roadmap-section .mcp-card:nth-child(3) h3', 'guide', 'green'],
+    ['#model-assurance-section .mcp-card:nth-child(1) h3', 'checklist', 'blue'],
+    ['#model-assurance-section .mcp-card:nth-child(2) h3', 'target', 'green'],
+    ['#model-assurance-section .mcp-card:nth-child(3) h3', 'guide', 'amber'],
 
     ['#calculator-section .calc-body .calc-group:nth-child(1) .calc-group-label', 'chart', 'blue'],
     ['#calculator-section .calc-body .calc-group:nth-child(2) .calc-group-label', 'sliders', 'amber'],
@@ -7511,6 +8672,7 @@ initOutputCardTooltips();
 initFormulaCardTooltips();
 cacheSubTexts();
 applyInformationIcons();
+applyGlossaryAutoLinks();
 updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
