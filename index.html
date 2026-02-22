@@ -2979,6 +2979,10 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   border-color: #0072b2;
   box-shadow: 0 0 0 3px rgba(0,114,178,0.1);
 }
+.formula-card:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
 .formula-card .info-btn {
   position: absolute;
   top: 8px; right: 8px;
@@ -3398,14 +3402,14 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 
           <div class="calc-field" id="field-devPerClient">
             <label class="calc-label" for="inp-devPerClient">
-              Dev Cost / Client
+              Dev Cost (Monthly @ n)
               <span class="ftag" style="color:var(--dev);border-color:var(--dev);background:rgba(213,94,0,0.06)">● orange curve</span>
             </label>
             <div class="calc-input-wrap">
               <input type="number" id="inp-devPerClient" inputmode="decimal" min="0" step="1" placeholder="e.g. 500" oninput="onInput('devPerClient')">
-              <span class="calc-unit">€ / client</span>
+              <span class="calc-unit">€ / month</span>
             </div>
-            <div class="calc-hint">Your dev cost per client at n. Derives <strong>K</strong> (platform build constant).</div>
+            <div class="calc-hint">Your amortized monthly development burden at reference n. Derives <strong>K</strong> for the dev cost decay curve.</div>
           </div>
 
           <div class="calc-field" id="field-infraTotal">
@@ -4032,13 +4036,13 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   <div class="controls">
     <span class="controls-label">SHOW/HIDE:</span>
     <div class="btns-wrap">
-      <button class="toggle-btn" id="btn-dev"       onclick="toggle('dev')"       style="color:var(--dev);      border-color:var(--dev)"><span class="swatch" style="background:var(--dev)"></span>Dev Cost / Client</button>
+      <button class="toggle-btn" id="btn-dev"       onclick="toggle('dev')"       style="color:var(--dev);      border-color:var(--dev)"><span class="swatch" style="background:var(--dev)"></span>Dev Cost (Amortized / mo)</button>
       <button class="toggle-btn" id="btn-infra-raw" onclick="toggle('infra-raw')" style="color:var(--infra-raw);border-color:var(--infra-raw)"><span class="swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</button>
       <button class="toggle-btn" id="btn-infra-cud" onclick="toggle('infra-cud')" style="color:var(--infra-cud);border-color:var(--infra-cud)"><span class="swatch" style="background:linear-gradient(90deg,var(--infra-cud) 55%,transparent 55%) repeat-x left/9px 3px"></span>Infra (With CUDs)</button>
-      <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / Client</button>
-      <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue</button>
+      <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / mo</button>
+      <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue / mo</button>
       <button class="toggle-btn" id="btn-profit"    onclick="toggle('profit')"    style="color:var(--profit);   border-color:var(--profit)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI</button>
-      <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Min. Price / Client</button>
+      <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Revenue Target / mo</button>
     </div>
   </div>
 
@@ -4062,7 +4066,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <div class="divider"></div>
       <div class="readout-grid">
         <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--dev)"></span>Dev Cost / Client</div>
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--dev)"></span>Dev Cost (Amortized / mo)</div>
           <div class="readout-val" id="sp-dev">—</div>
         </div>
         <div class="readout-row">
@@ -4074,11 +4078,11 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="readout-val" id="sp-infra-cud">—</div>
         </div>
         <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--total)"></span>Total Cost / Client</div>
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--total)"></span>Total Cost / mo</div>
           <div class="readout-val" id="sp-total">—</div>
         </div>
         <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue</div>
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue / mo</div>
           <div class="readout-val" id="sp-revenue">—</div>
         </div>
         <div class="readout-row">
@@ -4086,7 +4090,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="readout-val" id="sp-profit">—</div>
         </div>
         <div class="readout-row">
-          <div class="readout-label"><span class="readout-swatch" style="background:var(--price-min);border:1px solid #bbb"></span>Min. Price / Client</div>
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--price-min);border:1px solid #bbb"></span>Revenue Target / mo</div>
           <div class="readout-val" id="sp-price-min">—</div>
         </div>
       </div>
@@ -4125,7 +4129,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   <!-- FORMULAS -->
   <div class="formulas-section section-anchor" id="formulas-section">
     <div class="formulas-header-row">
-      <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card for a full explanation</span></div>
+      <div class="formulas-header">Core FinOps Equations Referenced in Figure 1 — <span style="font-weight:400;letter-spacing:0">click any card (or press Enter/Space) for a full explanation</span></div>
       <button class="feature-request-btn feature-request-btn-compact" type="button" onclick="requestFeature('Formulas Section')" aria-label="Request a feature on Github">Request a feature on Github</button>
     </div>
     <div class="formulas-grid">
@@ -4151,16 +4155,16 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <!-- 2 -->
       <div class="formula-card" onclick="toggleTip(this)">
         <span class="info-btn">i</span>
-        <div class="f-label">Dev Cost Decay (Economies of Scale)</div>
+        <div class="f-label">Dev Cost Decay (Amortized Burden)</div>
         <div class="f-eq">DC(n) = <span class="hl2">K</span> · n<sup>−α</sup>,  α ∈ (0,1)</div>
         <div class="ftip">
           <div class="ftip-title">Development Cost Decay</div>
-          <div class="ftip-desc">As you onboard more clients, the fixed development investment (platform build, R&D, engineering) is spread across a larger base — so the cost per client decreases following a power-law decay curve. This is the core driver of the orange curve in the chart.</div>
+          <div class="ftip-desc">As you onboard more clients, shared development burden can be amortized more efficiently. In this model, the monthly development cost component decays with a power-law curve as scale increases.</div>
           <div class="ftip-vars">
-            <div class="ftip-var"><span class="ftip-sym">DC(n)</span><span class="ftip-def">Development cost per client at scale n</span></div>
-            <div class="ftip-var"><span class="ftip-sym hl2">K</span><span class="ftip-def">Initial development cost constant — the total platform build cost when n = 1</span></div>
+            <div class="ftip-var"><span class="ftip-sym">DC(n)</span><span class="ftip-def">Amortized monthly development cost component at scale n</span></div>
+            <div class="ftip-var"><span class="ftip-sym hl2">K</span><span class="ftip-def">Calibration constant derived from your development-cost input at reference n</span></div>
             <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Number of clients currently onboarded</span></div>
-            <div class="ftip-var"><span class="ftip-sym">−α</span><span class="ftip-def">Decay exponent (0 &lt; α &lt; 1). Higher α means faster cost reduction per client as scale grows</span></div>
+            <div class="ftip-var"><span class="ftip-sym">−α</span><span class="ftip-def">Decay exponent (0 &lt; α &lt; 1). Higher α means faster amortization as scale grows</span></div>
           </div>
         </div>
       </div>
@@ -4201,16 +4205,17 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <!-- 5 -->
       <div class="formula-card" onclick="toggleTip(this)">
         <span class="info-btn">i</span>
-        <div class="f-label">Minimum Price per Client</div>
-        <div class="f-eq">MP(n) = TC(n) · (1 + <span class="hl2">m</span>)</div>
+        <div class="f-label">Revenue Target with Margin</div>
+        <div class="f-eq">RT(n) = TC(n) · (1 + <span class="hl2">m</span>)</div>
         <div class="ftip">
-          <div class="ftip-title">Minimum Price per Client (P<sub>min</sub>)</div>
-          <div class="ftip-desc">The floor price a provider must charge each client to remain profitable at a given scale. Pricing below this level leads to operating losses. As n increases, TC(n) often declines in this model due to development cost decay, enabling more competitive pricing while protecting margins. This is the dotted black line in the chart.</div>
+          <div class="ftip-title">Revenue Target with Margin (RT)</div>
+          <div class="ftip-desc">This computes the monthly revenue target required to cover modeled total cost and include your target margin buffer at scale n. It is the dotted black line in the chart.</div>
           <div class="ftip-vars">
-            <div class="ftip-var"><span class="ftip-sym">MP(n)</span><span class="ftip-def">Minimum monthly price per client to achieve break-even plus target margin</span></div>
-            <div class="ftip-var"><span class="ftip-sym">TC(n)</span><span class="ftip-def">Total cost per client at n clients — the sum of development and infrastructure components</span></div>
-            <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Current number of clients — as this grows, per-client cost falls</span></div>
-            <div class="ftip-var"><span class="ftip-sym hl2">m</span><span class="ftip-def">Target profit margin per client — added on top of cost recovery to ensure profitability (e.g. 15% margin)</span></div>
+            <div class="ftip-var"><span class="ftip-sym">RT(n)</span><span class="ftip-def">Required monthly revenue target at scale n</span></div>
+            <div class="ftip-var"><span class="ftip-sym">TC(n)</span><span class="ftip-def">Total monthly cost at n clients — development plus infrastructure components</span></div>
+            <div class="ftip-var"><span class="ftip-sym">n</span><span class="ftip-def">Current number of clients used for scale-sensitive cost modeling</span></div>
+            <div class="ftip-var"><span class="ftip-sym hl2">m</span><span class="ftip-def">Target margin factor added on top of cost recovery (e.g. 15%)</span></div>
+            <div class="ftip-var"><span class="ftip-sym">Note</span><span class="ftip-def">Minimum price per client output in Group C is computed separately as <code>(TC(n) ÷ n) × (1 + m)</code>.</span></div>
           </div>
         </div>
       </div>
@@ -5005,7 +5010,7 @@ function buildData() {
     const infraRaw = c * Math.pow(n, b);
     const infraCud = g * c * Math.pow(n, b * 0.96);
     const total    = dev + infraRaw;
-    const revenue  = ARPU;
+    const revenue  = ARPU * n;
     const profit   = revenue - total;
     const priceMin = total * (1 + m);
     return { n, dev, infraRaw, infraCud, total, revenue, profit, priceMin };
@@ -5029,7 +5034,7 @@ function zoneFor(n, beN, ssEnd) {
   };
   if (n < ssEnd) return {
     name: 'Zone III · ROI Sweet Spot', color: '#009e73',
-    desc: 'Economies of scale reducing dev cost per client. Infrastructure scaling is still manageable.',
+    desc: 'Economies of scale reduce amortized development burden. Infrastructure scaling is still manageable.',
     insight: 'Optimal zone for FinOps governance. Lock in CUDs now to extend this zone further right.'
   };
   return {
@@ -5162,13 +5167,13 @@ function draw() {
 
   // Curves
   const curveDefs = [
-    { id: 'dev',       key: 'dev',      color: '#d55e00', dash: null,  w: 2.5, label: 'Dev Cost/Client' },
+    { id: 'dev',       key: 'dev',      color: '#d55e00', dash: null,  w: 2.5, label: 'Dev Cost (Amortized)' },
     { id: 'infra-raw', key: 'infraRaw', color: '#009e73', dash: null,  w: 2.5, label: 'Infra (On-Demand)' },
     { id: 'infra-cud', key: 'infraCud', color: '#009e73', dash: '7,4', w: 2,   label: 'Infra (CUDs)' },
-    { id: 'total',     key: 'total',    color: '#444444', dash: null,  w: 2.2, label: 'Total Cost/Client' },
-    { id: 'revenue',   key: 'revenue',  color: '#0072b2', dash: null,  w: 2.5, label: 'Revenue' },
+    { id: 'total',     key: 'total',    color: '#444444', dash: null,  w: 2.2, label: 'Total Cost / mo' },
+    { id: 'revenue',   key: 'revenue',  color: '#0072b2', dash: null,  w: 2.5, label: 'Revenue / mo' },
     { id: 'profit',    key: 'profit',   color: '#7b2d8b', dash: '6,3', w: 2,   label: 'Profit / ROI' },
-    { id: 'price-min', key: 'priceMin', color: '#555555', dash: '3,4', w: 1.5, label: 'Min Price/Client' },
+    { id: 'price-min', key: 'priceMin', color: '#555555', dash: '3,4', w: 1.5, label: 'Revenue Target / mo' },
   ];
 
   const lineGen = key => d3.line()
@@ -5352,7 +5357,7 @@ function draw() {
       const profEl = document.getElementById('sp-profit');
       profEl.textContent  = (d.profit >= 0 ? '+' : '') + fmt(d.profit);
       profEl.className    = 'readout-val ' + (d.profit >= 0 ? 'positive' : 'negative');
-      document.getElementById('sp-price-min').textContent = fmt(d.priceMin) + '/client';
+      document.getElementById('sp-price-min').textContent = fmt(d.priceMin);
 
       const zone = zoneFor(d.n, beN, ssEnd);
       const badge = document.getElementById('sp-zone-badge');
@@ -6259,7 +6264,7 @@ function updateOutputCards(inputs) {
     const hint = !hasNRef ? ` · add Client Count for accuracy` : '';
     setOut('oval-beN', beN === null ? 'Not reachable' : `> ${nMax.toLocaleString()} clients`, 'warn', 'warn');
     const subEl = document.querySelector('#out-beN .calc-out-sub');
-    if (subEl) subEl.textContent = 'Revenue per client stays below total cost per client across range' + hint;
+    if (subEl) subEl.textContent = 'Monthly revenue stays below total monthly cost across modeled range' + hint;
   }
 
   // ── MIN PRICE / CLIENT ────────────────────────────────────────
@@ -7188,36 +7193,72 @@ function initQbvFocusMode() {
 }
 
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
-function toggleTip(card) {
-  const tip    = card.querySelector('.ftip');
-  const isOpen = card.classList.contains('active');
+function closeFormulaCardTooltip(card) {
+  if (!card) return;
+  card.classList.remove('active');
+  card.setAttribute('aria-expanded', 'false');
+  const tip = card.querySelector('.ftip');
+  if (!tip) return;
+  tip.classList.remove('open');
+  tip.setAttribute('aria-hidden', 'true');
+}
 
-  // Close all open tips first
-  document.querySelectorAll('.formula-card.active').forEach(c => {
-    c.classList.remove('active');
-    c.querySelector('.ftip').classList.remove('open');
-  });
+function closeAllFormulaCardTooltips() {
+  document.querySelectorAll('.formula-card.active').forEach(closeFormulaCardTooltip);
+}
+
+function toggleTip(card) {
+  if (!card) return;
+  const tip = card.querySelector('.ftip');
+  if (!tip) return;
+
+  const isOpen = card.classList.contains('active');
+  closeAllFormulaCardTooltips();
 
   if (!isOpen) {
     // Determine if tooltip should flip downward (card in upper half of page)
-    const rect      = card.getBoundingClientRect();
+    const rect = card.getBoundingClientRect();
     const midWindow = window.innerHeight / 2;
     card.classList.toggle('flip-down', rect.top < midWindow);
     card.classList.add('active');
+    card.setAttribute('aria-expanded', 'true');
     tip.classList.add('open');
+    tip.setAttribute('aria-hidden', 'false');
     tip.style.pointerEvents = 'none'; // keep clicks passing through
   }
 }
 
-// Close tooltip when clicking outside
-document.addEventListener('click', e => {
-  if (!e.target.closest('.formula-card')) {
-    document.querySelectorAll('.formula-card.active').forEach(c => {
-      c.classList.remove('active');
-      c.querySelector('.ftip').classList.remove('open');
+function initFormulaCardTooltips() {
+  const cards = Array.from(document.querySelectorAll('.formula-card'));
+  if (!cards.length) return;
+
+  cards.forEach((card, idx) => {
+    const tip = card.querySelector('.ftip');
+    if (!tip) return;
+    const tipId = tip.id || `formula-tip-${idx + 1}`;
+
+    tip.id = tipId;
+    tip.setAttribute('role', 'tooltip');
+    tip.setAttribute('aria-hidden', card.classList.contains('active') ? 'false' : 'true');
+
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-controls', tipId);
+    card.setAttribute('aria-expanded', card.classList.contains('active') ? 'true' : 'false');
+
+    card.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggleTip(card);
     });
-  }
-});
+  });
+
+  // Close tooltip when clicking outside
+  document.addEventListener('click', event => {
+    if (event.target.closest('.formula-card')) return;
+    closeAllFormulaCardTooltips();
+  });
+}
 
 // Close tooltip on Escape key
 document.addEventListener('keydown', e => {
@@ -7226,10 +7267,7 @@ document.addEventListener('keydown', e => {
     closeQbvFocusMode();
     closeMcpModal();
     closeAllOutputCardTooltips();
-    document.querySelectorAll('.formula-card.active').forEach(c => {
-      c.classList.remove('active');
-      c.querySelector('.ftip').classList.remove('open');
-    });
+    closeAllFormulaCardTooltips();
   }
 });
 
@@ -7470,6 +7508,7 @@ async function updatePageMetadataFromGitHub() {
 }
 
 initOutputCardTooltips();
+initFormulaCardTooltips();
 cacheSubTexts();
 applyInformationIcons();
 updatePageMetadataFromGitHub();
