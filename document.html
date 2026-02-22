@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FinOps Calculator Documentation - User Guide and Technical Reference</title>
-<meta name="description" content="User guide and technical documentation for the FinOps and cloud economics calculator, including formulas, workflow, health logic, and MCP integration.">
-<link rel="canonical" href="https://duksh.github.io/document.html">
+<title>FiceCal Documentation - User Guide and Technical Reference</title>
+<meta name="description" content="User guide and technical documentation for FiceCal, including formulas, workflow, glossary, health logic, and MCP integration.">
+<link rel="canonical" href="https://ficecal.readthedocs.io/en/latest/">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Cloud Economics Framework">
-<meta property="og:title" content="FinOps Calculator Documentation">
+<meta property="og:site_name" content="FiceCal">
+<meta property="og:title" content="FiceCal Documentation">
 <meta property="og:description" content="Complete user guide and technical reference for calculator usage, modeling logic, share-state, and MCP tools.">
-<meta property="og:url" content="https://duksh.github.io/document.html">
+<meta property="og:url" content="https://ficecal.readthedocs.io/en/latest/">
 <meta property="og:image" content="https://duksh.github.io/github-finops-cal-image-01.jpg">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
 <meta property="og:image:alt" content="Preview card for FinOps calculator documentation and MCP technical guide.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FinOps Calculator Documentation">
+<meta name="twitter:title" content="FiceCal Documentation">
 <meta name="twitter:description" content="Guide to calculator sections, formulas, health recommendations, and MCP integration.">
 <meta name="twitter:image" content="https://duksh.github.io/github-finops-cal-image-01.jpg">
 <meta name="twitter:image:alt" content="Preview card for FinOps calculator documentation page.">
@@ -405,6 +405,49 @@
     font-weight: 600;
   }
 
+  .glossary-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  .glossary-term {
+    border: 1px solid rgba(24, 41, 70, 0.13);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.95);
+    padding: 11px;
+  }
+
+  .glossary-term h3 {
+    margin: 0 0 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #17365c;
+  }
+
+  .glossary-term p {
+    margin: 0;
+    color: #364363;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+
+  .glossary-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 3px 8px;
+    border: 1px solid rgba(0,158,115,0.32);
+    background: rgba(0,158,115,0.08);
+    color: #0f7358;
+  }
+
   @media (max-width: 980px) {
     .hero-grid,
     .split { grid-template-columns: 1fr; }
@@ -429,11 +472,12 @@
   <div class="docs-topbar-inner">
     <a class="brand-link" href="index.html">
       <span class="brand-pill" aria-hidden="true">F</span>
-      <span>FinOps Calculator Docs</span>
+      <span>FiceCal Docs</span>
     </a>
     <div class="top-actions">
-      <a class="top-link primary" href="index.html#calculator-section">Open Calculator</a>
-      <a class="top-link" href="index.html#mcp-section">MCP Overview</a>
+      <a class="top-link primary" href="calculator.html#calculator-section">Open Calculator</a>
+      <a class="top-link" href="#glossary">Glossary</a>
+      <a class="top-link" href="calculator.html#mcp-section">MCP Overview</a>
       <a class="top-link" href="https://github.com/duksh/finops-calculator-mcp" target="_blank" rel="noopener noreferrer">MCP Repo</a>
     </div>
   </div>
@@ -442,8 +486,8 @@
 <main id="main-content">
   <section class="hero" aria-labelledby="doc-hero-title">
     <p class="kicker">User guide and technical reference</p>
-    <h1 id="doc-hero-title">Documentation for the FinOps and Cloud Economics Calculator + MCP</h1>
-    <p>This document explains what each part of the calculator does, how the model derives outputs, and how to use the MCP server for assistant-driven workflows and automations.</p>
+    <h1 id="doc-hero-title">Documentation for FiceCal + MCP</h1>
+    <p>This document explains what each part of the calculator does, how the model derives outputs, and includes a consolidated glossary and MCP reference for assistant-driven workflows and automations.</p>
 
     <div class="hero-grid">
       <article class="hero-card">
@@ -468,6 +512,7 @@
         <li><a href="#quick-start">Quick start</a></li>
         <li><a href="#calculator-parts">Calculator sections explained</a></li>
         <li><a href="#calculation-logic">How calculations work</a></li>
+        <li><a href="#glossary">Glossary and definitions</a></li>
         <li><a href="#usage-workflow">How to use the calculator</a></li>
         <li><a href="#health-recommendations">Health and recommendations</a></li>
         <li><a href="#share-state">Share state links</a></li>
@@ -583,6 +628,43 @@
           <li><code>RealizationRatio = TotalRealizedValue / IdentifiedSavings</code></li>
           <li><code>ResidualValueGap = IdentifiedSavings - TotalRealizedValue</code></li>
         </ul>
+      </section>
+
+      <section class="doc-section" id="glossary" aria-labelledby="glossary-title">
+        <h2 id="glossary-title">Glossary and definitions</h2>
+        <p>This glossary is consolidated here to keep public documentation in one place and avoid cross-page fragmentation.</p>
+        <div class="glossary-grid" aria-label="Glossary terms">
+          <article class="glossary-term" id="term-modeled-cost"><h3>ModeledCost</h3><p>The projected monthly technology cost generated by the model for a given client volume. It combines the development decay component and infrastructure growth component for scenario analysis.</p><span class="glossary-tag">Forecast / CFO</span></article>
+          <article class="glossary-term" id="term-arpu"><h3>ARPU (Average Revenue Per User)</h3><p>Average revenue generated per client per month. In this calculator, ARPU is the core unit revenue assumption used to derive break-even, contribution margin, and CCER.</p><span class="glossary-tag">Unit economics</span></article>
+          <article class="glossary-term" id="term-break-even"><h3>Break-even</h3><p>The operating point where total monthly revenue equals total monthly cost. Above this threshold, the business becomes contribution-positive; below it, operations are loss-making.</p><span class="glossary-tag">Viability</span></article>
+          <article class="glossary-term" id="term-break-even-clients"><h3>Break-Even Clients / Minimum Viable Clients</h3><p>The minimum client count required to cover modeled costs under current pricing and cost assumptions. This is shown as the key threshold in KPI cards and chart insights.</p><span class="glossary-tag">Scale threshold</span></article>
+          <article class="glossary-term" id="term-min-price"><h3>Min Price / Minimum Price</h3><p>The minimum viable per-client price required to recover modeled cost and target margin at a given scale. Used for pricing floor and startup planning outputs.</p><span class="glossary-tag">Pricing</span></article>
+          <article class="glossary-term" id="term-vcpu"><h3>VCPU (Variable Cost Per User)</h3><p>Per-client share of variable infrastructure cost. It indicates how much incremental cloud cost each additional client introduces under current assumptions.</p><span class="glossary-tag">Cost structure</span></article>
+          <article class="glossary-term" id="term-contribution-margin"><h3>Contribution Margin</h3><p>ARPU minus VCPU. It measures the amount each client contributes to fixed-cost recovery and profit after covering their own variable infrastructure load.</p><span class="glossary-tag">Unit margin</span></article>
+          <article class="glossary-term" id="term-ccer"><h3>CCER (Cloud Cost Efficiency Ratio)</h3><p>Revenue divided by cloud infrastructure cost. A higher ratio means stronger revenue productivity per euro of cloud spend; low values indicate weak efficiency posture.</p><span class="glossary-tag">FinOps KPI</span></article>
+          <article class="glossary-term" id="term-cud"><h3>CUD / CUDs (Committed Use Discounts)</h3><p>Commitment-based cloud discounts (e.g., 1-3 year commitments) that reduce unit infrastructure cost versus on-demand rates when workloads are predictable.</p><span class="glossary-tag">Optimization lever</span></article>
+          <article class="glossary-term" id="term-savings-plan"><h3>Savings Plans</h3><p>A commitment discount mechanism (primarily AWS) that lowers compute pricing for committed usage levels. Equivalent in intent to commitment models on other clouds.</p><span class="glossary-tag">Cloud pricing</span></article>
+          <article class="glossary-term" id="term-reserved-instances"><h3>Reserved Instances</h3><p>Pre-purchased cloud capacity commitments that trade flexibility for lower unit cost. Used in optimization strategies alongside Savings Plans/CUDs.</p><span class="glossary-tag">Cloud pricing</span></article>
+          <article class="glossary-term" id="term-target-margin"><h3>Target Margin</h3><p>The profit margin objective applied above modeled cost in pricing equations. It defines how much profit buffer you require beyond pure cost recovery.</p><span class="glossary-tag">Pricing policy</span></article>
+          <article class="glossary-term" id="term-target-revenue"><h3>Target Revenue</h3><p>Monthly revenue level required for the selected startup planning assumptions (target clients or target price) while meeting cost and margin objectives.</p><span class="glossary-tag">Startup planning</span></article>
+          <article class="glossary-term" id="term-budget-variance"><h3>Budget Variance</h3><p>Difference between technology budget and modeled/scoped monthly cost. Positive values indicate headroom; negative values indicate overrun risk.</p><span class="glossary-tag">CFO control</span></article>
+          <article class="glossary-term" id="term-forecast-band"><h3>Forecast Band</h3><p>Base, best, and worst margin outcomes generated from growth plus efficiency/drift assumptions. This is a deterministic scenario band, not statistical probability.</p><span class="glossary-tag">Scenario planning</span></article>
+          <article class="glossary-term" id="term-forecast-spread"><h3>Forecast Spread</h3><p>Distance between best and worst forecast margins, often expressed versus revenue. Wider spread implies greater planning uncertainty and lower confidence.</p><span class="glossary-tag">Uncertainty signal</span></article>
+          <article class="glossary-term" id="term-savings-identified"><h3>Savings Identified</h3><p>Total monthly savings opportunity discovered by analysis (rightsizing, commitments, waste reduction), before realization has occurred.</p><span class="glossary-tag">Value pipeline</span></article>
+          <article class="glossary-term" id="term-savings-realized"><h3>Savings Realized</h3><p>Monthly savings already captured in spend outcomes, not just identified. This is the achieved value component used in realization tracking.</p><span class="glossary-tag">Value delivery</span></article>
+          <article class="glossary-term" id="term-cost-avoidance"><h3>Cost Avoidance</h3><p>Future spend prevented through proactive design, governance, or procurement decisions. Unlike realized savings, this often represents avoided increases.</p><span class="glossary-tag">FinOps value</span></article>
+          <article class="glossary-term" id="term-realization-ratio"><h3>Realization Ratio</h3><p>Percentage of identified value that has been achieved through realized savings plus cost avoidance. Tracks execution quality of FinOps initiatives.</p><span class="glossary-tag">Execution KPI</span></article>
+          <article class="glossary-term" id="term-realization-gap"><h3>Realization Gap</h3><p>Remaining difference between identified value target and achieved value. A positive gap indicates value still pending capture.</p><span class="glossary-tag">Execution KPI</span></article>
+          <article class="glossary-term" id="term-normalization"><h3>Normalization</h3><p>Process of converting monthly costs into a comparable per-client basis across selected domains. Enables fair comparison of mixed technology cost structures.</p><span class="glossary-tag">Comparability</span></article>
+          <article class="glossary-term" id="term-ntc-client"><h3>NTC/client (Normalized Technology Cost per Client)</h3><p>Aggregate selected-domain monthly cost divided by client count. This provides a unified per-client technology cost signal across cloud and non-cloud domains.</p><span class="glossary-tag">Portfolio metric</span></article>
+          <article class="glossary-term" id="term-financial-truth-mode"><h3>Financial Truth mode</h3><p>Baseline mode where selected domains are included with neutral weighting for transparent reporting. Used to anchor governance discussions on actual scoped spend.</p><span class="glossary-tag">Governance mode</span></article>
+          <article class="glossary-term" id="term-priority-index"><h3>Priority Index</h3><p>Policy-weighted prioritization lens used to emphasize selected dimensions when governance requires scenario emphasis over neutral baseline representation.</p><span class="glossary-tag">Governance mode</span></article>
+          <article class="glossary-term" id="term-tech-coverage"><h3>Tech Coverage</h3><p>Share of selected technology domains that currently have cost data provided. Higher coverage improves confidence in normalization outputs.</p><span class="glossary-tag">Data quality</span></article>
+          <article class="glossary-term" id="term-focus-maturity"><h3>Focus Maturity</h3><p>Confidence level for scoped normalization quality (e.g., Low/Medium/High), based on data completeness and domain coverage.</p><span class="glossary-tag">Data quality</span></article>
+          <article class="glossary-term" id="term-nref"><h3>reference n / nRef</h3><p>The current client baseline used for calibrating model coefficients from your present-day cost and usage conditions.</p><span class="glossary-tag">Model calibration</span></article>
+          <article class="glossary-term" id="term-nmax"><h3>nMax</h3><p>Maximum client count shown in chart/scanning ranges. It controls projection horizon for break-even search and curve visualization range.</p><span class="glossary-tag">Projection horizon</span></article>
+          <article class="glossary-term" id="term-cfo-forecast-dashboard"><h3>CFO Forecast Dashboard</h3><p>The planning panel that summarizes budget checkpoints, margin scenarios, and realization trajectories for month-by-month finance review.</p><span class="glossary-tag">Finance reporting</span></article>
+        </div>
       </section>
 
       <section class="doc-section" id="usage-workflow" aria-labelledby="usage-workflow-title">
