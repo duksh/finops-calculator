@@ -2388,6 +2388,11 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-color: #0072b2;
   box-shadow: 0 0 0 3px rgba(0,114,178,0.12);
 }
+.calc-field.invalid .calc-input-wrap,
+.startup-field.invalid .calc-input-wrap {
+  border-color: #d55e00;
+  box-shadow: 0 0 0 3px rgba(213,94,0,0.14);
+}
 .calc-input-wrap input {
   flex: 1;
   min-width: 0;
@@ -2447,6 +2452,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
   font-size: var(--font-size-2xs);
   color: var(--muted);
   line-height: 1.45;
+}
+.calc-input-error {
+  margin-top: 6px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+  color: #a33f00;
 }
 
 /* Startup planner (ARPU unknown) */
@@ -5608,7 +5620,7 @@ const UI_INTENT_PROFILES = {
     recommendationWeights: { pricing: 0, infrastructure: 1, marketing: 2, crm: 3, governance: 4, all: 5 },
     kpiOrder: ['out-beN', 'out-minPrice', 'out-margin', 'out-ccer', 'out-vcpu', 'out-targetRevenue'],
     guidedSteps: [
-      { label: 'Viability', requires: ['hasAnyCostInput', 'hasARPU'] },
+      { label: 'Viability', requires: ['hasInfraInput', 'hasARPU'] },
       { label: 'Risk', requires: ['hasHealthScore'] },
       { label: 'Action', requires: ['hasRecommendations'] }
     ],
@@ -5628,7 +5640,7 @@ const UI_INTENT_PROFILES = {
     recommendationWeights: { infrastructure: 0, governance: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
     kpiOrder: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity'],
     guidedSteps: [
-      { label: 'Budget', requires: ['hasAnyCostInput', 'hasBudget'] },
+      { label: 'Budget', requires: ['hasInfraInput', 'hasBudget'] },
       { label: 'Forecast', requires: ['hasARPU', 'hasForecastSignal'] },
       { label: 'Action', requires: ['hasRecommendations'] }
     ],
@@ -5668,7 +5680,7 @@ const UI_INTENT_PROFILES = {
     recommendationWeights: { all: 0, infrastructure: 1, pricing: 2, governance: 3, crm: 4, marketing: 5 },
     kpiOrder: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient'],
     guidedSteps: [
-      { label: 'Narrative', requires: ['hasAnyCostInput', 'hasARPU'] },
+      { label: 'Narrative', requires: ['hasInfraInput', 'hasARPU'] },
       { label: 'Risk', requires: ['hasHealthScore', 'hasForecastSignal'] },
       { label: 'Readout', requires: ['hasQbvRows'] }
     ],
@@ -6667,6 +6679,7 @@ function buildIntentSignalState(inputs = {}) {
   const hasAnyCostInput =
     (devPerClient !== null && devPerClient !== undefined && devPerClient >= 0) ||
     (infraTotal !== null && infraTotal !== undefined && infraTotal >= 0);
+  const hasInfraInput = infraTotal !== null && infraTotal !== undefined && infraTotal >= 0;
   const hasARPU =
     (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0) ||
     (arpuInput !== null && arpuInput !== undefined && arpuInput > 0);
@@ -6691,6 +6704,7 @@ function buildIntentSignalState(inputs = {}) {
 
   return {
     hasAnyCostInput,
+    hasInfraInput,
     hasARPU,
     hasBudget,
     hasForecastSignal,
@@ -6741,8 +6755,8 @@ function renderRoleOnboardingState(inputs = {}) {
   const expectedOutcomes = Array.isArray(profile.outcomePreview) && profile.outcomePreview.length
     ? profile.outcomePreview.slice(0, 3).join(', ')
     : 'top outcomes and action guidance';
-  const filledCoreCount = Number(Boolean(signals.hasAnyCostInput)) + Number(Boolean(signals.hasARPU));
-  const hasRequiredInputs = Boolean(signals.hasAnyCostInput && signals.hasARPU);
+  const filledCoreCount = Number(Boolean(signals.hasInfraInput)) + Number(Boolean(signals.hasARPU));
+  const hasRequiredInputs = Boolean(signals.hasInfraInput && signals.hasARPU);
   const hasOutcomeReady = Boolean(signals.hasHealthScore && signals.hasRecommendations);
   renderIntentOutcomePreview(profile, { locked: !hasRequiredInputs });
 
@@ -6790,11 +6804,11 @@ function renderRoleOnboardingState(inputs = {}) {
   if (nextStepCopyEl) {
     if (!hasRequiredInputs) {
       const missing = [];
-      if (!signals.hasAnyCostInput) missing.push('Total Infra Cost');
+      if (!signals.hasInfraInput) missing.push('Total Infra Cost');
       if (!signals.hasARPU) missing.push('Revenue / Client (ARPU)');
       nextStepCopyEl.textContent = `Step 2: fill ${missing.join(' + ')}. Step 3 unlocks: ${expectedOutcomes}.`;
       if (step2CtaEl) {
-        if (!signals.hasAnyCostInput) {
+        if (!signals.hasInfraInput) {
           step2CtaEl.textContent = 'Start Step 2';
           step2CtaEl.setAttribute('href', '#field-infraTotal');
         } else {
@@ -6974,7 +6988,7 @@ function syncUiIntentButtons() {
   const activeIntent = getCurrentUiIntent();
   const profile = getUiIntentProfile(activeIntent);
   const signals = buildIntentSignalState(lastInputs || {});
-  const hasRequiredInputs = Boolean(signals.hasAnyCostInput && signals.hasARPU);
+  const hasRequiredInputs = Boolean(signals.hasInfraInput && signals.hasARPU);
 
   document.querySelectorAll('[data-ui-intent-btn]').forEach(btn => {
     const intent = btn.getAttribute('data-ui-intent-btn');
@@ -8325,9 +8339,59 @@ function updateHealthAndRecommendations(inputs) {
   renderIntentGuidedPath(inputs || {});
 }
 
+function setNumericFieldValidation(inputEl, message) {
+  if (!inputEl) return;
+  const fieldWrap = inputEl.closest('.calc-field, .startup-field');
+  if (!fieldWrap) return;
+
+  const hasError = Boolean(message);
+  fieldWrap.classList.toggle('invalid', hasError);
+  inputEl.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+  inputEl.setCustomValidity(hasError ? message : '');
+
+  let errorEl = fieldWrap.querySelector('.calc-input-error');
+  if (!hasError) {
+    if (errorEl) errorEl.remove();
+    return;
+  }
+
+  if (!errorEl) {
+    errorEl = document.createElement('div');
+    errorEl.className = 'calc-input-error';
+    fieldWrap.appendChild(errorEl);
+  }
+  errorEl.textContent = message;
+}
+
 function getInp(id) {
-  const v = parseFloat(document.getElementById(id).value);
-  return isNaN(v) ? null : v;
+  const input = document.getElementById(id);
+  if (!input) return null;
+
+  const rawValue = String(input.value ?? '').trim();
+  if (rawValue === '') {
+    setNumericFieldValidation(input, '');
+    return null;
+  }
+
+  const num = Number(rawValue);
+  if (!Number.isFinite(num)) {
+    setNumericFieldValidation(input, 'Enter a valid number.');
+    return null;
+  }
+
+  const minAttr = input.getAttribute('min');
+  const maxAttr = input.getAttribute('max');
+  if (minAttr !== null && minAttr !== '' && num < Number(minAttr)) {
+    setNumericFieldValidation(input, `Value must be >= ${minAttr}.`);
+    return null;
+  }
+  if (maxAttr !== null && maxAttr !== '' && num > Number(maxAttr)) {
+    setNumericFieldValidation(input, `Value must be <= ${maxAttr}.`);
+    return null;
+  }
+
+  setNumericFieldValidation(input, '');
+  return num;
 }
 
 function getInputString(id, fallback = '') {
@@ -8703,6 +8767,16 @@ function isMeaningfulInputValue(input, rawValue) {
   if (value === '') return false;
   const defaultValue = input.dataset.defaultValue;
   if (typeof defaultValue === 'string' && value === defaultValue) return false;
+
+  if (input.type === 'number') {
+    const numericValue = Number(value);
+    if (!Number.isFinite(numericValue)) return false;
+    const minAttr = input.getAttribute('min');
+    const maxAttr = input.getAttribute('max');
+    if (minAttr !== null && minAttr !== '' && numericValue < Number(minAttr)) return false;
+    if (maxAttr !== null && maxAttr !== '' && numericValue > Number(maxAttr)) return false;
+  }
+
   return true;
 }
 
@@ -9655,7 +9729,15 @@ function resetModel() {
       }
     }
     const field = el && el.closest('.calc-field, .startup-field');
-    if (field) field.classList.remove('has-value');
+    if (field) {
+      field.classList.remove('has-value', 'invalid');
+      const errorEl = field.querySelector('.calc-input-error');
+      if (errorEl) errorEl.remove();
+    }
+    if (el) {
+      el.removeAttribute('aria-invalid');
+      if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
+    }
   });
   for (let i = 0; i < ids.length; i++) {
     const p = document.getElementById('cp-' + i);
