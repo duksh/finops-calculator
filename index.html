@@ -2661,6 +2661,59 @@ body.chart-focus-open #chart-section .chart-focus-close {
   margin-left: 6px;
   cursor: help;
 }
+.calc-inline-help--hint:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.calc-inline-help-popover {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  z-index: 240;
+  max-width: min(320px, 76vw);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,114,178,0.28);
+  background: rgba(11, 35, 61, 0.96);
+  color: #f4f9ff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(7, 24, 42, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, calc(-100% - 8px));
+  transition: opacity 0.12s ease;
+  pointer-events: none;
+}
+.calc-inline-help-popover.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.calc-inline-help-popover::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 1px solid rgba(0,114,178,0.28);
+  border-bottom: 1px solid rgba(0,114,178,0.28);
+  background: rgba(11, 35, 61, 0.96);
+}
+.calc-inline-help-popover[data-placement="bottom"] {
+  transform: translate(-50%, 8px);
+}
+.calc-inline-help-popover[data-placement="bottom"]::after {
+  top: -5px;
+  bottom: auto;
+  border-right: none;
+  border-bottom: none;
+  border-left: 1px solid rgba(0,114,178,0.28);
+  border-top: 1px solid rgba(0,114,178,0.28);
+}
 .tech-domain-controls {
   display: flex;
   flex-wrap: wrap;
@@ -4242,7 +4295,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
         <div class="calc-actions">
           <div class="calc-actions-row calc-actions-row--onboarding">
-            <div class="calc-actions-hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes.">3 quick steps <span class="calc-inline-help calc-inline-help--hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes." aria-hidden="true">?</span></div>
+            <div class="calc-actions-hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes.">3 quick steps <span class="calc-inline-help calc-inline-help--hint" data-help="Your onboarding checklist: choose role, provide core inputs, then review outcomes." aria-label="Help: quick steps overview" tabindex="0" role="button">?</span></div>
             <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
               <div class="calc-onboarding-step is-active" data-onboarding-step="1" title="Step 1: choose the persona that best matches your decision context.">
                 <span class="calc-onboarding-step-num">1</span>
@@ -4260,7 +4313,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--persona">
             <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
-              <span class="calc-mode-label" title="Select your role to prioritize the most relevant KPIs and recommendations.">I am... <span class="calc-inline-help calc-inline-help--hint" title="Select your role to prioritize the most relevant KPIs and recommendations." aria-hidden="true">?</span></span>
+              <span class="calc-mode-label" title="Select your role to prioritize the most relevant KPIs and recommendations.">I am... <span class="calc-inline-help calc-inline-help--hint" data-help="Select your role to prioritize the most relevant KPIs and recommendations." aria-label="Help: role selector" tabindex="0" role="button">?</span></span>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Finance</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="operations" onclick="setUiIntent('operations')" aria-pressed="false">Operations</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architecture</button>
@@ -4270,11 +4323,11 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--analysis">
             <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
-              <span class="calc-mode-label" id="calc-outcomes-label" title="Preview of the first outcomes that become available for your selected role.">You'll get first <span class="calc-inline-help calc-inline-help--hint" title="Preview of the first outcomes that become available for your selected role." aria-hidden="true">?</span></span>
+              <span class="calc-mode-label" id="calc-outcomes-label" title="Preview of the first outcomes that become available for your selected role.">You'll get first <span class="calc-inline-help calc-inline-help--hint" data-help="Preview of the first outcomes that become available for your selected role." aria-label="Help: first outcomes preview" tabindex="0" role="button">?</span></span>
               <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
             </div>
             <div class="calc-next-step" id="calc-next-step">
-              <div class="calc-next-step-title" title="The recommended next action to continue the guided workflow.">Do this next <span class="calc-inline-help calc-inline-help--hint" title="The recommended next action to continue the guided workflow." aria-hidden="true">?</span></div>
+              <div class="calc-next-step-title" title="The recommended next action to continue the guided workflow.">Do this next <span class="calc-inline-help calc-inline-help--hint" data-help="The recommended next action to continue the guided workflow." aria-label="Help: next action" tabindex="0" role="button">?</span></div>
               <p class="calc-next-step-copy" id="calc-next-step-copy">Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.</p>
               <div class="calc-next-step-links">
                 <a class="calc-next-step-link calc-next-step-link--primary" id="calc-step2-cta" href="#field-infraTotal">Start Step 2</a>
@@ -4282,7 +4335,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             </div>
             <details class="calc-disclosure intent-path-wrap" id="intent-path-wrap">
               <summary title="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed.">
-                Guided path <span class="calc-inline-help calc-inline-help--hint" title="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed." aria-hidden="true">?</span>
+                Guided path <span class="calc-inline-help calc-inline-help--hint" data-help="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed." aria-label="Help: guided path" tabindex="0" role="button">?</span>
                 <span class="intent-path-progress" id="intent-path-progress">0/3 steps complete</span>
               </summary>
               <div class="calc-disclosure-body">
@@ -4297,11 +4350,11 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               Copy state link
             </button>
             <details class="calc-disclosure" id="calc-more-actions">
-              <summary title="Advanced controls for manual mode overrides and maintenance actions.">More actions (advanced) <span class="calc-inline-help calc-inline-help--hint" title="Advanced controls for manual mode overrides and maintenance actions." aria-hidden="true">?</span></summary>
+              <summary title="Advanced controls for manual mode overrides and maintenance actions.">More actions (advanced) <span class="calc-inline-help calc-inline-help--hint" data-help="Advanced controls for manual mode overrides and maintenance actions." aria-label="Help: advanced actions" tabindex="0" role="button">?</span></summary>
               <div class="calc-disclosure-body">
                 <div class="calc-advanced-wrap">
                   <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
-                    <span class="calc-mode-label" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls.">Mode override <span class="calc-inline-help calc-inline-help--hint" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls." aria-hidden="true">?</span></span>
+                    <span class="calc-mode-label" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls.">Mode override <span class="calc-inline-help calc-inline-help--hint" data-help="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls." aria-label="Help: mode override" tabindex="0" role="button">?</span></span>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
@@ -7903,30 +7956,41 @@ const DEMO_SCENARIOS = {
       ui: 'operations',
       um: 'operator',
       i: {
-        nRef: 320,
-        devPerClient: 260,
-        infraTotal: 4200,
-        ARPU: 78,
-        startupTargetPrice: 82,
-        startupTargetClients: 360,
-        cudPct: 34,
-        margin: 18,
+        nRef: 420,
+        devPerClient: 210,
+        infraTotal: 3600,
+        ARPU: 95,
+        startupTargetPrice: 96,
+        startupTargetClients: 420,
+        cudPct: 58,
+        margin: 20,
         nMax: 3000,
-        budgetMonthly: 7500,
-        forecastGrowthPct: 16,
-        forecastBestEfficiencyPct: 10,
-        forecastWorstDriftPct: 6,
-        savingsIdentified: 2400,
-        savingsRealized: 1700,
-        costAvoidance: 650,
-        costSaaS: 700,
-        costLicensing: 420,
-        costPrivateCloud: 380,
-        costDataCenter: 250,
-        costLabor: 560
+        budgetMonthly: 9000,
+        forecastGrowthPct: 18,
+        forecastBestEfficiencyPct: 12,
+        forecastWorstDriftPct: 4,
+        savingsIdentified: 2800,
+        savingsRealized: 2350,
+        costAvoidance: 950,
+        costSaaS: 620,
+        costLicensing: 350,
+        costPrivateCloud: 220,
+        costDataCenter: 160,
+        costLabor: 430,
+        aiEnabled: 'on',
+        aiPricingMode: 'blended',
+        aiRatePer1MInput: 3,
+        aiRatePer1MOutput: 9,
+        aiRatePer1MTotal: 5,
+        aiInputTokensM: 9,
+        aiOutputTokensM: 6,
+        aiRetryRatePct: 4,
+        aiPremiumMixPct: 9,
+        aiSharedOverheadMonthly: 700,
+        aiAllocationPolicy: 'token-weighted'
       },
       td: [...VALID_TECH_DOMAIN_KEYS],
-      p: ['aws', 'gcp'],
+      p: ['aws', 'azure', 'gcp'],
       h: []
     }
   },
@@ -7938,30 +8002,41 @@ const DEMO_SCENARIOS = {
       ui: 'operations',
       um: 'operator',
       i: {
-        nRef: 70,
-        devPerClient: 980,
-        infraTotal: 5200,
-        ARPU: 22,
-        startupTargetPrice: 24,
-        startupTargetClients: 120,
-        cudPct: 4,
-        margin: 25,
+        nRef: 55,
+        devPerClient: 1200,
+        infraTotal: 6400,
+        ARPU: 18,
+        startupTargetPrice: 20,
+        startupTargetClients: 90,
+        cudPct: 0,
+        margin: 30,
         nMax: 1800,
-        budgetMonthly: 4300,
-        forecastGrowthPct: -8,
-        forecastBestEfficiencyPct: 2,
-        forecastWorstDriftPct: 28,
-        savingsIdentified: 3000,
-        savingsRealized: 450,
-        costAvoidance: 120,
-        costSaaS: 1300,
-        costLicensing: 900,
-        costPrivateCloud: 1100,
-        costDataCenter: 760,
-        costLabor: 1400
+        budgetMonthly: 4200,
+        forecastGrowthPct: -12,
+        forecastBestEfficiencyPct: 1,
+        forecastWorstDriftPct: 35,
+        savingsIdentified: 3600,
+        savingsRealized: 280,
+        costAvoidance: 60,
+        costSaaS: 1500,
+        costLicensing: 1200,
+        costPrivateCloud: 1450,
+        costDataCenter: 980,
+        costLabor: 1800,
+        aiEnabled: 'on',
+        aiPricingMode: 'tiered',
+        aiRatePer1MInput: 5,
+        aiRatePer1MOutput: 18,
+        aiRatePer1MTotal: 12,
+        aiInputTokensM: 24,
+        aiOutputTokensM: 17,
+        aiRetryRatePct: 45,
+        aiPremiumMixPct: 72,
+        aiSharedOverheadMonthly: 3200,
+        aiAllocationPolicy: 'premium-weighted'
       },
       td: [...VALID_TECH_DOMAIN_KEYS],
-      p: ['multi'],
+      p: ['aws', 'azure', 'gcp'],
       h: []
     }
   }
@@ -10276,6 +10351,100 @@ function applyInformationIcons() {
   });
 }
 
+function initInlineHelpHints() {
+  const hints = Array.from(document.querySelectorAll('.calc-inline-help--hint[data-help]'));
+  if (!hints.length || window.__inlineHelpHintsInitialized) return;
+  const popover = document.createElement('div');
+  popover.className = 'calc-inline-help-popover';
+  popover.setAttribute('role', 'tooltip');
+  document.body.appendChild(popover);
+
+  let activeHint = null;
+
+  const placePopover = (el) => {
+    if (!el) return;
+    const helpText = el.getAttribute('data-help') || '';
+    popover.textContent = helpText;
+    popover.classList.add('is-open');
+    popover.dataset.placement = 'top';
+
+    const rect = el.getBoundingClientRect();
+    const tipRect = popover.getBoundingClientRect();
+    const margin = 10;
+    let left = rect.left + (rect.width / 2);
+    let top = rect.top - 10;
+    let placement = 'top';
+
+    if ((top - tipRect.height) < margin) {
+      placement = 'bottom';
+      top = rect.bottom + 10;
+    }
+
+    const minLeft = margin + (tipRect.width / 2);
+    const maxLeft = window.innerWidth - margin - (tipRect.width / 2);
+    left = Math.min(maxLeft, Math.max(minLeft, left));
+
+    popover.style.left = `${left}px`;
+    popover.style.top = `${top}px`;
+    popover.dataset.placement = placement;
+  };
+
+  const closeAll = () => {
+    popover.classList.remove('is-open');
+    hints.forEach((el) => el.classList.remove('is-open'));
+    activeHint = null;
+  };
+
+  const showHint = (el, toggle = false) => {
+    if (!el) return;
+    const alreadyOpen = activeHint === el && popover.classList.contains('is-open');
+    if (toggle && alreadyOpen) {
+      closeAll();
+      return;
+    }
+    hints.forEach((node) => {
+      if (node !== el) node.classList.remove('is-open');
+    });
+    el.classList.add('is-open');
+    activeHint = el;
+    placePopover(el);
+  };
+
+  hints.forEach((el) => {
+    el.addEventListener('mouseenter', () => showHint(el));
+    el.addEventListener('focus', () => showHint(el));
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      showHint(el, true);
+    });
+
+    el.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        showHint(el, true);
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeAll();
+        el.blur();
+      }
+    });
+  });
+
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeAll();
+  });
+  window.addEventListener('resize', () => {
+    if (activeHint) placePopover(activeHint);
+  });
+  window.addEventListener('scroll', () => {
+    if (activeHint) placePopover(activeHint);
+  }, true);
+
+  window.__inlineHelpHintsInitialized = true;
+}
+
 function formatPageMetaDate(isoString) {
   const d = new Date(isoString);
   if (!Number.isFinite(d.getTime())) return null;
@@ -10363,6 +10532,7 @@ initOutputCardTooltips();
 initFormulaCardTooltips();
 cacheSubTexts();
 applyInformationIcons();
+initInlineHelpHints();
 applyGlossaryAutoLinks();
 updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
