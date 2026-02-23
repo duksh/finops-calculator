@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-02-23",
+  "runtime": {
+    "defaultMode": "quick",
+    "modes": ["quick", "operator", "architect"]
+  },
+  "features": [
+    {
+      "id": "core-economics",
+      "manifestPath": "src/features/core-economics/feature.json",
+      "enabled": true,
+      "required": true
+    },
+    {
+      "id": "multi-tech-normalization",
+      "manifestPath": "src/features/multi-tech-normalization/feature.json",
+      "enabled": true,
+      "required": false
+    },
+    {
+      "id": "ai-token-economics",
+      "manifestPath": "src/features/ai-token-economics/feature.json",
+      "enabled": false,
+      "required": false
+    }
+  ]
+}

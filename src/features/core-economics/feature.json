@@ -1,0 +1,30 @@
+{
+  "id": "core-economics",
+  "name": "Core Economics Engine",
+  "version": "2.1.0",
+  "owner": "ficecal-core",
+  "status": "active",
+  "dependsOn": [],
+  "uiModes": ["quick", "operator", "architect"],
+  "inputs": [
+    "nRef",
+    "devPerClient",
+    "infraTotal",
+    "ARPU",
+    "margin",
+    "cudPct",
+    "nMax"
+  ],
+  "outputs": [
+    "breakEvenClients",
+    "minPricePerClient",
+    "contributionMargin",
+    "ccer",
+    "budgetVariance"
+  ],
+  "healthSignals": [
+    "zoneKey",
+    "zoneScore",
+    "failedChecks"
+  ]
+}

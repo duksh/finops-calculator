@@ -1,0 +1,30 @@
+{
+  "id": "ai-token-economics",
+  "name": "AI Token Economics",
+  "version": "0.1.0",
+  "owner": "ficecal-ai-finops",
+  "status": "experimental",
+  "dependsOn": ["core-economics"],
+  "uiModes": ["architect"],
+  "inputs": [
+    "aiInference.enabled",
+    "aiInference.pricingMode",
+    "aiInference.ratePer1MInput",
+    "aiInference.ratePer1MOutput",
+    "aiInference.ratePer1MTotal",
+    "aiInference.sharedOverheadMonthly",
+    "aiInference.allocationPolicy",
+    "aiInference.teams"
+  ],
+  "outputs": [
+    "aiTotalTokenCost",
+    "aiTotalAllocatedCost",
+    "aiCostPerClient",
+    "aiRetryInflationPct",
+    "aiPremiumMixPct"
+  ],
+  "healthSignals": [
+    "tokenGovernanceRisk",
+    "allocationConfidence"
+  ]
+}

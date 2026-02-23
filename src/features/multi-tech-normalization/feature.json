@@ -1,0 +1,25 @@
+{
+  "id": "multi-tech-normalization",
+  "name": "Multi-Technology Normalization",
+  "version": "2.0.0",
+  "owner": "ficecal-finops-portfolio",
+  "status": "active",
+  "dependsOn": ["core-economics"],
+  "uiModes": ["operator", "architect"],
+  "inputs": [
+    "techDomains",
+    "costSaaS",
+    "costLicensing",
+    "costPrivateCloud",
+    "costDataCenter",
+    "costLabor"
+  ],
+  "outputs": [
+    "normalizedTechCostPerClient",
+    "coveragePct",
+    "focusMaturity"
+  ],
+  "healthSignals": [
+    "normalizationConfidence"
+  ]
+}
