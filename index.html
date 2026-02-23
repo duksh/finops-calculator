@@ -2657,6 +2657,10 @@ body.chart-focus-open #chart-section .chart-focus-close {
   line-height: 1;
 }
 .calc-inline-help:hover { background: rgba(0,114,178,0.16); }
+.calc-inline-help--hint {
+  margin-left: 6px;
+  cursor: help;
+}
 .tech-domain-controls {
   display: flex;
   flex-wrap: wrap;
@@ -4238,17 +4242,17 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
         <div class="calc-actions">
           <div class="calc-actions-row calc-actions-row--onboarding">
-            <div class="calc-actions-hint">3 quick steps</div>
+            <div class="calc-actions-hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes.">3 quick steps <span class="calc-inline-help calc-inline-help--hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes." aria-hidden="true">?</span></div>
             <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
-              <div class="calc-onboarding-step is-active" data-onboarding-step="1">
+              <div class="calc-onboarding-step is-active" data-onboarding-step="1" title="Step 1: choose the persona that best matches your decision context.">
                 <span class="calc-onboarding-step-num">1</span>
                 <span class="calc-onboarding-step-text" id="calc-step-role">Pick your role</span>
               </div>
-              <div class="calc-onboarding-step" data-onboarding-step="2">
+              <div class="calc-onboarding-step" data-onboarding-step="2" title="Step 2: enter Infra Cost and ARPU to unlock core viability outputs.">
                 <span class="calc-onboarding-step-num">2</span>
                 <span class="calc-onboarding-step-text" id="calc-step-inputs">Fill Infra Cost + ARPU</span>
               </div>
-              <div class="calc-onboarding-step" data-onboarding-step="3">
+              <div class="calc-onboarding-step" data-onboarding-step="3" title="Step 3: review health recommendations and take the first suggested action.">
                 <span class="calc-onboarding-step-num">3</span>
                 <span class="calc-onboarding-step-text" id="calc-step-outcomes">Review top 3 outcomes + action</span>
               </div>
@@ -4256,29 +4260,29 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--persona">
             <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
-              <span class="calc-mode-label">I am...</span>
+              <span class="calc-mode-label" title="Select your role to prioritize the most relevant KPIs and recommendations.">I am... <span class="calc-inline-help calc-inline-help--hint" title="Select your role to prioritize the most relevant KPIs and recommendations." aria-hidden="true">?</span></span>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Finance</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="operations" onclick="setUiIntent('operations')" aria-pressed="false">Operations</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architecture</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="executive" onclick="setUiIntent('executive')" aria-pressed="false">Executive</button>
             </div>
-            <div class="calc-intent-summary" id="calc-intent-summary">As Finance, prioritize break-even, minimum price, and contribution margin for a fast viability decision.</div>
+            <div class="calc-intent-summary" id="calc-intent-summary" title="Role-specific summary of what this profile optimizes first.">As Finance, prioritize break-even, minimum price, and contribution margin for a fast viability decision.</div>
           </div>
           <div class="calc-actions-row calc-actions-row--analysis">
             <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
-              <span class="calc-mode-label" id="calc-outcomes-label">You'll get first</span>
+              <span class="calc-mode-label" id="calc-outcomes-label" title="Preview of the first outcomes that become available for your selected role.">You'll get first <span class="calc-inline-help calc-inline-help--hint" title="Preview of the first outcomes that become available for your selected role." aria-hidden="true">?</span></span>
               <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
             </div>
             <div class="calc-next-step" id="calc-next-step">
-              <div class="calc-next-step-title">Do this next</div>
+              <div class="calc-next-step-title" title="The recommended next action to continue the guided workflow.">Do this next <span class="calc-inline-help calc-inline-help--hint" title="The recommended next action to continue the guided workflow." aria-hidden="true">?</span></div>
               <p class="calc-next-step-copy" id="calc-next-step-copy">Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.</p>
               <div class="calc-next-step-links">
                 <a class="calc-next-step-link calc-next-step-link--primary" id="calc-step2-cta" href="#field-infraTotal">Start Step 2</a>
               </div>
             </div>
             <details class="calc-disclosure intent-path-wrap" id="intent-path-wrap">
-              <summary>
-                Guided path
+              <summary title="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed.">
+                Guided path <span class="calc-inline-help calc-inline-help--hint" title="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed." aria-hidden="true">?</span>
                 <span class="intent-path-progress" id="intent-path-progress">0/3 steps complete</span>
               </summary>
               <div class="calc-disclosure-body">
@@ -4288,16 +4292,16 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             </details>
           </div>
           <div class="calc-actions-row calc-actions-row--controls">
-            <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
+            <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state" title="Copy a URL containing current inputs, role, mode, and selected controls.">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
               Copy state link
             </button>
             <details class="calc-disclosure" id="calc-more-actions">
-              <summary>More actions (advanced)</summary>
+              <summary title="Advanced controls for manual mode overrides and maintenance actions.">More actions (advanced) <span class="calc-inline-help calc-inline-help--hint" title="Advanced controls for manual mode overrides and maintenance actions." aria-hidden="true">?</span></summary>
               <div class="calc-disclosure-body">
                 <div class="calc-advanced-wrap">
                   <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
-                    <span class="calc-mode-label">Mode override</span>
+                    <span class="calc-mode-label" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls.">Mode override <span class="calc-inline-help calc-inline-help--hint" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls." aria-hidden="true">?</span></span>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
