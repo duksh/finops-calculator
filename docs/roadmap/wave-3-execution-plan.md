@@ -35,7 +35,7 @@ Closeout artifacts:
 - Acceptance checklist: `docs/roadmap/wave-3-acceptance-checklist.md`
 - Regression test script: `scripts/test-wave3-intent-share-state.js`
 - UI contract regression script: `scripts/test-wave3-ui-contracts.js`
-- Release note: `docs/releases/release-2-wave-3-complete.md`
+- Release note: `docs/releases/release-3-wave-3-complete.md`
 
 ## I1. Intent selector and routing
 
@@ -138,4 +138,4 @@ This keeps one model while changing presentation and decision flow.
 - `docs/ai-token-economics.md`
 - `docs/roadmap/wave-3-modularization-backlog.md`
 - `docs/roadmap/wave-3-acceptance-checklist.md`
-- `docs/releases/release-2-wave-3-complete.md`
+- `docs/releases/release-3-wave-3-complete.md`

@@ -100,5 +100,5 @@ Record output:
 - [ ] Product acceptance complete
 - [ ] UX acceptance complete
 - [ ] Model acceptance complete
-- [ ] Release note prepared (`docs/releases/release-2-wave-3-complete.md`)
+- [ ] Release note prepared (`docs/releases/release-3-wave-3-complete.md`)
 - [ ] Ready for public mirror verification flow (`scripts/sync-public-pages.sh --check`)
