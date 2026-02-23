@@ -1857,18 +1857,58 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .calc-actions-hint {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #2e5c8a;
+  color: #1f4f7d;
   margin-bottom: 2px;
+}
+.calc-onboarding-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 2px 0 4px;
+}
+.calc-onboarding-step {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 5px;
+  align-items: center;
+  border: 1px solid rgba(31,79,125,0.2);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.9);
+  color: #425570;
+  padding: 5px 6px;
+}
+.calc-onboarding-step-num {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(31,79,125,0.4);
+  background: rgba(31,79,125,0.08);
+  color: #1f4f7d;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.calc-onboarding-step-text {
+  font-size: var(--font-size-2xs);
+  line-height: 1.35;
+}
+.calc-onboarding-step.is-active {
+  border-color: rgba(0,114,178,0.42);
+  background: rgba(0,114,178,0.09);
+  color: #0f3e65;
 }
 .calc-intent-switch {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 .calc-intent-btn {
   border: 1px solid rgba(106, 81, 145, 0.28);
@@ -1897,14 +1937,76 @@ body.chart-focus-open #chart-section .chart-focus-close {
   outline-offset: 2px;
 }
 .calc-intent-summary {
-  margin: 4px 0 8px;
-  padding: 7px 9px;
+  margin: 4px 0 6px;
+  padding: 8px 9px;
   border-radius: 8px;
-  border: 1px dashed rgba(106, 81, 145, 0.34);
-  background: rgba(106, 81, 145, 0.07);
-  color: #4b5263;
+  border: 1px solid rgba(106, 81, 145, 0.32);
+  background: rgba(106, 81, 145, 0.09);
+  color: #353f52;
   font-size: var(--font-size-2xs);
   line-height: 1.45;
+}
+.calc-intent-outcomes-wrap {
+  margin-bottom: 6px;
+}
+.calc-intent-outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.calc-intent-outcome-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(0,114,178,0.24);
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: rgba(0,114,178,0.08);
+  color: #1f4f7d;
+  font-size: var(--font-size-2xs);
+  line-height: 1;
+  white-space: nowrap;
+}
+.calc-next-step {
+  margin-bottom: 8px;
+  border: 1px solid rgba(0,114,178,0.26);
+  border-radius: 8px;
+  background: rgba(0,114,178,0.06);
+  padding: 8px 9px;
+  display: grid;
+  gap: 6px;
+}
+.calc-next-step-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1f4f7d;
+}
+.calc-next-step-copy {
+  margin: 0;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+  color: #31465f;
+}
+.calc-next-step-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.calc-next-step-link {
+  display: inline-flex;
+  align-items: center;
+  border: 1px dashed rgba(0,114,178,0.42);
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: #0f4f82;
+  text-decoration: none;
+  font-size: var(--font-size-2xs);
+}
+.calc-next-step-link:hover {
+  border-color: rgba(0,114,178,0.64);
+  background: rgba(0,114,178,0.08);
 }
 .intent-path-wrap {
   margin: 2px 0 8px;
@@ -2025,6 +2127,46 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .calc-actions .calc-action-btn {
   width: 100%;
 }
+.calc-advanced-wrap {
+  margin-bottom: 4px;
+  display: grid;
+  gap: 6px;
+}
+.calc-disclosure {
+  border: 1px solid rgba(40, 62, 95, 0.2);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.78);
+  margin-top: 2px;
+}
+.calc-disclosure > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #38587d;
+}
+.calc-disclosure > summary::-webkit-details-marker { display: none; }
+.calc-disclosure > summary::after {
+  content: '+';
+  float: right;
+  color: #4f6e91;
+}
+.calc-disclosure[open] > summary::after {
+  content: '−';
+}
+.calc-disclosure[open] > summary {
+  border-bottom: 1px solid rgba(40, 62, 95, 0.16);
+  background: rgba(0,114,178,0.07);
+}
+.calc-disclosure-body {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+}
 
 @media (max-width: 680px) {
   .calc-actions {
@@ -2039,12 +2181,24 @@ body.chart-focus-open #chart-section .chart-focus-close {
     grid-column: 1 / -1;
     margin-bottom: 0;
   }
+  .calc-onboarding-steps {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+  }
   .calc-intent-switch {
     grid-column: 1 / -1;
   }
   .calc-intent-summary {
     grid-column: 1 / -1;
     margin: 0;
+  }
+  .calc-intent-outcomes-wrap,
+  .calc-next-step {
+    grid-column: 1 / -1;
+  }
+  .calc-next-step-links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
   }
   .intent-path-wrap {
     grid-column: 1 / -1;
@@ -2057,6 +2211,10 @@ body.chart-focus-open #chart-section .chart-focus-close {
     min-height: 34px;
   }
   .calc-mode-switch {
+    grid-column: 1 / -1;
+  }
+  .calc-advanced-wrap,
+  .calc-disclosure {
     grid-column: 1 / -1;
   }
   .calc-actions .calc-action-btn {
@@ -4026,15 +4184,41 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
         </div>
         <div class="calc-actions">
-          <div class="calc-actions-hint">Quick actions + demos</div>
+          <div class="calc-actions-hint">Start here — choose your role</div>
+          <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
+            <div class="calc-onboarding-step is-active">
+              <span class="calc-onboarding-step-num">1</span>
+              <span class="calc-onboarding-step-text" id="calc-step-role">Choose your role</span>
+            </div>
+            <div class="calc-onboarding-step">
+              <span class="calc-onboarding-step-num">2</span>
+              <span class="calc-onboarding-step-text">Fill Infra Cost + ARPU</span>
+            </div>
+            <div class="calc-onboarding-step">
+              <span class="calc-onboarding-step-num">3</span>
+              <span class="calc-onboarding-step-text">Review top outcomes</span>
+            </div>
+          </div>
           <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
-            <span class="calc-mode-label">Intent</span>
-            <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Viability</button>
+            <span class="calc-mode-label">I am...</span>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Finance</button>
             <button type="button" class="calc-intent-btn" data-ui-intent-btn="operations" onclick="setUiIntent('operations')" aria-pressed="false">Operations</button>
-            <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architect</button>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architecture</button>
             <button type="button" class="calc-intent-btn" data-ui-intent-btn="executive" onclick="setUiIntent('executive')" aria-pressed="false">Executive</button>
           </div>
-          <div class="calc-intent-summary" id="calc-intent-summary">Intent profile decides which surfaces are prioritized first.</div>
+          <div class="calc-intent-summary" id="calc-intent-summary">As Finance, prioritize break-even, minimum price, and contribution margin for a fast viability decision.</div>
+          <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
+            <span class="calc-mode-label">You'll get first</span>
+            <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
+          </div>
+          <div class="calc-next-step" id="calc-next-step">
+            <div class="calc-next-step-title">Do this next</div>
+            <p class="calc-next-step-copy" id="calc-next-step-copy">Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.</p>
+            <div class="calc-next-step-links">
+              <a class="calc-next-step-link" href="#field-infraTotal">Jump to Total Infra Cost</a>
+              <a class="calc-next-step-link" href="#field-ARPU">Jump to Revenue / Client (ARPU)</a>
+            </div>
+          </div>
           <div class="intent-path-wrap" id="intent-path-wrap">
             <span class="calc-mode-label">Guided path</span>
             <div class="intent-path" id="intent-path" role="list" aria-label="Intent guided decision path"></div>
@@ -4043,36 +4227,45 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               <button class="calc-action-btn calc-action-btn--neutral intent-export-btn" id="intent-export-btn" type="button" onclick="exportIntentPreset()">Export intent preset</button>
             </div>
           </div>
-          <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
-            <span class="calc-mode-label">Mode</span>
-            <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
-            <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
-            <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
+          <div class="calc-advanced-wrap">
+            <span class="calc-mode-label">Advanced controls (optional)</span>
+            <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
+              <span class="calc-mode-label">Mode override</span>
+              <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
+              <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
+              <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
+            </div>
           </div>
           <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
             Copy state link
           </button>
-          <button class="feature-request-btn calc-action-btn calc-action-btn--warning" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
-            Request a feature on Github
-          </button>
-          <button class="reset-btn calc-action-btn calc-action-btn--neutral" type="button" onclick="resetModel()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
-            Reset defaults
-          </button>
-          <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load a healthy demo scenario">
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
-            Demo healthy
-          </button>
-          <button class="calc-action-btn calc-action-btn--demo-bad" type="button" onclick="loadDemoScenario('unhealthy')" aria-label="Load an unhealthy demo scenario">
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 4.2v2.8"/><circle cx="6" cy="8.9" r="0.2" fill="currentColor"/></svg>
-            Demo unhealthy
-          </button>
+          <details class="calc-disclosure" id="calc-more-actions">
+            <summary>More actions</summary>
+            <div class="calc-disclosure-body">
+              <button class="feature-request-btn calc-action-btn calc-action-btn--warning" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
+                Request a feature on Github
+              </button>
+              <button class="reset-btn calc-action-btn calc-action-btn--neutral" type="button" onclick="resetModel()">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
+                Reset defaults
+              </button>
+              <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load a healthy demo scenario">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
+                Demo healthy
+              </button>
+              <button class="calc-action-btn calc-action-btn--demo-bad" type="button" onclick="loadDemoScenario('unhealthy')" aria-label="Load an unhealthy demo scenario">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 4.2v2.8"/><circle cx="6" cy="8.9" r="0.2" fill="currentColor"/></svg>
+                Demo unhealthy
+              </button>
+            </div>
+          </details>
         </div>
       </div>
     </div>
 
     <div class="calc-body">
+        <!-- ── GROUP A ──────────────────────────────────────────── -->
 
       <!-- ── GROUP A ──────────────────────────────────────────── -->
       <div class="calc-group">
@@ -5357,7 +5550,10 @@ const UI_INTENT_PROFILES = {
     mode: 'quick',
     recommendationCategory: 'pricing',
     featureProfile: 'core-kpis',
-    summary: 'Viability intent: prioritises break-even, minimum price, and contribution margin for fast go/no-go checks.',
+    personaLabel: 'Finance',
+    summary: 'As Finance, prioritize break-even, minimum price, and contribution margin for fast go/no-go checks.',
+    outcomePreview: ['Break-even threshold', 'Minimum viable price', 'Contribution margin'],
+    nextStep: 'Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.',
     kpiHelper: 'Viability first: focus on Break-Even, Min Price, Contribution Margin, and CCER before broader overlays.',
     recommendationHelper: 'Recommendation emphasis: pricing and revenue-fit actions are ranked first for viability decisions.',
     recommendationWeights: { pricing: 0, infrastructure: 1, marketing: 2, crm: 3, governance: 4, all: 5 },
@@ -5374,7 +5570,10 @@ const UI_INTENT_PROFILES = {
     mode: 'operator',
     recommendationCategory: 'infrastructure',
     featureProfile: 'finops-operations',
-    summary: 'Operations intent: prioritises budgeting, forecast variance, and monthly optimization levers.',
+    personaLabel: 'Operations',
+    summary: 'As Operations, prioritize budgeting, forecast variance, and monthly optimization levers.',
+    outcomePreview: ['Budget variance', 'Forecast confidence band', 'Top optimization action'],
+    nextStep: 'Enter Total Infra Cost and ARPU to expose monthly budget and forecast signals.',
     kpiHelper: 'Operations first: budget variance, forecast band, realization cadence, and normalized coverage are surfaced early.',
     recommendationHelper: 'Recommendation emphasis: infrastructure and operating levers are ranked first for monthly control loops.',
     recommendationWeights: { infrastructure: 0, governance: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
@@ -5391,7 +5590,10 @@ const UI_INTENT_PROFILES = {
     mode: 'architect',
     recommendationCategory: 'governance',
     featureProfile: 'policy-ai',
-    summary: 'Architect intent: surfaces policy-heavy controls, including AI token economics and allocation behavior.',
+    personaLabel: 'Architecture',
+    summary: 'As Architecture, surface policy-heavy controls, including AI token economics and allocation behavior.',
+    outcomePreview: ['AI allocation signal', 'Token cost pressure', 'Governance risk action'],
+    nextStep: 'Enable AI inputs (or load a demo) to unlock policy, risk, and action guidance.',
     kpiHelper: 'Architecture first: AI allocation, retry inflation, premium mix, and governance-sensitive outputs are prioritized.',
     recommendationHelper: 'Recommendation emphasis: governance and policy controls are ranked first, then infrastructure and pricing.',
     recommendationWeights: { governance: 0, infrastructure: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
@@ -5408,7 +5610,10 @@ const UI_INTENT_PROFILES = {
     mode: 'operator',
     recommendationCategory: 'all',
     featureProfile: 'executive-summary',
-    summary: 'Executive intent: keeps a concise KPI story with cross-domain recommendations for decision review.',
+    personaLabel: 'Executive',
+    summary: 'As Executive, keep a concise KPI story with cross-domain recommendations for decision review.',
+    outcomePreview: ['Portfolio health narrative', 'Cross-domain risk view', 'Decision-ready readout'],
+    nextStep: 'Enter the two core inputs first, then scan guided path and export a board-ready snapshot.',
     kpiHelper: 'Executive first: concise KPI narrative prioritizing health score context, variance, and margin-sensitive metrics.',
     recommendationHelper: 'Recommendation emphasis: high-priority cross-domain actions are surfaced first for decision review.',
     recommendationWeights: { all: 0, infrastructure: 1, pricing: 2, governance: 3, crm: 4, marketing: 5 },
@@ -6610,6 +6815,31 @@ function syncUiIntentButtons() {
 
   const summaryEl = document.getElementById('calc-intent-summary');
   if (summaryEl) summaryEl.textContent = profile.summary;
+
+  const outcomesEl = document.getElementById('calc-intent-outcomes');
+  if (outcomesEl) {
+    outcomesEl.textContent = '';
+    const outcomes = Array.isArray(profile.outcomePreview) && profile.outcomePreview.length
+      ? profile.outcomePreview
+      : ['Break-even signal', 'Risk signal', 'Recommended action'];
+    outcomes.slice(0, 3).forEach(label => {
+      const chip = document.createElement('span');
+      chip.className = 'calc-intent-outcome-chip';
+      chip.setAttribute('role', 'listitem');
+      chip.textContent = label;
+      outcomesEl.appendChild(chip);
+    });
+  }
+
+  const nextStepCopyEl = document.getElementById('calc-next-step-copy');
+  if (nextStepCopyEl) nextStepCopyEl.textContent = profile.nextStep || 'Enter Total Infra Cost and ARPU to unlock your first readout.';
+
+  const stepRoleEl = document.getElementById('calc-step-role');
+  if (stepRoleEl) {
+    stepRoleEl.textContent = profile.personaLabel
+      ? `Role selected: ${profile.personaLabel}`
+      : 'Choose your role';
+  }
 
   const kpiHelperEl = document.getElementById('intent-kpi-helper');
   if (kpiHelperEl) kpiHelperEl.textContent = profile.kpiHelper || 'Intent profile prioritization is active for KPI output ordering.';
