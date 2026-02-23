@@ -30,6 +30,12 @@ Progress snapshot:
 - I2. KPI and recommendation orchestration: complete
 - I3. Guided decision paths: complete
 
+Closeout artifacts:
+
+- Acceptance checklist: `docs/roadmap/wave-3-acceptance-checklist.md`
+- Regression test script: `scripts/test-wave3-intent-share-state.js`
+- Release note: `docs/releases/release-2-wave-3-complete.md`
+
 ## I1. Intent selector and routing
 
 1. Add a top-level intent selector in calculator header.
@@ -130,3 +136,5 @@ This keeps one model while changing presentation and decision flow.
 - `docs/modularization-playbook.md`
 - `docs/ai-token-economics.md`
 - `docs/roadmap/wave-3-modularization-backlog.md`
+- `docs/roadmap/wave-3-acceptance-checklist.md`
+- `docs/releases/release-2-wave-3-complete.md`
