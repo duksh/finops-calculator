@@ -28,7 +28,7 @@ Progress snapshot:
 
 - I1. Intent selector and routing: complete
 - I2. KPI and recommendation orchestration: complete
-- I3. Guided decision paths: next
+- I3. Guided decision paths: complete
 
 ## I1. Intent selector and routing
 
@@ -52,7 +52,7 @@ Status: complete.
 2. Track completion state by step.
 3. Add one-click export presets tuned to each intent.
 
-Status: next.
+Status: complete.
 
 ---
 

@@ -1901,6 +1901,80 @@ body.chart-focus-open #chart-section .chart-focus-close {
   font-size: var(--font-size-2xs);
   line-height: 1.45;
 }
+.intent-path-wrap {
+  margin: 2px 0 8px;
+}
+.intent-path {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.intent-step {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+  border: 1px solid rgba(40, 62, 95, 0.2);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.85);
+  color: #475778;
+  padding: 6px 7px;
+  min-height: 36px;
+}
+.intent-step-status {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid rgba(40, 62, 95, 0.25);
+  background: rgba(255,255,255,0.95);
+}
+.intent-step-label {
+  font-size: var(--font-size-2xs);
+  line-height: 1.35;
+}
+.intent-step.active {
+  border-color: rgba(230,159,0,0.45);
+  background: rgba(230,159,0,0.1);
+  color: #845800;
+}
+.intent-step.active .intent-step-status {
+  border-color: rgba(230,159,0,0.6);
+  background: rgba(230,159,0,0.18);
+  color: #845800;
+}
+.intent-step.done {
+  border-color: rgba(0,158,115,0.44);
+  background: rgba(0,158,115,0.12);
+  color: #00684a;
+}
+.intent-step.done .intent-step-status {
+  border-color: rgba(0,158,115,0.58);
+  background: rgba(0,158,115,0.2);
+  color: #00684a;
+}
+.intent-export-row {
+  margin-top: 7px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+.intent-path-progress {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4f5f80;
+}
+.intent-export-btn {
+  min-height: 32px;
+  text-align: center;
+}
 .calc-mode-switch {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1966,6 +2040,16 @@ body.chart-focus-open #chart-section .chart-focus-close {
   .calc-intent-summary {
     grid-column: 1 / -1;
     margin: 0;
+  }
+  .intent-path-wrap {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .intent-path {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .intent-step {
+    min-height: 34px;
   }
   .calc-mode-switch {
     grid-column: 1 / -1;
@@ -3946,6 +4030,14 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <button type="button" class="calc-intent-btn" data-ui-intent-btn="executive" onclick="setUiIntent('executive')" aria-pressed="false">Executive</button>
           </div>
           <div class="calc-intent-summary" id="calc-intent-summary">Intent profile decides which surfaces are prioritized first.</div>
+          <div class="intent-path-wrap" id="intent-path-wrap">
+            <span class="calc-mode-label">Guided path</span>
+            <div class="intent-path" id="intent-path" role="list" aria-label="Intent guided decision path"></div>
+            <div class="intent-export-row">
+              <span class="intent-path-progress" id="intent-path-progress">0/3 steps complete</span>
+              <button class="calc-action-btn calc-action-btn--neutral intent-export-btn" id="intent-export-btn" type="button" onclick="exportIntentPreset()">Export intent preset</button>
+            </div>
+          </div>
           <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
             <span class="calc-mode-label">Mode</span>
             <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
@@ -5264,7 +5356,14 @@ const UI_INTENT_PROFILES = {
     kpiHelper: 'Viability first: focus on Break-Even, Min Price, Contribution Margin, and CCER before broader overlays.',
     recommendationHelper: 'Recommendation emphasis: pricing and revenue-fit actions are ranked first for viability decisions.',
     recommendationWeights: { pricing: 0, infrastructure: 1, marketing: 2, crm: 3, governance: 4, all: 5 },
-    kpiOrder: ['out-beN', 'out-minPrice', 'out-margin', 'out-ccer', 'out-vcpu', 'out-targetRevenue']
+    kpiOrder: ['out-beN', 'out-minPrice', 'out-margin', 'out-ccer', 'out-vcpu', 'out-targetRevenue'],
+    guidedSteps: [
+      { label: 'Viability', requires: ['hasAnyCostInput', 'hasARPU'] },
+      { label: 'Risk', requires: ['hasHealthScore'] },
+      { label: 'Action', requires: ['hasRecommendations'] }
+    ],
+    exportLabel: 'Export viability preset',
+    exportMetrics: ['out-beN', 'out-minPrice', 'out-margin', 'out-ccer', 'out-vcpu', 'out-targetRevenue']
   },
   operations: {
     mode: 'operator',
@@ -5274,7 +5373,14 @@ const UI_INTENT_PROFILES = {
     kpiHelper: 'Operations first: budget variance, forecast band, realization cadence, and normalized coverage are surfaced early.',
     recommendationHelper: 'Recommendation emphasis: infrastructure and operating levers are ranked first for monthly control loops.',
     recommendationWeights: { infrastructure: 0, governance: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
-    kpiOrder: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity']
+    kpiOrder: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity'],
+    guidedSteps: [
+      { label: 'Budget', requires: ['hasAnyCostInput', 'hasBudget'] },
+      { label: 'Forecast', requires: ['hasARPU', 'hasForecastSignal'] },
+      { label: 'Action', requires: ['hasRecommendations'] }
+    ],
+    exportLabel: 'Export operations preset',
+    exportMetrics: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techNorm']
   },
   architecture: {
     mode: 'architect',
@@ -5284,7 +5390,14 @@ const UI_INTENT_PROFILES = {
     kpiHelper: 'Architecture first: AI allocation, retry inflation, premium mix, and governance-sensitive outputs are prioritized.',
     recommendationHelper: 'Recommendation emphasis: governance and policy controls are ranked first, then infrastructure and pricing.',
     recommendationWeights: { governance: 0, infrastructure: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
-    kpiOrder: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-techNorm', 'out-focusMaturity']
+    kpiOrder: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-techNorm', 'out-focusMaturity'],
+    guidedSteps: [
+      { label: 'Policy', requires: ['hasAiEnabled'] },
+      { label: 'Risk', requires: ['hasAiSignal'] },
+      { label: 'Action', requires: ['hasRecommendations'] }
+    ],
+    exportLabel: 'Export architecture preset',
+    exportMetrics: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-focusMaturity']
   },
   executive: {
     mode: 'operator',
@@ -5294,7 +5407,14 @@ const UI_INTENT_PROFILES = {
     kpiHelper: 'Executive first: concise KPI narrative prioritizing health score context, variance, and margin-sensitive metrics.',
     recommendationHelper: 'Recommendation emphasis: high-priority cross-domain actions are surfaced first for decision review.',
     recommendationWeights: { all: 0, infrastructure: 1, pricing: 2, governance: 3, crm: 4, marketing: 5 },
-    kpiOrder: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient']
+    kpiOrder: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient'],
+    guidedSteps: [
+      { label: 'Narrative', requires: ['hasAnyCostInput', 'hasARPU'] },
+      { label: 'Risk', requires: ['hasHealthScore', 'hasForecastSignal'] },
+      { label: 'Readout', requires: ['hasQbvRows'] }
+    ],
+    exportLabel: 'Export executive preset',
+    exportMetrics: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm']
   }
 };
 const SHAREABLE_INPUT_KEYS = [
@@ -6268,6 +6388,210 @@ function applyIntentOutputOrdering(intent) {
   });
 }
 
+function buildIntentSignalState(inputs = {}) {
+  const {
+    devPerClient,
+    infraTotal,
+    ARPU: arpuInput,
+    effectiveARPU,
+    budgetMonthly,
+    forecastGrowthPct,
+    forecastBestEfficiencyPct,
+    forecastWorstDriftPct,
+    savingsIdentified,
+    savingsRealized,
+    costAvoidance,
+    aiEnabled,
+    aiMetrics
+  } = inputs || {};
+
+  const hasAnyCostInput =
+    (devPerClient !== null && devPerClient !== undefined && devPerClient >= 0) ||
+    (infraTotal !== null && infraTotal !== undefined && infraTotal >= 0);
+  const hasARPU =
+    (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0) ||
+    (arpuInput !== null && arpuInput !== undefined && arpuInput > 0);
+  const hasBudget = budgetMonthly !== null && budgetMonthly !== undefined && budgetMonthly >= 0;
+  const hasForecastSignal =
+    (forecastGrowthPct !== null && forecastGrowthPct !== undefined) ||
+    (forecastBestEfficiencyPct !== null && forecastBestEfficiencyPct !== undefined) ||
+    (forecastWorstDriftPct !== null && forecastWorstDriftPct !== undefined);
+  const hasRealizationSignal =
+    (savingsIdentified !== null && savingsIdentified !== undefined) ||
+    (savingsRealized !== null && savingsRealized !== undefined) ||
+    (costAvoidance !== null && costAvoidance !== undefined);
+
+  const scoreEl = document.getElementById('health-score-value');
+  const scoreNumber = scoreEl ? Number(String(scoreEl.textContent || '').trim()) : NaN;
+  const hasHealthScore = Number.isFinite(scoreNumber);
+  const hasRecommendations = document.querySelectorAll('#rec-list .rec-card').length > 0;
+  const hasProviderSelection = selectedProviders.size > 0;
+  const hasQbvRows = Array.isArray(qbvDashboardRows) && qbvDashboardRows.length > 0;
+  const hasAiEnabled = Boolean(aiEnabled);
+  const hasAiSignal = Boolean(aiMetrics && aiMetrics.enabled && aiMetrics.aiTotalTokenCost !== null);
+
+  return {
+    hasAnyCostInput,
+    hasARPU,
+    hasBudget,
+    hasForecastSignal,
+    hasRealizationSignal,
+    hasHealthScore,
+    hasRecommendations,
+    hasProviderSelection,
+    hasQbvRows,
+    hasAiEnabled,
+    hasAiSignal
+  };
+}
+
+function evaluateIntentSteps(intent, inputs = {}) {
+  const profile = getUiIntentProfile(intent);
+  const steps = Array.isArray(profile.guidedSteps) ? profile.guidedSteps : [];
+  const signals = buildIntentSignalState(inputs);
+
+  return steps.map((step, index) => {
+    const requires = Array.isArray(step.requires) ? step.requires : [];
+    const metCount = requires.filter(flag => Boolean(signals[flag])).length;
+    let status = 'todo';
+    if (!requires.length || metCount === requires.length) {
+      status = 'done';
+    } else if (metCount > 0) {
+      status = 'active';
+    }
+
+    return {
+      key: `${intent}-${index + 1}`,
+      label: step.label || `Step ${index + 1}`,
+      status,
+      metCount,
+      requiredCount: requires.length
+    };
+  });
+}
+
+function renderIntentGuidedPath(inputs = {}) {
+  const intent = getCurrentUiIntent();
+  const steps = evaluateIntentSteps(intent, inputs);
+  const pathEl = document.getElementById('intent-path');
+  const progressEl = document.getElementById('intent-path-progress');
+  if (!pathEl || !progressEl) return;
+
+  if (!steps.length) {
+    pathEl.innerHTML = '';
+    progressEl.textContent = '0/0 steps complete';
+    return;
+  }
+
+  const doneCount = steps.filter(step => step.status === 'done').length;
+  progressEl.textContent = `${doneCount}/${steps.length} steps complete`;
+
+  pathEl.innerHTML = steps.map(step => {
+    const marker = step.status === 'done' ? '✓' : (step.status === 'active' ? '•' : '○');
+    return `
+      <div class="intent-step ${step.status}" role="listitem" aria-label="${step.label}: ${step.status}">
+        <span class="intent-step-status">${marker}</span>
+        <span class="intent-step-label">${step.label}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function syncIntentExportButton() {
+  const btn = document.getElementById('intent-export-btn');
+  if (!btn) return;
+  const profile = getUiIntentProfile(getCurrentUiIntent());
+  const label = profile.exportLabel || 'Export intent preset';
+  btn.textContent = label;
+  btn.setAttribute('aria-label', label);
+}
+
+function csvEscape(value) {
+  const text = String(value ?? '');
+  if (!/[",\n]/.test(text)) return text;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function collectIntentExportRows(intent, inputs = {}) {
+  const profile = getUiIntentProfile(intent);
+  const mode = getCurrentUiMode();
+  const timestamp = new Date().toISOString();
+  const rows = [
+    ['section', 'key', 'value'],
+    ['meta', 'intent', intent],
+    ['meta', 'mode', mode],
+    ['meta', 'timestamp', timestamp],
+    ['meta', 'providers', Array.from(selectedProviders).join('|') || 'none'],
+    ['meta', 'tech_domains', getSelectedTechDomains().join('|')],
+    ['meta', 'recommendation_category', selectedRecommendationCategory]
+  ];
+
+  evaluateIntentSteps(intent, inputs).forEach((step, idx) => {
+    rows.push(['path', `step_${idx + 1}_${step.label.toLowerCase()}`, step.status]);
+  });
+
+  const metricIds = Array.isArray(profile.exportMetrics) && profile.exportMetrics.length
+    ? profile.exportMetrics
+    : (profile.kpiOrder || []);
+
+  metricIds.forEach(cardId => {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    const label = card.querySelector('.calc-out-label')?.textContent?.trim() || cardId;
+    const value = card.querySelector('.calc-out-val')?.textContent?.trim() || '—';
+    rows.push(['kpi', label, value]);
+  });
+
+  if (intent === 'operations' && Array.isArray(qbvDashboardRows) && qbvDashboardRows.length) {
+    rows.push(['cfo', 'columns', 'month|clients|modeled_cost|budget_variance|base_margin|cumulative_gap']);
+    qbvDashboardRows.forEach(row => {
+      rows.push([
+        'cfo',
+        `M${row.month}`,
+        [
+          Math.round(row.clients),
+          row.modeledCost.toFixed(2),
+          row.budgetVariance !== null ? row.budgetVariance.toFixed(2) : '',
+          row.baseMargin !== null ? row.baseMargin.toFixed(2) : '',
+          row.cumulativeGap !== null ? row.cumulativeGap.toFixed(2) : ''
+        ].join('|')
+      ]);
+    });
+  }
+
+  if (intent === 'architecture' && inputs.aiMetrics && inputs.aiMetrics.enabled) {
+    const ai = inputs.aiMetrics;
+    rows.push(['ai', 'allocation_policy', ai.allocationPolicy || '']);
+    rows.push(['ai', 'allocation_confidence', ai.allocationConfidence || '']);
+    rows.push(['ai', 'governance_risk', ai.tokenGovernanceRisk || '']);
+    rows.push(['ai', 'token_volume_m', ai.tokenVolumeM !== null && ai.tokenVolumeM !== undefined ? Number(ai.tokenVolumeM).toFixed(2) : '']);
+  }
+
+  return rows;
+}
+
+function exportIntentPreset() {
+  const intent = getCurrentUiIntent();
+  const rows = collectIntentExportRows(intent, lastInputs || {});
+  if (rows.length <= 1) {
+    writeShareFeedback('Add at least one value before exporting an intent preset.', true);
+    return;
+  }
+
+  const csv = rows.map(parts => parts.map(csvEscape).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `ficecal-${intent}-preset-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  writeShareFeedback(`${getUiIntentProfile(intent).exportLabel || 'Intent preset'} exported.`, false);
+}
+
 function syncUiIntentButtons() {
   const activeIntent = getCurrentUiIntent();
   const profile = getUiIntentProfile(activeIntent);
@@ -6289,6 +6613,8 @@ function syncUiIntentButtons() {
   if (recHelperEl) recHelperEl.textContent = profile.recommendationHelper || 'Recommendation emphasis adapts to selected intent while keeping health-score logic unchanged.';
 
   applyIntentOutputOrdering(activeIntent);
+  syncIntentExportButton();
+  renderIntentGuidedPath(lastInputs || {});
 
   const calcSection = document.getElementById('calculator-section');
   if (calcSection) {
@@ -7467,6 +7793,7 @@ function updateHealthAndRecommendations(inputs) {
     scoreEl.textContent = '—';
     scoreEl.style.color = '#7a7a8c';
     listEl.innerHTML = '<div class="rec-empty">Recommendations will appear after health scoring data is available.</div>';
+    renderIntentGuidedPath(inputs || {});
     return;
   }
 
@@ -7580,6 +7907,7 @@ function updateHealthAndRecommendations(inputs) {
       listEl.innerHTML = `<div class="rec-empty">No ${selectedLabel} recommendations match your current zone/provider context. Try another category or switch back to All.</div>`;
     }
     applyGlossaryAutoLinks(document.getElementById('group-health'));
+    renderIntentGuidedPath(inputs || {});
     return;
   }
 
@@ -7602,6 +7930,7 @@ function updateHealthAndRecommendations(inputs) {
     `;
   }).join('');
   applyGlossaryAutoLinks(document.getElementById('group-health'));
+  renderIntentGuidedPath(inputs || {});
 }
 
 function getInp(id) {
