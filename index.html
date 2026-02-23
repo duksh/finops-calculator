@@ -1904,6 +1904,16 @@ body.chart-focus-open #chart-section .chart-focus-close {
   background: rgba(0,114,178,0.09);
   color: #0f3e65;
 }
+.calc-onboarding-step.is-done {
+  border-color: rgba(0,158,115,0.44);
+  background: rgba(0,158,115,0.11);
+  color: #005d43;
+}
+.calc-onboarding-step.is-done .calc-onboarding-step-num {
+  border-color: rgba(0,158,115,0.52);
+  background: rgba(0,158,115,0.2);
+  color: #005d43;
+}
 .calc-intent-switch {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4186,17 +4196,17 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         <div class="calc-actions">
           <div class="calc-actions-hint">Start here — choose your role</div>
           <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
-            <div class="calc-onboarding-step is-active">
+            <div class="calc-onboarding-step is-active" data-onboarding-step="1">
               <span class="calc-onboarding-step-num">1</span>
               <span class="calc-onboarding-step-text" id="calc-step-role">Choose your role</span>
             </div>
-            <div class="calc-onboarding-step">
+            <div class="calc-onboarding-step" data-onboarding-step="2">
               <span class="calc-onboarding-step-num">2</span>
-              <span class="calc-onboarding-step-text">Fill Infra Cost + ARPU</span>
+              <span class="calc-onboarding-step-text" id="calc-step-inputs">Fill Infra Cost + ARPU</span>
             </div>
-            <div class="calc-onboarding-step">
+            <div class="calc-onboarding-step" data-onboarding-step="3">
               <span class="calc-onboarding-step-num">3</span>
-              <span class="calc-onboarding-step-text">Review top outcomes</span>
+              <span class="calc-onboarding-step-text" id="calc-step-outcomes">Review top outcomes</span>
             </div>
           </div>
           <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
@@ -6680,6 +6690,66 @@ function evaluateIntentSteps(intent, inputs = {}) {
   });
 }
 
+function renderRoleOnboardingState(inputs = {}) {
+  const onboardingRoot = document.getElementById('calc-onboarding-steps');
+  if (!onboardingRoot) return;
+
+  const stepEls = Array.from(onboardingRoot.querySelectorAll('[data-onboarding-step]'));
+  if (stepEls.length < 3) return;
+
+  const profile = getUiIntentProfile(getCurrentUiIntent());
+  const signals = buildIntentSignalState(inputs);
+  const filledCoreCount = Number(Boolean(signals.hasAnyCostInput)) + Number(Boolean(signals.hasARPU));
+  const hasRequiredInputs = Boolean(signals.hasAnyCostInput && signals.hasARPU);
+  const hasOutcomeReady = Boolean(signals.hasHealthScore && signals.hasRecommendations);
+
+  const applyState = (stepEl, state) => {
+    stepEl.classList.remove('is-active', 'is-done');
+    if (state === 'active') stepEl.classList.add('is-active');
+    if (state === 'done') stepEl.classList.add('is-done');
+  };
+
+  applyState(stepEls[0], 'done');
+  applyState(stepEls[1], hasRequiredInputs ? 'done' : (filledCoreCount > 0 ? 'active' : 'todo'));
+  applyState(stepEls[2], hasOutcomeReady ? 'done' : ((hasRequiredInputs || signals.hasHealthScore || signals.hasRecommendations) ? 'active' : 'todo'));
+
+  const stepInputsEl = document.getElementById('calc-step-inputs');
+  if (stepInputsEl) {
+    if (hasRequiredInputs) {
+      stepInputsEl.textContent = 'Fill Infra Cost + ARPU ✓';
+    } else if (filledCoreCount > 0) {
+      stepInputsEl.textContent = 'Fill Infra Cost + ARPU (1/2 complete)';
+    } else {
+      stepInputsEl.textContent = 'Fill Infra Cost + ARPU';
+    }
+  }
+
+  const stepOutcomesEl = document.getElementById('calc-step-outcomes');
+  if (stepOutcomesEl) {
+    if (hasOutcomeReady) {
+      stepOutcomesEl.textContent = 'Review top outcomes ✓';
+    } else if (hasRequiredInputs || signals.hasHealthScore || signals.hasRecommendations) {
+      stepOutcomesEl.textContent = 'Review top outcomes (in progress)';
+    } else {
+      stepOutcomesEl.textContent = 'Review top outcomes';
+    }
+  }
+
+  const nextStepCopyEl = document.getElementById('calc-next-step-copy');
+  if (nextStepCopyEl) {
+    if (!hasRequiredInputs) {
+      const missing = [];
+      if (!signals.hasAnyCostInput) missing.push('Total Infra Cost');
+      if (!signals.hasARPU) missing.push('Revenue / Client (ARPU)');
+      nextStepCopyEl.textContent = `To unlock ${profile.personaLabel || 'this role'} outcomes, fill ${missing.join(' + ')}.`;
+    } else if (!hasOutcomeReady) {
+      nextStepCopyEl.textContent = 'Core inputs captured. Review Health Zone recommendations and guided path to complete your outcome readout.';
+    } else {
+      nextStepCopyEl.textContent = `${profile.personaLabel || 'Role'} outcomes are ready. Export preset or copy state link to share this analysis.`;
+    }
+  }
+}
+
 function renderIntentGuidedPath(inputs = {}) {
   const intent = getCurrentUiIntent();
   const steps = evaluateIntentSteps(intent, inputs);
@@ -6705,6 +6775,8 @@ function renderIntentGuidedPath(inputs = {}) {
       </div>
     `;
   }).join('');
+
+  renderRoleOnboardingState(inputs);
 }
 
 function syncIntentExportButton() {
