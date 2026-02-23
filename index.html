@@ -2208,6 +2208,49 @@ body.chart-focus-open #chart-section .chart-focus-close {
   background: rgba(0,158,115,0.1);
   color: #0c6d55;
 }
+.ai-token-overlay {
+  border-top: 1px dashed rgba(111, 78, 145, 0.42);
+  border-left: 3px solid rgba(111, 78, 145, 0.5);
+  background:
+    linear-gradient(180deg, rgba(111, 78, 145, 0.07) 0%, rgba(0, 114, 178, 0.03) 100%);
+}
+.ai-token-overlay .calc-field {
+  background: linear-gradient(180deg, rgba(246, 240, 255, 0.86) 0%, rgba(249, 244, 255, 0.94) 100%);
+  border-top-color: rgba(111, 78, 145, 0.24);
+}
+.ai-token-overlay .calc-label {
+  color: #4f3370;
+}
+.ai-token-overlay .ftag {
+  border-color: rgba(111, 78, 145, 0.34);
+  background: rgba(111, 78, 145, 0.1);
+  color: #4f3370;
+}
+.ai-preset-actions {
+  padding: 0 18px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ai-preset-btn {
+  border: 1px solid rgba(111, 78, 145, 0.34);
+  border-radius: 999px;
+  background: rgba(111, 78, 145, 0.1);
+  color: #4f3370;
+  font-size: var(--font-size-2xs);
+  font-family: 'JetBrains Mono', monospace;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.ai-preset-btn:hover {
+  background: rgba(111, 78, 145, 0.16);
+  border-color: rgba(111, 78, 145, 0.5);
+}
+.ai-token-card {
+  border-color: rgba(111, 78, 145, 0.35);
+  background: linear-gradient(180deg, rgba(246, 240, 255, 0.95) 0%, rgba(241, 249, 255, 0.9) 100%);
+}
+.ai-token-card .calc-out-label { color: #4f3370; }
 .finops-2026-pill {
   margin-left: 8px;
   display: inline-flex;
@@ -4179,6 +4222,156 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-guardrail" id="portfolio-guardrail">Add at least one non-cloud domain cost to activate multi-technology normalization insights.</div>
           <div class="portfolio-report-note"><a href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the online State of FinOps 2026 report">Why this matters in State of FinOps 2026 ↗</a></div>
         </div>
+
+        <div class="portfolio-overlay ai-token-overlay" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="startup-title">AI token economics (Wave 3 MVP)<span class="finops-2026-pill">Architect mode</span></div>
+          <div class="ai-preset-actions">
+            <button type="button" class="ai-preset-btn" onclick="applyAiTokenPreset('balanced')">Balanced AI mix</button>
+            <button type="button" class="ai-preset-btn" onclick="applyAiTokenPreset('premiumSpike')">Premium routing spike</button>
+            <button type="button" class="ai-preset-btn" onclick="applyAiTokenPreset('retryStorm')">Retry storm</button>
+          </div>
+          <div class="calc-fields">
+            <div class="calc-field" id="field-aiEnabled">
+              <label class="calc-label" for="inp-aiEnabled">
+                AI Cost Tracking
+                <span class="ftag">toggle</span>
+              </label>
+              <div class="calc-input-wrap">
+                <select id="inp-aiEnabled" data-default-value="off" onchange="onInput('aiEnabled')">
+                  <option value="off" selected>Off</option>
+                  <option value="on">On</option>
+                </select>
+              </div>
+              <div class="calc-hint">Enable AI token economics to include inference spend and allocation pressure in KPIs.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiPricingMode">
+              <label class="calc-label" for="inp-aiPricingMode">
+                Pricing Mode
+                <span class="ftag">model</span>
+              </label>
+              <div class="calc-input-wrap">
+                <select id="inp-aiPricingMode" data-default-value="blended" onchange="onInput('aiPricingMode')">
+                  <option value="blended" selected>Blended (single rate)</option>
+                  <option value="tiered">Tiered (input/output split)</option>
+                </select>
+              </div>
+              <div class="calc-hint">Blended uses a single per-1M rate. Tiered separates input and output token rates.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiRatePer1MInput">
+              <label class="calc-label" for="inp-aiRatePer1MInput">
+                Input Token Rate
+                <span class="ftag">tiered</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiRatePer1MInput" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 3" oninput="onInput('aiRatePer1MInput')">
+                <span class="calc-unit">€ / 1M</span>
+              </div>
+              <div class="calc-hint">Used when pricing mode is Tiered.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiRatePer1MOutput">
+              <label class="calc-label" for="inp-aiRatePer1MOutput">
+                Output Token Rate
+                <span class="ftag">tiered</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiRatePer1MOutput" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 9" oninput="onInput('aiRatePer1MOutput')">
+                <span class="calc-unit">€ / 1M</span>
+              </div>
+              <div class="calc-hint">Used when pricing mode is Tiered.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiRatePer1MTotal">
+              <label class="calc-label" for="inp-aiRatePer1MTotal">
+                Blended Token Rate
+                <span class="ftag">blended</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiRatePer1MTotal" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 6" oninput="onInput('aiRatePer1MTotal')">
+                <span class="calc-unit">€ / 1M</span>
+              </div>
+              <div class="calc-hint">Used when pricing mode is Blended. If empty, weighted fallback from input/output rates is used.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiInputTokensM">
+              <label class="calc-label" for="inp-aiInputTokensM">
+                Input Tokens / Month
+                <span class="ftag">volume</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiInputTokensM" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 12" oninput="onInput('aiInputTokensM')">
+                <span class="calc-unit">M tokens</span>
+              </div>
+              <div class="calc-hint">Monthly prompt-side token volume.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiOutputTokensM">
+              <label class="calc-label" for="inp-aiOutputTokensM">
+                Output Tokens / Month
+                <span class="ftag">volume</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiOutputTokensM" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 8" oninput="onInput('aiOutputTokensM')">
+                <span class="calc-unit">M tokens</span>
+              </div>
+              <div class="calc-hint">Monthly completion-side token volume.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiRetryRatePct">
+              <label class="calc-label" for="inp-aiRetryRatePct">
+                Retry Rate
+                <span class="ftag">quality</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiRetryRatePct" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 8" oninput="onInput('aiRetryRatePct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Additional token demand caused by retries / re-prompts.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiPremiumMixPct">
+              <label class="calc-label" for="inp-aiPremiumMixPct">
+                Premium Model Mix
+                <span class="ftag">routing</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiPremiumMixPct" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 20" oninput="onInput('aiPremiumMixPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Share of traffic routed to premium model tier.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiSharedOverheadMonthly">
+              <label class="calc-label" for="inp-aiSharedOverheadMonthly">
+                Shared AI Overhead
+                <span class="ftag">allocation</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-aiSharedOverheadMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 1200" oninput="onInput('aiSharedOverheadMonthly')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Common AI platform costs allocated on top of token spend.</div>
+            </div>
+
+            <div class="calc-field" id="field-aiAllocationPolicy">
+              <label class="calc-label" for="inp-aiAllocationPolicy">
+                Allocation Policy
+                <span class="ftag">governance</span>
+              </label>
+              <div class="calc-input-wrap">
+                <select id="inp-aiAllocationPolicy" data-default-value="token-weighted" onchange="onInput('aiAllocationPolicy')">
+                  <option value="token-weighted" selected>Token-weighted</option>
+                  <option value="equal">Equal split</option>
+                  <option value="premium-weighted">Premium-weighted</option>
+                </select>
+              </div>
+              <div class="calc-hint">MVP allocation model selector for showback/chargeback strategy.</div>
+            </div>
+          </div>
+          <div class="portfolio-guardrail" id="ai-token-guardrail">AI token economics remains inactive until AI Cost Tracking is set to On and token/rate inputs are provided.</div>
+        </div>
       </div>
 
       <!-- ── GROUP C ──────────────────────────────────────────── -->
@@ -4300,6 +4493,36 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
           </div>
 
+          <div class="calc-out-card ai-token-card" id="out-aiTokenCost" data-feature="ai-token-economics" data-ui-mode="architect">
+            <div class="calc-out-label">AI Token Cost</div>
+            <div class="calc-out-val muted" id="oval-aiTokenCost">—</div>
+            <div class="calc-out-sub">Inference token spend after retry/premium behavior adjustments</div>
+          </div>
+
+          <div class="calc-out-card ai-token-card" id="out-aiAllocatedCost" data-feature="ai-token-economics" data-ui-mode="architect">
+            <div class="calc-out-label">AI Total Allocated Cost</div>
+            <div class="calc-out-val muted" id="oval-aiAllocatedCost">—</div>
+            <div class="calc-out-sub">Token spend plus shared AI overhead allocation</div>
+          </div>
+
+          <div class="calc-out-card ai-token-card" id="out-aiCostPerClient" data-feature="ai-token-economics" data-ui-mode="architect">
+            <div class="calc-out-label">AI Cost / Client</div>
+            <div class="calc-out-val muted" id="oval-aiCostPerClient">—</div>
+            <div class="calc-out-sub">Allocated AI monthly cost divided by active clients</div>
+          </div>
+
+          <div class="calc-out-card ai-token-card" id="out-aiRetryInflation" data-feature="ai-token-economics" data-ui-mode="architect">
+            <div class="calc-out-label">AI Retry Inflation</div>
+            <div class="calc-out-val muted" id="oval-aiRetryInflation">—</div>
+            <div class="calc-out-sub">Extra AI cost pressure driven by retry behavior</div>
+          </div>
+
+          <div class="calc-out-card ai-token-card" id="out-aiPremiumMix" data-feature="ai-token-economics" data-ui-mode="architect">
+            <div class="calc-out-label">AI Premium Mix</div>
+            <div class="calc-out-val muted" id="oval-aiPremiumMix">—</div>
+            <div class="calc-out-sub">Share of AI traffic routed to premium models</div>
+          </div>
+
         </div>
 
         <!-- Progress + status bar -->
@@ -4327,6 +4550,17 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="cp-pill" id="cp-19"></div>
           <div class="cp-pill" id="cp-20"></div>
           <div class="cp-pill" id="cp-21"></div>
+          <div class="cp-pill" id="cp-22"></div>
+          <div class="cp-pill" id="cp-23"></div>
+          <div class="cp-pill" id="cp-24"></div>
+          <div class="cp-pill" id="cp-25"></div>
+          <div class="cp-pill" id="cp-26"></div>
+          <div class="cp-pill" id="cp-27"></div>
+          <div class="cp-pill" id="cp-28"></div>
+          <div class="cp-pill" id="cp-29"></div>
+          <div class="cp-pill" id="cp-30"></div>
+          <div class="cp-pill" id="cp-31"></div>
+          <div class="cp-pill" id="cp-32"></div>
         </div>
         <div class="calc-status-bar" id="calc-status-bar">
           <div class="calc-status-dot" id="calc-dot"></div>
@@ -4927,6 +5161,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 </div>
 
 <script src="src/features/runtime-gates.js"></script>
+<script src="src/features/ai-token-economics/engine.js"></script>
 <script src="src/core/economics.js"></script>
 <script>
 // ─── STATE ──────────────────────────────────────────────────────
@@ -4943,7 +5178,10 @@ const SHAREABLE_INPUT_KEYS = [
   'cudPct', 'margin', 'nMax',
   'budgetMonthly', 'forecastGrowthPct', 'forecastBestEfficiencyPct', 'forecastWorstDriftPct',
   'savingsIdentified', 'savingsRealized', 'costAvoidance',
-  'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor'
+  'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor',
+  'aiEnabled', 'aiPricingMode', 'aiRatePer1MInput', 'aiRatePer1MOutput', 'aiRatePer1MTotal',
+  'aiInputTokensM', 'aiOutputTokensM', 'aiRetryRatePct', 'aiPremiumMixPct',
+  'aiSharedOverheadMonthly', 'aiAllocationPolicy'
 ];
 const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
 const TECH_DOMAIN_SCHEMA = [
@@ -5770,6 +6008,66 @@ function setTechDomainPreset(mode) {
   setTechDomainSelection(DEFAULT_TECH_DOMAINS);
 }
 
+const AI_TOKEN_PRESETS = {
+  balanced: {
+    aiEnabled: 'on',
+    aiPricingMode: 'blended',
+    aiRatePer1MInput: 3,
+    aiRatePer1MOutput: 9,
+    aiRatePer1MTotal: 6,
+    aiInputTokensM: 12,
+    aiOutputTokensM: 8,
+    aiRetryRatePct: 8,
+    aiPremiumMixPct: 18,
+    aiSharedOverheadMonthly: 1200,
+    aiAllocationPolicy: 'token-weighted'
+  },
+  premiumSpike: {
+    aiEnabled: 'on',
+    aiPricingMode: 'tiered',
+    aiRatePer1MInput: 4,
+    aiRatePer1MOutput: 14,
+    aiRatePer1MTotal: '',
+    aiInputTokensM: 14,
+    aiOutputTokensM: 11,
+    aiRetryRatePct: 10,
+    aiPremiumMixPct: 62,
+    aiSharedOverheadMonthly: 1850,
+    aiAllocationPolicy: 'premium-weighted'
+  },
+  retryStorm: {
+    aiEnabled: 'on',
+    aiPricingMode: 'tiered',
+    aiRatePer1MInput: 3,
+    aiRatePer1MOutput: 9,
+    aiRatePer1MTotal: '',
+    aiInputTokensM: 16,
+    aiOutputTokensM: 10,
+    aiRetryRatePct: 34,
+    aiPremiumMixPct: 28,
+    aiSharedOverheadMonthly: 1400,
+    aiAllocationPolicy: 'token-weighted'
+  }
+};
+
+function applyAiTokenPreset(presetKey) {
+  const preset = AI_TOKEN_PRESETS[presetKey];
+  if (!preset) return;
+
+  Object.entries(preset).forEach(([fieldId, rawValue]) => {
+    const input = document.getElementById(`inp-${fieldId}`);
+    if (!input) return;
+    input.value = String(rawValue);
+    const filled = isMeaningfulInputValue(input, rawValue);
+    USER_PROVIDED[fieldId] = filled;
+    const fieldWrap = input.closest('.calc-field, .startup-field');
+    if (fieldWrap) fieldWrap.classList.toggle('has-value', filled);
+  });
+
+  recalculate();
+  updateProgressPills();
+}
+
 function applyFeatureGates() {
   const runtime = window.FiceCalFeatureRuntime;
   if (!runtime || typeof runtime.applyDomGates !== 'function') return;
@@ -5950,9 +6248,9 @@ function applySharedState(state) {
       : '';
     const safeValue = hasKey ? normaliseSharedInput(el, inputState[key]) : defaultValue;
     el.value = safeValue;
-    USER_PROVIDED[key] = safeValue !== '';
+    USER_PROVIDED[key] = isMeaningfulInputValue(el, safeValue);
     const wrap = el.closest('.calc-field, .startup-field');
-    if (wrap) wrap.classList.toggle('has-value', safeValue !== '');
+    if (wrap) wrap.classList.toggle('has-value', isMeaningfulInputValue(el, safeValue));
   });
 
   const legacyPrimary = (typeof inputState.techDomain === 'string') ? [inputState.techDomain] : [];
@@ -6559,7 +6857,12 @@ const USER_PROVIDED = {
   budgetMonthly:false, forecastGrowthPct:false, forecastBestEfficiencyPct:false, forecastWorstDriftPct:false,
   savingsIdentified:false, savingsRealized:false, costAvoidance:false,
   techDomains:false, costSaaS:false, costLicensing:false,
-  costPrivateCloud:false, costDataCenter:false, costLabor:false
+  costPrivateCloud:false, costDataCenter:false, costLabor:false,
+  aiEnabled:false, aiPricingMode:false,
+  aiRatePer1MInput:false, aiRatePer1MOutput:false, aiRatePer1MTotal:false,
+  aiInputTokensM:false, aiOutputTokensM:false,
+  aiRetryRatePct:false, aiPremiumMixPct:false,
+  aiSharedOverheadMonthly:false, aiAllocationPolicy:false
 };
 
 // Smart default n when user hasn't told us their scale yet
@@ -6583,7 +6886,14 @@ let lastInputs = {
   budgetMonthly: null, forecastGrowthPct: null, forecastBestEfficiencyPct: null, forecastWorstDriftPct: null,
   savingsIdentified: null, savingsRealized: null, costAvoidance: null,
   techDomains: [...DEFAULT_TECH_DOMAINS],
-  costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
+  costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null,
+  aiEnabled: false,
+  aiPricingMode: 'blended',
+  aiRatePer1MInput: null, aiRatePer1MOutput: null, aiRatePer1MTotal: null,
+  aiInputTokensM: null, aiOutputTokensM: null,
+  aiRetryRatePct: null, aiPremiumMixPct: null,
+  aiSharedOverheadMonthly: null, aiAllocationPolicy: 'token-weighted',
+  aiMetrics: null
 };
 
 const DEMO_SCENARIOS = {
@@ -6799,6 +7109,62 @@ function buildStrategicRecommendations({ zoneKey, nSample, beN, arpuUsed, minCos
   return strategic;
 }
 
+function buildAiTokenRecommendations({ aiMetrics, arpuUsed }) {
+  if (!aiMetrics || !aiMetrics.enabled) return [];
+
+  const aiRecs = [];
+
+  if (aiMetrics.aiRetryInflationPct !== null && aiMetrics.aiRetryInflationPct > 12) {
+    aiRecs.push({
+      icon: '🔁',
+      title: 'Reduce AI retry inflation',
+      desc: `Retry inflation is ${aiMetrics.aiRetryInflationPct.toFixed(1)}%, which is amplifying AI inference spend beyond first-pass expectations.`,
+      action: 'Action: instrument prompt quality, timeout handling, and tool-call error paths; set retry budgets per workflow.',
+      providers: [],
+      zones: ['green', 'yellow', 'red'],
+      priority: aiMetrics.aiRetryInflationPct > 20 ? 'high' : 'medium'
+    });
+  }
+
+  if (aiMetrics.aiPremiumMixPct !== null && aiMetrics.aiPremiumMixPct > 35) {
+    aiRecs.push({
+      icon: '🧠',
+      title: 'Tune premium model routing',
+      desc: `Premium model mix is ${aiMetrics.aiPremiumMixPct.toFixed(1)}%, increasing weighted cost per request.`,
+      action: 'Action: route low-complexity prompts to lower-cost models and keep premium models for high-value or low-confidence cases.',
+      providers: [],
+      zones: ['green', 'yellow', 'red'],
+      priority: aiMetrics.aiPremiumMixPct > 55 ? 'high' : 'medium'
+    });
+  }
+
+  if (aiMetrics.aiCostPerClient !== null && arpuUsed !== null && aiMetrics.aiCostPerClient > arpuUsed * 0.4) {
+    aiRecs.push({
+      icon: '💬',
+      title: 'Reprice AI-heavy experience tiers',
+      desc: `AI cost per client (${fmtOut(aiMetrics.aiCostPerClient, 2)}) is consuming a high share of ARPU (${fmtOut(arpuUsed, 2)}).`,
+      action: 'Action: create AI usage-aware pricing tiers, enforce fair-use envelopes, and align premium features to token intensity.',
+      providers: [],
+      zones: ['green', 'yellow', 'red'],
+      priority: 'high'
+    });
+  }
+
+  if (aiMetrics.allocationConfidence === 'low') {
+    aiRecs.push({
+      icon: '🧾',
+      title: 'Strengthen AI allocation telemetry',
+      desc: 'Allocation confidence is low because token volume and/or rate visibility is incomplete.',
+      action: 'Action: enforce team-level token telemetry and rate-card governance before publishing chargeback/showback outcomes.',
+      providers: [],
+      zones: ['green', 'yellow', 'red'],
+      priority: 'medium'
+    });
+  }
+
+  return aiRecs;
+}
+
 function toggleProvider(provider) {
   const btn = document.querySelector(`[data-provider="${provider}"]`);
   if (selectedProviders.has(provider)) {
@@ -6812,7 +7178,7 @@ function toggleProvider(provider) {
 }
 
 function updateHealthAndRecommendations(inputs) {
-  const { nRef, infraTotal, ARPU: arpuInp, effectiveARPU, arpuMode } = inputs || {};
+  const { nRef, infraTotal, ARPU: arpuInp, effectiveARPU, arpuMode, aiMetrics } = inputs || {};
   const nSample  = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
   const hasInfra = infraTotal !== null && infraTotal !== undefined;
   const arpuUsed = (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0)
@@ -6923,7 +7289,8 @@ function updateHealthAndRecommendations(inputs) {
     minCostN,
     minUnitCostPerClient
   });
-  const scoped = [...strategicRecommendations, ...RECOMMENDATIONS]
+  const aiRecommendations = buildAiTokenRecommendations({ aiMetrics, arpuUsed });
+  const scoped = [...strategicRecommendations, ...aiRecommendations, ...RECOMMENDATIONS]
     .map(rec => ({ ...rec, categoryKey: inferRecommendationCategory(rec) }))
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
@@ -7329,13 +7696,22 @@ function initOutputCardTooltips() {
 function onInput(fieldId) {
   const input = document.getElementById('inp-' + fieldId);
   if (input) {
-    const filled = input.value.trim() !== '';
+    const filled = isMeaningfulInputValue(input, input.value);
     const fieldWrap = input.closest('.calc-field, .startup-field');
     if (fieldWrap) fieldWrap.classList.toggle('has-value', filled);
     USER_PROVIDED[fieldId] = filled;
   }
   recalculate();
   updateProgressPills();
+}
+
+function isMeaningfulInputValue(input, rawValue) {
+  if (!input) return false;
+  const value = String(rawValue ?? '').trim();
+  if (value === '') return false;
+  const defaultValue = input.dataset.defaultValue;
+  if (typeof defaultValue === 'string' && value === defaultValue) return false;
+  return true;
 }
 
 function updateProgressPills() {
@@ -7345,7 +7721,10 @@ function updateProgressPills() {
     'inp-cudPct','inp-margin','inp-nMax',
     'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
     'inp-savingsIdentified','inp-savingsRealized','inp-costAvoidance',
-    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
+    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor',
+    'inp-aiEnabled','inp-aiPricingMode','inp-aiRatePer1MInput','inp-aiRatePer1MOutput','inp-aiRatePer1MTotal',
+    'inp-aiInputTokensM','inp-aiOutputTokensM','inp-aiRetryRatePct','inp-aiPremiumMixPct',
+    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy'
   ];
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'flex';
@@ -7353,7 +7732,7 @@ function updateProgressPills() {
   ids.forEach((id, i) => {
     const el   = document.getElementById(id);
     const pill = document.getElementById('cp-' + i);
-    const has  = el && el.value.trim() !== '';
+    const has  = isMeaningfulInputValue(el, el ? el.value : '');
     if (has) filled++;
     if (pill) pill.classList.toggle('filled', has);
   });
@@ -7395,6 +7774,17 @@ function recalculate() {
   const costPrivateCloud= getInp('inp-costPrivateCloud');
   const costDataCenter  = getInp('inp-costDataCenter');
   const costLabor       = getInp('inp-costLabor');
+  const aiEnabled       = getInputString('inp-aiEnabled', 'off') === 'on';
+  const aiPricingMode   = getInputString('inp-aiPricingMode', 'blended');
+  const aiRatePer1MInput = getInp('inp-aiRatePer1MInput');
+  const aiRatePer1MOutput = getInp('inp-aiRatePer1MOutput');
+  const aiRatePer1MTotal = getInp('inp-aiRatePer1MTotal');
+  const aiInputTokensM  = getInp('inp-aiInputTokensM');
+  const aiOutputTokensM = getInp('inp-aiOutputTokensM');
+  const aiRetryRatePct  = getInp('inp-aiRetryRatePct');
+  const aiPremiumMixPct = getInp('inp-aiPremiumMixPct');
+  const aiSharedOverheadMonthly = getInp('inp-aiSharedOverheadMonthly');
+  const aiAllocationPolicy = getInputString('inp-aiAllocationPolicy', 'token-weighted');
 
   let derivations = [];
   let effectiveARPU = null;
@@ -7456,7 +7846,13 @@ function recalculate() {
     budgetMonthly, forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct,
     savingsIdentified, savingsRealized, costAvoidance,
     techDomains,
-    costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
+    costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor,
+    aiEnabled, aiPricingMode,
+    aiRatePer1MInput, aiRatePer1MOutput, aiRatePer1MTotal,
+    aiInputTokensM, aiOutputTokensM,
+    aiRetryRatePct, aiPremiumMixPct,
+    aiSharedOverheadMonthly, aiAllocationPolicy,
+    aiMetrics: null
   };
 
   if (changed) { draw(); }
@@ -7475,7 +7871,12 @@ function updateOutputCards(inputs) {
     startupTargetPrice, startupTargetClients, effectiveARPU, arpuMode,
     budgetMonthly, forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct,
     savingsIdentified, savingsRealized, costAvoidance,
-    techDomains, costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor
+    techDomains, costSaaS, costLicensing, costPrivateCloud, costDataCenter, costLabor,
+    aiEnabled, aiPricingMode,
+    aiRatePer1MInput, aiRatePer1MOutput, aiRatePer1MTotal,
+    aiInputTokensM, aiOutputTokensM,
+    aiRetryRatePct, aiPremiumMixPct,
+    aiSharedOverheadMonthly, aiAllocationPolicy
   } = inputs;
   const { K, a, c, b, g, m, nMax } = MODEL;
 
@@ -7813,6 +8214,69 @@ function updateOutputCards(inputs) {
       : (normalization.confidence === 'Medium' ? 'warn' : 'bad');
     const confidenceCardState = confidenceClass === 'good' ? '' : (confidenceClass === 'warn' ? 'warn' : 'bad');
     setOut('oval-focusMaturity', normalization.confidence, confidenceClass, confidenceCardState);
+  }
+
+  const aiEngine = window.FiceCalAiTokenEconomics;
+  const aiMetrics = (aiEngine && typeof aiEngine.calculate === 'function')
+    ? aiEngine.calculate({
+      enabled: aiEnabled,
+      pricingMode: aiPricingMode,
+      ratePer1MInput: aiRatePer1MInput,
+      ratePer1MOutput: aiRatePer1MOutput,
+      ratePer1MTotal: aiRatePer1MTotal,
+      inputTokensM: aiInputTokensM,
+      outputTokensM: aiOutputTokensM,
+      retryRatePct: aiRetryRatePct,
+      premiumMixPct: aiPremiumMixPct,
+      sharedOverheadMonthly: aiSharedOverheadMonthly,
+      allocationPolicy: aiAllocationPolicy,
+      nRef: nSample
+    })
+    : null;
+  inputs.aiMetrics = aiMetrics;
+
+  const aiGuardrailEl = document.getElementById('ai-token-guardrail');
+  if (!aiEnabled) {
+    setOut('oval-aiTokenCost', null, '', '', 'AI Cost Tracking = On');
+    setOut('oval-aiAllocatedCost', null, '', '', 'AI Cost Tracking = On');
+    setOut('oval-aiCostPerClient', null, '', '', 'AI Cost Tracking = On + Client Count');
+    setOut('oval-aiRetryInflation', null, '', '', 'AI Cost Tracking = On');
+    setOut('oval-aiPremiumMix', null, '', '', 'AI Cost Tracking = On');
+    if (aiGuardrailEl) aiGuardrailEl.textContent = 'AI token economics remains inactive until AI Cost Tracking is set to On and token/rate inputs are provided.';
+  } else if (!aiMetrics || aiMetrics.aiTotalTokenCost === null) {
+    setOut('oval-aiTokenCost', null, '', '', 'Token volume + token rates');
+    setOut('oval-aiAllocatedCost', null, '', '', 'Token volume + token rates + shared overhead');
+    setOut('oval-aiCostPerClient', null, '', '', 'Client count + AI allocated cost');
+    setOut('oval-aiRetryInflation', null, '', '', 'Retry rate %');
+    setOut('oval-aiPremiumMix', null, '', '', 'Premium model mix %');
+    if (aiGuardrailEl) aiGuardrailEl.textContent = 'Populate token rates and monthly token volumes to activate AI allocation outputs.';
+  } else {
+    const aiCostPerClientClass = (!hasARPU || aiMetrics.aiCostPerClient === null)
+      ? 'warn'
+      : (aiMetrics.aiCostPerClient <= arpuUsed * 0.25 ? 'good' : (aiMetrics.aiCostPerClient <= arpuUsed * 0.45 ? 'warn' : 'bad'));
+    const aiCostPerClientCard = aiCostPerClientClass === 'good' ? '' : aiCostPerClientClass;
+    const retryClass = aiMetrics.aiRetryInflationPct <= 10 ? 'good' : (aiMetrics.aiRetryInflationPct <= 20 ? 'warn' : 'bad');
+    const premiumClass = aiMetrics.aiPremiumMixPct <= 25 ? 'good' : (aiMetrics.aiPremiumMixPct <= 45 ? 'warn' : 'bad');
+
+    setOut('oval-aiTokenCost', `${fmtOut(aiMetrics.aiTotalTokenCost, 0)} / mo`, 'good', '');
+    setOut('oval-aiAllocatedCost', `${fmtOut(aiMetrics.aiTotalAllocatedCost, 0)} / mo`, 'good', '');
+
+    if (aiMetrics.aiCostPerClient === null) {
+      setOut('oval-aiCostPerClient', null, '', '', 'Client count (n)');
+    } else {
+      setOut('oval-aiCostPerClient', `${fmtOut(aiMetrics.aiCostPerClient, 2)} / client`, aiCostPerClientClass, aiCostPerClientCard);
+    }
+
+    setOut('oval-aiRetryInflation', `${aiMetrics.aiRetryInflationPct.toFixed(1)}%`, retryClass, retryClass === 'good' ? '' : retryClass);
+    setOut('oval-aiPremiumMix', `${aiMetrics.aiPremiumMixPct.toFixed(1)}%`, premiumClass, premiumClass === 'good' ? '' : premiumClass);
+
+    const aiAllocSub = document.querySelector('#out-aiAllocatedCost .calc-out-sub');
+    if (aiAllocSub) {
+      aiAllocSub.textContent = `Allocation policy: ${aiMetrics.allocationPolicy} · confidence: ${aiMetrics.allocationConfidence.toUpperCase()}`;
+    }
+    if (aiGuardrailEl) {
+      aiGuardrailEl.textContent = `AI token economics active: ${aiMetrics.tokenVolumeM.toFixed(1)}M monthly tokens, governance risk ${aiMetrics.tokenGovernanceRisk.toUpperCase()}, allocation confidence ${aiMetrics.allocationConfidence.toUpperCase()}.`;
+    }
   }
 
   renderPortfolioSummary(normalization);
@@ -8167,7 +8631,14 @@ function resetModel() {
     budgetMonthly: null, forecastGrowthPct: null, forecastBestEfficiencyPct: null, forecastWorstDriftPct: null,
     savingsIdentified: null, savingsRealized: null, costAvoidance: null,
     techDomains: [...DEFAULT_TECH_DOMAINS],
-    costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null
+    costSaaS: null, costLicensing: null, costPrivateCloud: null, costDataCenter: null, costLabor: null,
+    aiEnabled: false,
+    aiPricingMode: 'blended',
+    aiRatePer1MInput: null, aiRatePer1MOutput: null, aiRatePer1MTotal: null,
+    aiInputTokensM: null, aiOutputTokensM: null,
+    aiRetryRatePct: null, aiPremiumMixPct: null,
+    aiSharedOverheadMonthly: null, aiAllocationPolicy: 'token-weighted',
+    aiMetrics: null
   };
   const ids = [
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
@@ -8175,13 +8646,18 @@ function resetModel() {
     'inp-cudPct','inp-margin','inp-nMax',
     'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
     'inp-savingsIdentified','inp-savingsRealized','inp-costAvoidance',
-    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor'
+    'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor',
+    'inp-aiEnabled','inp-aiPricingMode','inp-aiRatePer1MInput','inp-aiRatePer1MOutput','inp-aiRatePer1MTotal',
+    'inp-aiInputTokensM','inp-aiOutputTokensM','inp-aiRetryRatePct','inp-aiPremiumMixPct',
+    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy'
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       if (el.type === 'hidden') {
         el.value = el.dataset.defaultValue || '';
+      } else if (el.tagName === 'SELECT') {
+        el.value = el.dataset.defaultValue || (el.options[0] ? el.options[0].value : '');
       } else {
         el.value = '';
       }

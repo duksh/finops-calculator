@@ -29,10 +29,10 @@ Create a modular foundation for FiceCal so new capabilities (starting with AI to
 
 ## Lane D: AI token economics module (P2)
 
-- [ ] Implement token cost formulas in isolated module
-- [ ] Add module outputs to KPI and recommendation pipeline
-- [ ] Add module health checks (allocation reconcile, retry inflation, premium mix)
-- [ ] Add baseline scenario presets
+- [x] Implement token cost formulas in isolated module
+- [x] Add module outputs to KPI and recommendation pipeline
+- [x] Add module health checks (allocation reconcile, retry inflation, premium mix)
+- [x] Add baseline scenario presets
 
 ## Lane E: GitOps reliability (P1)
 

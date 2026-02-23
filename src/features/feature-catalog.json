@@ -21,7 +21,7 @@
     {
       "id": "ai-token-economics",
       "manifestPath": "src/features/ai-token-economics/feature.json",
-      "enabled": false,
+      "enabled": true,
       "required": false
     }
   ]
