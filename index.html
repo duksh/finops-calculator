@@ -1742,14 +1742,6 @@ body.chart-focus-open #chart-section .chart-focus-close {
   padding: 6px 12px;
   font-size: 11px;
 }
-@media (max-width: 680px) {
-  .calc-actions {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-}
 
 /* Unified action controls for calculator header */
 .calc-action-btn {
@@ -1844,6 +1836,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .calc-actions {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 10px;
   width: 100%;
   min-width: 0;
@@ -1855,6 +1848,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .calc-actions-row {
   display: grid;
+  width: 100%;
   gap: 10px;
   align-items: start;
 }
@@ -2233,7 +2227,14 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 
 @media (max-width: 680px) {
-  .calc-actions { padding: 10px; }
+  .calc-actions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 10px;
+  }
   .calc-actions-row--persona,
   .calc-actions-row--analysis,
   .calc-actions-row--controls {
