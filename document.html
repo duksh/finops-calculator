@@ -528,15 +528,15 @@
       <section class="doc-section" id="quick-start" aria-labelledby="quick-start-title">
         <h2 id="quick-start-title">Quick start</h2>
         <ol>
-          <li>Open the calculator page and complete Group A inputs (client volume, costs, and ARPU or startup planning fields).</li>
-          <li>Use Group B controls for both model tuning and Quantify Business Value inputs: CUD, target margin, budget, forecast assumptions, savings realization, and cost avoidance.</li>
+          <li>In <strong>Quick actions</strong>, follow the first-timer strip: <strong>Step 1: Pick your role</strong> (Finance, Operations, Architecture, Executive).</li>
+          <li>Use the <strong>Start Step 2</strong> button to jump directly to the required core fields: <strong>Total Infra Cost</strong> and <strong>Revenue / Client (ARPU)</strong>.</li>
+          <li>After Step 2 is complete, Step 3 unlocks your role-specific <strong>top 3 outcomes + first action</strong>. Use this as your immediate readout before deeper tuning.</li>
+          <li>Then use Group B controls for model tuning and Quantify Business Value inputs: CUD, target margin, budget, forecast assumptions, savings realization, and cost avoidance.</li>
           <li>Optionally add multi-technology costs (SaaS, licensing, private cloud, data center, labor) and scope domains for normalization.</li>
-          <li>Review Group C auto-calculated outputs. Use the info tooltips on each output for formula context, then validate budget variance, forecast confidence band, and value realization metrics.</li>
-          <li>Check Group E health status and recommendation cards for priority actions.</li>
-          <li>Use the chart section to inspect cost/revenue/profit curves across scale.</li>
+          <li>Review Group C auto-calculated outputs and Group E health/recommendation cards, then use the chart section to inspect cost/revenue/profit behavior across scale.</li>
         </ol>
         <div class="callout">
-          Tip: For scenario planning, adjust one assumption at a time (ARPU, growth, efficiency, or budget) and compare impact on break-even, CCER, forecast margin band, and realization ratio.
+          Tip: Keep first-pass analysis simple: role -> two core inputs -> top outcomes. Expand "Guided path" and "More actions (advanced)" only after the initial readout is clear.
         </div>
       </section>
 
@@ -671,7 +671,9 @@
         <h2 id="usage-workflow-title">How to use the calculator effectively</h2>
         <h3>Recommended workflow</h3>
         <ol>
-          <li>Start with realistic current values. If ARPU is uncertain, use startup planning options.</li>
+          <li>Select the role that matches your decision context. This automatically aligns recommendation emphasis and guided-path framing.</li>
+          <li>Complete only the two core fields first (Infra Cost + ARPU) to unlock the role preview and avoid early input overload.</li>
+          <li>Review "You'll get first" outcomes and "Do this next" before touching advanced controls.</li>
           <li>Set a conservative CUD percentage first, then refine after observing sensitivity.</li>
           <li>Set monthly budget and check Budget Variance to identify immediate overrun/headroom posture.</li>
           <li>Add forecast growth, best-case efficiency, and worst-case drift to activate the forecast margin/confidence band outputs.</li>
@@ -708,6 +710,7 @@
         <ul>
           <li>Includes all active numeric inputs, selected tech domains, selected providers, and curve visibility toggles.</li>
           <li>This now includes Quantify Business Value controls (budget, forecast assumptions, savings realization, cost avoidance).</li>
+          <li>Also includes UI context: selected role (<code>ui</code>) and interface mode (<code>um</code>) so shared links reopen in the same decision lens.</li>
           <li>The URL contains an encoded <code>?state=</code> token.</li>
           <li>On load, the app decodes and validates this state, then recalculates outputs, chart, health, and recommendations.</li>
         </ul>
@@ -720,6 +723,7 @@
           <li>Transport: JSON-RPC over stdio in the current implementation.</li>
           <li>Core logic is shared between browser model behavior and MCP tool handlers for unit economics, health scoring, recommendation prioritization, and state encoding/decoding.</li>
           <li><code>finops.calculate</code> supports multi-technology scope through <code>techDomains</code> and optional non-cloud monthly cost inputs.</li>
+          <li>MCP v0.3.0 keeps share-state parity with the calculator by supporting UI role/mode context (<code>uiIntent</code>, <code>uiMode</code>) in generated state tokens.</li>
           <li><code>finops.recommend</code> supports category-aware filtering and can include strategic pricing/marketing/CRM recommendations when inputs are supplied.</li>
           <li>Useful for repeatable analysis, not just manual UI interactions.</li>
         </ul>
@@ -738,8 +742,8 @@
           <tbody>
             <tr>
               <td><code>finops.calculate</code></td>
-              <td>Full model execution with normalized inputs.</td>
-              <td>Calculated outputs (including normalization snapshot), health, recommendations, and optional state token.</td>
+              <td>Full model execution with normalized inputs and optional UI context.</td>
+              <td>Calculated outputs (including normalization snapshot), health, recommendations, and optional state token that can preserve <code>ui</code>/<code>um</code> context.</td>
             </tr>
             <tr>
               <td><code>finops.health</code></td>
@@ -753,8 +757,8 @@
             </tr>
             <tr>
               <td><code>finops.state.encode</code></td>
-              <td>Create share-state tokens from assumptions.</td>
-              <td>Encoded token for URL embedding.</td>
+              <td>Create share-state tokens from assumptions plus optional role/mode context.</td>
+              <td>Encoded token for URL embedding with normalized <code>ui</code>, <code>um</code>, inputs, domains, providers, and hidden curves.</td>
             </tr>
             <tr>
               <td><code>finops.state.decode</code></td>
@@ -772,6 +776,7 @@
           <li>Clone <code>finops-calculator</code> or <code>finops-calculator-mcp</code>.</li>
           <li>Install dependencies in the MCP workspace.</li>
           <li>Run tests to verify contract/protocol behavior.</li>
+          <li>Run parity tests to verify that share-state and UI option constants have not drifted from <code>index.html</code>.</li>
           <li>Register MCP server command in your client config.</li>
         </ol>
 
@@ -804,11 +809,44 @@ node /absolute/path/to/mcp/server/index.js
         "nMax": 2000
       },
       "providers": ["aws"],
+      "uiIntent": "operations",
+      "uiMode": "operator",
       "options": {
         "includeHealth": true,
         "includeRecommendations": true,
         "includeStateToken": true
       }
+    }
+  }
+}
+</code></pre>
+
+        <h3>Decode state token and restore UI context</h3>
+<pre><code>{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "finops.state.decode",
+    "arguments": {
+      "stateToken": "..."
+    }
+  }
+}
+</code></pre>
+
+<pre><code>{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "state": {
+      "v": 1,
+      "ui": "operations",
+      "um": "operator",
+      "i": { "infraTotal": "2400", "ARPU": "30" },
+      "td": ["cloud", "saas"],
+      "p": ["aws"],
+      "h": []
     }
   }
 }
@@ -877,6 +915,7 @@ node /absolute/path/to/mcp/server/index.js
           <li><strong>Forecast band is missing:</strong> add ARPU (or startup-derived ARPU) and at least one forecast assumption.</li>
           <li><strong>Realization ratio is missing:</strong> identified savings must be greater than zero to compute ratio/gap.</li>
           <li><strong>Shared link does not restore:</strong> ensure full URL including <code>?state=</code> is copied.</li>
+          <li><strong>Role/mode not matching after opening link:</strong> regenerate the link after selecting role and mode so <code>ui</code>/<code>um</code> are captured.</li>
         </ul>
 
         <h3>MCP issues</h3>
@@ -884,13 +923,14 @@ node /absolute/path/to/mcp/server/index.js
           <li><strong>Tools not visible:</strong> confirm server command path and restart the MCP client.</li>
           <li><strong>Tool call errors:</strong> validate argument types against the schema definitions in the <code>finops-calculator-mcp</code> repository.</li>
           <li><strong>Unexpected decode errors:</strong> ensure the token is complete and unmodified.</li>
+          <li><strong>MCP parity failures:</strong> run <code>npm run test:parity</code> in <code>finops-calculator-mcp/server</code> and inspect drift in share-state version or UI option constants.</li>
         </ul>
       </section>
 
       <p class="footer-note">This documentation page is intended as both a business user guide and technical handoff reference for teams integrating the FinOps calculator in human and assistant workflows.</p>
       <div class="doc-page-meta" aria-label="Page metadata">
-        <span><strong>Last updated:</strong> <time datetime="2026-02-21T13:10:00+04:00">21 Feb 2026, 13:10 (UTC+04:00)</time></span>
-        <span><strong>Version ID:</strong> v2026.02.21-01</span>
+        <span><strong>Last updated:</strong> <time datetime="2026-02-23T15:03:00+04:00">23 Feb 2026, 15:03 (UTC+04:00)</time></span>
+        <span><strong>Version ID:</strong> v2026.02.23-01</span>
       </div>
       <p class="doc-author-ref">Reference author: Duksh Koonjoobeeharry (FinOps &amp; AWS/GCP Cloud Solution Developer, DBA Researcher) · <a href="https://www.linkedin.com/in/duksh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
     </div>
