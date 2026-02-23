@@ -3370,6 +3370,16 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   flex-wrap: wrap;
   gap: 8px;
 }
+.intent-rec-helper {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px dashed rgba(0,114,178,0.3);
+  background: rgba(0,114,178,0.07);
+  color: #4b5263;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+}
 .rec-filters-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -3400,6 +3410,16 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   background: rgba(0,114,178,0.12);
   border-color: rgba(0,114,178,0.52);
   color: #0f4e76;
+}
+.intent-kpi-helper {
+  margin: 10px 12px 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px dashed rgba(0,114,178,0.32);
+  background: rgba(0,114,178,0.07);
+  color: #4b5263;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
 }
 .rec-card {
   border: 1.5px solid var(--border);
@@ -4440,7 +4460,9 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <span class="finops-2026-pill">State of FinOps 2026 aligned outputs</span>
         </div>
 
-        <div class="calc-outputs">
+        <div class="intent-kpi-helper" id="intent-kpi-helper">Intent profile prioritization is active for KPI output ordering.</div>
+
+        <div class="calc-outputs" id="calc-kpi-output-grid">
 
           <div class="calc-out-card" id="out-beN">
             <div class="calc-out-label">Break-Even Clients</div>
@@ -4775,6 +4797,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <button class="rec-filter-btn" type="button" data-rec-category="crm" aria-pressed="false">CRM</button>
             <button class="rec-filter-btn" type="button" data-rec-category="governance" aria-pressed="false">Governance</button>
           </div>
+          <div class="intent-rec-helper" id="intent-rec-helper">Recommendation emphasis adapts to selected intent while keeping health-score logic unchanged.</div>
           <div class="rec-list" id="rec-list">
             <div class="rec-empty">Recommendations will appear here once enough data is available.</div>
           </div>
@@ -5237,25 +5260,41 @@ const UI_INTENT_PROFILES = {
     mode: 'quick',
     recommendationCategory: 'pricing',
     featureProfile: 'core-kpis',
-    summary: 'Viability intent: prioritises break-even, minimum price, and contribution margin for fast go/no-go checks.'
+    summary: 'Viability intent: prioritises break-even, minimum price, and contribution margin for fast go/no-go checks.',
+    kpiHelper: 'Viability first: focus on Break-Even, Min Price, Contribution Margin, and CCER before broader overlays.',
+    recommendationHelper: 'Recommendation emphasis: pricing and revenue-fit actions are ranked first for viability decisions.',
+    recommendationWeights: { pricing: 0, infrastructure: 1, marketing: 2, crm: 3, governance: 4, all: 5 },
+    kpiOrder: ['out-beN', 'out-minPrice', 'out-margin', 'out-ccer', 'out-vcpu', 'out-targetRevenue']
   },
   operations: {
     mode: 'operator',
     recommendationCategory: 'infrastructure',
     featureProfile: 'finops-operations',
-    summary: 'Operations intent: prioritises budgeting, forecast variance, and monthly optimization levers.'
+    summary: 'Operations intent: prioritises budgeting, forecast variance, and monthly optimization levers.',
+    kpiHelper: 'Operations first: budget variance, forecast band, realization cadence, and normalized coverage are surfaced early.',
+    recommendationHelper: 'Recommendation emphasis: infrastructure and operating levers are ranked first for monthly control loops.',
+    recommendationWeights: { infrastructure: 0, governance: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
+    kpiOrder: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity']
   },
   architecture: {
     mode: 'architect',
     recommendationCategory: 'governance',
     featureProfile: 'policy-ai',
-    summary: 'Architect intent: surfaces policy-heavy controls, including AI token economics and allocation behavior.'
+    summary: 'Architect intent: surfaces policy-heavy controls, including AI token economics and allocation behavior.',
+    kpiHelper: 'Architecture first: AI allocation, retry inflation, premium mix, and governance-sensitive outputs are prioritized.',
+    recommendationHelper: 'Recommendation emphasis: governance and policy controls are ranked first, then infrastructure and pricing.',
+    recommendationWeights: { governance: 0, infrastructure: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
+    kpiOrder: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-techNorm', 'out-focusMaturity']
   },
   executive: {
     mode: 'operator',
     recommendationCategory: 'all',
     featureProfile: 'executive-summary',
-    summary: 'Executive intent: keeps a concise KPI story with cross-domain recommendations for decision review.'
+    summary: 'Executive intent: keeps a concise KPI story with cross-domain recommendations for decision review.',
+    kpiHelper: 'Executive first: concise KPI narrative prioritizing health score context, variance, and margin-sensitive metrics.',
+    recommendationHelper: 'Recommendation emphasis: high-priority cross-domain actions are surfaced first for decision review.',
+    recommendationWeights: { all: 0, infrastructure: 1, pricing: 2, governance: 3, crm: 4, marketing: 5 },
+    kpiOrder: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient']
   }
 };
 const SHAREABLE_INPUT_KEYS = [
@@ -6195,6 +6234,40 @@ function getUiIntentProfile(intent) {
   return UI_INTENT_PROFILES[normalizeUiIntent(intent)] || UI_INTENT_PROFILES[UI_INTENT_DEFAULT];
 }
 
+function recommendationIntentWeight(categoryKey, intent) {
+  const profile = getUiIntentProfile(intent);
+  const weights = profile.recommendationWeights || {};
+  const normalizedCategory = normalizeRecommendationCategory(categoryKey);
+  if (Object.prototype.hasOwnProperty.call(weights, normalizedCategory)) {
+    return Number(weights[normalizedCategory]) || 0;
+  }
+  return 99;
+}
+
+function applyIntentOutputOrdering(intent) {
+  const profile = getUiIntentProfile(intent);
+  const outputGrid = document.getElementById('calc-kpi-output-grid');
+  if (!outputGrid) return;
+
+  const currentCards = Array.from(outputGrid.querySelectorAll(':scope > .calc-out-card'));
+  if (!currentCards.length) return;
+
+  const byId = new Map(currentCards.map(card => [card.id, card]));
+  const appended = new Set();
+
+  (profile.kpiOrder || []).forEach(cardId => {
+    const card = byId.get(cardId);
+    if (!card) return;
+    outputGrid.appendChild(card);
+    appended.add(card);
+  });
+
+  currentCards.forEach(card => {
+    if (appended.has(card)) return;
+    outputGrid.appendChild(card);
+  });
+}
+
 function syncUiIntentButtons() {
   const activeIntent = getCurrentUiIntent();
   const profile = getUiIntentProfile(activeIntent);
@@ -6208,6 +6281,14 @@ function syncUiIntentButtons() {
 
   const summaryEl = document.getElementById('calc-intent-summary');
   if (summaryEl) summaryEl.textContent = profile.summary;
+
+  const kpiHelperEl = document.getElementById('intent-kpi-helper');
+  if (kpiHelperEl) kpiHelperEl.textContent = profile.kpiHelper || 'Intent profile prioritization is active for KPI output ordering.';
+
+  const recHelperEl = document.getElementById('intent-rec-helper');
+  if (recHelperEl) recHelperEl.textContent = profile.recommendationHelper || 'Recommendation emphasis adapts to selected intent while keeping health-score logic unchanged.';
+
+  applyIntentOutputOrdering(activeIntent);
 
   const calcSection = document.getElementById('calculator-section');
   if (calcSection) {
@@ -7473,11 +7554,18 @@ function updateHealthAndRecommendations(inputs) {
     minUnitCostPerClient
   });
   const aiRecommendations = buildAiTokenRecommendations({ aiMetrics, arpuUsed });
+  const activeIntent = getCurrentUiIntent();
   const scoped = [...strategicRecommendations, ...aiRecommendations, ...RECOMMENDATIONS]
     .map(rec => ({ ...rec, categoryKey: inferRecommendationCategory(rec) }))
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
-    .sort((a, b) => priorityWeight(a.priority) - priorityWeight(b.priority));
+    .sort((a, b) => {
+      const priorityDelta = priorityWeight(a.priority) - priorityWeight(b.priority);
+      if (priorityDelta !== 0) return priorityDelta;
+      const intentDelta = recommendationIntentWeight(a.categoryKey, activeIntent) - recommendationIntentWeight(b.categoryKey, activeIntent);
+      if (intentDelta !== 0) return intentDelta;
+      return String(a.title || '').localeCompare(String(b.title || ''));
+    });
 
   const filtered = scoped.filter(rec => {
     if (selectedRecommendationCategory === 'all') return true;

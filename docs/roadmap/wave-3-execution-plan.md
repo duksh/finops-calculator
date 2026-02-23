@@ -24,11 +24,19 @@ Snapshot:
 
 ## Immediate next execution (Intent-based UI/UX rehauling)
 
+Progress snapshot:
+
+- I1. Intent selector and routing: complete
+- I2. KPI and recommendation orchestration: complete
+- I3. Guided decision paths: next
+
 ## I1. Intent selector and routing
 
 1. Add a top-level intent selector in calculator header.
 2. Map intent -> default mode + feature visibility profile.
 3. Persist intent in shared state (same pattern as `um`).
+
+Status: complete.
 
 ## I2. KPI and recommendation orchestration
 
@@ -36,11 +44,15 @@ Snapshot:
 2. Add intent-specific "why this first" helper text.
 3. Re-rank recommendation emphasis by intent while preserving numeric logic.
 
+Status: complete.
+
 ## I3. Guided decision paths
 
 1. Add step ribbons per intent (e.g., Viability -> Risk -> Action).
 2. Track completion state by step.
 3. Add one-click export presets tuned to each intent.
+
+Status: next.
 
 ---
 
