@@ -6125,7 +6125,7 @@ function collectShareState() {
     const el = document.getElementById(`inp-${key}`);
     if (!el) return;
     const value = el.value.trim();
-    if (value !== '') inputState[key] = value;
+    if (isMeaningfulInputValue(el, value)) inputState[key] = value;
   });
 
   return {
