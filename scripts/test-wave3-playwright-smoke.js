@@ -94,6 +94,38 @@ async function waitAndFill(page, selector, value) {
   await page.fill(selector, value, { timeout: STEP_TIMEOUT_MS });
 }
 
+async function ensureDetailsOpen(page, detailsSelector, summarySelector) {
+  await page.waitForSelector(detailsSelector, { state: 'attached', timeout: STEP_TIMEOUT_MS });
+  const isOpen = await page.evaluate((selector) => {
+    const el = document.querySelector(selector);
+    return Boolean(el && el.hasAttribute('open'));
+  }, detailsSelector);
+  if (isOpen) return;
+
+  await waitAndClick(page, summarySelector);
+  await page.waitForFunction(
+    selector => {
+      const el = document.querySelector(selector);
+      return Boolean(el && el.hasAttribute('open'));
+    },
+    detailsSelector,
+    { timeout: STEP_TIMEOUT_MS }
+  );
+}
+
+async function ensureMoreActionsOpen(page) {
+  await ensureDetailsOpen(page, '#calc-more-actions', '#calc-more-actions > summary');
+}
+
+async function ensureGuidedPathOpen(page) {
+  await ensureDetailsOpen(page, '#intent-path-wrap', '#intent-path-wrap > summary');
+}
+
+async function setModeViaUi(page, mode) {
+  await ensureMoreActionsOpen(page);
+  await waitAndClick(page, `[data-ui-mode-btn="${mode}"]`);
+}
+
 async function run() {
   const { server, port } = await startStaticServer();
   const baseUrl = `http://${HOST}:${port}`;
@@ -121,7 +153,7 @@ async function run() {
     await waitAndFill(page, '#inp-infraTotal', '2500');
     await waitAndFill(page, '#inp-ARPU', '72');
     await waitAndClick(page, '[data-ui-intent-btn="architecture"]');
-    await waitAndClick(page, '[data-ui-mode-btn="operator"]');
+    await setModeViaUi(page, 'operator');
     await page.waitForFunction(
       () => document.querySelector('[data-ui-intent-btn="architecture"]')?.getAttribute('aria-pressed') === 'true',
       null,
@@ -182,6 +214,7 @@ async function run() {
     assert.ok(doneProgress.includes('3/3'), `Expected guided progress to include 3/3 after complete signal set, got: ${doneProgress}`);
 
     // 4) Intent export button triggers CSV download
+    await ensureGuidedPathOpen(pageFlow);
     await pageFlow.waitForSelector('#intent-export-btn', { state: 'visible', timeout: STEP_TIMEOUT_MS });
     const [download] = await Promise.all([
       pageFlow.waitForEvent('download', { timeout: STEP_TIMEOUT_MS }),
