@@ -12,6 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Wave 3 AI token regression
+        run: node scripts/test-ai-token-economics.js
+
+      - name: Wave 3 intent and share-state regression
+        run: node scripts/test-wave3-intent-share-state.js
+
+      - name: Wave 3 UI contracts regression
+        run: node scripts/test-wave3-ui-contracts.js
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

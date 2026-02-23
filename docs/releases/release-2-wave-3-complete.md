@@ -42,11 +42,14 @@
 - Added Wave 3 acceptance checklist: `docs/roadmap/wave-3-acceptance-checklist.md`.
 - Updated Wave 3 execution status: `docs/roadmap/wave-3-execution-plan.md`.
 - Added Wave 3 regression script: `scripts/test-wave3-intent-share-state.js`.
+- Added Wave 3 UI contract regression script: `scripts/test-wave3-ui-contracts.js`.
+- Extended CI guardrails workflow to run Wave 3 Node regression checks before Python validations.
 
 ## Validation evidence
 
 - `node scripts/test-ai-token-economics.js`
 - `node scripts/test-wave3-intent-share-state.js`
+- `node scripts/test-wave3-ui-contracts.js`
 - `python3 scripts/validate-feature-catalog.py`
 - `python3 scripts/validate-doc-links.py`
 - Additional checks:
