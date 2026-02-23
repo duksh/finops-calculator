@@ -1851,15 +1851,23 @@ body.chart-focus-open #chart-section .chart-focus-close {
   width: 100%;
   gap: 10px;
   align-items: start;
+  padding: 10px;
+  border: 1px solid rgba(17,71,128,0.16);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.58);
 }
 .calc-actions-row--onboarding {
   grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
-.calc-actions-row--persona,
-.calc-actions-row--analysis,
+.calc-actions-row--persona {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+.calc-actions-row--analysis {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+}
 .calc-actions-row--controls {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
 }
 .calc-actions-hint {
   font-family: 'JetBrains Mono', monospace;
@@ -1868,7 +1876,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #1f4f7d;
-  margin-bottom: 2px;
+  margin: 0;
 }
 .calc-onboarding-steps {
   display: grid;
@@ -1955,6 +1963,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .calc-intent-summary {
   margin: 0;
   padding: 8px 9px;
+  min-height: 100%;
   border-radius: 8px;
   border: 1px solid rgba(106, 81, 145, 0.32);
   background: rgba(106, 81, 145, 0.09);
@@ -2183,46 +2192,22 @@ body.chart-focus-open #chart-section .chart-focus-close {
   gap: 8px;
   padding: 8px;
 }
-.calc-actions-row--persona .calc-intent-switch {
-  grid-column: 1 / span 8;
-}
-.calc-actions-row--persona .calc-intent-summary {
-  grid-column: 9 / -1;
-}
-.calc-actions-row--analysis .calc-intent-outcomes-wrap {
-  grid-column: 1 / span 3;
-}
-.calc-actions-row--analysis .calc-next-step {
-  grid-column: 4 / span 5;
-}
-.calc-actions-row--analysis .intent-path-wrap {
-  grid-column: 9 / -1;
-}
-.calc-actions-row--controls .calc-advanced-wrap {
-  grid-column: 1 / span 4;
-}
-.calc-actions-row--controls .share-btn {
-  grid-column: 5 / span 4;
-}
-.calc-actions-row--controls .calc-disclosure {
-  grid-column: 9 / -1;
-}
 
 @media (max-width: 1120px) {
-  .calc-actions-row--persona,
-  .calc-actions-row--analysis,
-  .calc-actions-row--controls {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+  .calc-actions-row--persona {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .calc-actions-row--persona .calc-intent-switch,
-  .calc-actions-row--persona .calc-intent-summary,
-  .calc-actions-row--analysis .calc-intent-outcomes-wrap,
-  .calc-actions-row--analysis .calc-next-step,
-  .calc-actions-row--analysis .intent-path-wrap,
-  .calc-actions-row--controls .calc-advanced-wrap,
-  .calc-actions-row--controls .share-btn,
+  .calc-actions-row--analysis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .calc-actions-row--analysis .intent-path-wrap {
+    grid-column: 1 / -1;
+  }
+  .calc-actions-row--controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .calc-actions-row--controls .calc-disclosure {
-    grid-column: span 3;
+    grid-column: 1 / -1;
   }
 }
 
@@ -2240,6 +2225,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
   .calc-actions-row--controls {
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
+    padding: 8px;
   }
   .calc-actions-hint { margin-bottom: 0; }
   .calc-onboarding-steps {
