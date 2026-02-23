@@ -84,6 +84,7 @@ Run from repo root:
 - [ ] `node scripts/test-ai-token-economics.js`
 - [ ] `node scripts/test-wave3-intent-share-state.js`
 - [ ] `node scripts/test-wave3-ui-contracts.js`
+- [ ] `node scripts/test-wave3-playwright-smoke.js` *(requires Playwright runtime + Chromium installed)*
 - [ ] `python3 scripts/validate-doc-links.py`
 - [ ] `python3 scripts/validate-feature-catalog.py`
 

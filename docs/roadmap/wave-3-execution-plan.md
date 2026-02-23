@@ -37,6 +37,10 @@ Closeout artifacts:
 - UI contract regression script: `scripts/test-wave3-ui-contracts.js`
 - Release note: `docs/releases/release-3-wave-3-complete.md`
 
+Post-release handoff:
+
+- Next phase plan: `docs/roadmap/wave-4-execution-plan.md`
+
 ## I1. Intent selector and routing
 
 1. Add a top-level intent selector in calculator header.
