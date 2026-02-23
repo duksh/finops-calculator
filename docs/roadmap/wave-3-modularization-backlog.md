@@ -18,7 +18,7 @@ Create a modular foundation for FiceCal so new capabilities (starting with AI to
 - [x] Introduce `src/core/` runtime shell helpers
 - [x] Extract pure economics helpers from `index.html` into `src/core/economics.js`
 - [x] Add compatibility adapter so current page behavior is unchanged
-- [ ] Add feature gate resolver to enable/disable optional modules
+- [x] Add feature gate resolver to enable/disable optional modules
 
 ## Lane C: UX mode architecture (P1)
 

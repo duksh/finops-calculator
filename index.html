@@ -3863,7 +3863,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-hint">Average monthly revenue per client. If unknown, leave blank and use Startup Planning below.</div>
           </div>
 
-          <div class="calc-field" id="field-techDomain">
+          <div class="calc-field" id="field-techDomain" data-feature="multi-tech-normalization">
             <label class="calc-label" for="inp-techDomains">
               Technology Domains in Scope
               <span class="ftag">R2 wave 1</span>
@@ -4062,7 +4062,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-guardrail value-guardrail" id="value-guardrail">Set budget and at least one forecasting or realization input to activate Quantify Business Value controls.</div>
         </div>
 
-        <div class="portfolio-overlay finops-2026-highlight">
+        <div class="portfolio-overlay finops-2026-highlight" data-feature="multi-tech-normalization">
           <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-costSaaS">
@@ -4231,19 +4231,19 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-out-sub">Remaining value to realize (or exceeded target)</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-techCoverage">
+          <div class="calc-out-card finops-2026-card" id="out-techCoverage" data-feature="multi-tech-normalization">
             <div class="calc-out-label">Coverage Across Domains</div>
             <div class="calc-out-val muted" id="oval-techCoverage">—</div>
             <div class="calc-out-sub">Coverage inside your selected scope (single or multi-domain)</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-techNorm">
+          <div class="calc-out-card finops-2026-card" id="out-techNorm" data-feature="multi-tech-normalization">
             <div class="calc-out-label">Normalized Tech Cost / Client</div>
             <div class="calc-out-val muted" id="oval-techNorm">—</div>
             <div class="calc-out-sub">Scoped cost aggregation normalized per client using selected domains</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-focusMaturity">
+          <div class="calc-out-card finops-2026-card" id="out-focusMaturity" data-feature="multi-tech-normalization">
             <div class="calc-out-label">Normalization Confidence</div>
             <div class="calc-out-val muted" id="oval-focusMaturity">—</div>
             <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
@@ -4875,6 +4875,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   </div>
 </div>
 
+<script src="src/features/runtime-gates.js"></script>
 <script src="src/core/economics.js"></script>
 <script>
 // ─── STATE ──────────────────────────────────────────────────────
@@ -5715,6 +5716,22 @@ function setTechDomainPreset(mode) {
     return;
   }
   setTechDomainSelection(DEFAULT_TECH_DOMAINS);
+}
+
+function applyFeatureGates() {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.applyDomGates !== 'function') return;
+  runtime.applyDomGates(document);
+}
+
+async function initFeatureRuntime() {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime) return;
+  applyFeatureGates();
+  if (typeof runtime.loadCatalog === 'function') {
+    await runtime.loadCatalog();
+    applyFeatureGates();
+  }
 }
 
 function collectShareState() {
@@ -8706,6 +8723,7 @@ renderCfoForecastDashboard(null);
 if (!loadSharedStateFromUrl()) {
   updateHealthAndRecommendations(lastInputs);
 }
+initFeatureRuntime();
 </script>
 </body>
 </html>
