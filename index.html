@@ -4875,6 +4875,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   </div>
 </div>
 
+<script src="src/core/economics.js"></script>
 <script>
 // ─── STATE ──────────────────────────────────────────────────────
 const hidden = new Set();
@@ -6042,6 +6043,11 @@ let MODEL = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000
 
 // ─── DATA MODEL ─────────────────────────────────────────────────
 function buildData() {
+  const coreEconomics = window.FiceCalCoreEconomics;
+  if (coreEconomics && typeof coreEconomics.buildDataFromModel === 'function') {
+    return coreEconomics.buildDataFromModel(MODEL, 300);
+  }
+
   const { K, a, c, b, g, ARPU, m, nMax } = MODEL;
   const N = 300;
   return d3.range(N + 1).map(i => {
@@ -6864,11 +6870,21 @@ function fmtOut(v, decimals=0) {
 }
 
 function totalCostAtClients(n, model = MODEL) {
+  const coreEconomics = window.FiceCalCoreEconomics;
+  if (coreEconomics && typeof coreEconomics.totalCostAtClients === 'function') {
+    return coreEconomics.totalCostAtClients(n, model);
+  }
+
   const safeN = Math.max(1, n);
   return model.K * Math.pow(safeN, -model.a) + model.c * Math.pow(safeN, model.b);
 }
 
 function scanEconomicRange(arpu, maxN, model = MODEL) {
+  const coreEconomics = window.FiceCalCoreEconomics;
+  if (coreEconomics && typeof coreEconomics.scanEconomicRange === 'function') {
+    return coreEconomics.scanEconomicRange(arpu, maxN, model);
+  }
+
   const limit = Math.max(1, Math.round(maxN));
   const hasArpu = arpu !== null && arpu !== undefined && arpu > 0;
   let breakEvenN = null;
@@ -6897,6 +6913,11 @@ function scanEconomicRange(arpu, maxN, model = MODEL) {
 }
 
 function minPriceAtClients(n, model = MODEL) {
+  const coreEconomics = window.FiceCalCoreEconomics;
+  if (coreEconomics && typeof coreEconomics.minPriceAtClients === 'function') {
+    return coreEconomics.minPriceAtClients(n, model);
+  }
+
   const safeN = Math.max(1, n);
   const total = totalCostAtClients(safeN, model);
   return (total / safeN) * (1 + model.m);
