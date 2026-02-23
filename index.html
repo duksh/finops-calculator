@@ -1859,6 +1859,48 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: #2e5c8a;
   margin-bottom: 2px;
 }
+.calc-intent-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.calc-intent-btn {
+  border: 1px solid rgba(106, 81, 145, 0.28);
+  border-radius: 8px;
+  min-height: 30px;
+  background: rgba(255,255,255,0.94);
+  color: #583c79;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.calc-intent-btn:hover {
+  border-color: rgba(106, 81, 145, 0.45);
+  background: rgba(106, 81, 145, 0.1);
+}
+.calc-intent-btn[aria-pressed="true"] {
+  border-color: rgba(106, 81, 145, 0.58);
+  background: linear-gradient(180deg, rgba(106,81,145,0.2), rgba(0,114,178,0.13));
+  color: #3f275f;
+}
+.calc-intent-btn:focus-visible {
+  outline: 2px solid #b39ddb;
+  outline-offset: 2px;
+}
+.calc-intent-summary {
+  margin: 4px 0 8px;
+  padding: 7px 9px;
+  border-radius: 8px;
+  border: 1px dashed rgba(106, 81, 145, 0.34);
+  background: rgba(106, 81, 145, 0.07);
+  color: #4b5263;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+}
 .calc-mode-switch {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1917,6 +1959,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
   .calc-actions-hint {
     grid-column: 1 / -1;
     margin-bottom: 0;
+  }
+  .calc-intent-switch {
+    grid-column: 1 / -1;
+  }
+  .calc-intent-summary {
+    grid-column: 1 / -1;
+    margin: 0;
   }
   .calc-mode-switch {
     grid-column: 1 / -1;
@@ -3869,6 +3918,14 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
         <div class="calc-actions">
           <div class="calc-actions-hint">Quick actions + demos</div>
+          <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
+            <span class="calc-mode-label">Intent</span>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Viability</button>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="operations" onclick="setUiIntent('operations')" aria-pressed="false">Operations</button>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architect</button>
+            <button type="button" class="calc-intent-btn" data-ui-intent-btn="executive" onclick="setUiIntent('executive')" aria-pressed="false">Executive</button>
+          </div>
+          <div class="calc-intent-summary" id="calc-intent-summary">Intent profile decides which surfaces are prioritized first.</div>
           <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
             <span class="calc-mode-label">Mode</span>
             <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
@@ -5172,6 +5229,35 @@ const TDABC_REFERENCE_URL = 'https://hbr.org/2004/11/time-driven-activity-based-
 const COMPOSITE_INDEX_REFERENCE_URL = 'https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf';
 const SHARE_STATE_VERSION = 1;
 const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
+const UI_INTENT_OPTIONS = ['viability', 'operations', 'architecture', 'executive'];
+const UI_INTENT_DEFAULT = 'viability';
+const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
+const UI_INTENT_PROFILES = {
+  viability: {
+    mode: 'quick',
+    recommendationCategory: 'pricing',
+    featureProfile: 'core-kpis',
+    summary: 'Viability intent: prioritises break-even, minimum price, and contribution margin for fast go/no-go checks.'
+  },
+  operations: {
+    mode: 'operator',
+    recommendationCategory: 'infrastructure',
+    featureProfile: 'finops-operations',
+    summary: 'Operations intent: prioritises budgeting, forecast variance, and monthly optimization levers.'
+  },
+  architecture: {
+    mode: 'architect',
+    recommendationCategory: 'governance',
+    featureProfile: 'policy-ai',
+    summary: 'Architect intent: surfaces policy-heavy controls, including AI token economics and allocation behavior.'
+  },
+  executive: {
+    mode: 'operator',
+    recommendationCategory: 'all',
+    featureProfile: 'executive-summary',
+    summary: 'Executive intent: keeps a concise KPI story with cross-domain recommendations for decision review.'
+  }
+};
 const SHAREABLE_INPUT_KEYS = [
   'nRef', 'devPerClient', 'infraTotal', 'ARPU',
   'startupTargetPrice', 'startupTargetClients',
@@ -6080,6 +6166,86 @@ function getCurrentUiMode() {
   return runtime.getMode();
 }
 
+function normalizeUiIntent(intent) {
+  return UI_INTENT_OPTIONS.includes(intent) ? intent : UI_INTENT_DEFAULT;
+}
+
+function getStoredUiIntent() {
+  try {
+    const stored = window.localStorage.getItem(UI_INTENT_STORAGE_KEY);
+    return normalizeUiIntent(stored || UI_INTENT_DEFAULT);
+  } catch (err) {
+    return UI_INTENT_DEFAULT;
+  }
+}
+
+function storeUiIntent(intent) {
+  try {
+    window.localStorage.setItem(UI_INTENT_STORAGE_KEY, normalizeUiIntent(intent));
+  } catch (err) {
+    // Ignore storage failures silently.
+  }
+}
+
+function getCurrentUiIntent() {
+  return normalizeUiIntent(activeUiIntent);
+}
+
+function getUiIntentProfile(intent) {
+  return UI_INTENT_PROFILES[normalizeUiIntent(intent)] || UI_INTENT_PROFILES[UI_INTENT_DEFAULT];
+}
+
+function syncUiIntentButtons() {
+  const activeIntent = getCurrentUiIntent();
+  const profile = getUiIntentProfile(activeIntent);
+
+  document.querySelectorAll('[data-ui-intent-btn]').forEach(btn => {
+    const intent = btn.getAttribute('data-ui-intent-btn');
+    const pressed = intent === activeIntent;
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    btn.classList.toggle('is-active', pressed);
+  });
+
+  const summaryEl = document.getElementById('calc-intent-summary');
+  if (summaryEl) summaryEl.textContent = profile.summary;
+
+  const calcSection = document.getElementById('calculator-section');
+  if (calcSection) {
+    calcSection.dataset.uiIntent = activeIntent;
+    calcSection.dataset.intentProfile = profile.featureProfile;
+  }
+}
+
+function setUiIntent(intent, options = {}) {
+  const {
+    recalcAfter = true,
+    syncMode = true,
+    persist = true,
+    syncRecommendations = true
+  } = options;
+  const normalized = normalizeUiIntent(intent);
+  const profile = getUiIntentProfile(normalized);
+  activeUiIntent = normalized;
+
+  if (persist) storeUiIntent(normalized);
+
+  if (syncMode) {
+    setUiMode(profile.mode, false);
+  }
+
+  if (syncRecommendations) {
+    setRecommendationCategory(profile.recommendationCategory || 'all');
+  }
+
+  syncUiIntentButtons();
+
+  if (recalcAfter) {
+    recalculate();
+    updateProgressPills();
+    draw();
+  }
+}
+
 function syncUiModeButtons() {
   const activeMode = getCurrentUiMode();
   document.querySelectorAll('[data-ui-mode-btn]').forEach(btn => {
@@ -6108,6 +6274,7 @@ function setUiMode(mode, recalcAfter = true) {
 async function initFeatureRuntime() {
   const runtime = window.FiceCalFeatureRuntime;
   if (!runtime) {
+    syncUiIntentButtons();
     syncUiModeButtons();
     return;
   }
@@ -6116,6 +6283,7 @@ async function initFeatureRuntime() {
     await runtime.loadCatalog();
   }
   applyFeatureGates();
+  syncUiIntentButtons();
   syncUiModeButtons();
 }
 
@@ -6130,6 +6298,7 @@ function collectShareState() {
 
   return {
     v: SHARE_STATE_VERSION,
+    ui: getCurrentUiIntent(),
     um: getCurrentUiMode(),
     i: inputState,
     td: getSelectedTechDomains(),
@@ -6146,8 +6315,10 @@ function buildShareStateUrl() {
   const defaultMode = (runtime && typeof runtime.getDefaultMode === 'function')
     ? runtime.getDefaultMode()
     : 'quick';
+  const defaultIntent = UI_INTENT_DEFAULT;
   const hasCustomMode = state.um !== defaultMode;
-  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope || hasCustomMode;
+  const hasCustomIntent = state.ui !== defaultIntent;
+  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope || hasCustomMode || hasCustomIntent;
   if (!hasData) return null;
 
   const encoded = encodeShareState(state);
@@ -6233,6 +6404,15 @@ function normaliseSharedInput(el, rawValue) {
 
 function applySharedState(state) {
   if (!state || typeof state !== 'object') return false;
+
+  if (typeof state.ui === 'string') {
+    setUiIntent(state.ui, {
+      recalcAfter: false,
+      syncMode: typeof state.um !== 'string',
+      persist: true,
+      syncRecommendations: true
+    });
+  }
 
   if (typeof state.um === 'string') {
     setUiMode(state.um, false);
@@ -6869,6 +7049,7 @@ const USER_PROVIDED = {
 const DEFAULT_N_REF = 100;
 const selectedProviders = new Set();
 let selectedRecommendationCategory = 'all';
+let activeUiIntent = UI_INTENT_DEFAULT;
 const RECOMMENDATION_CATEGORY_LABELS = {
   all: 'All',
   infrastructure: 'Infrastructure',
@@ -6902,6 +7083,7 @@ const DEMO_SCENARIOS = {
     summary: 'Review Health Zone, output indicators, and recommendation quality in a positive trajectory.',
     state: {
       v: SHARE_STATE_VERSION,
+      ui: 'operations',
       um: 'operator',
       i: {
         nRef: 320,
@@ -6936,6 +7118,7 @@ const DEMO_SCENARIOS = {
     summary: 'See red-zone behavior, weak unit economics, and remediation guidance in action.',
     state: {
       v: SHARE_STATE_VERSION,
+      ui: 'operations',
       um: 'operator',
       i: {
         nRef: 70,
@@ -9289,6 +9472,7 @@ applyGlossaryAutoLinks();
 updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
+setUiIntent(getStoredUiIntent(), { recalcAfter: false, syncMode: true, persist: false, syncRecommendations: true });
 initCfoDashboardExport();
 initQbvFocusMode();
 initMcpModal();
