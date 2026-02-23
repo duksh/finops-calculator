@@ -1859,6 +1859,48 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: #2e5c8a;
   margin-bottom: 2px;
 }
+.calc-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.calc-mode-label {
+  grid-column: 1 / -1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2e5c8a;
+}
+.calc-mode-btn {
+  border: 1px solid rgba(0,114,178,0.26);
+  border-radius: 8px;
+  min-height: 30px;
+  background: rgba(255,255,255,0.94);
+  color: #2a5078;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.calc-mode-btn:hover {
+  border-color: rgba(0,114,178,0.44);
+  background: rgba(0,114,178,0.1);
+}
+.calc-mode-btn[aria-pressed="true"] {
+  border-color: rgba(0,114,178,0.58);
+  background: linear-gradient(180deg, rgba(0,114,178,0.2), rgba(0,165,200,0.14));
+  color: #0f3e65;
+}
+.calc-mode-btn:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
 .calc-actions .calc-action-btn {
   width: 100%;
 }
@@ -1875,6 +1917,9 @@ body.chart-focus-open #chart-section .chart-focus-close {
   .calc-actions-hint {
     grid-column: 1 / -1;
     margin-bottom: 0;
+  }
+  .calc-mode-switch {
+    grid-column: 1 / -1;
   }
   .calc-actions .calc-action-btn {
     min-height: 34px;
@@ -3781,6 +3826,12 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
         <div class="calc-actions">
           <div class="calc-actions-hint">Quick actions + demos</div>
+          <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
+            <span class="calc-mode-label">Mode</span>
+            <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
+            <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
+            <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
+          </div>
           <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
             Copy state link
@@ -3863,7 +3914,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-hint">Average monthly revenue per client. If unknown, leave blank and use Startup Planning below.</div>
           </div>
 
-          <div class="calc-field" id="field-techDomain" data-feature="multi-tech-normalization">
+          <div class="calc-field" id="field-techDomain" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
             <label class="calc-label" for="inp-techDomains">
               Technology Domains in Scope
               <span class="ftag">R2 wave 1</span>
@@ -3972,7 +4023,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 
         </div>
 
-        <div class="value-overlay">
+        <div class="value-overlay" data-ui-mode="operator architect">
           <div class="startup-title">Quantify business value controls<span class="finops-2026-pill">Forecasting · Budgeting · Realization</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-budgetMonthly">
@@ -4062,7 +4113,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-guardrail value-guardrail" id="value-guardrail">Set budget and at least one forecasting or realization input to activate Quantify Business Value controls.</div>
         </div>
 
-        <div class="portfolio-overlay finops-2026-highlight" data-feature="multi-tech-normalization">
+        <div class="portfolio-overlay finops-2026-highlight" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
           <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-costSaaS">
@@ -4195,55 +4246,55 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-out-sub">Revenue level implied by your startup planning assumptions</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-budgetVariance">
+          <div class="calc-out-card qbv-card" id="out-budgetVariance" data-ui-mode="operator architect">
             <div class="calc-out-label">Budget Variance</div>
             <div class="calc-out-val muted" id="oval-budgetVariance">—</div>
             <div class="calc-out-sub">Headroom or overrun versus monthly technology budget</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-forecastBand">
+          <div class="calc-out-card qbv-card" id="out-forecastBand" data-ui-mode="operator architect">
             <div class="calc-out-label">Forecast Margin Band</div>
             <div class="calc-out-val muted" id="oval-forecastBand">—</div>
             <div class="calc-out-sub">Baseline, best, and worst monthly margin for next cycle</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-forecastSpread">
+          <div class="calc-out-card qbv-card" id="out-forecastSpread" data-ui-mode="operator architect">
             <div class="calc-out-label">Forecast Confidence Band</div>
             <div class="calc-out-val muted" id="oval-forecastSpread">—</div>
             <div class="calc-out-sub">Spread width between best and worst scenarios (narrower is stronger)</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-realizedValue">
+          <div class="calc-out-card qbv-card" id="out-realizedValue" data-ui-mode="operator architect">
             <div class="calc-out-label">Total Realized Value</div>
             <div class="calc-out-val muted" id="oval-realizedValue">—</div>
             <div class="calc-out-sub">Realized savings plus cost avoidance captured this cycle</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-realizationRatio">
+          <div class="calc-out-card qbv-card" id="out-realizationRatio" data-ui-mode="operator architect">
             <div class="calc-out-label">Savings Realization Ratio</div>
             <div class="calc-out-val muted" id="oval-realizationRatio">—</div>
             <div class="calc-out-sub">Total realized value divided by identified savings target</div>
           </div>
 
-          <div class="calc-out-card qbv-card" id="out-realizationGap">
+          <div class="calc-out-card qbv-card" id="out-realizationGap" data-ui-mode="operator architect">
             <div class="calc-out-label">Residual Value Gap</div>
             <div class="calc-out-val muted" id="oval-realizationGap">—</div>
             <div class="calc-out-sub">Remaining value to realize (or exceeded target)</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-techCoverage" data-feature="multi-tech-normalization">
+          <div class="calc-out-card finops-2026-card" id="out-techCoverage" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
             <div class="calc-out-label">Coverage Across Domains</div>
             <div class="calc-out-val muted" id="oval-techCoverage">—</div>
             <div class="calc-out-sub">Coverage inside your selected scope (single or multi-domain)</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-techNorm" data-feature="multi-tech-normalization">
+          <div class="calc-out-card finops-2026-card" id="out-techNorm" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
             <div class="calc-out-label">Normalized Tech Cost / Client</div>
             <div class="calc-out-val muted" id="oval-techNorm">—</div>
             <div class="calc-out-sub">Scoped cost aggregation normalized per client using selected domains</div>
           </div>
 
-          <div class="calc-out-card finops-2026-card" id="out-focusMaturity" data-feature="multi-tech-normalization">
+          <div class="calc-out-card finops-2026-card" id="out-focusMaturity" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
             <div class="calc-out-label">Normalization Confidence</div>
             <div class="calc-out-val muted" id="oval-focusMaturity">—</div>
             <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
@@ -4289,7 +4340,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
         </div>
 
-        <div class="qbv-dashboard" id="qbv-dashboard">
+        <div class="qbv-dashboard" id="qbv-dashboard" data-ui-mode="operator architect">
           <button class="cfo-focus-close" id="qbv-focus-close" type="button" aria-label="Exit expanded CFO dashboard view">Exit focus view</button>
           <div class="qbv-dashboard-head">
             <div>
@@ -4885,6 +4936,7 @@ const FINOPS_2026_REPORT_URL = 'https://data.finops.org';
 const TDABC_REFERENCE_URL = 'https://hbr.org/2004/11/time-driven-activity-based-costing';
 const COMPOSITE_INDEX_REFERENCE_URL = 'https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf';
 const SHARE_STATE_VERSION = 1;
+const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
 const SHAREABLE_INPUT_KEYS = [
   'nRef', 'devPerClient', 'infraTotal', 'ARPU',
   'startupTargetPrice', 'startupTargetClients',
@@ -5724,14 +5776,49 @@ function applyFeatureGates() {
   runtime.applyDomGates(document);
 }
 
+function getCurrentUiMode() {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.getMode !== 'function') return 'quick';
+  return runtime.getMode();
+}
+
+function syncUiModeButtons() {
+  const activeMode = getCurrentUiMode();
+  document.querySelectorAll('[data-ui-mode-btn]').forEach(btn => {
+    const mode = btn.getAttribute('data-ui-mode-btn');
+    const pressed = mode === activeMode;
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    btn.classList.toggle('is-active', pressed);
+  });
+}
+
+function setUiMode(mode, recalcAfter = true) {
+  const normalized = UI_MODE_OPTIONS.includes(mode) ? mode : 'quick';
+  const runtime = window.FiceCalFeatureRuntime;
+  if (runtime && typeof runtime.setMode === 'function') {
+    runtime.setMode(normalized);
+  }
+  applyFeatureGates();
+  syncUiModeButtons();
+  if (recalcAfter) {
+    recalculate();
+    updateProgressPills();
+    draw();
+  }
+}
+
 async function initFeatureRuntime() {
   const runtime = window.FiceCalFeatureRuntime;
-  if (!runtime) return;
+  if (!runtime) {
+    syncUiModeButtons();
+    return;
+  }
   applyFeatureGates();
   if (typeof runtime.loadCatalog === 'function') {
     await runtime.loadCatalog();
-    applyFeatureGates();
   }
+  applyFeatureGates();
+  syncUiModeButtons();
 }
 
 function collectShareState() {
@@ -5745,6 +5832,7 @@ function collectShareState() {
 
   return {
     v: SHARE_STATE_VERSION,
+    um: getCurrentUiMode(),
     i: inputState,
     td: getSelectedTechDomains(),
     p: Array.from(selectedProviders),
@@ -5756,7 +5844,12 @@ function buildShareStateUrl() {
   const state = collectShareState();
   const defaultScope = DEFAULT_TECH_DOMAINS.join(',');
   const hasCustomScope = state.td.join(',') !== defaultScope;
-  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope;
+  const runtime = window.FiceCalFeatureRuntime;
+  const defaultMode = (runtime && typeof runtime.getDefaultMode === 'function')
+    ? runtime.getDefaultMode()
+    : 'quick';
+  const hasCustomMode = state.um !== defaultMode;
+  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope || hasCustomMode;
   if (!hasData) return null;
 
   const encoded = encodeShareState(state);
@@ -5842,6 +5935,10 @@ function normaliseSharedInput(el, rawValue) {
 
 function applySharedState(state) {
   if (!state || typeof state !== 'object') return false;
+
+  if (typeof state.um === 'string') {
+    setUiMode(state.um, false);
+  }
 
   const inputState = (state.i && typeof state.i === 'object') ? state.i : {};
   SHAREABLE_INPUT_KEYS.forEach(key => {
@@ -6495,6 +6592,7 @@ const DEMO_SCENARIOS = {
     summary: 'Review Health Zone, output indicators, and recommendation quality in a positive trajectory.',
     state: {
       v: SHARE_STATE_VERSION,
+      um: 'operator',
       i: {
         nRef: 320,
         devPerClient: 260,
@@ -6528,6 +6626,7 @@ const DEMO_SCENARIOS = {
     summary: 'See red-zone behavior, weak unit economics, and remediation guidance in action.',
     state: {
       v: SHARE_STATE_VERSION,
+      um: 'operator',
       i: {
         nRef: 70,
         devPerClient: 980,

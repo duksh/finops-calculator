@@ -22,10 +22,10 @@ Create a modular foundation for FiceCal so new capabilities (starting with AI to
 
 ## Lane C: UX mode architecture (P1)
 
-- [ ] Add explicit mode state (`quick`, `operator`, `architect`)
-- [ ] Hide advanced controls by mode
-- [ ] Add mode switcher and persistence in shared state
-- [ ] Set AI module visibility to Architect mode only
+- [x] Add explicit mode state (`quick`, `operator`, `architect`)
+- [x] Hide advanced controls by mode
+- [x] Add mode switcher and persistence in shared state
+- [x] Set AI module visibility to Architect mode only
 
 ## Lane D: AI token economics module (P2)
 

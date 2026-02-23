@@ -1,6 +1,8 @@
 (function (global) {
   'use strict';
 
+  const MODE_STORAGE_KEY = 'ficecal.ui.mode';
+
   const FALLBACK_CATALOG = {
     version: '1.0.0',
     generatedAt: '2026-02-23',
@@ -38,8 +40,57 @@
 
   const runtimeState = {
     catalog: FALLBACK_CATALOG,
-    manifests: { ...FALLBACK_MANIFESTS }
+    manifests: { ...FALLBACK_MANIFESTS },
+    mode: (FALLBACK_CATALOG.runtime && FALLBACK_CATALOG.runtime.defaultMode) || 'quick'
   };
+
+  function getRuntimeModes() {
+    const modes = runtimeState.catalog && runtimeState.catalog.runtime && runtimeState.catalog.runtime.modes;
+    if (!Array.isArray(modes) || !modes.length) return ['quick', 'operator', 'architect'];
+    return modes;
+  }
+
+  function getDefaultMode() {
+    const defaultMode = runtimeState.catalog && runtimeState.catalog.runtime && runtimeState.catalog.runtime.defaultMode;
+    const modes = getRuntimeModes();
+    return modes.includes(defaultMode) ? defaultMode : modes[0];
+  }
+
+  function normalizeMode(mode) {
+    const modes = getRuntimeModes();
+    return modes.includes(mode) ? mode : getDefaultMode();
+  }
+
+  function getStoredMode() {
+    try {
+      if (!global.localStorage) return null;
+      return global.localStorage.getItem(MODE_STORAGE_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function storeMode(mode) {
+    try {
+      if (!global.localStorage) return;
+      global.localStorage.setItem(MODE_STORAGE_KEY, mode);
+    } catch (_) {
+      // Ignore storage failures (privacy mode / restricted context).
+    }
+  }
+
+  function getMode() {
+    return runtimeState.mode || getDefaultMode();
+  }
+
+  function setMode(mode, options) {
+    const opts = options || {};
+    const persist = opts.persist !== false;
+    const normalized = normalizeMode(mode);
+    runtimeState.mode = normalized;
+    if (persist) storeMode(normalized);
+    return normalized;
+  }
 
   function getCatalogFeatures() {
     const features = runtimeState.catalog && runtimeState.catalog.features;
@@ -57,6 +108,12 @@
     return status === 'disabled';
   }
 
+  function isFeatureModeEnabled(featureId, mode) {
+    const manifest = runtimeState.manifests[featureId];
+    if (!manifest || !Array.isArray(manifest.uiModes) || !manifest.uiModes.length) return true;
+    return manifest.uiModes.includes(mode);
+  }
+
   function isFeatureEnabled(featureId) {
     const entry = findCatalogEntry(featureId);
     if (!entry) return false;
@@ -72,17 +129,38 @@
       .map((entry) => entry.id);
   }
 
+  function isModeAllowedForNode(node, mode) {
+    const attr = node.getAttribute('data-ui-mode');
+    if (!attr) return true;
+    const allowed = attr
+      .split(/[\s,]+/)
+      .map((token) => token.trim())
+      .filter(Boolean);
+    if (!allowed.length) return true;
+    return allowed.includes(mode);
+  }
+
   function applyDomGates(root) {
     const scope = root || global.document;
     if (!scope || typeof scope.querySelectorAll !== 'function') return;
 
-    const nodes = scope.querySelectorAll('[data-feature]');
+    const activeMode = getMode();
+    const nodes = scope.querySelectorAll('[data-feature], [data-ui-mode]');
     nodes.forEach((node) => {
+      let visible = true;
+
       const featureId = node.getAttribute('data-feature');
-      if (!featureId) return;
-      const enabled = isFeatureEnabled(featureId);
-      node.hidden = !enabled;
-      node.setAttribute('data-feature-enabled', enabled ? '1' : '0');
+      if (featureId) {
+        const enabled = isFeatureEnabled(featureId) && isFeatureModeEnabled(featureId, activeMode);
+        node.setAttribute('data-feature-enabled', enabled ? '1' : '0');
+        visible = visible && enabled;
+      }
+
+      const modeAllowed = isModeAllowedForNode(node, activeMode);
+      node.setAttribute('data-mode-allowed', modeAllowed ? '1' : '0');
+      visible = visible && modeAllowed;
+
+      node.hidden = !visible;
     });
   }
 
@@ -120,11 +198,17 @@
         ...manifests
       };
 
+      const preferredMode = getStoredMode() || runtimeState.mode || nextCatalog.runtime?.defaultMode;
+      runtimeState.mode = normalizeMode(preferredMode);
+      storeMode(runtimeState.mode);
+
       return true;
     } catch (_) {
       return false;
     }
   }
+
+  runtimeState.mode = normalizeMode(getStoredMode() || runtimeState.mode);
 
   global.FiceCalFeatureRuntime = {
     getCatalog: function () {
@@ -133,6 +217,10 @@
     getManifests: function () {
       return runtimeState.manifests;
     },
+    getModes: getRuntimeModes,
+    getDefaultMode,
+    getMode,
+    setMode,
     isFeatureEnabled,
     getEnabledFeatureIds,
     applyDomGates,
