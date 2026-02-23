@@ -1867,7 +1867,7 @@ body.chart-focus-open #chart-section .chart-focus-close {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
 }
 .calc-actions-row--controls {
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 .calc-actions-hint {
   font-family: 'JetBrains Mono', monospace;
@@ -1991,6 +1991,12 @@ body.chart-focus-open #chart-section .chart-focus-close {
   line-height: 1;
   white-space: nowrap;
 }
+.calc-intent-outcome-chip--placeholder {
+  border-style: dashed;
+  border-color: rgba(31,79,125,0.32);
+  background: rgba(31,79,125,0.06);
+  color: #39597f;
+}
 .calc-next-step {
   margin: 0;
   border: 1px solid rgba(0,114,178,0.26);
@@ -2029,12 +2035,24 @@ body.chart-focus-open #chart-section .chart-focus-close {
   text-decoration: none;
   font-size: var(--font-size-2xs);
 }
+.calc-next-step-link--primary {
+  border-style: solid;
+  border-color: rgba(0,114,178,0.62);
+  background: rgba(0,114,178,0.14);
+  color: #0d4773;
+  font-weight: 700;
+}
 .calc-next-step-link:hover {
   border-color: rgba(0,114,178,0.64);
   background: rgba(0,114,178,0.08);
 }
 .intent-path-wrap {
   margin: 0;
+}
+.intent-path-wrap > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .intent-path {
   display: grid;
@@ -2098,10 +2116,12 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .intent-path-progress {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: none;
   color: #4f5f80;
+  margin-left: auto;
+  padding-right: 14px;
 }
 .intent-export-btn {
   min-height: 32px;
@@ -2205,9 +2225,6 @@ body.chart-focus-open #chart-section .chart-focus-close {
   }
   .calc-actions-row--controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .calc-actions-row--controls .calc-disclosure {
-    grid-column: 1 / -1;
   }
 }
 
@@ -4209,11 +4226,11 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
         <div class="calc-actions">
           <div class="calc-actions-row calc-actions-row--onboarding">
-            <div class="calc-actions-hint">Start here — choose your role</div>
+            <div class="calc-actions-hint">3 quick steps</div>
             <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
               <div class="calc-onboarding-step is-active" data-onboarding-step="1">
                 <span class="calc-onboarding-step-num">1</span>
-                <span class="calc-onboarding-step-text" id="calc-step-role">Choose your role</span>
+                <span class="calc-onboarding-step-text" id="calc-step-role">Pick your role</span>
               </div>
               <div class="calc-onboarding-step" data-onboarding-step="2">
                 <span class="calc-onboarding-step-num">2</span>
@@ -4221,7 +4238,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               </div>
               <div class="calc-onboarding-step" data-onboarding-step="3">
                 <span class="calc-onboarding-step-num">3</span>
-                <span class="calc-onboarding-step-text" id="calc-step-outcomes">Review top outcomes</span>
+                <span class="calc-onboarding-step-text" id="calc-step-outcomes">Review top 3 outcomes + action</span>
               </div>
             </div>
           </div>
@@ -4237,43 +4254,43 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--analysis">
             <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
-              <span class="calc-mode-label">You'll get first</span>
+              <span class="calc-mode-label" id="calc-outcomes-label">You'll get first</span>
               <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
             </div>
             <div class="calc-next-step" id="calc-next-step">
               <div class="calc-next-step-title">Do this next</div>
               <p class="calc-next-step-copy" id="calc-next-step-copy">Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.</p>
               <div class="calc-next-step-links">
-                <a class="calc-next-step-link" href="#field-infraTotal">Jump to Total Infra Cost</a>
-                <a class="calc-next-step-link" href="#field-ARPU">Jump to Revenue / Client (ARPU)</a>
+                <a class="calc-next-step-link calc-next-step-link--primary" id="calc-step2-cta" href="#field-infraTotal">Start Step 2</a>
               </div>
             </div>
-            <div class="intent-path-wrap" id="intent-path-wrap">
-              <span class="calc-mode-label">Guided path</span>
-              <div class="intent-path" id="intent-path" role="list" aria-label="Intent guided decision path"></div>
-              <div class="intent-export-row">
+            <details class="calc-disclosure intent-path-wrap" id="intent-path-wrap">
+              <summary>
+                Guided path
                 <span class="intent-path-progress" id="intent-path-progress">0/3 steps complete</span>
+              </summary>
+              <div class="calc-disclosure-body">
+                <div class="intent-path" id="intent-path" role="list" aria-label="Intent guided decision path"></div>
                 <button class="calc-action-btn calc-action-btn--neutral intent-export-btn" id="intent-export-btn" type="button" onclick="exportIntentPreset()">Export intent preset</button>
               </div>
-            </div>
+            </details>
           </div>
           <div class="calc-actions-row calc-actions-row--controls">
-            <div class="calc-advanced-wrap">
-              <span class="calc-mode-label">Advanced controls (optional)</span>
-              <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
-                <span class="calc-mode-label">Mode override</span>
-                <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
-                <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
-                <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
-              </div>
-            </div>
             <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
               Copy state link
             </button>
             <details class="calc-disclosure" id="calc-more-actions">
-              <summary>More actions</summary>
+              <summary>More actions (advanced)</summary>
               <div class="calc-disclosure-body">
+                <div class="calc-advanced-wrap">
+                  <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
+                    <span class="calc-mode-label">Mode override</span>
+                    <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
+                    <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
+                    <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
+                  </div>
+                </div>
                 <button class="feature-request-btn calc-action-btn calc-action-btn--warning" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
                   Request a feature on Github
                 </button>
@@ -6721,9 +6738,20 @@ function renderRoleOnboardingState(inputs = {}) {
 
   const profile = getUiIntentProfile(getCurrentUiIntent());
   const signals = buildIntentSignalState(inputs);
+  const expectedOutcomes = Array.isArray(profile.outcomePreview) && profile.outcomePreview.length
+    ? profile.outcomePreview.slice(0, 3).join(', ')
+    : 'top outcomes and action guidance';
   const filledCoreCount = Number(Boolean(signals.hasAnyCostInput)) + Number(Boolean(signals.hasARPU));
   const hasRequiredInputs = Boolean(signals.hasAnyCostInput && signals.hasARPU);
   const hasOutcomeReady = Boolean(signals.hasHealthScore && signals.hasRecommendations);
+  renderIntentOutcomePreview(profile, { locked: !hasRequiredInputs });
+
+  const outcomesLabelEl = document.getElementById('calc-outcomes-label');
+  if (outcomesLabelEl) {
+    outcomesLabelEl.textContent = hasRequiredInputs
+      ? "You'll get first"
+      : "You'll get first (after Step 2)";
+  }
 
   const applyState = (stepEl, state) => {
     stepEl.classList.remove('is-active', 'is-done');
@@ -6738,7 +6766,7 @@ function renderRoleOnboardingState(inputs = {}) {
   const stepInputsEl = document.getElementById('calc-step-inputs');
   if (stepInputsEl) {
     if (hasRequiredInputs) {
-      stepInputsEl.textContent = 'Fill Infra Cost + ARPU ✓';
+      stepInputsEl.textContent = 'Fill Infra Cost + ARPU (done)';
     } else if (filledCoreCount > 0) {
       stepInputsEl.textContent = 'Fill Infra Cost + ARPU (1/2 complete)';
     } else {
@@ -6749,25 +6777,43 @@ function renderRoleOnboardingState(inputs = {}) {
   const stepOutcomesEl = document.getElementById('calc-step-outcomes');
   if (stepOutcomesEl) {
     if (hasOutcomeReady) {
-      stepOutcomesEl.textContent = 'Review top outcomes ✓';
+      stepOutcomesEl.textContent = 'Review top 3 outcomes + action (done)';
     } else if (hasRequiredInputs || signals.hasHealthScore || signals.hasRecommendations) {
-      stepOutcomesEl.textContent = 'Review top outcomes (in progress)';
+      stepOutcomesEl.textContent = 'Review top 3 outcomes + action (in progress)';
     } else {
-      stepOutcomesEl.textContent = 'Review top outcomes';
+      stepOutcomesEl.textContent = 'Review top 3 outcomes + action';
     }
   }
 
   const nextStepCopyEl = document.getElementById('calc-next-step-copy');
+  const step2CtaEl = document.getElementById('calc-step2-cta');
   if (nextStepCopyEl) {
     if (!hasRequiredInputs) {
       const missing = [];
       if (!signals.hasAnyCostInput) missing.push('Total Infra Cost');
       if (!signals.hasARPU) missing.push('Revenue / Client (ARPU)');
-      nextStepCopyEl.textContent = `To unlock ${profile.personaLabel || 'this role'} outcomes, fill ${missing.join(' + ')}.`;
+      nextStepCopyEl.textContent = `Step 2: fill ${missing.join(' + ')}. Step 3 unlocks: ${expectedOutcomes}.`;
+      if (step2CtaEl) {
+        if (!signals.hasAnyCostInput) {
+          step2CtaEl.textContent = 'Start Step 2';
+          step2CtaEl.setAttribute('href', '#field-infraTotal');
+        } else {
+          step2CtaEl.textContent = 'Continue Step 2';
+          step2CtaEl.setAttribute('href', '#field-ARPU');
+        }
+      }
     } else if (!hasOutcomeReady) {
-      nextStepCopyEl.textContent = 'Core inputs captured. Review Health Zone recommendations and guided path to complete your outcome readout.';
+      nextStepCopyEl.textContent = 'Step 3: review Health Zone recommendations to see your top outcomes and first action.';
+      if (step2CtaEl) {
+        step2CtaEl.textContent = 'Open Step 3 outcomes';
+        step2CtaEl.setAttribute('href', '#group-health');
+      }
     } else {
-      nextStepCopyEl.textContent = `${profile.personaLabel || 'Role'} outcomes are ready. Export preset or copy state link to share this analysis.`;
+      nextStepCopyEl.textContent = `Done. ${profile.personaLabel || 'Role'} outcomes are ready (${expectedOutcomes}). Copy state link to share this analysis.`;
+      if (step2CtaEl) {
+        step2CtaEl.textContent = 'Review recommendations';
+        step2CtaEl.setAttribute('href', '#group-health');
+      }
     }
   }
 }
@@ -6896,9 +6942,39 @@ function exportIntentPreset() {
   writeShareFeedback(`${getUiIntentProfile(intent).exportLabel || 'Intent preset'} exported.`, false);
 }
 
+function renderIntentOutcomePreview(profile, options = {}) {
+  const outcomesEl = document.getElementById('calc-intent-outcomes');
+  if (!outcomesEl) return;
+
+  const { locked = false } = options;
+  const outcomes = Array.isArray(profile.outcomePreview) && profile.outcomePreview.length
+    ? profile.outcomePreview
+    : ['Break-even signal', 'Risk signal', 'Recommended action'];
+
+  outcomesEl.textContent = '';
+  if (locked) {
+    const placeholder = document.createElement('span');
+    placeholder.className = 'calc-intent-outcome-chip calc-intent-outcome-chip--placeholder';
+    placeholder.setAttribute('role', 'listitem');
+    placeholder.textContent = 'Complete Step 2 to preview outcomes';
+    outcomesEl.appendChild(placeholder);
+    return;
+  }
+
+  outcomes.slice(0, 3).forEach(label => {
+    const chip = document.createElement('span');
+    chip.className = 'calc-intent-outcome-chip';
+    chip.setAttribute('role', 'listitem');
+    chip.textContent = label;
+    outcomesEl.appendChild(chip);
+  });
+}
+
 function syncUiIntentButtons() {
   const activeIntent = getCurrentUiIntent();
   const profile = getUiIntentProfile(activeIntent);
+  const signals = buildIntentSignalState(lastInputs || {});
+  const hasRequiredInputs = Boolean(signals.hasAnyCostInput && signals.hasARPU);
 
   document.querySelectorAll('[data-ui-intent-btn]').forEach(btn => {
     const intent = btn.getAttribute('data-ui-intent-btn');
@@ -6910,20 +6986,7 @@ function syncUiIntentButtons() {
   const summaryEl = document.getElementById('calc-intent-summary');
   if (summaryEl) summaryEl.textContent = profile.summary;
 
-  const outcomesEl = document.getElementById('calc-intent-outcomes');
-  if (outcomesEl) {
-    outcomesEl.textContent = '';
-    const outcomes = Array.isArray(profile.outcomePreview) && profile.outcomePreview.length
-      ? profile.outcomePreview
-      : ['Break-even signal', 'Risk signal', 'Recommended action'];
-    outcomes.slice(0, 3).forEach(label => {
-      const chip = document.createElement('span');
-      chip.className = 'calc-intent-outcome-chip';
-      chip.setAttribute('role', 'listitem');
-      chip.textContent = label;
-      outcomesEl.appendChild(chip);
-    });
-  }
+  renderIntentOutcomePreview(profile, { locked: !hasRequiredInputs });
 
   const nextStepCopyEl = document.getElementById('calc-next-step-copy');
   if (nextStepCopyEl) nextStepCopyEl.textContent = profile.nextStep || 'Enter Total Infra Cost and ARPU to unlock your first readout.';
