@@ -19,3 +19,6 @@ jobs:
 
       - name: Validate feature catalog and manifests
         run: python3 scripts/validate-feature-catalog.py
+
+      - name: Validate canonical docs links
+        run: python3 scripts/validate-doc-links.py

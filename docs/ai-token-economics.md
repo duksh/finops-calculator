@@ -251,6 +251,35 @@ Include:
 - "Premium routing spike"
 - "Retry storm"
 
+### Intent-based FiceCal UI/UX rehauling (Wave 3+)
+
+Use intent-first routing so AI controls appear only when users need them.
+
+Initial intent map:
+
+1. **Validate viability quickly**
+   - mode: `quick`
+   - hides AI controls by default
+2. **Operate monthly FinOps**
+   - mode: `operator`
+   - keeps budgeting/forecasting/normalization surfaces
+3. **Architect scenario and policy**
+   - mode: `architect`
+   - enables AI token economics panel and policy controls
+4. **Prepare executive readout**
+   - mode: `operator` dashboard-first
+   - prioritizes summarized KPIs and recommendation confidence
+
+Design outcomes:
+
+- Less UI overwhelm while preserving the same underlying model logic
+- Faster path to relevant controls/KPIs by decision intent
+- Better recommendation framing without changing numeric results
+
+Execution details are tracked in:
+
+- `docs/roadmap/wave-3-execution-plan.md`
+
 ---
 
 ## MCP extension proposal

@@ -37,9 +37,9 @@ Create a modular foundation for FiceCal so new capabilities (starting with AI to
 ## Lane E: GitOps reliability (P1)
 
 - [x] Add `scripts/sync-public-pages.sh` to standardize mirror sync
-- [ ] Add release checklist item requiring public mirror verification before “fixed” confirmation
-- [ ] Add CI check to ensure docs links point to canonical RTD URL where expected
-- [ ] Add release note template section for module changes
+- [x] Add release checklist item requiring public mirror verification before “fixed” confirmation
+- [x] Add CI check to ensure docs links point to canonical RTD URL where expected
+- [x] Add release note template section for module changes
 
 ## Exit criteria for modularization foundation
 

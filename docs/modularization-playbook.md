@@ -100,6 +100,7 @@ Reference files introduced in this wave:
 ## Required checks
 
 - Manifest validation pass (`scripts/validate-feature-catalog.py`)
+- Docs-link canonical validation pass (`scripts/validate-doc-links.py`)
 - Repo mapping and branch hygiene (`scripts/check-repo-mapping.sh`)
 - Docs updated for any new feature contract or KPI changes.
 
@@ -108,6 +109,19 @@ Reference files introduced in this wave:
 - Tag modular milestones under release waves.
 - Include module-level change logs in release notes.
 - If module schema changes, include migration note in docs.
+
+## Mandatory public mirror verification checklist (before any "fixed" confirmation)
+
+1. Confirm source repo docs changes are committed.
+2. Run `scripts/sync-public-pages.sh --check` and review output.
+3. Verify mirror-target diffs for `index.html`, `document.html`, and `glossary.html`.
+4. Complete mirror push in `duksh/duksh.github.io`.
+5. Only then post "fixed" or closure confirmation.
+
+## Release notes template
+
+Use `docs/releases/release-note-template.md` for all future release cuts.
+The template includes a dedicated module-changes section with module ID/version, rollout status, schema impact, and migration notes.
 
 ---
 
