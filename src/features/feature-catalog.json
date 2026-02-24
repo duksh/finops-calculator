@@ -23,6 +23,12 @@
       "manifestPath": "src/features/ai-token-economics/feature.json",
       "enabled": true,
       "required": false
+    },
+    {
+      "id": "sla-slo-sli-economics",
+      "manifestPath": "src/features/sla-slo-sli-economics/feature.json",
+      "enabled": false,
+      "required": false
     }
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "id": "sla-slo-sli-economics",
+  "name": "SLA/SLO/SLI Reliability Economics",
+  "version": "0.1.0",
+  "owner": "ficecal-reliability-finops",
+  "status": "experimental",
+  "dependsOn": ["core-economics"],
+  "uiModes": ["operator", "architect"],
+  "inputs": [
+    "reliability.enabled",
+    "reliability.sloTargetAvailabilityPct",
+    "reliability.sliObservedAvailabilityPct",
+    "reliability.incidentCountMonthly",
+    "reliability.mttrHours",
+    "reliability.reliabilityInvestmentMonthly"
+  ],
+  "outputs": [
+    "expectedDowntimeMinutes",
+    "expectedSlaPenaltyMonthly",
+    "expectedIncidentLaborMonthly",
+    "expectedRevenueAtRiskMonthly",
+    "expectedChurnRiskMonthly",
+    "expectedReliabilityFailureCostMonthly",
+    "reliabilityAdjustedCostMonthly"
+  ],
+  "healthSignals": [
+    "reliabilityDataConfidence",
+    "reliabilityRiskBand"
+  ]
+}

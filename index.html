@@ -2988,11 +2988,44 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .qbv-bar-fill { display: block; height: 100%; border-radius: 999px; }
 .qbv-bar-fill.budget { background: rgba(0,114,178,0.65); }
 .qbv-bar-fill.cost { background: rgba(213,94,0,0.65); }
+.qbv-bar-fill.rel-penalty { background: rgba(0,114,178,0.65); }
+.qbv-bar-fill.rel-incident { background: rgba(213,94,0,0.68); }
+.qbv-bar-fill.rel-downtime { background: rgba(230,159,0,0.72); }
+.qbv-bar-fill.rel-churn { background: rgba(123,45,139,0.68); }
 .qbv-bar-meta {
   text-align: right;
   font-size: var(--font-size-xs);
   font-family: 'JetBrains Mono', monospace;
   color: #335774;
+}
+.qbv-risk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 62, 101, 0.22);
+  font-size: var(--font-size-2xs);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2b4f73;
+  background: rgba(255,255,255,0.85);
+}
+.qbv-risk-pill.good {
+  border-color: rgba(0,158,115,0.36);
+  color: #0c664f;
+  background: rgba(0,158,115,0.12);
+}
+.qbv-risk-pill.warn {
+  border-color: rgba(230,159,0,0.4);
+  color: #8a5a00;
+  background: rgba(230,159,0,0.14);
+}
+.qbv-risk-pill.bad {
+  border-color: rgba(213,94,0,0.4);
+  color: #8a3100;
+  background: rgba(213,94,0,0.13);
 }
 .qbv-forecast-svg {
   width: 100%;
@@ -4854,6 +4887,134 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="portfolio-guardrail" id="ai-token-guardrail">AI token economics remains inactive until AI Cost Tracking is set to On and token/rate inputs are provided.</div>
         </div>
+
+        <div class="portfolio-overlay reliability-overlay" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+          <div class="startup-title">SLA/SLO/SLI reliability economics (Release 4 scaffold)<span class="finops-2026-pill">Operator &amp; Architect</span></div>
+          <div class="calc-fields">
+            <div class="calc-field" id="field-reliabilityEnabled">
+              <label class="calc-label" for="inp-reliabilityEnabled">
+                Reliability Economics
+                <span class="ftag">toggle</span>
+              </label>
+              <div class="calc-input-wrap">
+                <select id="inp-reliabilityEnabled" data-default-value="off" onchange="onInput('reliabilityEnabled')">
+                  <option value="off" selected>Off</option>
+                  <option value="on">On</option>
+                </select>
+              </div>
+              <div class="calc-hint">Enable reliability economics to estimate SLA penalties, incident losses, and risk-adjusted cost pressure.</div>
+            </div>
+
+            <div class="calc-field" id="field-sloTargetAvailabilityPct">
+              <label class="calc-label" for="inp-sloTargetAvailabilityPct">
+                SLO Target Availability
+                <span class="ftag">policy</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-sloTargetAvailabilityPct" inputmode="decimal" min="90" max="100" step="0.001" placeholder="e.g. 99.90" oninput="onInput('sloTargetAvailabilityPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Your target reliability policy threshold used for breach-gap and penalty modeling.</div>
+            </div>
+
+            <div class="calc-field" id="field-sliObservedAvailabilityPct">
+              <label class="calc-label" for="inp-sliObservedAvailabilityPct">
+                Observed SLI Availability
+                <span class="ftag">observed</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-sliObservedAvailabilityPct" inputmode="decimal" min="90" max="100" step="0.001" placeholder="e.g. 99.70" oninput="onInput('sliObservedAvailabilityPct')">
+                <span class="calc-unit">%</span>
+              </div>
+              <div class="calc-hint">Measured availability from production telemetry for the modeled service period.</div>
+            </div>
+
+            <div class="calc-field" id="field-incidentCountMonthly">
+              <label class="calc-label" for="inp-incidentCountMonthly">
+                Incidents / Month
+                <span class="ftag">ops</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-incidentCountMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 4" oninput="onInput('incidentCountMonthly')">
+                <span class="calc-unit">count</span>
+              </div>
+              <div class="calc-hint">Average monthly production incidents relevant to this service's SLA obligations.</div>
+            </div>
+
+            <div class="calc-field" id="field-mttrHours">
+              <label class="calc-label" for="inp-mttrHours">
+                MTTR
+                <span class="ftag">ops</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-mttrHours" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 1.5" oninput="onInput('mttrHours')">
+                <span class="calc-unit">hours</span>
+              </div>
+              <div class="calc-hint">Mean time to recover per incident used to estimate labor and downtime-driven exposure.</div>
+            </div>
+
+            <div class="calc-field" id="field-incidentBlendedHourlyRate">
+              <label class="calc-label" for="inp-incidentBlendedHourlyRate">
+                Incident Team Blended Rate
+                <span class="ftag">labor</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-incidentBlendedHourlyRate" inputmode="decimal" min="0" step="1" placeholder="e.g. 95" oninput="onInput('incidentBlendedHourlyRate')">
+                <span class="calc-unit">€ / hour</span>
+              </div>
+              <div class="calc-hint">Blended hourly cost of incident responders participating in major/minor incident recovery.</div>
+            </div>
+
+            <div class="calc-field" id="field-criticalRevenuePerMinute">
+              <label class="calc-label" for="inp-criticalRevenuePerMinute">
+                Critical Revenue at Risk
+                <span class="ftag">revenue</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-criticalRevenuePerMinute" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 35" oninput="onInput('criticalRevenuePerMinute')">
+                <span class="calc-unit">€ / minute</span>
+              </div>
+              <div class="calc-hint">Revenue exposure per critical minute used for outage loss estimation.</div>
+            </div>
+
+            <div class="calc-field" id="field-arrExposedMonthly">
+              <label class="calc-label" for="inp-arrExposedMonthly">
+                ARR Exposed (Monthly)
+                <span class="ftag">retention</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-arrExposedMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 120000" oninput="onInput('arrExposedMonthly')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Revenue base at retention risk if reliability misses persist.</div>
+            </div>
+
+            <div class="calc-field" id="field-slaPenaltyRatePerBreachPointMonthly">
+              <label class="calc-label" for="inp-slaPenaltyRatePerBreachPointMonthly">
+                SLA Penalty Rate
+                <span class="ftag">contract</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-slaPenaltyRatePerBreachPointMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 6000" oninput="onInput('slaPenaltyRatePerBreachPointMonthly')">
+                <span class="calc-unit">€ / breach-pt</span>
+              </div>
+              <div class="calc-hint">Penalty cost per availability percentage point below target for monthly estimation.</div>
+            </div>
+
+            <div class="calc-field" id="field-reliabilityInvestmentMonthly">
+              <label class="calc-label" for="inp-reliabilityInvestmentMonthly">
+                Reliability Investment
+                <span class="ftag">preventive</span>
+              </label>
+              <div class="calc-input-wrap">
+                <input type="number" id="inp-reliabilityInvestmentMonthly" inputmode="decimal" min="0" step="1" placeholder="e.g. 2500" oninput="onInput('reliabilityInvestmentMonthly')">
+                <span class="calc-unit">€ / month</span>
+              </div>
+              <div class="calc-hint">Planned monthly spend for resilience controls (redundancy, observability, on-call readiness, validation).</div>
+            </div>
+          </div>
+          <div class="portfolio-guardrail" id="reliability-guardrail">Reliability economics remains inactive until enabled with SLO/SLI and incident context inputs.</div>
+        </div>
       </div>
 
       <!-- ── GROUP C ──────────────────────────────────────────── -->
@@ -5007,6 +5168,36 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-out-sub">Share of AI traffic routed to premium models</div>
           </div>
 
+          <div class="calc-out-card reliability-card" id="out-relDowntime" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Expected Downtime</div>
+            <div class="calc-out-val muted" id="oval-relDowntime">—</div>
+            <div class="calc-out-sub">Estimated monthly downtime from observed SLI availability</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relFailureCost" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Expected Reliability Failure Cost</div>
+            <div class="calc-out-val muted" id="oval-relFailureCost">—</div>
+            <div class="calc-out-sub">Penalties + incident labor + outage loss + churn-risk expectation</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relAdjustedCost" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Reliability-Adjusted Cost</div>
+            <div class="calc-out-val muted" id="oval-relAdjustedCost">—</div>
+            <div class="calc-out-sub">Baseline modeled cost plus reliability investment and expected failure burden</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relRiskBand" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Reliability Risk Band</div>
+            <div class="calc-out-val muted" id="oval-relRiskBand">—</div>
+            <div class="calc-out-sub">Risk signal from breach gap and expected reliability loss share</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relDataConfidence" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Reliability Data Confidence</div>
+            <div class="calc-out-val muted" id="oval-relDataConfidence">—</div>
+            <div class="calc-out-sub">Confidence score based on completeness of reliability and risk inputs</div>
+          </div>
+
         </div>
 
         <!-- Progress + status bar -->
@@ -5045,6 +5236,20 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="cp-pill" id="cp-30"></div>
           <div class="cp-pill" id="cp-31"></div>
           <div class="cp-pill" id="cp-32"></div>
+          <div class="cp-pill" id="cp-33"></div>
+          <div class="cp-pill" id="cp-34"></div>
+          <div class="cp-pill" id="cp-35"></div>
+          <div class="cp-pill" id="cp-36"></div>
+          <div class="cp-pill" id="cp-37"></div>
+          <div class="cp-pill" id="cp-38"></div>
+          <div class="cp-pill" id="cp-39"></div>
+          <div class="cp-pill" id="cp-40"></div>
+          <div class="cp-pill" id="cp-41"></div>
+          <div class="cp-pill" id="cp-42"></div>
+          <div class="cp-pill" id="cp-43"></div>
+          <div class="cp-pill" id="cp-44"></div>
+          <div class="cp-pill" id="cp-45"></div>
+          <div class="cp-pill" id="cp-46"></div>
         </div>
         <div class="calc-status-bar" id="calc-status-bar">
           <div class="calc-status-dot" id="calc-dot"></div>
@@ -5128,6 +5333,23 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               </div>
               <div id="qbv-realization-summary" class="qbv-realization-summary">Add realization inputs to compute burn-up status.</div>
               <div id="qbv-realization-bars" class="qbv-realization-bars qbv-placeholder"></div>
+            </article>
+
+            <article class="qbv-panel" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+              <div class="cfo-panel-head">
+                <h4>Reliability risk-cost panel</h4>
+                <details class="cfo-panel-tip">
+                  <summary aria-label="Learn more about Reliability risk-cost panel">?</summary>
+                  <div class="cfo-panel-tip-popover">
+                    <p><strong>What:</strong> Breaks expected reliability downside into penalty, incident labor, downtime loss, and churn-risk components.</p>
+                    <p><strong>How calculated:</strong> Uses the SLA/SLO/SLI economics module outputs to aggregate <code>ExpectedFailureCost</code> and compare against reliability-adjusted cost.</p>
+                    <p><strong>Why it matters:</strong> Makes reliability trade-offs explicit so teams can balance preventive investment against expected downside.</p>
+                  </div>
+                </details>
+              </div>
+              <p class="qbv-panel-sub">Monthly reliability downside composition and risk posture</p>
+              <div id="qbv-reliability-summary" class="qbv-realization-summary">Enable reliability economics to activate risk-cost composition output.</div>
+              <div id="qbv-reliability-bars" class="qbv-realization-bars qbv-placeholder"></div>
             </article>
           </div>
 
@@ -5647,6 +5869,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 
 <script src="src/features/runtime-gates.js"></script>
 <script src="src/features/ai-token-economics/engine.js"></script>
+<script src="src/features/sla-slo-sli-economics/engine.js"></script>
 <script src="src/core/economics.js"></script>
 <script>
 // ─── STATE ──────────────────────────────────────────────────────
@@ -5686,60 +5909,60 @@ const UI_INTENT_PROFILES = {
     recommendationCategory: 'infrastructure',
     featureProfile: 'finops-operations',
     personaLabel: 'Operations',
-    summary: 'As Operations, prioritize budgeting, forecast variance, and monthly optimization levers.',
-    outcomePreview: ['Budget variance', 'Forecast confidence band', 'Top optimization action'],
-    nextStep: 'Enter Total Infra Cost and ARPU to expose monthly budget and forecast signals.',
-    kpiHelper: 'Operations first: budget variance, forecast band, realization cadence, and normalized coverage are surfaced early.',
+    summary: 'As Operations, prioritize budgeting, reliability downside exposure, and monthly optimization levers.',
+    outcomePreview: ['Budget variance', 'Reliability failure cost', 'Top optimization action'],
+    nextStep: 'Enter Total Infra Cost and budget assumptions, then activate reliability inputs to expose downside pressure.',
+    kpiHelper: 'Operations first: budget variance, reliability failure cost, risk band, and forecast signals are surfaced early.',
     recommendationHelper: 'Recommendation emphasis: infrastructure and operating levers are ranked first for monthly control loops.',
     recommendationWeights: { infrastructure: 0, governance: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
-    kpiOrder: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity'],
+    kpiOrder: ['out-budgetVariance', 'out-relFailureCost', 'out-relRiskBand', 'out-relAdjustedCost', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techCoverage', 'out-techNorm', 'out-focusMaturity'],
     guidedSteps: [
       { label: 'Budget', requires: ['hasInfraInput', 'hasBudget'] },
-      { label: 'Forecast', requires: ['hasARPU', 'hasForecastSignal'] },
+      { label: 'Risk', requires: ['hasOpsRiskSignal'] },
       { label: 'Action', requires: ['hasRecommendations'] }
     ],
     exportLabel: 'Export operations preset',
-    exportMetrics: ['out-budgetVariance', 'out-forecastBand', 'out-forecastSpread', 'out-realizedValue', 'out-realizationGap', 'out-techNorm']
+    exportMetrics: ['out-budgetVariance', 'out-relFailureCost', 'out-relRiskBand', 'out-relAdjustedCost', 'out-forecastBand', 'out-forecastSpread', 'out-techNorm']
   },
   architecture: {
     mode: 'architect',
     recommendationCategory: 'governance',
     featureProfile: 'policy-ai',
     personaLabel: 'Architecture',
-    summary: 'As Architecture, surface policy-heavy controls, including AI token economics and allocation behavior.',
-    outcomePreview: ['AI allocation signal', 'Token cost pressure', 'Governance risk action'],
-    nextStep: 'Enable AI inputs (or load a demo) to unlock policy, risk, and action guidance.',
-    kpiHelper: 'Architecture first: AI allocation, retry inflation, premium mix, and governance-sensitive outputs are prioritized.',
+    summary: 'As Architecture, surface policy-heavy controls across AI token economics and SLA/SLO/SLI reliability economics.',
+    outcomePreview: ['Reliability-adjusted cost signal', 'AI allocation pressure', 'Governance risk action'],
+    nextStep: 'Enable AI and/or reliability inputs (or load a demo) to unlock policy, risk, and action guidance.',
+    kpiHelper: 'Architecture first: reliability-adjusted cost, reliability risk, AI allocation, and governance-sensitive outputs are prioritized.',
     recommendationHelper: 'Recommendation emphasis: governance and policy controls are ranked first, then infrastructure and pricing.',
     recommendationWeights: { governance: 0, infrastructure: 1, pricing: 2, crm: 3, marketing: 4, all: 5 },
-    kpiOrder: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-techNorm', 'out-focusMaturity'],
+    kpiOrder: ['out-relAdjustedCost', 'out-relFailureCost', 'out-relRiskBand', 'out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-techNorm', 'out-focusMaturity'],
     guidedSteps: [
-      { label: 'Policy', requires: ['hasAiEnabled'] },
-      { label: 'Risk', requires: ['hasAiSignal'] },
+      { label: 'Policy', requires: ['hasArchitecturePolicySignal'] },
+      { label: 'Risk', requires: ['hasArchitectureRiskSignal'] },
       { label: 'Action', requires: ['hasRecommendations'] }
     ],
     exportLabel: 'Export architecture preset',
-    exportMetrics: ['out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-aiRetryInflation', 'out-aiPremiumMix', 'out-focusMaturity']
+    exportMetrics: ['out-relAdjustedCost', 'out-relFailureCost', 'out-relRiskBand', 'out-aiAllocatedCost', 'out-aiCostPerClient', 'out-aiTokenCost', 'out-focusMaturity']
   },
   executive: {
     mode: 'operator',
     recommendationCategory: 'all',
     featureProfile: 'executive-summary',
     personaLabel: 'Executive',
-    summary: 'As Executive, keep a concise KPI story with cross-domain recommendations for decision review.',
-    outcomePreview: ['Portfolio health narrative', 'Cross-domain risk view', 'Decision-ready readout'],
+    summary: 'As Executive, keep a concise KPI story with risk-adjusted cost and cross-domain recommendations for decision review.',
+    outcomePreview: ['Portfolio health narrative', 'Reliability downside view', 'Decision-ready readout'],
     nextStep: 'Enter the two core inputs first, then scan guided path and export a board-ready snapshot.',
-    kpiHelper: 'Executive first: concise KPI narrative prioritizing health score context, variance, and margin-sensitive metrics.',
+    kpiHelper: 'Executive first: concise KPI narrative prioritizing reliability-adjusted cost, risk band, variance, and margin-sensitive metrics.',
     recommendationHelper: 'Recommendation emphasis: high-priority cross-domain actions are surfaced first for decision review.',
     recommendationWeights: { all: 0, infrastructure: 1, pricing: 2, governance: 3, crm: 4, marketing: 5 },
-    kpiOrder: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient'],
+    kpiOrder: ['out-forecastBand', 'out-relAdjustedCost', 'out-relRiskBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm', 'out-aiCostPerClient'],
     guidedSteps: [
       { label: 'Narrative', requires: ['hasInfraInput', 'hasARPU'] },
-      { label: 'Risk', requires: ['hasHealthScore', 'hasForecastSignal'] },
+      { label: 'Risk', requires: ['hasExecutiveRiskSignal'] },
       { label: 'Readout', requires: ['hasQbvRows'] }
     ],
     exportLabel: 'Export executive preset',
-    exportMetrics: ['out-forecastBand', 'out-budgetVariance', 'out-margin', 'out-ccer', 'out-realizationRatio', 'out-techNorm']
+    exportMetrics: ['out-forecastBand', 'out-relAdjustedCost', 'out-relRiskBand', 'out-budgetVariance', 'out-margin', 'out-realizationRatio', 'out-techNorm']
   }
 };
 const SHAREABLE_INPUT_KEYS = [
@@ -5751,7 +5974,11 @@ const SHAREABLE_INPUT_KEYS = [
   'costSaaS', 'costLicensing', 'costPrivateCloud', 'costDataCenter', 'costLabor',
   'aiEnabled', 'aiPricingMode', 'aiRatePer1MInput', 'aiRatePer1MOutput', 'aiRatePer1MTotal',
   'aiInputTokensM', 'aiOutputTokensM', 'aiRetryRatePct', 'aiPremiumMixPct',
-  'aiSharedOverheadMonthly', 'aiAllocationPolicy'
+  'aiSharedOverheadMonthly', 'aiAllocationPolicy',
+  'reliabilityEnabled', 'sloTargetAvailabilityPct', 'sliObservedAvailabilityPct',
+  'incidentCountMonthly', 'mttrHours', 'incidentBlendedHourlyRate',
+  'criticalRevenuePerMinute', 'arrExposedMonthly',
+  'slaPenaltyRatePerBreachPointMonthly', 'reliabilityInvestmentMonthly'
 ];
 const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
 const TECH_DOMAIN_SCHEMA = [
@@ -5962,6 +6189,51 @@ const OUTPUT_TOOLTIP_CONTENT = {
     ],
     refs: [
       { label: 'State of FinOps report', url: FINOPS_2026_REPORT_URL }
+    ]
+  },
+  'out-relDowntime': {
+    title: 'Expected Downtime',
+    what: 'Estimates monthly downtime minutes from observed availability for reliability cost modeling.',
+    how: [
+      '<code>ExpectedDowntimeMinutes = (1 - SLI_observed) × minutes_in_month</code>.',
+      'SLI observed availability is interpreted as operational outcome for the selected period.',
+      'Used downstream by revenue-at-risk and reliability risk-band estimation.'
+    ]
+  },
+  'out-relFailureCost': {
+    title: 'Expected Reliability Failure Cost',
+    what: 'Aggregates contract and operational loss exposure from reliability shortfalls.',
+    how: [
+      '<code>FailureCost = SLA penalty + incident labor + revenue at risk + churn-risk expectation</code>.',
+      'Penalty cost uses SLO-SLI breach gap and your configured penalty rate override model.',
+      'Each component is expressed as monthly total for planning and governance reviews.'
+    ]
+  },
+  'out-relAdjustedCost': {
+    title: 'Reliability-Adjusted Cost',
+    what: 'Adds reliability investment and expected failure exposure to baseline modeled monthly cost.',
+    how: [
+      '<code>AdjustedCost = BaselineModeledCost + ReliabilityInvestment + ExpectedFailureCost</code>.',
+      'Lets teams compare preventive spend with expected downside risk in one cost frame.',
+      'Designed as additive overlay so baseline core economics remain intact when disabled.'
+    ]
+  },
+  'out-relRiskBand': {
+    title: 'Reliability Risk Band',
+    what: 'Classifies reliability pressure level from breach gap and downside share signals.',
+    how: [
+      'Risk is derived from breach gap and failure-cost share of adjusted cost envelope.',
+      '<code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code> supports policy and remediation triage.',
+      'Used as decision signal, not as legal SLA interpretation.'
+    ]
+  },
+  'out-relDataConfidence': {
+    title: 'Reliability Data Confidence',
+    what: 'Indicates confidence based on completeness of reliability and exposure inputs.',
+    how: [
+      'Confidence counts how many required reliability model inputs are populated.',
+      '<code>HIGH</code> = richer data coverage; <code>LOW</code> = directional estimate only.',
+      'Use confidence with risk band before committing major investment decisions.'
     ]
   }
 };
@@ -6727,7 +6999,9 @@ function buildIntentSignalState(inputs = {}) {
     savingsRealized,
     costAvoidance,
     aiEnabled,
-    aiMetrics
+    aiMetrics,
+    reliabilityEnabled,
+    reliabilityMetrics
   } = inputs || {};
 
   const hasAnyCostInput =
@@ -6755,6 +7029,16 @@ function buildIntentSignalState(inputs = {}) {
   const hasQbvRows = Array.isArray(qbvDashboardRows) && qbvDashboardRows.length > 0;
   const hasAiEnabled = Boolean(aiEnabled);
   const hasAiSignal = Boolean(aiMetrics && aiMetrics.enabled && aiMetrics.aiTotalTokenCost !== null);
+  const hasReliabilityEnabled = Boolean(reliabilityEnabled);
+  const hasReliabilitySignal = Boolean(
+    reliabilityMetrics &&
+    reliabilityMetrics.enabled &&
+    reliabilityMetrics.expectedReliabilityFailureCostMonthly !== null
+  );
+  const hasOpsRiskSignal = Boolean((hasARPU && hasForecastSignal) || hasReliabilitySignal);
+  const hasArchitecturePolicySignal = Boolean(hasAiEnabled || hasReliabilityEnabled);
+  const hasArchitectureRiskSignal = Boolean(hasAiSignal || hasReliabilitySignal);
+  const hasExecutiveRiskSignal = Boolean((hasHealthScore && hasForecastSignal) || hasReliabilitySignal);
 
   return {
     hasAnyCostInput,
@@ -6768,7 +7052,13 @@ function buildIntentSignalState(inputs = {}) {
     hasProviderSelection,
     hasQbvRows,
     hasAiEnabled,
-    hasAiSignal
+    hasAiSignal,
+    hasReliabilityEnabled,
+    hasReliabilitySignal,
+    hasOpsRiskSignal,
+    hasArchitecturePolicySignal,
+    hasArchitectureRiskSignal,
+    hasExecutiveRiskSignal
   };
 }
 
@@ -7909,7 +8199,11 @@ const USER_PROVIDED = {
   aiRatePer1MInput:false, aiRatePer1MOutput:false, aiRatePer1MTotal:false,
   aiInputTokensM:false, aiOutputTokensM:false,
   aiRetryRatePct:false, aiPremiumMixPct:false,
-  aiSharedOverheadMonthly:false, aiAllocationPolicy:false
+  aiSharedOverheadMonthly:false, aiAllocationPolicy:false,
+  reliabilityEnabled:false, sloTargetAvailabilityPct:false, sliObservedAvailabilityPct:false,
+  incidentCountMonthly:false, mttrHours:false, incidentBlendedHourlyRate:false,
+  criticalRevenuePerMinute:false, arrExposedMonthly:false,
+  slaPenaltyRatePerBreachPointMonthly:false, reliabilityInvestmentMonthly:false
 };
 
 // Smart default n when user hasn't told us their scale yet
@@ -7941,7 +8235,18 @@ let lastInputs = {
   aiInputTokensM: null, aiOutputTokensM: null,
   aiRetryRatePct: null, aiPremiumMixPct: null,
   aiSharedOverheadMonthly: null, aiAllocationPolicy: 'token-weighted',
-  aiMetrics: null
+  aiMetrics: null,
+  reliabilityEnabled: false,
+  sloTargetAvailabilityPct: null,
+  sliObservedAvailabilityPct: null,
+  incidentCountMonthly: null,
+  mttrHours: null,
+  incidentBlendedHourlyRate: null,
+  criticalRevenuePerMinute: null,
+  arrExposedMonthly: null,
+  slaPenaltyRatePerBreachPointMonthly: null,
+  reliabilityInvestmentMonthly: null,
+  reliabilityMetrics: null
 };
 
 const DEMO_SCENARIOS = {
@@ -7984,7 +8289,17 @@ const DEMO_SCENARIOS = {
         aiRetryRatePct: 4,
         aiPremiumMixPct: 9,
         aiSharedOverheadMonthly: 700,
-        aiAllocationPolicy: 'token-weighted'
+        aiAllocationPolicy: 'token-weighted',
+        reliabilityEnabled: 'on',
+        sloTargetAvailabilityPct: 99.9,
+        sliObservedAvailabilityPct: 99.82,
+        incidentCountMonthly: 2,
+        mttrHours: 0.9,
+        incidentBlendedHourlyRate: 95,
+        criticalRevenuePerMinute: 24,
+        arrExposedMonthly: 65000,
+        slaPenaltyRatePerBreachPointMonthly: 3000,
+        reliabilityInvestmentMonthly: 1800
       },
       td: [...VALID_TECH_DOMAIN_KEYS],
       p: ['aws', 'azure', 'gcp'],
@@ -8030,7 +8345,17 @@ const DEMO_SCENARIOS = {
         aiRetryRatePct: 45,
         aiPremiumMixPct: 72,
         aiSharedOverheadMonthly: 3200,
-        aiAllocationPolicy: 'premium-weighted'
+        aiAllocationPolicy: 'premium-weighted',
+        reliabilityEnabled: 'on',
+        sloTargetAvailabilityPct: 99.9,
+        sliObservedAvailabilityPct: 98.9,
+        incidentCountMonthly: 11,
+        mttrHours: 3.7,
+        incidentBlendedHourlyRate: 140,
+        criticalRevenuePerMinute: 110,
+        arrExposedMonthly: 180000,
+        slaPenaltyRatePerBreachPointMonthly: 12000,
+        reliabilityInvestmentMonthly: 900
       },
       td: [...VALID_TECH_DOMAIN_KEYS],
       p: ['aws', 'azure', 'gcp'],
@@ -8866,7 +9191,11 @@ function updateProgressPills() {
     'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor',
     'inp-aiEnabled','inp-aiPricingMode','inp-aiRatePer1MInput','inp-aiRatePer1MOutput','inp-aiRatePer1MTotal',
     'inp-aiInputTokensM','inp-aiOutputTokensM','inp-aiRetryRatePct','inp-aiPremiumMixPct',
-    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy'
+    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy',
+    'inp-reliabilityEnabled','inp-sloTargetAvailabilityPct','inp-sliObservedAvailabilityPct',
+    'inp-incidentCountMonthly','inp-mttrHours','inp-incidentBlendedHourlyRate',
+    'inp-criticalRevenuePerMinute','inp-arrExposedMonthly',
+    'inp-slaPenaltyRatePerBreachPointMonthly','inp-reliabilityInvestmentMonthly'
   ];
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'flex';
@@ -8927,6 +9256,16 @@ function recalculate() {
   const aiPremiumMixPct = getInp('inp-aiPremiumMixPct');
   const aiSharedOverheadMonthly = getInp('inp-aiSharedOverheadMonthly');
   const aiAllocationPolicy = getInputString('inp-aiAllocationPolicy', 'token-weighted');
+  const reliabilityEnabled = getInputString('inp-reliabilityEnabled', 'off') === 'on';
+  const sloTargetAvailabilityPct = getInp('inp-sloTargetAvailabilityPct');
+  const sliObservedAvailabilityPct = getInp('inp-sliObservedAvailabilityPct');
+  const incidentCountMonthly = getInp('inp-incidentCountMonthly');
+  const mttrHours = getInp('inp-mttrHours');
+  const incidentBlendedHourlyRate = getInp('inp-incidentBlendedHourlyRate');
+  const criticalRevenuePerMinute = getInp('inp-criticalRevenuePerMinute');
+  const arrExposedMonthly = getInp('inp-arrExposedMonthly');
+  const slaPenaltyRatePerBreachPointMonthly = getInp('inp-slaPenaltyRatePerBreachPointMonthly');
+  const reliabilityInvestmentMonthly = getInp('inp-reliabilityInvestmentMonthly');
 
   let derivations = [];
   let effectiveARPU = null;
@@ -8994,7 +9333,18 @@ function recalculate() {
     aiInputTokensM, aiOutputTokensM,
     aiRetryRatePct, aiPremiumMixPct,
     aiSharedOverheadMonthly, aiAllocationPolicy,
-    aiMetrics: null
+    aiMetrics: null,
+    reliabilityEnabled,
+    sloTargetAvailabilityPct,
+    sliObservedAvailabilityPct,
+    incidentCountMonthly,
+    mttrHours,
+    incidentBlendedHourlyRate,
+    criticalRevenuePerMinute,
+    arrExposedMonthly,
+    slaPenaltyRatePerBreachPointMonthly,
+    reliabilityInvestmentMonthly,
+    reliabilityMetrics: null
   };
 
   if (changed) { draw(); }
@@ -9018,7 +9368,17 @@ function updateOutputCards(inputs) {
     aiRatePer1MInput, aiRatePer1MOutput, aiRatePer1MTotal,
     aiInputTokensM, aiOutputTokensM,
     aiRetryRatePct, aiPremiumMixPct,
-    aiSharedOverheadMonthly, aiAllocationPolicy
+    aiSharedOverheadMonthly, aiAllocationPolicy,
+    reliabilityEnabled,
+    sloTargetAvailabilityPct,
+    sliObservedAvailabilityPct,
+    incidentCountMonthly,
+    mttrHours,
+    incidentBlendedHourlyRate,
+    criticalRevenuePerMinute,
+    arrExposedMonthly,
+    slaPenaltyRatePerBreachPointMonthly,
+    reliabilityInvestmentMonthly
   } = inputs;
   const { K, a, c, b, g, m, nMax } = MODEL;
 
@@ -9421,6 +9781,74 @@ function updateOutputCards(inputs) {
     }
   }
 
+  const reliabilityEngine = window.FiceCalReliabilityEconomics;
+  const reliabilityMetrics = (reliabilityEngine && typeof reliabilityEngine.calculate === 'function')
+    ? reliabilityEngine.calculate({
+      enabled: reliabilityEnabled,
+      sloTargetAvailabilityPct,
+      sliObservedAvailabilityPct,
+      incidentCountMonthly,
+      mttrHours,
+      incidentBlendedHourlyRate,
+      criticalRevenuePerMinute,
+      arrExposedMonthly,
+      slaPenaltyRatePerBreachPointMonthly,
+      reliabilityInvestmentMonthly,
+      existingModeledCostMonthly: budgetBasisCost
+    })
+    : null;
+  inputs.reliabilityMetrics = reliabilityMetrics;
+
+  const reliabilityGuardrailEl = document.getElementById('reliability-guardrail');
+  if (!reliabilityEnabled) {
+    setOut('oval-relDowntime', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relFailureCost', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relAdjustedCost', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relRiskBand', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relDataConfidence', null, '', '', 'Reliability Economics = On');
+    if (reliabilityGuardrailEl) {
+      reliabilityGuardrailEl.textContent = 'Reliability economics remains inactive until enabled with SLO/SLI and incident context inputs.';
+    }
+  } else if (!reliabilityMetrics || reliabilityMetrics.expectedReliabilityFailureCostMonthly === null) {
+    setOut('oval-relDowntime', null, '', '', 'Observed SLI Availability %');
+    setOut('oval-relFailureCost', null, '', '', 'Reliability inputs for penalties, incident labor, and exposure');
+    setOut('oval-relAdjustedCost', null, '', '', 'Baseline cost + reliability inputs');
+    setOut('oval-relRiskBand', null, '', '', 'Reliability signal inputs');
+    setOut('oval-relDataConfidence', null, '', '', 'Reliability input completeness');
+    if (reliabilityGuardrailEl) {
+      reliabilityGuardrailEl.textContent = 'Populate reliability fields to activate SLA/SLO/SLI cost and risk outputs.';
+    }
+  } else {
+    const downtimeClass = reliabilityMetrics.expectedDowntimeMinutes <= 45
+      ? 'good'
+      : (reliabilityMetrics.expectedDowntimeMinutes <= 180 ? 'warn' : 'bad');
+    const riskClass = reliabilityMetrics.reliabilityRiskBand === 'high'
+      ? 'bad'
+      : (reliabilityMetrics.reliabilityRiskBand === 'medium' ? 'warn' : 'good');
+    const confidenceClass = reliabilityMetrics.reliabilityDataConfidence === 'high'
+      ? 'good'
+      : (reliabilityMetrics.reliabilityDataConfidence === 'medium' ? 'warn' : 'bad');
+
+    setOut(
+      'oval-relDowntime',
+      `${reliabilityMetrics.expectedDowntimeMinutes.toFixed(1)} min / mo`,
+      downtimeClass,
+      downtimeClass === 'good' ? '' : downtimeClass
+    );
+    setOut('oval-relFailureCost', `${fmtOut(reliabilityMetrics.expectedReliabilityFailureCostMonthly, 0)} / mo`, riskClass, riskClass === 'good' ? '' : riskClass);
+    setOut('oval-relAdjustedCost', `${fmtOut(reliabilityMetrics.reliabilityAdjustedCostMonthly, 0)} / mo`, 'good', '');
+    setOut('oval-relRiskBand', reliabilityMetrics.reliabilityRiskBand.toUpperCase(), riskClass, riskClass === 'good' ? '' : riskClass);
+    setOut('oval-relDataConfidence', reliabilityMetrics.reliabilityDataConfidence.toUpperCase(), confidenceClass, confidenceClass === 'good' ? '' : confidenceClass);
+
+    const adjustedSub = document.querySelector('#out-relAdjustedCost .calc-out-sub');
+    if (adjustedSub) {
+      adjustedSub.textContent = `Base ${fmtOut(budgetBasisCost, 0)} + investment ${fmtOut(reliabilityMetrics.reliabilityInvestmentMonthly, 0)} + expected failure ${fmtOut(reliabilityMetrics.expectedReliabilityFailureCostMonthly, 0)}.`;
+    }
+    if (reliabilityGuardrailEl) {
+      reliabilityGuardrailEl.textContent = `Reliability economics active: risk ${reliabilityMetrics.reliabilityRiskBand.toUpperCase()} with ${reliabilityMetrics.reliabilityDataConfidence.toUpperCase()} data confidence.`;
+    }
+  }
+
   renderPortfolioSummary(normalization);
   updateNormalizationGuardrail(normalization);
   updateValueGuardrail({
@@ -9436,6 +9864,9 @@ function updateOutputCards(inputs) {
     hasBudget,
     hasForecastSignal,
     hasRealizationSignal,
+    hasReliabilityEnabled: reliabilityEnabled,
+    hasReliabilitySignal: Boolean(reliabilityMetrics && reliabilityMetrics.enabled && reliabilityMetrics.expectedReliabilityFailureCostMonthly !== null),
+    reliabilityMetrics,
     nSample,
     arpuUsed,
     budgetMonthly,
@@ -9527,6 +9958,60 @@ function renderCfoBudgetPanel(rows, state) {
           <div class="qbv-bar-track"><span class="qbv-bar-fill cost" style="width:${costWidth}%;"></span></div>
         </div>
         <div class="qbv-bar-meta ${varianceClass}">${fmtOut(row.budgetVariance, 0)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCfoReliabilityPanel(state) {
+  const summaryEl = document.getElementById('qbv-reliability-summary');
+  const barsEl = document.getElementById('qbv-reliability-bars');
+  if (!summaryEl || !barsEl) return;
+
+  const metrics = state && state.reliabilityMetrics;
+  if (!state || !state.hasReliabilityEnabled) {
+    summaryEl.textContent = 'Enable Reliability Economics to expose SLA/SLO/SLI downside composition.';
+    barsEl.innerHTML = '<div class="qbv-placeholder">Reliability panel inactive until reliability economics is enabled.</div>';
+    return;
+  }
+
+  if (!metrics || !metrics.enabled || metrics.expectedReliabilityFailureCostMonthly === null) {
+    summaryEl.textContent = 'Populate reliability fields to compute expected failure cost composition.';
+    barsEl.innerHTML = '<div class="qbv-placeholder">Need SLO/SLI, incident, and exposure assumptions.</div>';
+    return;
+  }
+
+  const riskClass = metrics.reliabilityRiskBand === 'high'
+    ? 'bad'
+    : (metrics.reliabilityRiskBand === 'medium' ? 'warn' : 'good');
+  const confidenceClass = metrics.reliabilityDataConfidence === 'high'
+    ? 'good'
+    : (metrics.reliabilityDataConfidence === 'medium' ? 'warn' : 'bad');
+
+  summaryEl.innerHTML = `
+    Expected failure cost <strong>${fmtOut(metrics.expectedReliabilityFailureCostMonthly, 0)} / mo</strong>
+    against adjusted envelope <strong>${fmtOut(metrics.reliabilityAdjustedCostMonthly, 0)} / mo</strong>
+    · <span class="qbv-risk-pill ${riskClass}">risk ${metrics.reliabilityRiskBand.toUpperCase()}</span>
+    · <span class="qbv-risk-pill ${confidenceClass}">confidence ${metrics.reliabilityDataConfidence.toUpperCase()}</span>
+  `;
+
+  const components = [
+    { label: 'Penalty', key: 'rel-penalty', value: metrics.expectedSlaPenaltyMonthly || 0 },
+    { label: 'Incident labor', key: 'rel-incident', value: metrics.expectedIncidentLaborMonthly || 0 },
+    { label: 'Downtime loss', key: 'rel-downtime', value: metrics.expectedRevenueAtRiskMonthly || 0 },
+    { label: 'Churn risk', key: 'rel-churn', value: metrics.expectedChurnRiskMonthly || 0 }
+  ];
+
+  const maxValue = Math.max(1, ...components.map(item => item.value));
+  barsEl.innerHTML = components.map(item => {
+    const width = Math.max(2, (item.value / maxValue) * 100);
+    return `
+      <div class="qbv-bar-row">
+        <div class="qbv-bar-label">${item.label}</div>
+        <div class="qbv-bar-stack" title="${item.label}: ${fmtOut(item.value, 0)} / mo">
+          <div class="qbv-bar-track"><span class="qbv-bar-fill ${item.key}" style="width:${width}%;"></span></div>
+        </div>
+        <div class="qbv-bar-meta">${fmtOut(item.value, 0)}</div>
       </div>
     `;
   }).join('');
@@ -9661,6 +10146,7 @@ function renderCfoForecastDashboard(state) {
     renderCfoBudgetPanel([], { hasBudget: false, budgetMonthly: null });
     renderCfoForecastPanel([], { hasARPU: false, hasForecastSignal: false });
     renderCfoRealizationPanel([], { hasRealizationSignal: false, identifiedUsed: null, totalRealizedValue: 0 });
+    renderCfoReliabilityPanel({ hasReliabilityEnabled: false, reliabilityMetrics: null });
     renderCfoPlanningTable([], {});
     noteEl.textContent = 'Add Dev Cost or Infra Cost to activate CFO visual planning outputs.';
     if (qbvExportBtnEl) qbvExportBtnEl.disabled = true;
@@ -9672,12 +10158,15 @@ function renderCfoForecastDashboard(state) {
   renderCfoBudgetPanel(rows, state);
   renderCfoForecastPanel(rows, state);
   renderCfoRealizationPanel(rows, state);
+  renderCfoReliabilityPanel(state);
   renderCfoPlanningTable(rows, state);
 
   if (!state.hasBudget) {
     noteEl.textContent = 'Set Monthly Technology Budget to unlock variance tracking in the CFO planning dashboard.';
   } else if (!state.hasARPU || !state.hasForecastSignal) {
     noteEl.textContent = 'Budgeting is active. Add ARPU and forecast assumptions to render best/base/worst margin scenarios.';
+  } else if (state.hasReliabilityEnabled && state.hasReliabilitySignal) {
+    noteEl.textContent = 'CFO dashboard active: reliability downside composition is now visible alongside budgeting, forecast fan, and cumulative value signals.';
   } else {
     noteEl.textContent = 'CFO dashboard active: use Month 1/6/12 budget checkpoints, scenario fan chart, and cumulative value gap to prepare forecast packs.';
   }
@@ -9780,7 +10269,18 @@ function resetModel() {
     aiInputTokensM: null, aiOutputTokensM: null,
     aiRetryRatePct: null, aiPremiumMixPct: null,
     aiSharedOverheadMonthly: null, aiAllocationPolicy: 'token-weighted',
-    aiMetrics: null
+    aiMetrics: null,
+    reliabilityEnabled: false,
+    sloTargetAvailabilityPct: null,
+    sliObservedAvailabilityPct: null,
+    incidentCountMonthly: null,
+    mttrHours: null,
+    incidentBlendedHourlyRate: null,
+    criticalRevenuePerMinute: null,
+    arrExposedMonthly: null,
+    slaPenaltyRatePerBreachPointMonthly: null,
+    reliabilityInvestmentMonthly: null,
+    reliabilityMetrics: null
   };
   const ids = [
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
@@ -9791,7 +10291,11 @@ function resetModel() {
     'inp-techDomains','inp-costSaaS','inp-costLicensing','inp-costPrivateCloud','inp-costDataCenter','inp-costLabor',
     'inp-aiEnabled','inp-aiPricingMode','inp-aiRatePer1MInput','inp-aiRatePer1MOutput','inp-aiRatePer1MTotal',
     'inp-aiInputTokensM','inp-aiOutputTokensM','inp-aiRetryRatePct','inp-aiPremiumMixPct',
-    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy'
+    'inp-aiSharedOverheadMonthly','inp-aiAllocationPolicy',
+    'inp-reliabilityEnabled','inp-sloTargetAvailabilityPct','inp-sliObservedAvailabilityPct',
+    'inp-incidentCountMonthly','inp-mttrHours','inp-incidentBlendedHourlyRate',
+    'inp-criticalRevenuePerMinute','inp-arrExposedMonthly',
+    'inp-slaPenaltyRatePerBreachPointMonthly','inp-reliabilityInvestmentMonthly'
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);

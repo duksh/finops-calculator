@@ -13,6 +13,7 @@ This folder is the modular contract layer for FiceCal features.
 - `core-economics` (required)
 - `multi-tech-normalization` (optional, active)
 - `ai-token-economics` (optional, experimental, Wave 3)
+- `sla-slo-sli-economics` (optional, experimental, Release 4 scaffold)
 
 ## Rules
 

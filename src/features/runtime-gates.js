@@ -28,6 +28,12 @@
         manifestPath: 'src/features/ai-token-economics/feature.json',
         enabled: false,
         required: false
+      },
+      {
+        id: 'sla-slo-sli-economics',
+        manifestPath: 'src/features/sla-slo-sli-economics/feature.json',
+        enabled: false,
+        required: false
       }
     ]
   };
@@ -35,7 +41,8 @@
   const FALLBACK_MANIFESTS = {
     'core-economics': { id: 'core-economics', status: 'active' },
     'multi-tech-normalization': { id: 'multi-tech-normalization', status: 'active' },
-    'ai-token-economics': { id: 'ai-token-economics', status: 'experimental' }
+    'ai-token-economics': { id: 'ai-token-economics', status: 'experimental' },
+    'sla-slo-sli-economics': { id: 'sla-slo-sli-economics', status: 'experimental' }
   };
 
   const runtimeState = {
