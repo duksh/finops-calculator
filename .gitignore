@@ -4,3 +4,4 @@ wireframe-design
 .cursor
 CLAUDE.md
 .superdesign
+scripts/check-repo-mapping.local.sh
