@@ -5,3 +5,4 @@ wireframe-design
 CLAUDE.md
 .superdesign
 scripts/check-repo-mapping.local.sh
+scripts/sync-public-pages.local.sh
