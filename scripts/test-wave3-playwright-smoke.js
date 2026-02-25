@@ -94,6 +94,11 @@ async function waitAndFill(page, selector, value) {
   await page.fill(selector, value, { timeout: STEP_TIMEOUT_MS });
 }
 
+async function waitAndSelect(page, selector, value) {
+  await page.waitForSelector(selector, { state: 'visible', timeout: STEP_TIMEOUT_MS });
+  await page.selectOption(selector, value, { timeout: STEP_TIMEOUT_MS });
+}
+
 async function ensureDetailsOpen(page, detailsSelector, summarySelector) {
   await page.waitForSelector(detailsSelector, { state: 'attached', timeout: STEP_TIMEOUT_MS });
   const isOpen = await page.evaluate((selector) => {
@@ -175,7 +180,58 @@ async function run() {
     assert.strictEqual(restoredIntent, 'true', 'Shared link should restore architecture intent');
     assert.strictEqual(restoredMode, 'true', 'Shared link should preserve explicit mode override');
 
-    // 3) Guided-path transitions (todo -> active -> done)
+    // 3) Reliability smoke: cards + CFO reliability panel + share-state restore
+    const pageReliability = await context.newPage();
+    pageReliability.setDefaultTimeout(STEP_TIMEOUT_MS);
+    await pageReliability.goto(`${baseUrl}/index.html`, { waitUntil: 'domcontentloaded' });
+    await waitAndClick(pageReliability, '[data-ui-intent-btn="operations"]');
+
+    await waitAndFill(pageReliability, '#inp-infraTotal', '3600');
+    await waitAndFill(pageReliability, '#inp-ARPU', '95');
+    await waitAndSelect(pageReliability, '#inp-reliabilityEnabled', 'on');
+    await waitAndFill(pageReliability, '#inp-sloTargetAvailabilityPct', '99.90');
+    await waitAndFill(pageReliability, '#inp-sliObservedAvailabilityPct', '99.40');
+    await waitAndFill(pageReliability, '#inp-incidentCountMonthly', '5');
+    await waitAndFill(pageReliability, '#inp-mttrHours', '1.8');
+    await waitAndFill(pageReliability, '#inp-incidentBlendedHourlyRate', '120');
+    await waitAndFill(pageReliability, '#inp-criticalRevenuePerMinute', '40');
+    await waitAndFill(pageReliability, '#inp-arrExposedMonthly', '90000');
+    await waitAndFill(pageReliability, '#inp-slaPenaltyRatePerBreachPointMonthly', '5000');
+    await waitAndFill(pageReliability, '#inp-reliabilityInvestmentMonthly', '2100');
+
+    await pageReliability.waitForFunction(() => {
+      const val = document.getElementById('oval-relRiskBand');
+      return Boolean(val && val.textContent && val.textContent.trim() && val.textContent.trim() !== '—');
+    }, null, { timeout: STEP_TIMEOUT_MS });
+    const riskBandText = (await pageReliability.textContent('#oval-relRiskBand')) || '';
+    assert.ok(/LOW|MEDIUM|HIGH/.test(riskBandText.trim()), `Expected reliability risk band output, got: ${riskBandText}`);
+
+    await pageReliability.waitForFunction(() => {
+      const rows = document.querySelectorAll('#qbv-reliability-bars .qbv-bar-row');
+      return rows.length >= 4;
+    }, null, { timeout: STEP_TIMEOUT_MS });
+
+    const reliabilityShareUrl = await withRetry('generate reliability share url', async () => pageReliability.evaluate(() => {
+      const urlObj = window.buildShareStateUrl ? window.buildShareStateUrl() : null;
+      return urlObj ? urlObj.toString() : null;
+    }));
+    assert.ok(reliabilityShareUrl, 'Expected reliability share URL to be generated after entering reliability inputs');
+
+    const pageReliabilityRestore = await context.newPage();
+    pageReliabilityRestore.setDefaultTimeout(STEP_TIMEOUT_MS);
+    await pageReliabilityRestore.goto(reliabilityShareUrl, { waitUntil: 'domcontentloaded' });
+    await pageReliabilityRestore.waitForSelector('#inp-reliabilityEnabled', { state: 'visible', timeout: STEP_TIMEOUT_MS });
+    const restoredReliabilityToggle = await pageReliabilityRestore.inputValue('#inp-reliabilityEnabled');
+    const restoredSli = await pageReliabilityRestore.inputValue('#inp-sliObservedAvailabilityPct');
+    assert.strictEqual(restoredReliabilityToggle, 'on', 'Shared link should restore reliability toggle to on');
+    assert.strictEqual(restoredSli, '99.4', 'Shared link should restore observed availability input');
+
+    await pageReliabilityRestore.waitForFunction(() => {
+      const val = document.getElementById('oval-relFailureCost');
+      return Boolean(val && val.textContent && val.textContent.trim() && val.textContent.trim() !== '—');
+    }, null, { timeout: STEP_TIMEOUT_MS });
+
+    // 4) Guided-path transitions (todo -> active -> done)
     const pageFlow = await context.newPage();
     pageFlow.setDefaultTimeout(STEP_TIMEOUT_MS);
     await pageFlow.goto(`${baseUrl}/index.html`, { waitUntil: 'domcontentloaded' });
@@ -213,7 +269,7 @@ async function run() {
     const doneProgress = (await pageFlow.textContent('#intent-path-progress')) || '';
     assert.ok(doneProgress.includes('3/3'), `Expected guided progress to include 3/3 after complete signal set, got: ${doneProgress}`);
 
-    // 4) Intent export button triggers CSV download
+    // 5) Intent export button triggers CSV download
     await ensureGuidedPathOpen(pageFlow);
     await pageFlow.waitForSelector('#intent-export-btn', { state: 'visible', timeout: STEP_TIMEOUT_MS });
     const [download] = await Promise.all([
@@ -226,7 +282,7 @@ async function run() {
       `Unexpected export filename: ${filename}`
     );
 
-    console.log('[PASS] Wave 3 Playwright smoke checks passed');
+    console.log('[PASS] Wave 3 + Release 4 Playwright smoke checks passed');
   } finally {
     await browser.close();
     await new Promise(resolve => server.close(resolve));
