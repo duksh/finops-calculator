@@ -5,7 +5,7 @@
   "owner": "ficecal-ai-finops",
   "status": "experimental",
   "dependsOn": ["core-economics"],
-  "uiModes": ["architect"],
+  "uiModes": ["operator", "architect"],
   "inputs": [
     "aiInference.enabled",
     "aiInference.pricingMode",

@@ -2,6 +2,7 @@
   'use strict';
 
   const MODE_STORAGE_KEY = 'ficecal.ui.mode';
+  const FEATURE_OVERRIDE_STORAGE_KEY = 'ficecal.feature.overrides';
 
   const FALLBACK_CATALOG = {
     version: '1.0.0',
@@ -26,13 +27,13 @@
       {
         id: 'ai-token-economics',
         manifestPath: 'src/features/ai-token-economics/feature.json',
-        enabled: false,
+        enabled: true,
         required: false
       },
       {
         id: 'sla-slo-sli-economics',
         manifestPath: 'src/features/sla-slo-sli-economics/feature.json',
-        enabled: false,
+        enabled: true,
         required: false
       }
     ]
@@ -45,10 +46,37 @@
     'sla-slo-sli-economics': { id: 'sla-slo-sli-economics', status: 'experimental' }
   };
 
+  function getStoredFeatureOverrides() {
+    try {
+      if (!global.localStorage) return {};
+      const raw = global.localStorage.getItem(FEATURE_OVERRIDE_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return {};
+      const normalized = {};
+      Object.keys(parsed).forEach((featureId) => {
+        if (typeof parsed[featureId] === 'boolean') normalized[featureId] = parsed[featureId];
+      });
+      return normalized;
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function storeFeatureOverrides(overrides) {
+    try {
+      if (!global.localStorage) return;
+      global.localStorage.setItem(FEATURE_OVERRIDE_STORAGE_KEY, JSON.stringify(overrides || {}));
+    } catch (_) {
+      // Ignore storage failures (privacy mode / restricted context).
+    }
+  }
+
   const runtimeState = {
     catalog: FALLBACK_CATALOG,
     manifests: { ...FALLBACK_MANIFESTS },
-    mode: (FALLBACK_CATALOG.runtime && FALLBACK_CATALOG.runtime.defaultMode) || 'quick'
+    mode: (FALLBACK_CATALOG.runtime && FALLBACK_CATALOG.runtime.defaultMode) || 'quick',
+    featureOverrides: getStoredFeatureOverrides()
   };
 
   function getRuntimeModes() {
@@ -108,6 +136,27 @@
     return getCatalogFeatures().find((entry) => entry && entry.id === featureId) || null;
   }
 
+  function getDefaultFeatureEnabled(entry) {
+    if (!entry) return false;
+    if (entry.required) return true;
+    return entry.enabled !== false;
+  }
+
+  function normalizeFeatureOverrides() {
+    const overrides = runtimeState.featureOverrides || {};
+    const normalized = {};
+    getCatalogFeatures().forEach((entry) => {
+      if (!entry || !entry.id || entry.required) return;
+      const override = overrides[entry.id];
+      if (typeof override !== 'boolean') return;
+      const defaultEnabled = getDefaultFeatureEnabled(entry);
+      if (override === defaultEnabled) return;
+      normalized[entry.id] = override;
+    });
+    runtimeState.featureOverrides = normalized;
+    storeFeatureOverrides(normalized);
+  }
+
   function isManifestDisabled(featureId) {
     const manifest = runtimeState.manifests[featureId];
     if (!manifest || typeof manifest !== 'object') return false;
@@ -124,9 +173,40 @@
   function isFeatureEnabled(featureId) {
     const entry = findCatalogEntry(featureId);
     if (!entry) return false;
-    if (entry.required) return true;
-    if (entry.enabled === false) return false;
     if (isManifestDisabled(featureId)) return false;
+    if (entry.required) return true;
+    const override = runtimeState.featureOverrides && runtimeState.featureOverrides[featureId];
+    if (typeof override === 'boolean') return override;
+    return getDefaultFeatureEnabled(entry);
+  }
+
+  function setFeatureEnabled(featureId, enabled, options) {
+    const entry = findCatalogEntry(featureId);
+    if (!entry || entry.required) return false;
+
+    const opts = options || {};
+    const persist = opts.persist !== false;
+    const next = { ...(runtimeState.featureOverrides || {}) };
+    const desired = Boolean(enabled);
+    const defaultEnabled = getDefaultFeatureEnabled(entry);
+
+    if (desired === defaultEnabled) delete next[featureId];
+    else next[featureId] = desired;
+
+    runtimeState.featureOverrides = next;
+    if (persist) storeFeatureOverrides(next);
+    return true;
+  }
+
+  function getFeatureOverrides() {
+    return { ...(runtimeState.featureOverrides || {}) };
+  }
+
+  function resetFeatureOverrides(options) {
+    const opts = options || {};
+    const persist = opts.persist !== false;
+    runtimeState.featureOverrides = {};
+    if (persist) storeFeatureOverrides({});
     return true;
   }
 
@@ -208,6 +288,7 @@
       const preferredMode = getStoredMode() || runtimeState.mode || nextCatalog.runtime?.defaultMode;
       runtimeState.mode = normalizeMode(preferredMode);
       storeMode(runtimeState.mode);
+      normalizeFeatureOverrides();
 
       return true;
     } catch (_) {
@@ -216,6 +297,7 @@
   }
 
   runtimeState.mode = normalizeMode(getStoredMode() || runtimeState.mode);
+  normalizeFeatureOverrides();
 
   global.FiceCalFeatureRuntime = {
     getCatalog: function () {
@@ -228,6 +310,9 @@
     getDefaultMode,
     getMode,
     setMode,
+    getFeatureOverrides,
+    setFeatureEnabled,
+    resetFeatureOverrides,
     isFeatureEnabled,
     getEnabledFeatureIds,
     applyDomGates,

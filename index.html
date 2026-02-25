@@ -2411,6 +2411,73 @@ body.chart-focus-open #chart-section .chart-focus-close {
   display: grid;
   gap: 6px;
 }
+.calc-feature-switch {
+  display: grid;
+  gap: 6px;
+}
+.calc-feature-toggle-summary {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #4a5d7a;
+}
+.calc-feature-toggle-list {
+  display: grid;
+  gap: 6px;
+}
+.calc-feature-toggle-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid rgba(40, 62, 95, 0.18);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.92);
+  padding: 6px 8px;
+}
+.calc-feature-toggle-item.is-required {
+  opacity: 0.8;
+}
+.calc-feature-toggle-main {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.calc-feature-toggle-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f3f63;
+}
+.calc-feature-toggle-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: #5f6f86;
+}
+.calc-feature-toggle-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.calc-feature-toggle-control input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #0072b2;
+}
+.calc-feature-toggle-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(0,114,178,0.3);
+  border-radius: 999px;
+  padding: 2px 6px;
+  color: #2b4e78;
+  background: rgba(0,114,178,0.08);
+}
+.calc-feature-reset-btn[hidden] {
+  display: none !important;
+}
 .calc-disclosure {
   border: 1px solid rgba(40, 62, 95, 0.2);
   border-radius: 10px;
@@ -2563,6 +2630,63 @@ body.chart-focus-open #chart-section .chart-focus-close {
   font-size: var(--font-size-xs);
   font-weight: 400;
   color: var(--muted);
+}
+.fine-tune-area-indicators {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.fine-tune-area-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  appearance: none;
+  border: 1px solid rgba(0,114,178,0.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  color: #23496f;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+  padding: 3px 8px;
+  line-height: 1;
+  cursor: pointer;
+}
+.fine-tune-area-chip:hover {
+  background: rgba(0,114,178,0.12);
+  border-color: rgba(0,114,178,0.45);
+}
+.fine-tune-area-chip:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.fine-tune-area-chip.is-disabled {
+  border-color: rgba(95, 111, 134, 0.45);
+  background: rgba(242, 245, 249, 0.92);
+  color: #5f6f86;
+}
+.fine-tune-area-chip.is-disabled:hover {
+  background: rgba(232, 237, 244, 0.98);
+  border-color: rgba(95, 111, 134, 0.6);
+}
+.fine-tune-area-chip.is-disabled .fine-tune-area-chip-num {
+  background: rgba(95, 111, 134, 0.16);
+  color: #52637a;
+}
+.fine-tune-area-chip-num {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,114,178,0.16);
+  color: #12416c;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 /* ── Input fields grid ── */
@@ -2720,6 +2844,21 @@ body.chart-focus-open #chart-section .chart-focus-close {
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+.fine-tune-area-seq {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,114,178,0.34);
+  background: rgba(0,114,178,0.12);
+  color: #13436c;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
 }
 .startup-help {
   margin: 0 18px 10px;
@@ -3405,6 +3544,34 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: #244f7a;
   background: rgba(0,114,178,0.08);
 }
+.qbv-quarter-sep td {
+  border: 0;
+  padding: 8px 0 4px;
+  background: transparent;
+}
+.qbv-quarter-sep-line {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qbv-quarter-sep-line::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(28, 98, 177, 0.5);
+}
+.qbv-quarter-sep-label {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--font-size-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #214e80;
+}
 .qbv-dashboard-note {
   border-top: 1px dashed rgba(0,114,178,0.22);
   padding: 8px 12px 10px;
@@ -3485,6 +3652,10 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
   position: relative;
 }
+[data-feature][hidden],
+[data-ui-mode][hidden] {
+  display: none !important;
+}
 .finops-2026-group {
   border-color: rgba(0,158,115,0.44);
   box-shadow:
@@ -3529,6 +3700,120 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   border-color: #d55e00;
   background: rgba(213,94,0,0.05);
   box-shadow: 0 0 0 1px rgba(213,94,0,0.15);
+}
+
+.calc-severity-helper {
+  margin: 0 18px 0;
+  padding: 8px 10px;
+  border-top: 1px dashed rgba(40, 62, 95, 0.18);
+  border-bottom: 1px dashed rgba(40, 62, 95, 0.18);
+  background: rgba(247, 251, 255, 0.72);
+  font-size: 10px;
+  line-height: 1.45;
+  color: #4a5d79;
+}
+.calc-severity-helper strong {
+  color: #173d62;
+  font-weight: 700;
+}
+
+.calc-out-severity-badge {
+  align-self: flex-start;
+  margin: 0 0 3px;
+  border: 1px solid rgba(40, 62, 95, 0.26);
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.88);
+  color: #395472;
+}
+.calc-out-severity-badge.severity-critical {
+  border-color: rgba(213,94,0,0.46);
+  background: rgba(213,94,0,0.14);
+  color: #8a3100;
+}
+.calc-out-severity-badge.severity-high {
+  border-color: rgba(230,159,0,0.5);
+  background: rgba(230,159,0,0.16);
+  color: #7a5400;
+}
+.calc-out-severity-badge.severity-needs {
+  border-color: rgba(106,81,163,0.4);
+  background: rgba(106,81,163,0.12);
+  color: #4f347f;
+}
+.calc-out-severity-badge.severity-low {
+  border-color: rgba(0,158,115,0.45);
+  background: rgba(0,158,115,0.12);
+  color: #0a664e;
+}
+.calc-out-severity-badge.severity-info {
+  border-color: rgba(0,114,178,0.35);
+  background: rgba(0,114,178,0.1);
+  color: #12517e;
+}
+
+.calc-severity-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+}
+.calc-severity-divider-line {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed rgba(40,62,95,0.22);
+}
+.calc-severity-divider-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(40,62,95,0.25);
+  background: rgba(255,255,255,0.9);
+  padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #3a5675;
+  white-space: nowrap;
+}
+.calc-severity-divider.severity-critical .calc-severity-divider-line {
+  border-top-color: rgba(213,94,0,0.46);
+}
+.calc-severity-divider.severity-critical .calc-severity-divider-label {
+  border-color: rgba(213,94,0,0.46);
+  color: #8a3100;
+  background: rgba(213,94,0,0.12);
+}
+.calc-severity-divider.severity-high .calc-severity-divider-line {
+  border-top-color: rgba(230,159,0,0.5);
+}
+.calc-severity-divider.severity-high .calc-severity-divider-label {
+  border-color: rgba(230,159,0,0.5);
+  color: #7a5400;
+  background: rgba(230,159,0,0.16);
+}
+.calc-severity-divider.severity-needs .calc-severity-divider-line {
+  border-top-color: rgba(106,81,163,0.42);
+}
+.calc-severity-divider.severity-needs .calc-severity-divider-label {
+  border-color: rgba(106,81,163,0.42);
+  color: #4f347f;
+  background: rgba(106,81,163,0.12);
+}
+.calc-severity-divider.severity-low .calc-severity-divider-line {
+  border-top-color: rgba(0,158,115,0.46);
+}
+.calc-severity-divider.severity-low .calc-severity-divider-label {
+  border-color: rgba(0,158,115,0.46);
+  color: #0a664e;
+  background: rgba(0,158,115,0.12);
 }
 
 .calc-out-label {
@@ -3931,6 +4216,35 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   color: #b07800;
   font-style: italic;
 }
+.calc-out-missing-msg {
+  display: inline;
+}
+.calc-out-missing-cta {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #8a5a00;
+  cursor: pointer;
+  pointer-events: auto;
+  font: inherit;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.calc-out-missing-cta:hover {
+  color: #6f4600;
+}
+.calc-out-missing-cta:focus-visible {
+  outline: 2px solid rgba(86, 180, 233, 0.9);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
 
 /* Progress pills — show how many fields are filled */
 .calc-progress {
@@ -3945,8 +4259,61 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   border-radius: 3px;
   background: var(--border);
   transition: background 0.3s;
+  cursor: default;
+  position: relative;
 }
 .cp-pill.filled { background: #0072b2; }
+.cp-pill[data-filled="0"] {
+  cursor: pointer;
+}
+.cp-pill[data-filled="0"]:focus-visible {
+  outline: 2px solid #56b4e9;
+  outline-offset: 2px;
+}
+.cp-pill::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(4px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  line-height: 1.25;
+  color: #fff;
+  background: rgba(22, 36, 58, 0.98);
+  border: 1px solid rgba(86, 118, 156, 0.55);
+  border-radius: 6px;
+  padding: 5px 7px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+}
+.cp-pill::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  width: 8px;
+  height: 8px;
+  background: rgba(22, 36, 58, 0.98);
+  border-right: 1px solid rgba(86, 118, 156, 0.55);
+  border-bottom: 1px solid rgba(86, 118, 156, 0.55);
+  transform: translateX(-50%) rotate(45deg) scale(0.9);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 24;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+}
+.cp-pill:hover::after,
+.cp-pill:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
 
 
 /* ── GROUP D: PROVIDERS ── */
@@ -4700,7 +5067,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               <span class="calc-release-text">FiceCal now covers 6 capability lanes: core unit economics, business-value forecasting, multi-tech normalization, AI token economics, Release 4 reliability economics, and health + recommendation guidance.</span>
               <a class="calc-release-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">FinOps 2026 ↗</a>
             </div>
-            <div class="calc-r4-discovery" id="calc-r4-discovery" role="note" aria-label="Release 4 reliability economics overview">
+            <div class="calc-r4-discovery" id="calc-r4-discovery" role="note" aria-label="Release 4 reliability economics overview" data-feature="sla-slo-sli-economics">
               <div class="calc-r4-discovery-title">
                 <span class="calc-new-badge">New in R4</span>
                 <span>SLA/SLO/SLI reliability economics now supports full downside-to-action decisioning.</span>
@@ -4770,8 +5137,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--scenarios" id="calc-scenario-demos">
             <div class="calc-scenario-suite">
-              <div class="calc-scenario-title">Scenario demos (4 presets)</div>
-              <p class="calc-scenario-copy">Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.</p>
+              <div class="calc-scenario-title" id="calc-scenario-title">Scenario demos (4 presets)</div>
+              <p class="calc-scenario-copy" id="calc-scenario-copy">Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.</p>
               <div class="calc-scenario-actions" role="group" aria-label="Scenario demo presets">
                 <div class="calc-scenario-item">
                   <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load Healthy preset">
@@ -4787,14 +5154,14 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
                   </button>
                   <span class="calc-scenario-meta">Core downside stress</span>
                 </div>
-                <div class="calc-scenario-item">
+                <div class="calc-scenario-item" data-feature="sla-slo-sli-economics" data-scenario-group="reliability">
                   <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('reliabilityHealthy')" aria-label="Load Reliability Healthy R4 preset">
                     <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
                     Reliability Healthy (R4)
                   </button>
                   <span class="calc-scenario-meta">Reliability low-risk baseline</span>
                 </div>
-                <div class="calc-scenario-item">
+                <div class="calc-scenario-item" data-feature="sla-slo-sli-economics" data-scenario-group="reliability">
                   <button class="calc-action-btn calc-action-btn--demo-r4" type="button" onclick="loadDemoScenario('reliabilityUnhealthy')" aria-label="Load Reliability Unhealthy R4 preset">
                     <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6h9"/><path d="M6 1.5v9"/></svg>
                     Reliability Unhealthy (R4)
@@ -4820,6 +5187,12 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
+                  </div>
+                  <div class="calc-feature-switch" id="calc-feature-switch" role="group" aria-label="Optional feature module controls">
+                    <span class="calc-mode-label" title="Enable or disable optional FiceCal modules without editing files.">Feature controls <span class="calc-inline-help calc-inline-help--hint" data-help="Enable or disable optional FiceCal modules without editing files. Required modules stay locked on." aria-label="Help: feature controls" tabindex="0" role="button">?</span></span>
+                    <div class="calc-feature-toggle-summary" id="calc-feature-toggle-summary">Loading feature controls…</div>
+                    <div class="calc-feature-toggle-list" id="calc-feature-toggle-list"></div>
+                    <button class="calc-action-btn calc-action-btn--neutral calc-feature-reset-btn" id="calc-feature-reset-btn" type="button" onclick="resetFeatureToggles()" hidden>Reset feature defaults</button>
                   </div>
                 </div>
                 <button class="feature-request-btn calc-action-btn calc-action-btn--warning" type="button" onclick="requestFeature('Calculator Section')" aria-label="Request a feature on Github">
@@ -4858,6 +5231,21 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               <span class="calc-unit">clients</span>
             </div>
             <div class="calc-hint">How many clients right now? All curves calibrate from this point.</div>
+          </div>
+
+          <div class="calc-field" id="field-currency">
+            <label class="calc-label" for="inp-currency">
+              Currency
+              <span class="ftag">display</span>
+            </label>
+            <div class="calc-input-wrap">
+              <select id="inp-currency" data-default-value="EUR" onchange="onInput('currency')">
+                <option value="EUR" selected>EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="USD">USD ($)</option>
+              </select>
+            </div>
+            <div class="calc-hint">Display currency for financial inputs/outputs (values are not FX-converted).</div>
           </div>
 
           <div class="calc-field" id="field-devPerClient">
@@ -4964,6 +5352,12 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <span class="calc-group-num" style="background:#888">B</span>
           <span class="calc-group-label">Optional — Fine-Tune the Model</span>
           <span class="calc-group-hint">Leave blank to use smart defaults</span>
+          <div class="fine-tune-area-indicators" aria-label="Section B fine-tuning areas">
+            <button type="button" class="fine-tune-area-chip" data-area-key="value" onclick="jumpToFineTuneArea('value')" aria-label="Jump to Area 1: Quantify business value controls"><span class="fine-tune-area-chip-num">1</span>Value controls</button>
+            <button type="button" class="fine-tune-area-chip" data-area-key="multi" data-feature-id="multi-tech-normalization" onclick="jumpToFineTuneArea('multi')" aria-label="Jump to Area 2: Multi-technology overlay"><span class="fine-tune-area-chip-num">2</span>Multi-tech overlay</button>
+            <button type="button" class="fine-tune-area-chip" data-area-key="ai" data-feature-id="ai-token-economics" onclick="jumpToFineTuneArea('ai')" aria-label="Jump to Area 3: AI token economics"><span class="fine-tune-area-chip-num">3</span>AI token economics</button>
+            <button type="button" class="fine-tune-area-chip" data-area-key="reliability" data-feature-id="sla-slo-sli-economics" onclick="jumpToFineTuneArea('reliability')" aria-label="Jump to Area 4: Reliability economics"><span class="fine-tune-area-chip-num">4</span>Reliability economics</button>
+          </div>
         </div>
         <div class="calc-fields">
 
@@ -5005,8 +5399,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 
         </div>
 
-        <div class="value-overlay" data-ui-mode="operator architect">
-          <div class="startup-title">Quantify business value controls<span class="finops-2026-pill">Forecasting · Budgeting · Realization</span></div>
+        <div class="value-overlay" id="fine-tune-value-controls" data-ui-mode="operator architect">
+          <div class="startup-title"><span class="fine-tune-area-seq" aria-hidden="true">1</span>Quantify business value controls<span class="finops-2026-pill">Forecasting · Budgeting · Realization</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-budgetMonthly">
               <label class="calc-label" for="inp-budgetMonthly">
@@ -5095,8 +5489,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-guardrail value-guardrail" id="value-guardrail">Set budget and at least one forecasting or realization input to activate Quantify Business Value controls.</div>
         </div>
 
-        <div class="portfolio-overlay finops-2026-highlight" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
-          <div class="startup-title">Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
+        <div class="portfolio-overlay finops-2026-highlight" id="fine-tune-multi-tech" data-feature="multi-tech-normalization" data-ui-mode="operator architect">
+          <div class="startup-title"><span class="fine-tune-area-seq" aria-hidden="true">2</span>Multi-technology spend overlay (FOCUS-aligned normalization)<span class="finops-2026-pill">State of FinOps 2026 aligned</span></div>
           <div class="calc-fields">
             <div class="calc-field" id="field-costSaaS">
               <label class="calc-label" for="inp-costSaaS">
@@ -5162,8 +5556,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-report-note"><a href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the online State of FinOps 2026 report">Why this matters in State of FinOps 2026 ↗</a></div>
         </div>
 
-        <div class="portfolio-overlay ai-token-overlay" data-feature="ai-token-economics" data-ui-mode="architect">
-          <div class="startup-title">AI token economics (Wave 3 MVP)<span class="finops-2026-pill">Architect mode</span></div>
+        <div class="portfolio-overlay ai-token-overlay" id="fine-tune-ai-token" data-feature="ai-token-economics" data-ui-mode="operator architect">
+          <div class="startup-title"><span class="fine-tune-area-seq" aria-hidden="true">3</span>AI token economics (Wave 3 MVP)<span class="finops-2026-pill">Operator + Architect modes</span></div>
           <div class="ai-preset-actions">
             <button type="button" class="ai-preset-btn" onclick="applyAiTokenPreset('balanced')">Balanced AI mix</button>
             <button type="button" class="ai-preset-btn" onclick="applyAiTokenPreset('premiumSpike')">Premium routing spike</button>
@@ -5312,8 +5706,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="portfolio-guardrail" id="ai-token-guardrail">AI token economics remains inactive until AI Cost Tracking is set to On and token/rate inputs are provided.</div>
         </div>
 
-        <div class="portfolio-overlay reliability-overlay" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
-          <div class="startup-title">SLA/SLO/SLI reliability economics (Release 4 scaffold)<span class="calc-new-badge calc-new-badge--inline">NEW</span><span class="finops-2026-pill">Operator &amp; Architect</span></div>
+        <div class="portfolio-overlay reliability-overlay" id="fine-tune-reliability" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+          <div class="startup-title"><span class="fine-tune-area-seq" aria-hidden="true">4</span>SLA/SLO/SLI reliability economics (Release 4 scaffold)<span class="calc-new-badge calc-new-badge--inline">NEW</span><span class="finops-2026-pill">Operator &amp; Architect</span></div>
           <details class="reliability-explainer" open>
             <summary>What Release 4 adds and how it is modeled</summary>
             <div class="reliability-explainer-body">Release 4 reliability includes <strong>10 reliability inputs</strong>, <strong>8 reliability output cards</strong>, and <strong>2 chart overlays</strong> (Total Cost + Reliability, Profit + Reliability). The model combines four downside lanes (SLA penalties, incident labor, downtime revenue loss, churn-risk expectation), then computes reliability-adjusted cost, reliability-adjusted profit/loss, ARPU uplift needed, and extra clients needed at current ARPU. This helps teams choose between resilience investment, pricing changes, or additional client growth with a quantified trade-off view.</div>
@@ -5455,6 +5849,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
 
         <div class="intent-kpi-helper" id="intent-kpi-helper">Intent profile prioritization is active for KPI output ordering.</div>
+        <div class="calc-severity-helper" id="calc-severity-helper"><strong>Severity order:</strong> Critical → High → Needs data → Low. Severity is computed from each card's current status thresholds.</div>
 
         <div class="calc-outputs" id="calc-kpi-output-grid">
 
@@ -5566,31 +5961,31 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-out-sub">Confidence based on selected-domain completeness and input quality</div>
           </div>
 
-          <div class="calc-out-card ai-token-card" id="out-aiTokenCost" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="calc-out-card ai-token-card" id="out-aiTokenCost" data-feature="ai-token-economics" data-ui-mode="operator architect">
             <div class="calc-out-label">AI Token Cost</div>
             <div class="calc-out-val muted" id="oval-aiTokenCost">—</div>
             <div class="calc-out-sub">Inference token spend after retry/premium behavior adjustments</div>
           </div>
 
-          <div class="calc-out-card ai-token-card" id="out-aiAllocatedCost" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="calc-out-card ai-token-card" id="out-aiAllocatedCost" data-feature="ai-token-economics" data-ui-mode="operator architect">
             <div class="calc-out-label">AI Total Allocated Cost</div>
             <div class="calc-out-val muted" id="oval-aiAllocatedCost">—</div>
             <div class="calc-out-sub">Token spend plus shared AI overhead allocation</div>
           </div>
 
-          <div class="calc-out-card ai-token-card" id="out-aiCostPerClient" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="calc-out-card ai-token-card" id="out-aiCostPerClient" data-feature="ai-token-economics" data-ui-mode="operator architect">
             <div class="calc-out-label">AI Cost / Client</div>
             <div class="calc-out-val muted" id="oval-aiCostPerClient">—</div>
             <div class="calc-out-sub">Allocated AI monthly cost divided by active clients</div>
           </div>
 
-          <div class="calc-out-card ai-token-card" id="out-aiRetryInflation" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="calc-out-card ai-token-card" id="out-aiRetryInflation" data-feature="ai-token-economics" data-ui-mode="operator architect">
             <div class="calc-out-label">AI Retry Inflation</div>
             <div class="calc-out-val muted" id="oval-aiRetryInflation">—</div>
             <div class="calc-out-sub">Extra AI cost pressure driven by retry behavior</div>
           </div>
 
-          <div class="calc-out-card ai-token-card" id="out-aiPremiumMix" data-feature="ai-token-economics" data-ui-mode="architect">
+          <div class="calc-out-card ai-token-card" id="out-aiPremiumMix" data-feature="ai-token-economics" data-ui-mode="operator architect">
             <div class="calc-out-label">AI Premium Mix</div>
             <div class="calc-out-val muted" id="oval-aiPremiumMix">—</div>
             <div class="calc-out-sub">Share of AI traffic routed to premium models</div>
@@ -5696,6 +6091,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="cp-pill" id="cp-44"></div>
           <div class="cp-pill" id="cp-45"></div>
           <div class="cp-pill" id="cp-46"></div>
+          <div class="cp-pill" id="cp-47"></div>
         </div>
         <div class="calc-status-bar" id="calc-status-bar">
           <div class="calc-status-dot" id="calc-dot"></div>
@@ -6469,6 +6865,13 @@ const UI_INTENT_OPTIONS = ['viability', 'operations', 'architecture', 'executive
 const UI_INTENT_DEFAULT = 'viability';
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
 const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
+const FEATURE_TOGGLE_ORDER = ['multi-tech-normalization', 'ai-token-economics', 'sla-slo-sli-economics'];
+const FEATURE_TOGGLE_LABELS = {
+  'core-economics': 'Core Economics',
+  'multi-tech-normalization': 'Multi-Technology Normalization',
+  'ai-token-economics': 'AI Token Economics',
+  'sla-slo-sli-economics': 'SLA/SLO/SLI Reliability Economics'
+};
 const UI_INTENT_PROFILES = {
   viability: {
     mode: 'quick',
@@ -6552,7 +6955,7 @@ const UI_INTENT_PROFILES = {
   }
 };
 const SHAREABLE_INPUT_KEYS = [
-  'nRef', 'devPerClient', 'infraTotal', 'ARPU',
+  'nRef', 'currency', 'devPerClient', 'infraTotal', 'ARPU',
   'startupTargetPrice', 'startupTargetClients',
   'cudPct', 'margin', 'nMax',
   'budgetMonthly', 'forecastGrowthPct', 'forecastBestEfficiencyPct', 'forecastWorstDriftPct',
@@ -7599,6 +8002,129 @@ function getOutputCardSignal(card) {
   return { key: 'needs', label: 'Review signal', cls: 'needs' };
 }
 
+function getOutputCardSeverityMeta(card) {
+  const signal = getOutputCardSignal(card);
+  if (signal.key === 'bad') return { rank: 0, key: 'critical', label: 'Critical' };
+  if (signal.key === 'warn') return { rank: 1, key: 'high', label: 'High' };
+  if (signal.key === 'needs') return { rank: 2, key: 'needs', label: 'Needs data' };
+  if (signal.key === 'good') return { rank: 3, key: 'low', label: 'Low' };
+  return { rank: 4, key: 'info', label: 'Info' };
+}
+
+function applyOutputCardSeverityBadge(card, severity) {
+  if (!card || !severity) return;
+  const labelEl = card.querySelector('.calc-out-label');
+  if (!labelEl) return;
+
+  let badgeEl = card.querySelector('.calc-out-severity-badge');
+  if (!badgeEl) {
+    badgeEl = document.createElement('span');
+    badgeEl.className = 'calc-out-severity-badge';
+    labelEl.insertAdjacentElement('afterend', badgeEl);
+  }
+
+  badgeEl.className = `calc-out-severity-badge severity-${severity.key}`;
+  badgeEl.textContent = severity.label;
+  badgeEl.setAttribute('aria-label', `Severity ${severity.label}`);
+}
+
+function clearOutputSeverityDividers(outputGrid) {
+  if (!outputGrid) return;
+  outputGrid.querySelectorAll(':scope > .calc-severity-divider').forEach(divider => divider.remove());
+}
+
+function getSeverityDividerLabel(severityKey, count) {
+  const labelMap = {
+    critical: 'Critical severity',
+    high: 'High severity',
+    needs: 'Needs data',
+    low: 'Low severity',
+    info: 'Info'
+  };
+  const base = labelMap[severityKey] || 'Severity';
+  const safeCount = Number.isFinite(Number(count)) ? Number(count) : 0;
+  return safeCount > 0 ? `${base} (${safeCount})` : base;
+}
+
+function createSeverityDivider(severityKey, count) {
+  const divider = document.createElement('div');
+  divider.className = `calc-severity-divider severity-${severityKey}`;
+
+  const leftLine = document.createElement('span');
+  leftLine.className = 'calc-severity-divider-line';
+
+  const label = document.createElement('span');
+  label.className = 'calc-severity-divider-label';
+  label.textContent = getSeverityDividerLabel(severityKey, count);
+
+  const rightLine = document.createElement('span');
+  rightLine.className = 'calc-severity-divider-line';
+
+  divider.appendChild(leftLine);
+  divider.appendChild(label);
+  divider.appendChild(rightLine);
+  return divider;
+}
+
+function syncOutputCardSeverityAndOrder() {
+  const outputGrid = document.getElementById('calc-kpi-output-grid');
+  if (!outputGrid) return;
+  clearOutputSeverityDividers(outputGrid);
+
+  const cards = Array.from(outputGrid.querySelectorAll(':scope > .calc-out-card'));
+  if (!cards.length) return;
+
+  const withMeta = cards.map((card, index) => {
+    const severity = getOutputCardSeverityMeta(card);
+    applyOutputCardSeverityBadge(card, severity);
+    const parsedRank = Number(card.dataset.intentRank);
+    const intentRank = Number.isFinite(parsedRank) ? parsedRank : index;
+    card.dataset.severityKey = severity.key;
+    card.dataset.severityRank = String(severity.rank);
+    return { card, severity, intentRank };
+  });
+
+  withMeta.sort((a, b) => {
+    if (a.severity.rank !== b.severity.rank) return a.severity.rank - b.severity.rank;
+    return a.intentRank - b.intentRank;
+  });
+
+  withMeta.forEach(({ card }) => {
+    outputGrid.appendChild(card);
+  });
+
+  const visibleWithMeta = withMeta.filter(({ card }) => card.offsetParent !== null && !card.hidden);
+  const groupOrder = [];
+  const groupMap = new Map();
+  visibleWithMeta.forEach((item) => {
+    const key = item.severity.key;
+    if (!groupMap.has(key)) {
+      groupMap.set(key, []);
+      groupOrder.push(key);
+    }
+    groupMap.get(key).push(item.card);
+  });
+
+  groupOrder.forEach((key) => {
+    const groupCards = groupMap.get(key) || [];
+    const firstCard = groupCards[0];
+    if (!firstCard) return;
+    const divider = createSeverityDivider(key, groupCards.length);
+    outputGrid.insertBefore(divider, firstCard);
+  });
+
+  const helperEl = document.getElementById('calc-severity-helper');
+  if (!helperEl) return;
+
+  const visible = visibleWithMeta;
+  const counters = { critical: 0, high: 0, needs: 0, low: 0 };
+  visible.forEach(({ severity }) => {
+    if (Object.prototype.hasOwnProperty.call(counters, severity.key)) counters[severity.key] += 1;
+  });
+
+  helperEl.innerHTML = `<strong>Severity order:</strong> Critical → High → Needs data → Low. Calculated from each card's computed status threshold (<code>live-bad</code>, <code>live-warn</code>, <code>needs-data</code>, <code>live</code>). Visible now: ${counters.critical} critical, ${counters.high} high, ${counters.needs} needs data, ${counters.low} low.`;
+}
+
 function buildActionList(items = []) {
   if (!items.length) {
     return '<ul class="calc-out-solve-list"><li>No specific actions yet. Use this as a review checkpoint.</li></ul>';
@@ -7892,8 +8418,211 @@ function applyAiTokenPreset(presetKey) {
 
 function applyFeatureGates() {
   const runtime = window.FiceCalFeatureRuntime;
-  if (!runtime || typeof runtime.applyDomGates !== 'function') return;
-  runtime.applyDomGates(document);
+  if (runtime && typeof runtime.applyDomGates === 'function') {
+    runtime.applyDomGates(document);
+  }
+  syncScenarioDemoVisibility();
+  syncFineTuneAreaIndicatorState();
+  renderFeatureToggleControls();
+}
+
+function isFeatureRuntimeEnabled(featureId) {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.isFeatureEnabled !== 'function') return true;
+  return runtime.isFeatureEnabled(featureId);
+}
+
+function syncFineTuneAreaIndicatorState() {
+  document.querySelectorAll('.fine-tune-area-chip').forEach((chipEl) => {
+    const featureId = chipEl.dataset.featureId;
+    if (!featureId) {
+      chipEl.classList.remove('is-disabled');
+      chipEl.removeAttribute('data-feature-state');
+      chipEl.removeAttribute('title');
+      return;
+    }
+
+    const enabled = isFeatureRuntimeEnabled(featureId);
+    const displayName = getFeatureDisplayName(featureId);
+    chipEl.classList.toggle('is-disabled', !enabled);
+    chipEl.setAttribute('data-feature-state', enabled ? 'enabled' : 'disabled');
+    chipEl.title = enabled
+      ? `${displayName} enabled`
+      : `${displayName} disabled - enable in Feature controls`;
+  });
+}
+
+function getFeatureDisplayName(featureId) {
+  if (FEATURE_TOGGLE_LABELS[featureId]) return FEATURE_TOGGLE_LABELS[featureId];
+  const runtime = window.FiceCalFeatureRuntime;
+  const manifests = runtime && typeof runtime.getManifests === 'function' ? runtime.getManifests() : null;
+  const manifestName = manifests && manifests[featureId] && manifests[featureId].name;
+  return manifestName || featureId;
+}
+
+function syncScenarioDemoVisibility() {
+  const reliabilityEnabled = isFeatureRuntimeEnabled('sla-slo-sli-economics');
+  document.querySelectorAll('[data-scenario-group="reliability"]').forEach((el) => {
+    el.hidden = !reliabilityEnabled;
+  });
+
+  const titleEl = document.getElementById('calc-scenario-title');
+  if (titleEl) {
+    titleEl.textContent = reliabilityEnabled ? 'Scenario demos (4 presets)' : 'Scenario demos (2 presets)';
+  }
+
+  const copyEl = document.getElementById('calc-scenario-copy');
+  if (copyEl) {
+    copyEl.textContent = reliabilityEnabled
+      ? 'Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.'
+      : 'Load 1 of 2 curated states to compare baseline viability and downside stress. Enable the Reliability module in Advanced tools to unlock the Release 4 reliability demos.';
+  }
+}
+
+function renderFeatureToggleControls() {
+  const listEl = document.getElementById('calc-feature-toggle-list');
+  const summaryEl = document.getElementById('calc-feature-toggle-summary');
+  const resetBtn = document.getElementById('calc-feature-reset-btn');
+  if (!listEl) return;
+
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.getCatalog !== 'function') {
+    listEl.textContent = '';
+    if (summaryEl) summaryEl.textContent = 'Feature runtime is unavailable in this environment.';
+    if (resetBtn) resetBtn.hidden = true;
+    return;
+  }
+
+  const catalog = runtime.getCatalog();
+  const features = Array.isArray(catalog && catalog.features) ? catalog.features.slice() : [];
+  const manifests = typeof runtime.getManifests === 'function' ? runtime.getManifests() : {};
+  const enabledIds = typeof runtime.getEnabledFeatureIds === 'function' ? runtime.getEnabledFeatureIds() : [];
+  const enabledSet = new Set(enabledIds);
+
+  features.sort((a, b) => {
+    const aIndex = FEATURE_TOGGLE_ORDER.indexOf(a && a.id);
+    const bIndex = FEATURE_TOGGLE_ORDER.indexOf(b && b.id);
+    const normalizedA = aIndex === -1 ? 999 : aIndex;
+    const normalizedB = bIndex === -1 ? 999 : bIndex;
+    if (normalizedA !== normalizedB) return normalizedA - normalizedB;
+    return String(a && a.id || '').localeCompare(String(b && b.id || ''));
+  });
+
+  listEl.textContent = '';
+  features.forEach((entry) => {
+    if (!entry || !entry.id) return;
+    const featureId = entry.id;
+    const required = Boolean(entry.required);
+    const manifest = manifests && manifests[featureId] ? manifests[featureId] : {};
+    const modeScope = Array.isArray(manifest.uiModes) && manifest.uiModes.length
+      ? manifest.uiModes.join(', ')
+      : 'all modes';
+    const checkboxId = `feature-toggle-${featureId.replace(/[^a-z0-9_-]/gi, '-')}`;
+
+    const row = document.createElement('label');
+    row.className = `calc-feature-toggle-item${required ? ' is-required' : ''}`;
+    row.setAttribute('for', checkboxId);
+
+    const main = document.createElement('span');
+    main.className = 'calc-feature-toggle-main';
+
+    const name = document.createElement('span');
+    name.className = 'calc-feature-toggle-name';
+    name.textContent = getFeatureDisplayName(featureId);
+
+    const meta = document.createElement('span');
+    meta.className = 'calc-feature-toggle-meta';
+    meta.textContent = `${featureId} • modes: ${modeScope}`;
+
+    main.appendChild(name);
+    main.appendChild(meta);
+
+    const control = document.createElement('span');
+    control.className = 'calc-feature-toggle-control';
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = checkboxId;
+    input.setAttribute('data-feature-toggle', featureId);
+    input.checked = enabledSet.has(featureId);
+    input.disabled = required;
+    input.addEventListener('change', () => setFeatureToggle(featureId, input.checked));
+
+    const pill = document.createElement('span');
+    pill.className = 'calc-feature-toggle-pill';
+    pill.textContent = required ? 'Required' : 'Optional';
+
+    control.appendChild(input);
+    control.appendChild(pill);
+
+    row.appendChild(main);
+    row.appendChild(control);
+    listEl.appendChild(row);
+  });
+
+  if (summaryEl) {
+    const optionalCount = features.filter((entry) => entry && !entry.required).length;
+    summaryEl.textContent = `${enabledSet.size} modules active • ${optionalCount} optional modules can be toggled here.`;
+  }
+
+  if (resetBtn && typeof runtime.getFeatureOverrides === 'function') {
+    const overrides = runtime.getFeatureOverrides() || {};
+    resetBtn.hidden = Object.keys(overrides).length === 0;
+  }
+}
+
+function openFeatureToggles(featureId) {
+  const advancedEl = document.getElementById('calc-more-actions');
+  if (advancedEl && !advancedEl.open) advancedEl.open = true;
+  renderFeatureToggleControls();
+  const listEl = document.getElementById('calc-feature-toggle-list');
+  const selector = featureId ? `input[data-feature-toggle="${featureId}"]` : null;
+  const target = selector && listEl ? listEl.querySelector(selector) : listEl;
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (typeof target.focus === 'function') target.focus();
+}
+
+function setFeatureToggle(featureId, enabled) {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.setFeatureEnabled !== 'function') {
+    writeShareFeedback('Feature toggle controls are unavailable in this runtime.', true);
+    return;
+  }
+
+  const changed = runtime.setFeatureEnabled(featureId, enabled);
+  if (!changed) {
+    renderFeatureToggleControls();
+    return;
+  }
+
+  applyFeatureGates();
+  syncUiModeButtons();
+  syncUiIntentButtons();
+  syncReliabilityVisibilityHint();
+  recalculate();
+  updateProgressPills();
+  draw();
+
+  const label = getFeatureDisplayName(featureId);
+  writeShareFeedback(`${label} ${enabled ? 'enabled' : 'disabled'}.`, false);
+}
+
+function resetFeatureToggles() {
+  const runtime = window.FiceCalFeatureRuntime;
+  if (!runtime || typeof runtime.resetFeatureOverrides !== 'function') {
+    writeShareFeedback('Feature reset controls are unavailable in this runtime.', true);
+    return;
+  }
+  runtime.resetFeatureOverrides();
+  applyFeatureGates();
+  syncUiModeButtons();
+  syncUiIntentButtons();
+  syncReliabilityVisibilityHint();
+  recalculate();
+  updateProgressPills();
+  draw();
+  writeShareFeedback('Feature controls reset to catalog defaults.', false);
 }
 
 function getCurrentUiMode() {
@@ -7951,18 +8680,23 @@ function applyIntentOutputOrdering(intent) {
 
   const byId = new Map(currentCards.map(card => [card.id, card]));
   const appended = new Set();
+  let intentRank = 0;
 
   (profile.kpiOrder || []).forEach(cardId => {
     const card = byId.get(cardId);
     if (!card) return;
     outputGrid.appendChild(card);
+    card.dataset.intentRank = String(intentRank++);
     appended.add(card);
   });
 
   currentCards.forEach(card => {
     if (appended.has(card)) return;
     outputGrid.appendChild(card);
+    card.dataset.intentRank = String(intentRank++);
   });
+
+  syncOutputCardSeverityAndOrder();
 }
 
 function buildIntentSignalState(inputs = {}) {
@@ -8445,11 +9179,8 @@ function applyReliabilityDiscoveryState() {
 }
 
 function ensureReliabilityPreviewVisible() {
-  const reliabilityNodes = Array.from(document.querySelectorAll('[data-feature="sla-slo-sli-economics"]'));
-  reliabilityNodes.forEach((node) => {
-    if (node.hasAttribute('hidden')) node.removeAttribute('hidden');
-    if (node.style && node.style.display === 'none') node.style.display = '';
-  });
+  if (!isFeatureRuntimeEnabled('sla-slo-sli-economics')) return;
+  applyFeatureGates();
 }
 
 function dismissReliabilityCoachmark() {
@@ -8461,6 +9192,11 @@ function dismissReliabilityCoachmark() {
 function syncReliabilityVisibilityHint() {
   const noteEl = document.getElementById('reliability-visibility-note');
   if (!noteEl) return;
+  const reliabilityEnabled = isFeatureRuntimeEnabled('sla-slo-sli-economics');
+  if (!reliabilityEnabled) {
+    noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability module is disabled in Feature controls. <button type="button" class="calc-inline-link-btn" onclick="openFeatureToggles(\'sla-slo-sli-economics\')">Enable it</button>';
+    return;
+  }
   const mode = getCurrentUiMode();
   const overlay = document.querySelector('.reliability-overlay');
   const overlayHidden = !overlay || overlay.hasAttribute('hidden') || window.getComputedStyle(overlay).display === 'none';
@@ -8471,7 +9207,7 @@ function syncReliabilityVisibilityHint() {
   }
 
   if (overlayHidden) {
-    noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability module is currently in preview gate mode. <button type="button" class="calc-inline-link-btn" onclick="focusReliabilityFeature()">Open reliability preview</button>';
+    noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability controls are currently gated by mode. <button type="button" class="calc-inline-link-btn" onclick="setUiIntent(\'operations\')">Switch to Operations</button>';
     return;
   }
 
@@ -8479,6 +9215,11 @@ function syncReliabilityVisibilityHint() {
 }
 
 function focusReliabilityFeature() {
+  if (!isFeatureRuntimeEnabled('sla-slo-sli-economics')) {
+    openFeatureToggles('sla-slo-sli-economics');
+    writeShareFeedback('Enable SLA/SLO/SLI Reliability Economics from Advanced tools → Feature controls first.', true);
+    return;
+  }
   setRelease4ReliabilitySeen();
   if (getCurrentUiMode() === 'quick') {
     setUiIntent('operations');
@@ -8510,6 +9251,38 @@ function focusScenarioDemos() {
   window.setTimeout(() => demos.classList.remove('reliability-spotlight'), 1400);
 }
 
+function jumpToFineTuneArea(areaKey) {
+  const areaMap = {
+    value: { id: 'fine-tune-value-controls' },
+    multi: { id: 'fine-tune-multi-tech', featureId: 'multi-tech-normalization' },
+    ai: { id: 'fine-tune-ai-token', featureId: 'ai-token-economics' },
+    reliability: { id: 'fine-tune-reliability', featureId: 'sla-slo-sli-economics' }
+  };
+
+  const targetConfig = areaMap[areaKey];
+  if (!targetConfig) return;
+
+  if (targetConfig.featureId && !isFeatureRuntimeEnabled(targetConfig.featureId)) {
+    openFeatureToggles(targetConfig.featureId);
+    writeShareFeedback(`${getFeatureDisplayName(targetConfig.featureId)} is disabled. Enable it in Feature controls to access this area.`, true);
+    return;
+  }
+
+  if (getCurrentUiMode() === 'quick') {
+    setUiIntent('operations', { recalcAfter: false, syncMode: true, persist: true, syncRecommendations: true });
+    applyFeatureGates();
+    syncUiModeButtons();
+    syncUiIntentButtons();
+  }
+
+  const targetEl = document.getElementById(targetConfig.id);
+  if (!targetEl) return;
+
+  requestAnimationFrame(() => {
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 function initRelease4ReliabilityDiscovery() {
   applyReliabilityDiscoveryState();
   syncReliabilityVisibilityHint();
@@ -8520,6 +9293,8 @@ async function initFeatureRuntime() {
   if (!runtime) {
     syncUiIntentButtons();
     syncUiModeButtons();
+    syncScenarioDemoVisibility();
+    renderFeatureToggleControls();
     return;
   }
   applyFeatureGates();
@@ -8529,6 +9304,8 @@ async function initFeatureRuntime() {
   applyFeatureGates();
   syncUiIntentButtons();
   syncUiModeButtons();
+  syncScenarioDemoVisibility();
+  renderFeatureToggleControls();
 }
 
 function collectShareState() {
@@ -8540,6 +9317,11 @@ function collectShareState() {
     if (isMeaningfulInputValue(el, value)) inputState[key] = value;
   });
 
+  const runtime = window.FiceCalFeatureRuntime;
+  const featureOverrides = (runtime && typeof runtime.getFeatureOverrides === 'function')
+    ? runtime.getFeatureOverrides()
+    : {};
+
   return {
     v: SHARE_STATE_VERSION,
     ui: getCurrentUiIntent(),
@@ -8547,7 +9329,8 @@ function collectShareState() {
     i: inputState,
     td: getSelectedTechDomains(),
     p: Array.from(selectedProviders),
-    h: Array.from(hidden).filter(id => SHAREABLE_CURVE_KEYS.includes(id))
+    h: Array.from(hidden).filter(id => SHAREABLE_CURVE_KEYS.includes(id)),
+    f: featureOverrides
   };
 }
 
@@ -8562,7 +9345,8 @@ function buildShareStateUrl() {
   const defaultIntent = UI_INTENT_DEFAULT;
   const hasCustomMode = state.um !== defaultMode;
   const hasCustomIntent = state.ui !== defaultIntent;
-  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope || hasCustomMode || hasCustomIntent;
+  const hasCustomFeatureOverrides = state.f && Object.keys(state.f).length > 0;
+  const hasData = Object.keys(state.i).length > 0 || state.p.length > 0 || state.h.length > 0 || hasCustomScope || hasCustomMode || hasCustomIntent || hasCustomFeatureOverrides;
   if (!hasData) return null;
 
   const encoded = encodeShareState(state);
@@ -8606,6 +9390,13 @@ function loadDemoScenario(scenarioKey) {
     return;
   }
 
+  const isReliabilityScenario = scenarioKey === 'reliability' || scenarioKey === 'reliabilityHealthy' || scenarioKey === 'reliabilityUnhealthy';
+  if (isReliabilityScenario && !isFeatureRuntimeEnabled('sla-slo-sli-economics')) {
+    openFeatureToggles('sla-slo-sli-economics');
+    writeShareFeedback('Reliability demo is disabled. Enable SLA/SLO/SLI Reliability Economics in Feature controls first.', true);
+    return;
+  }
+
   closeOutputSolutionPanel();
   closeAllOutputCardTooltips();
 
@@ -8616,7 +9407,7 @@ function loadDemoScenario(scenarioKey) {
   }
 
   clearShareStateParam();
-  if (scenarioKey === 'reliability' || scenarioKey === 'reliabilityHealthy' || scenarioKey === 'reliabilityUnhealthy') {
+  if (isReliabilityScenario) {
     setRelease4ReliabilitySeen();
     ensureReliabilityPreviewVisible();
     window.setTimeout(ensureReliabilityPreviewVisible, 140);
@@ -8662,6 +9453,18 @@ function normaliseSharedInput(el, rawValue) {
 
 function applySharedState(state) {
   if (!state || typeof state !== 'object') return false;
+
+  const runtime = window.FiceCalFeatureRuntime;
+  const hasFeatureState = Object.prototype.hasOwnProperty.call(state, 'f');
+  if (hasFeatureState && runtime && typeof runtime.resetFeatureOverrides === 'function' && typeof runtime.setFeatureEnabled === 'function') {
+    const featureOverrides = (state.f && typeof state.f === 'object') ? state.f : {};
+    runtime.resetFeatureOverrides({ persist: true });
+    Object.entries(featureOverrides).forEach(([featureId, enabled]) => {
+      if (typeof enabled !== 'boolean') return;
+      runtime.setFeatureEnabled(featureId, enabled, { persist: true });
+    });
+    applyFeatureGates();
+  }
 
   if (typeof state.ui === 'string') {
     setUiIntent(state.ui, {
@@ -9194,10 +9997,50 @@ function buildData() {
 }
 
 // ─── FORMAT ─────────────────────────────────────────────────────
+const DEFAULT_CURRENCY_CODE = 'EUR';
+const CURRENCY_SYMBOLS = Object.freeze({
+  EUR: '€',
+  GBP: '£',
+  USD: '$'
+});
+let currencyUnitTemplatesReady = false;
+
+function normalizeCurrencyCode(value) {
+  const next = String(value || '').trim().toUpperCase();
+  return Object.prototype.hasOwnProperty.call(CURRENCY_SYMBOLS, next)
+    ? next
+    : DEFAULT_CURRENCY_CODE;
+}
+
+function getActiveCurrencyCode() {
+  return normalizeCurrencyCode(getInputString('inp-currency', DEFAULT_CURRENCY_CODE));
+}
+
+function getActiveCurrencySymbol() {
+  return CURRENCY_SYMBOLS[getActiveCurrencyCode()] || CURRENCY_SYMBOLS[DEFAULT_CURRENCY_CODE];
+}
+
+function refreshCurrencyUnits() {
+  if (!currencyUnitTemplatesReady) {
+    document.querySelectorAll('.calc-unit').forEach(unitEl => {
+      const text = String(unitEl.textContent || '').trim();
+      if (!/[€£$]/.test(text)) return;
+      unitEl.dataset.currencyTemplate = text.replace(/[€£$]/g, '{symbol}');
+    });
+    currencyUnitTemplatesReady = true;
+  }
+
+  const symbol = getActiveCurrencySymbol();
+  document.querySelectorAll('.calc-unit[data-currency-template]').forEach(unitEl => {
+    unitEl.textContent = unitEl.dataset.currencyTemplate.replace('{symbol}', symbol);
+  });
+}
+
 function fmt(v) {
   if (!isFinite(v)) return '—';
   const abs = Math.abs(v);
-  const str = abs >= 1000 ? `€${(abs/1000).toFixed(1)}K` : `€${abs.toFixed(0)}`;
+  const symbol = getActiveCurrencySymbol();
+  const str = abs >= 1000 ? `${symbol}${(abs/1000).toFixed(1)}K` : `${symbol}${abs.toFixed(0)}`;
   return v < 0 ? `−${str}` : str;
 }
 
@@ -9620,7 +10463,7 @@ const MODEL_DEFAULTS = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15
 
 // Track what the user has explicitly provided
 const USER_PROVIDED = {
-  nRef:false, devPerClient:false, infraTotal:false, ARPU:false,
+  nRef:false, currency:false, devPerClient:false, infraTotal:false, ARPU:false,
   startupTargetPrice:false, startupTargetClients:false,
   cudPct:false, margin:false, nMax:false,
   budgetMonthly:false, forecastGrowthPct:false, forecastBestEfficiencyPct:false, forecastWorstDriftPct:false,
@@ -9653,7 +10496,7 @@ const RECOMMENDATION_CATEGORY_LABELS = {
 };
 const selectedTechDomains = new Set(DEFAULT_TECH_DOMAINS);
 let lastInputs = {
-  nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+  nRef: null, currency: DEFAULT_CURRENCY_CODE, devPerClient: null, infraTotal: null, ARPU: null,
   startupTargetPrice: null, startupTargetClients: null,
   effectiveARPU: null, arpuMode: 'missing',
   cudPct: null, margin: null, nMax: null,
@@ -11220,7 +12063,8 @@ function getInputString(id, fallback = '') {
 function fmtOut(v, decimals=0) {
   if (!isFinite(v) || v === null) return null;
   const abs = Math.abs(v);
-  const str = abs >= 1000 ? `€${(abs/1000).toFixed(1)}K` : `€${abs.toFixed(decimals)}`;
+  const symbol = getActiveCurrencySymbol();
+  const str = abs >= 1000 ? `${symbol}${(abs/1000).toFixed(1)}K` : `${symbol}${abs.toFixed(decimals)}`;
   return v < 0 ? `−${str}` : str;
 }
 
@@ -11461,6 +12305,149 @@ function renderPortfolioSummary(snapshot) {
   `;
 }
 
+const OUTPUT_CARD_MISSING_INPUT_MAP = Object.freeze({
+  'out-beN': ['inp-ARPU', 'inp-startupTargetPrice', 'inp-startupTargetClients'],
+  'out-minPrice': ['inp-devPerClient', 'inp-infraTotal', 'inp-nRef'],
+  'out-vcpu': ['inp-infraTotal', 'inp-nRef'],
+  'out-margin': ['inp-ARPU', 'inp-startupTargetPrice', 'inp-infraTotal'],
+  'out-ccer': ['inp-ARPU', 'inp-startupTargetPrice', 'inp-infraTotal'],
+  'out-cudSave': ['inp-infraTotal', 'inp-cudPct'],
+  'out-reqClients': ['inp-startupTargetPrice', 'inp-devPerClient', 'inp-infraTotal'],
+  'out-reqPrice': ['inp-startupTargetClients', 'inp-devPerClient', 'inp-infraTotal'],
+  'out-targetRevenue': ['inp-startupTargetPrice', 'inp-startupTargetClients', 'inp-devPerClient', 'inp-infraTotal'],
+  'out-budgetVariance': ['inp-budgetMonthly', 'inp-devPerClient', 'inp-infraTotal'],
+  'out-forecastBand': ['inp-forecastGrowthPct', 'inp-forecastBestEfficiencyPct', 'inp-forecastWorstDriftPct'],
+  'out-forecastSpread': ['inp-forecastGrowthPct', 'inp-forecastBestEfficiencyPct', 'inp-forecastWorstDriftPct'],
+  'out-realizedValue': ['inp-savingsRealized', 'inp-costAvoidance'],
+  'out-realizationRatio': ['inp-savingsIdentified', 'inp-savingsRealized', 'inp-costAvoidance'],
+  'out-realizationGap': ['inp-savingsIdentified', 'inp-savingsRealized', 'inp-costAvoidance'],
+  'out-techCoverage': ['inp-techDomains', 'inp-costSaaS', 'inp-costLicensing', 'inp-costPrivateCloud', 'inp-costDataCenter', 'inp-costLabor'],
+  'out-techNorm': ['inp-techDomains', 'inp-costSaaS', 'inp-costLicensing', 'inp-costPrivateCloud', 'inp-costDataCenter', 'inp-costLabor'],
+  'out-focusMaturity': ['inp-techDomains', 'inp-costSaaS', 'inp-costLicensing', 'inp-costPrivateCloud', 'inp-costDataCenter', 'inp-costLabor'],
+  'out-aiTokenCost': ['inp-aiEnabled', 'inp-aiRatePer1MTotal', 'inp-aiInputTokensM', 'inp-aiOutputTokensM'],
+  'out-aiAllocatedCost': ['inp-aiEnabled', 'inp-aiRatePer1MTotal', 'inp-aiInputTokensM', 'inp-aiOutputTokensM', 'inp-aiSharedOverheadMonthly'],
+  'out-aiCostPerClient': ['inp-aiEnabled', 'inp-aiInputTokensM', 'inp-aiOutputTokensM', 'inp-nRef'],
+  'out-aiRetryInflation': ['inp-aiEnabled', 'inp-aiRetryRatePct'],
+  'out-aiPremiumMix': ['inp-aiEnabled', 'inp-aiPremiumMixPct'],
+  'out-relDowntime': ['inp-reliabilityEnabled', 'inp-sliObservedAvailabilityPct'],
+  'out-relFailureCost': ['inp-reliabilityEnabled', 'inp-incidentCountMonthly', 'inp-mttrHours', 'inp-incidentBlendedHourlyRate', 'inp-criticalRevenuePerMinute', 'inp-arrExposedMonthly'],
+  'out-relAdjustedCost': ['inp-reliabilityEnabled', 'inp-reliabilityInvestmentMonthly'],
+  'out-relProfitImpact': ['inp-reliabilityEnabled', 'inp-ARPU', 'inp-startupTargetPrice'],
+  'out-relArpuUplift': ['inp-reliabilityEnabled', 'inp-ARPU', 'inp-startupTargetPrice'],
+  'out-relExtraClients': ['inp-reliabilityEnabled', 'inp-ARPU', 'inp-startupTargetPrice', 'inp-nRef'],
+  'out-relRiskBand': ['inp-reliabilityEnabled', 'inp-sliObservedAvailabilityPct', 'inp-incidentCountMonthly'],
+  'out-relDataConfidence': ['inp-reliabilityEnabled', 'inp-sliObservedAvailabilityPct', 'inp-incidentCountMonthly', 'inp-mttrHours']
+});
+
+const OUTPUT_MISSING_INPUT_KEYWORD_RULES = Object.freeze([
+  { regex: /option\s*a|target price/i, inputId: 'inp-startupTargetPrice' },
+  { regex: /option\s*b|target clients/i, inputId: 'inp-startupTargetClients' },
+  { regex: /arpu|revenue\s*\/\s*client/i, inputId: 'inp-ARPU' },
+  { regex: /dev\s*cost/i, inputId: 'inp-devPerClient' },
+  { regex: /infra\s*cost/i, inputId: 'inp-infraTotal' },
+  { regex: /monthly technology budget/i, inputId: 'inp-budgetMonthly' },
+  { regex: /forecast/i, inputId: 'inp-forecastGrowthPct' },
+  { regex: /identified savings/i, inputId: 'inp-savingsIdentified' },
+  { regex: /realized savings/i, inputId: 'inp-savingsRealized' },
+  { regex: /cost avoidance/i, inputId: 'inp-costAvoidance' },
+  { regex: /selected domain|domain scope|selected-domain/i, inputId: 'inp-techDomains' },
+  { regex: /ai cost tracking\s*=\s*on/i, inputId: 'inp-aiEnabled' },
+  { regex: /token volume|token rates?/i, inputId: 'inp-aiRatePer1MTotal' },
+  { regex: /retry rate/i, inputId: 'inp-aiRetryRatePct' },
+  { regex: /premium model mix/i, inputId: 'inp-aiPremiumMixPct' },
+  { regex: /shared overhead/i, inputId: 'inp-aiSharedOverheadMonthly' },
+  { regex: /client count|\(n\)/i, inputId: 'inp-nRef' },
+  { regex: /reliability economics\s*=\s*on/i, inputId: 'inp-reliabilityEnabled' },
+  { regex: /observed sli availability/i, inputId: 'inp-sliObservedAvailabilityPct' },
+  { regex: /reliability input|incident|mttr/i, inputId: 'inp-incidentCountMonthly' }
+]);
+
+let missingDataCtaHandlerBound = false;
+
+function resolveMissingDataInputId(card, missingMsg = '') {
+  if (!card) return '';
+  const mappedIds = OUTPUT_CARD_MISSING_INPUT_MAP[card.id] || [];
+
+  for (const inputId of mappedIds) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) continue;
+    if (!isMeaningfulInputValue(inputEl, inputEl.value)) return inputId;
+  }
+
+  for (const inputId of mappedIds) {
+    if (document.getElementById(inputId)) return inputId;
+  }
+
+  const message = String(missingMsg || '');
+  for (const rule of OUTPUT_MISSING_INPUT_KEYWORD_RULES) {
+    if (!rule.regex.test(message)) continue;
+    if (document.getElementById(rule.inputId)) return rule.inputId;
+  }
+
+  return '';
+}
+
+function focusMissingDataInput(inputId) {
+  if (!inputId) return;
+  const inputEl = document.getElementById(inputId);
+  if (!inputEl) return;
+
+  const fieldWrap = inputEl.closest('.calc-field, .startup-field') || inputEl;
+  fieldWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  window.setTimeout(() => {
+    inputEl.focus({ preventScroll: true });
+    if (typeof inputEl.select === 'function' && inputEl.tagName === 'INPUT') {
+      inputEl.select();
+    }
+  }, 180);
+}
+
+function bindMissingDataCtaHandler() {
+  if (missingDataCtaHandlerBound) return;
+  missingDataCtaHandlerBound = true;
+
+  document.addEventListener('click', event => {
+    const ctaEl = event.target.closest && event.target.closest('.calc-out-missing-cta');
+    if (!ctaEl) return;
+    event.preventDefault();
+    event.stopPropagation();
+    focusMissingDataInput(ctaEl.dataset.focusInput || '');
+  }, true);
+}
+
+function renderMissingDataCallout(card, missingMsg = '') {
+  if (!card) return;
+  const subEl = card.querySelector('.calc-out-sub');
+  if (!subEl) return;
+
+  const msg = String(missingMsg || '').trim();
+  const messageText = msg ? `⚠ Needs: ${msg}. ` : '⚠ Needs: provide required input data. ';
+  const focusInputId = resolveMissingDataInputId(card, msg);
+
+  subEl.textContent = '';
+
+  const msgEl = document.createElement('span');
+  msgEl.className = 'calc-out-missing-msg';
+  msgEl.textContent = messageText;
+  subEl.appendChild(msgEl);
+
+  if (!focusInputId) return;
+
+  const ctaEl = document.createElement('button');
+  ctaEl.type = 'button';
+  ctaEl.className = 'calc-out-missing-cta';
+  ctaEl.setAttribute('data-focus-input', focusInputId);
+  ctaEl.setAttribute('aria-label', 'Click to fill missing data for this card');
+  ctaEl.textContent = 'Click here to fill missing data';
+  ctaEl.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    focusMissingDataInput(focusInputId);
+  });
+  subEl.appendChild(ctaEl);
+}
+
 // Set output card — val=null means "needs more data", val=string is a result
 function setOut(id, val, cls='', cardState='', missingMsg='') {
   const el   = document.getElementById(id);
@@ -11475,9 +12462,7 @@ function setOut(id, val, cls='', cardState='', missingMsg='') {
     el.textContent = '—';
     el.className   = 'calc-out-val muted';
     card.classList.add('needs-data');
-    // Write the missing message into the sub-line
-    const subEl = card.querySelector('.calc-out-sub');
-    if (subEl && missingMsg) subEl.textContent = '⚠ Needs: ' + missingMsg;
+    renderMissingDataCallout(card, missingMsg);
   } else {
     el.textContent = val;
     el.className   = 'calc-out-val' + (cls ? ' ' + cls : '');
@@ -11580,7 +12565,11 @@ function initOutputCardTooltips() {
     });
 
     card.addEventListener('click', event => {
-      if (event.target.closest('.calc-out-tip-btn') || event.target.closest('.calc-out-tip')) return;
+      if (
+        event.target.closest('.calc-out-tip-btn') ||
+        event.target.closest('.calc-out-tip') ||
+        event.target.closest('.calc-out-sub')
+      ) return;
       toggleOutputCardTooltip(card);
     });
 
@@ -11640,9 +12629,79 @@ function isMeaningfulInputValue(input, rawValue) {
   return true;
 }
 
+let progressInputLabelCache = null;
+function getProgressInputLabel(inputId) {
+  if (!progressInputLabelCache) progressInputLabelCache = {};
+  if (progressInputLabelCache[inputId]) return progressInputLabelCache[inputId];
+
+  const fallback = inputId.replace(/^inp-/, '');
+  const labelEl = document.querySelector(`label[for="${inputId}"]`);
+  if (!labelEl) {
+    progressInputLabelCache[inputId] = fallback;
+    return fallback;
+  }
+
+  const copy = labelEl.cloneNode(true);
+  copy.querySelectorAll('.ftag, .calc-inline-help').forEach((node) => node.remove());
+  const normalized = String(copy.textContent || '').replace(/\s+/g, ' ').trim();
+  const label = normalized || fallback;
+  progressInputLabelCache[inputId] = label;
+  return label;
+}
+
+let progressPillNavigationBound = false;
+function focusInputFromProgressPill(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  const featureScopeEl = input.closest('[data-feature]');
+  const featureId = featureScopeEl && featureScopeEl.getAttribute('data-feature');
+  if (featureId && !isFeatureRuntimeEnabled(featureId)) {
+    openFeatureToggles(featureId);
+    writeShareFeedback(`${getFeatureDisplayName(featureId)} is disabled. Enable it in Feature controls to fill this field.`, true);
+    return;
+  }
+
+  const field = input.closest('.calc-field, .startup-field');
+  const target = field || input;
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  window.setTimeout(() => {
+    if (typeof input.focus === 'function') input.focus({ preventScroll: true });
+  }, 220);
+}
+
+function bindProgressPillNavigation() {
+  if (progressPillNavigationBound) return;
+  const prog = document.getElementById('calc-progress');
+  if (!prog) return;
+
+  const handleActivate = (pill) => {
+    if (!pill || pill.dataset.filled !== '0') return;
+    const inputId = pill.dataset.targetInputId;
+    if (!inputId) return;
+    focusInputFromProgressPill(inputId);
+  };
+
+  prog.addEventListener('click', (event) => {
+    const pill = event.target && event.target.closest ? event.target.closest('.cp-pill') : null;
+    if (!pill) return;
+    handleActivate(pill);
+  });
+
+  prog.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const pill = event.target && event.target.closest ? event.target.closest('.cp-pill') : null;
+    if (!pill) return;
+    event.preventDefault();
+    handleActivate(pill);
+  });
+
+  progressPillNavigationBound = true;
+}
+
 function updateProgressPills() {
   const ids = [
-    'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
+    'inp-nRef','inp-currency','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
     'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
@@ -11658,13 +12717,25 @@ function updateProgressPills() {
   ];
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'flex';
+  bindProgressPillNavigation();
   let filled = 0;
   ids.forEach((id, i) => {
     const el   = document.getElementById(id);
     const pill = document.getElementById('cp-' + i);
     const has  = isMeaningfulInputValue(el, el ? el.value : '');
+    const inputLabel = getProgressInputLabel(id);
+    const tooltip = `${inputLabel} - ${has ? 'filled' : 'not filled (click to jump)'}`;
     if (has) filled++;
     if (pill) pill.classList.toggle('filled', has);
+    if (pill) {
+      pill.title = tooltip;
+      pill.setAttribute('aria-label', tooltip);
+      pill.dataset.tooltip = tooltip;
+      pill.dataset.targetInputId = id;
+      pill.dataset.filled = has ? '1' : '0';
+      pill.tabIndex = has ? -1 : 0;
+      pill.setAttribute('role', 'button');
+    }
   });
   const dot  = document.getElementById('calc-dot');
   const text = document.getElementById('calc-status-text');
@@ -11681,9 +12752,11 @@ function updateProgressPills() {
 
 function recalculate() {
   cacheSubTexts();
+  refreshCurrencyUnits();
   const previousReliabilityCurveSignature = getReliabilityCurveSignature(chartReliabilityInputs || {});
 
   const nRef         = getInp('inp-nRef');
+  const currency     = normalizeCurrencyCode(getInputString('inp-currency', DEFAULT_CURRENCY_CODE));
   const devPerClient = getInp('inp-devPerClient');
   const infraTotal   = getInp('inp-infraTotal');
   const ARPU         = getInp('inp-ARPU');
@@ -11780,7 +12853,7 @@ function recalculate() {
   MODEL = nextModel;
 
   lastInputs = {
-    nRef, devPerClient, infraTotal, ARPU,
+    nRef, currency, devPerClient, infraTotal, ARPU,
     startupTargetPrice, startupTargetClients,
     effectiveARPU, arpuMode,
     cudPct, margin: marginPct, nMax: nMaxInp,
@@ -12387,6 +13460,8 @@ function updateOutputCards(inputs) {
     }
   }
 
+  syncOutputCardSeverityAndOrder();
+
   renderPortfolioSummary(normalization);
   updateNormalizationGuardrail(normalization);
   updateValueGuardrail({
@@ -12661,18 +13736,39 @@ function renderCfoPlanningTable(rows, state) {
     return;
   }
 
-  tableBodyEl.innerHTML = rows.map(row => `
-    <tr>
-      <td>M${row.month}</td>
-      <td>${Math.round(row.clients).toLocaleString()}</td>
-      <td>${fmtOut(row.modeledCost, 0)} / mo</td>
-      <td>${row.budgetVariance !== null ? `${fmtOut(row.budgetVariance, 0)} (${row.budgetVariancePct.toFixed(1)}%)` : '—'}</td>
-      <td>${row.baseMargin !== null ? `${fmtOut(row.baseMargin, 0)} / mo` : '—'}</td>
-      <td>${row.bestMargin !== null ? `${fmtOut(row.bestMargin, 0)} / mo` : '—'}</td>
-      <td>${row.worstMargin !== null ? `${fmtOut(row.worstMargin, 0)} / mo` : '—'}</td>
-      <td>${row.cumulativeGap !== null ? `${fmtOut(row.cumulativeGap, 0)}` : '—'}</td>
-    </tr>
-  `).join('');
+  let currentQuarter = null;
+  const markup = [];
+
+  rows.forEach((row) => {
+    const quarter = `Q${Math.floor((row.month - 1) / 3) + 1}`;
+    if (quarter !== currentQuarter) {
+      currentQuarter = quarter;
+      markup.push(`
+        <tr class="qbv-quarter-sep">
+          <td colspan="8">
+            <div class="qbv-quarter-sep-line">
+              <span class="qbv-quarter-sep-label">${quarter}</span>
+            </div>
+          </td>
+        </tr>
+      `);
+    }
+
+    markup.push(`
+      <tr>
+        <td>M${row.month}</td>
+        <td>${Math.round(row.clients).toLocaleString()}</td>
+        <td>${fmtOut(row.modeledCost, 0)} / mo</td>
+        <td>${row.budgetVariance !== null ? `${fmtOut(row.budgetVariance, 0)} (${row.budgetVariancePct.toFixed(1)}%)` : '—'}</td>
+        <td>${row.baseMargin !== null ? `${fmtOut(row.baseMargin, 0)} / mo` : '—'}</td>
+        <td>${row.bestMargin !== null ? `${fmtOut(row.bestMargin, 0)} / mo` : '—'}</td>
+        <td>${row.worstMargin !== null ? `${fmtOut(row.worstMargin, 0)} / mo` : '—'}</td>
+        <td>${row.cumulativeGap !== null ? `${fmtOut(row.cumulativeGap, 0)}` : '—'}</td>
+      </tr>
+    `);
+  });
+
+  tableBodyEl.innerHTML = markup.join('');
 }
 
 function renderCfoForecastDashboard(state) {
@@ -12793,7 +13889,7 @@ function resetModel() {
   selectedProviders.clear();
   document.querySelectorAll('.provider-btn.selected').forEach(btn => btn.classList.remove('selected'));
   lastInputs = {
-    nRef: null, devPerClient: null, infraTotal: null, ARPU: null,
+    nRef: null, currency: DEFAULT_CURRENCY_CODE, devPerClient: null, infraTotal: null, ARPU: null,
     startupTargetPrice: null, startupTargetClients: null,
     effectiveARPU: null, arpuMode: 'missing',
     cudPct: null, margin: null, nMax: null,
@@ -12822,7 +13918,7 @@ function resetModel() {
   };
   chartReliabilityInputs = lastInputs;
   const ids = [
-    'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
+    'inp-nRef','inp-currency','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
     'inp-cudPct','inp-margin','inp-nMax',
     'inp-budgetMonthly','inp-forecastGrowthPct','inp-forecastBestEfficiencyPct','inp-forecastWorstDriftPct',
@@ -12862,6 +13958,7 @@ function resetModel() {
     const p = document.getElementById('cp-' + i);
     if (p) p.classList.remove('filled');
   }
+  refreshCurrencyUnits();
   const prog = document.getElementById('calc-progress');
   if (prog) prog.style.display = 'none';
   const dot  = document.getElementById('calc-dot');
@@ -13597,7 +14694,9 @@ async function updatePageMetadataFromGitHub() {
 
 initOutputCardTooltips();
 initFormulaCardTooltips();
+bindMissingDataCtaHandler();
 cacheSubTexts();
+refreshCurrencyUnits();
 applyInformationIcons();
 initInlineHelpHints();
 applyGlossaryAutoLinks();

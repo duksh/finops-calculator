@@ -27,7 +27,7 @@
     {
       "id": "sla-slo-sli-economics",
       "manifestPath": "src/features/sla-slo-sli-economics/feature.json",
-      "enabled": false,
+      "enabled": true,
       "required": false
     }
   ]
