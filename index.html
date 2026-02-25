@@ -53,8 +53,10 @@
   --infra-raw: #009e73;
   --infra-cud: #009e73;
   --total:     #444444;
+  --total-rel: #8a3d00;
   --revenue:   #0072b2;
   --profit:    #7b2d8b;
+  --profit-rel:#b33f7a;
   --price-min: #555555;
 
   --page-pad-x: clamp(10px, 3vw, 24px);
@@ -1167,6 +1169,14 @@ a:focus-visible {
 }
 .toggle-btn.off { opacity: 0.32; }
 .toggle-btn:hover { opacity: 1 !important; background: rgba(0,0,0,0.03); }
+.toggle-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.toggle-btn:disabled:hover {
+  opacity: 0.35 !important;
+  background: transparent;
+}
 
 /* ─── CHART + SIDE PANEL ────────────────────────────────────────── */
 .chart-section {
@@ -1601,25 +1611,33 @@ body.chart-focus-open #chart-section .chart-focus-close {
   line-height: 1.6;
   max-width: 600px;
 }
-.calc-release-note {
+.calc-context-flow {
   margin-top: 10px;
   display: grid;
-  gap: 5px;
-  max-width: 720px;
-  border: 1px solid rgba(0,158,115,0.28);
+  gap: 8px;
+  max-width: 760px;
+}
+.calc-release-note {
+  margin-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  max-width: 760px;
+  border: 1px solid rgba(0,158,115,0.2);
   border-radius: 9px;
-  background: rgba(0,158,115,0.08);
-  padding: 8px 10px;
+  background: rgba(0,158,115,0.05);
+  padding: 7px 10px;
 }
 .calc-release-title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: var(--font-size-2xs);
+  font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #006d4d;
 }
 .calc-release-text {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-2xs);
   color: #234055;
   line-height: 1.45;
 }
@@ -1633,6 +1651,67 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .calc-release-link:hover {
   border-bottom-color: rgba(0,109,77,0.8);
+}
+.calc-r4-discovery {
+  margin-top: 0;
+  max-width: 760px;
+  border: 1px solid rgba(213,94,0,0.24);
+  border-left: 3px solid rgba(213,94,0,0.46);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(213,94,0,0.05), rgba(255,255,255,0.95));
+  padding: 8px 10px;
+  display: grid;
+  gap: 5px;
+}
+.calc-r4-discovery-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--font-size-xs);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.03em;
+  color: #7a3300;
+}
+.calc-r4-discovery-text {
+  margin: 0;
+  font-size: var(--font-size-2xs);
+  line-height: 1.5;
+  color: #3a4d65;
+}
+.calc-r4-discovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.calc-role-note {
+  margin-top: 8px;
+  min-height: 18px;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+  color: #55637a;
+}
+.calc-role-note strong {
+  color: #143a5e;
+}
+.calc-inline-link-btn {
+  border: 1px solid rgba(0,114,178,0.34);
+  border-radius: 999px;
+  background: rgba(0,114,178,0.08);
+  color: #005a8f;
+  padding: 2px 8px;
+  margin-left: 4px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+}
+.calc-inline-link-btn:hover {
+  background: rgba(0,114,178,0.15);
+  border-color: rgba(0,114,178,0.5);
+}
+.calc-r4-discovery.is-coach {
+  box-shadow: 0 0 0 2px rgba(213,94,0,0.22), 0 9px 20px rgba(213,94,0,0.12);
 }
 .share-feedback {
   margin-top: 8px;
@@ -1826,6 +1905,35 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-color: rgba(181,76,0,0.5);
   background: rgba(181,76,0,0.15);
 }
+.calc-action-btn--demo-r4 {
+  border-color: rgba(213,94,0,0.42);
+  background: rgba(213,94,0,0.12);
+  color: #7a3300;
+}
+.calc-action-btn--demo-r4:hover {
+  border-color: rgba(213,94,0,0.58);
+  background: rgba(213,94,0,0.2);
+}
+
+.calc-new-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(213,94,0,0.55);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(213,94,0,0.14);
+  color: #7a3300;
+}
+
+.calc-new-badge--inline {
+  margin-left: 6px;
+  vertical-align: middle;
+}
 
 .calc-title-main .calc-deeplink.calc-action-btn {
   margin-top: 8px;
@@ -1835,37 +1943,86 @@ body.chart-focus-open #chart-section .chart-focus-close {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   min-width: 0;
-  padding: 12px;
-  border: 1px solid rgba(17,71,128,0.18);
+  padding: 0;
+  border: 1px solid rgba(17,71,128,0.14);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(240,247,255,0.8) 100%);
-  box-shadow: 0 8px 18px rgba(15, 44, 82, 0.08);
+  background: rgba(255,255,255,0.84);
+  box-shadow: 0 5px 14px rgba(15, 44, 82, 0.05);
 }
 .calc-actions-row {
   display: grid;
   width: 100%;
-  gap: 10px;
+  gap: 8px;
   align-items: start;
-  padding: 10px;
-  border: 1px solid rgba(17,71,128,0.16);
-  border-radius: 10px;
-  background: rgba(255,255,255,0.58);
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid rgba(17,71,128,0.12);
+  border-radius: 0;
+  background: transparent;
 }
 .calc-actions-row--onboarding {
   grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
+  gap: 7px;
+  background: rgba(0,114,178,0.03);
 }
 .calc-actions-row--persona {
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 .calc-actions-row--analysis {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
 }
 .calc-actions-row--controls {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+.calc-actions-row--scenarios {
+  background: rgba(0,114,178,0.03);
+}
+.calc-actions-row--advanced {
+  border-bottom: 0;
+  padding-bottom: 10px;
+}
+.calc-scenario-suite {
+  display: grid;
+  gap: 8px;
+}
+.calc-scenario-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #1f4f7d;
+}
+.calc-scenario-copy {
+  margin: 0;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+  color: #40506b;
+}
+.calc-scenario-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.calc-scenario-item {
+  display: grid;
+  gap: 4px;
+}
+.calc-scenario-actions .calc-action-btn {
+  width: 100%;
+}
+.calc-scenario-meta {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #55637a;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.calc-actions-row--advanced .calc-disclosure {
+  width: 100%;
 }
 .calc-actions-hint {
   font-family: 'JetBrains Mono', monospace;
@@ -1997,9 +2154,9 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .calc-next-step {
   margin: 0;
-  border: 1px solid rgba(0,114,178,0.26);
+  border: 1px solid rgba(0,114,178,0.22);
   border-radius: 8px;
-  background: rgba(0,114,178,0.06);
+  background: rgba(0,114,178,0.05);
   padding: 8px 9px;
   display: grid;
   gap: 6px;
@@ -2043,6 +2200,24 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .calc-next-step-link:hover {
   border-color: rgba(0,114,178,0.64);
   background: rgba(0,114,178,0.08);
+}
+.calc-outcome-preview {
+  border: 1px dashed rgba(0,114,178,0.24);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.75);
+}
+.calc-outcome-preview > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 7px 9px;
+}
+.calc-outcome-preview > summary::-webkit-details-marker { display: none; }
+.calc-outcome-preview > summary .calc-mode-label {
+  font-size: 9px;
+  color: #335f8a;
+}
+.calc-outcome-preview .calc-intent-outcomes-wrap {
+  padding: 0 9px 8px;
 }
 .intent-path-wrap {
   margin: 0;
@@ -2168,6 +2343,10 @@ body.chart-focus-open #chart-section .chart-focus-close {
   outline-offset: 2px;
 }
 .calc-actions .calc-action-btn {
+  width: auto;
+}
+.calc-actions-row--controls .calc-action-btn,
+.calc-disclosure-body .calc-action-btn {
   width: 100%;
 }
 .calc-advanced-wrap {
@@ -2216,12 +2395,9 @@ body.chart-focus-open #chart-section .chart-focus-close {
     grid-template-columns: minmax(0, 1fr);
   }
   .calc-actions-row--analysis {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
   }
-  .calc-actions-row--analysis .intent-path-wrap {
-    grid-column: 1 / -1;
-  }
-  .calc-actions-row--controls {
+  .calc-scenario-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2235,6 +2411,13 @@ body.chart-focus-open #chart-section .chart-focus-close {
     align-items: stretch;
     padding: 10px;
   }
+  .calc-context-flow {
+    gap: 7px;
+  }
+  .calc-release-note,
+  .calc-r4-discovery {
+    max-width: 100%;
+  }
   .calc-actions-row--persona,
   .calc-actions-row--analysis,
   .calc-actions-row--controls {
@@ -2242,8 +2425,17 @@ body.chart-focus-open #chart-section .chart-focus-close {
     gap: 8px;
     padding: 8px;
   }
+  .calc-actions-row--scenarios,
+  .calc-actions-row--advanced {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
   .calc-actions-hint { margin-bottom: 0; }
   .calc-onboarding-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .calc-scenario-actions {
     grid-template-columns: minmax(0, 1fr);
   }
   .calc-next-step-links {
@@ -2610,6 +2802,66 @@ body.chart-focus-open #chart-section .chart-focus-close {
   text-transform: uppercase;
   color: #0d6d55;
   background: rgba(255,255,255,0.78);
+}
+.reliability-overlay {
+  border-top: 1px dashed rgba(213,94,0,0.4);
+  border-left: 3px solid rgba(213,94,0,0.45);
+  background: linear-gradient(180deg, rgba(255,245,238,0.88), rgba(246,251,255,0.9));
+}
+.reliability-overlay .calc-field {
+  background: linear-gradient(180deg, rgba(255,250,246,0.92) 0%, rgba(251,254,255,0.94) 100%);
+  border-top-color: rgba(213,94,0,0.2);
+}
+.reliability-overlay .calc-label {
+  color: #7a3300;
+}
+.reliability-overlay .ftag {
+  border-color: rgba(213,94,0,0.35);
+  background: rgba(213,94,0,0.1);
+  color: #8a3d00;
+}
+.reliability-explainer {
+  margin: 0 18px 10px;
+  border: 1px dashed rgba(213,94,0,0.34);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.75);
+  padding: 6px 10px;
+}
+.reliability-explainer summary {
+  cursor: pointer;
+  font-size: var(--font-size-2xs);
+  font-family: 'JetBrains Mono', monospace;
+  color: #7a3300;
+}
+.reliability-explainer-body {
+  margin-top: 6px;
+  font-size: var(--font-size-2xs);
+  color: #4b5263;
+  line-height: 1.45;
+}
+.reliability-card {
+  border-color: rgba(213,94,0,0.38);
+  background: linear-gradient(180deg, rgba(255,248,243,0.94), rgba(241,249,255,0.92));
+}
+
+.reliability-emphasis {
+  box-shadow: 0 0 0 2px rgba(213,94,0,0.25), 0 10px 22px rgba(213,94,0,0.1);
+}
+
+.reliability-spotlight {
+  animation: reliabilityPulse 1.4s ease-in-out 1;
+}
+
+@keyframes reliabilityPulse {
+  0% { box-shadow: 0 0 0 0 rgba(213,94,0,0.05); }
+  35% { box-shadow: 0 0 0 8px rgba(213,94,0,0.18); }
+  100% { box-shadow: 0 0 0 0 rgba(213,94,0,0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reliability-spotlight {
+    animation: none;
+  }
 }
 .portfolio-guardrail {
   border-top: 1px dashed var(--border);
@@ -4084,7 +4336,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <h2 class="finops-2026-title" id="finops2026-title">2026 report findings translated into FiceCal capabilities</h2>
       <p class="finops-2026-subtitle">
         This section summarizes how FiceCal operationalizes FinOps Foundation guidance from the 2026 report,
-        including multi-domain visibility, normalized unit economics, AI token economics, and policy-ready prioritization.
+        turning visibility into action across normalized unit economics, AI token economics, Release 4 reliability economics,
+        and policy-ready prioritization.
       </p>
 
       <div class="finops-2026-grid">
@@ -4103,6 +4356,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <li>Multi-technology cost inputs (SaaS, Licensing, Private Cloud, Data Center, Labor).</li>
             <li>Scoped normalization: <code>NTC/client = Σ(αᵈ × Cᵈ) / n</code> for cross-domain comparability.</li>
             <li>AI token economics with token pricing mode, retry/premium mix, and allocated AI cost outputs.</li>
+            <li>Release 4 reliability economics with 10 reliability inputs, 8 reliability output cards, and 2 reliability-adjusted chart overlays for resilience planning.</li>
             <li>Coverage and confidence outputs for evidence-quality signaling before actioning recommendations.</li>
           </ul>
         </article>
@@ -4112,7 +4366,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <ul>
             <li>Start with Financial Truth mode (<code>αᵈ ∈ {0,1}</code>) to anchor baseline reporting.</li>
             <li>Use Priority Index weights (<code>Σwᵈ=1</code>) only when governance policy requires scenario emphasis.</li>
-            <li>Use Demo Healthy/Unhealthy presets to stress-test policy and recommendation behavior before live rollout.</li>
+            <li>Use 4 scenario demos (Healthy, Unhealthy, Reliability Healthy, Reliability Unhealthy) to stress-test policy and downside readiness before live rollout.</li>
             <li>Review normalization confidence before making pricing or commitment decisions.</li>
           </ul>
           <a class="finops-2026-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer">Open State of FinOps 2026 ↗</a>
@@ -4312,20 +4566,30 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="fig-label" style="margin-bottom:5px">⚙︎ Interactive Model — Live Parameter Calculator</div>
           <h2 class="calc-title">Enter what you know. I'll calculate the rest for you.</h2>
           <p class="calc-subtitle">Type in any business figure and the model instantly derives all other parameters and <strong>redraws the chart</strong>. Fields show <span class="badge-calc">calculated</span> when auto-derived from your inputs.</p>
-          <div class="calc-release-note" role="note" aria-label="Current FiceCal feature alignment note">
-            <span class="calc-release-title">Current feature update</span>
-            <span class="calc-release-text">This version includes State of FinOps 2026 alignment, multi-technology normalization, guided intent workflows, and AI token economics outputs with healthy/unhealthy demo coverage.</span>
-            <a class="calc-release-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">Open State of FinOps 2026 report ↗</a>
+          <div class="calc-context-flow">
+            <div class="calc-release-note" role="note" aria-label="Current FiceCal capabilities and release update">
+              <span class="calc-release-title">Current feature update</span>
+              <span class="calc-release-text">FiceCal now covers 6 capability lanes: core unit economics, business-value forecasting, multi-tech normalization, AI token economics, Release 4 reliability economics, and health + recommendation guidance.</span>
+              <a class="calc-release-link" href="https://data.finops.org" target="_blank" rel="noopener noreferrer" title="Open the State of FinOps 2026 report">FinOps 2026 ↗</a>
+            </div>
+            <div class="calc-r4-discovery" id="calc-r4-discovery" role="note" aria-label="Release 4 reliability economics overview">
+              <div class="calc-r4-discovery-title">
+                <span class="calc-new-badge">New in R4</span>
+                <span>SLA/SLO/SLI reliability economics now supports full downside-to-action decisioning.</span>
+              </div>
+              <p class="calc-r4-discovery-text">R4 adds 10 reliability inputs, 8 reliability output cards, 2 reliability-adjusted chart curves, and 2 reliability scenario demos (healthy + unhealthy) so teams can quantify resilience trade-offs before approving pricing, investment, or growth decisions.</p>
+              <div class="calc-r4-discovery-actions">
+                <button class="calc-action-btn calc-action-btn--demo-r4" type="button" onclick="focusReliabilityFeature()" aria-label="Open Release 4 reliability input lane">Open R4 reliability inputs</button>
+                <button class="calc-action-btn calc-action-btn--neutral" type="button" onclick="focusScenarioDemos()" aria-label="Open scenario demo presets">Compare scenario demos</button>
+              </div>
+            </div>
           </div>
-          <a class="calc-deeplink calc-action-btn calc-action-btn--soft" href="#live-calculator">
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7.5l3-3"/><path d="M3 9a2 2 0 0 1 0-2.8l1.2-1.2a2 2 0 0 1 2.8 0"/><path d="M9 3a2 2 0 0 1 0 2.8L7.8 7a2 2 0 0 1-2.8 0"/></svg>
-            Share this section
-          </a>
+          <div class="calc-role-note" id="reliability-visibility-note" aria-live="polite"></div>
           <div class="share-feedback" id="share-feedback" aria-live="polite"></div>
         </div>
         <div class="calc-actions">
           <div class="calc-actions-row calc-actions-row--onboarding">
-            <div class="calc-actions-hint" title="Your onboarding checklist: choose role, provide core inputs, then review outcomes.">3 quick steps <span class="calc-inline-help calc-inline-help--hint" data-help="Your onboarding checklist: choose role, provide core inputs, then review outcomes." aria-label="Help: quick steps overview" tabindex="0" role="button">?</span></div>
+            <div class="calc-actions-hint" title="Three-step onboarding: pick role, provide core inputs, then review outcomes.">3 quick steps <span class="calc-inline-help calc-inline-help--hint" data-help="Three-step onboarding: pick role, provide core inputs, then review outcomes." aria-label="Help: quick-start checklist" tabindex="0" role="button">?</span></div>
             <div class="calc-onboarding-steps" id="calc-onboarding-steps" aria-label="Quick start steps">
               <div class="calc-onboarding-step is-active" data-onboarding-step="1" title="Step 1: choose the persona that best matches your decision context.">
                 <span class="calc-onboarding-step-num">1</span>
@@ -4342,8 +4606,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             </div>
           </div>
           <div class="calc-actions-row calc-actions-row--persona">
-            <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision intent selector">
-              <span class="calc-mode-label" title="Select your role to prioritize the most relevant KPIs and recommendations.">I am... <span class="calc-inline-help calc-inline-help--hint" data-help="Select your role to prioritize the most relevant KPIs and recommendations." aria-label="Help: role selector" tabindex="0" role="button">?</span></span>
+            <div class="calc-intent-switch" id="calc-intent-switch" role="group" aria-label="Decision lens selector">
+              <span class="calc-mode-label" title="Choose your decision lens to prioritize the most relevant KPIs and recommendations.">I am... <span class="calc-inline-help calc-inline-help--hint" data-help="Choose your decision lens to prioritize the most relevant KPIs and recommendations." aria-label="Help: decision lens selector" tabindex="0" role="button">?</span></span>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="viability" onclick="setUiIntent('viability')" aria-pressed="false">Finance</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="operations" onclick="setUiIntent('operations')" aria-pressed="false">Operations</button>
               <button type="button" class="calc-intent-btn" data-ui-intent-btn="architecture" onclick="setUiIntent('architecture')" aria-pressed="false">Architecture</button>
@@ -4352,20 +4616,22 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <div class="calc-intent-summary" id="calc-intent-summary" title="Role-specific summary of what this profile optimizes first.">As Finance, prioritize break-even, minimum price, and contribution margin for a fast viability decision.</div>
           </div>
           <div class="calc-actions-row calc-actions-row--analysis">
-            <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
-              <span class="calc-mode-label" id="calc-outcomes-label" title="Preview of the first outcomes that become available for your selected role.">You'll get first <span class="calc-inline-help calc-inline-help--hint" data-help="Preview of the first outcomes that become available for your selected role." aria-label="Help: first outcomes preview" tabindex="0" role="button">?</span></span>
-              <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
-            </div>
             <div class="calc-next-step" id="calc-next-step">
-              <div class="calc-next-step-title" title="The recommended next action to continue the guided workflow.">Do this next <span class="calc-inline-help calc-inline-help--hint" data-help="The recommended next action to continue the guided workflow." aria-label="Help: next action" tabindex="0" role="button">?</span></div>
+              <div class="calc-next-step-title" title="Recommended next action to keep your guided workflow moving.">Do this next <span class="calc-inline-help calc-inline-help--hint" data-help="Recommended next action to keep your guided workflow moving." aria-label="Help: next recommended action" tabindex="0" role="button">?</span></div>
               <p class="calc-next-step-copy" id="calc-next-step-copy">Enter Total Infra Cost and ARPU to unlock your first finance-grade readout.</p>
               <div class="calc-next-step-links">
                 <a class="calc-next-step-link calc-next-step-link--primary" id="calc-step2-cta" href="#field-infraTotal">Start Step 2</a>
               </div>
+              <details class="calc-outcome-preview" id="calc-outcome-preview">
+                <summary title="Preview of the first outcomes that become available for your selected role."><span class="calc-mode-label" id="calc-outcomes-label">Top outcomes preview</span></summary>
+                <div class="calc-intent-outcomes-wrap" id="calc-intent-outcomes-wrap">
+                  <div class="calc-intent-outcomes" id="calc-intent-outcomes" role="list" aria-label="Top outcomes preview"></div>
+                </div>
+              </details>
             </div>
             <details class="calc-disclosure intent-path-wrap" id="intent-path-wrap">
-              <summary title="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed.">
-                Guided path <span class="calc-inline-help calc-inline-help--hint" data-help="Expanded checklist for this role: each step moves from todo to active to done as inputs are completed." aria-label="Help: guided path" tabindex="0" role="button">?</span>
+              <summary title="Expanded checklist for your selected role: steps move from to-do to active to done as inputs are completed.">
+                Guided path <span class="calc-inline-help calc-inline-help--hint" data-help="Expanded checklist for your selected role: steps move from to-do to active to done as inputs are completed." aria-label="Help: guided path checklist" tabindex="0" role="button">?</span>
                 <span class="intent-path-progress" id="intent-path-progress">0/3 steps complete</span>
               </summary>
               <div class="calc-disclosure-body">
@@ -4374,17 +4640,55 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               </div>
             </details>
           </div>
+          <div class="calc-actions-row calc-actions-row--scenarios" id="calc-scenario-demos">
+            <div class="calc-scenario-suite">
+              <div class="calc-scenario-title">Scenario demos (4 presets)</div>
+              <p class="calc-scenario-copy">Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.</p>
+              <div class="calc-scenario-actions" role="group" aria-label="Scenario demo presets">
+                <div class="calc-scenario-item">
+                  <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load Healthy preset">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
+                    Healthy
+                  </button>
+                  <span class="calc-scenario-meta">Core viability baseline</span>
+                </div>
+                <div class="calc-scenario-item">
+                  <button class="calc-action-btn calc-action-btn--demo-bad" type="button" onclick="loadDemoScenario('unhealthy')" aria-label="Load Unhealthy preset">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 4.2v2.8"/><circle cx="6" cy="8.9" r="0.2" fill="currentColor"/></svg>
+                    Unhealthy
+                  </button>
+                  <span class="calc-scenario-meta">Core downside stress</span>
+                </div>
+                <div class="calc-scenario-item">
+                  <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('reliabilityHealthy')" aria-label="Load Reliability Healthy R4 preset">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
+                    Reliability Healthy (R4)
+                  </button>
+                  <span class="calc-scenario-meta">Reliability low-risk baseline</span>
+                </div>
+                <div class="calc-scenario-item">
+                  <button class="calc-action-btn calc-action-btn--demo-r4" type="button" onclick="loadDemoScenario('reliabilityUnhealthy')" aria-label="Load Reliability Unhealthy R4 preset">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6h9"/><path d="M6 1.5v9"/></svg>
+                    Reliability Unhealthy (R4)
+                  </button>
+                  <span class="calc-scenario-meta">Reliability downside stress</span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="calc-actions-row calc-actions-row--controls">
             <button class="share-btn calc-action-btn calc-action-btn--primary" id="share-state-btn" type="button" onclick="copyShareStateLink()" aria-label="Copy a shareable link with current calculator state" title="Copy a URL containing current inputs, role, mode, and selected controls.">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
               Copy state link
             </button>
+          </div>
+          <div class="calc-actions-row calc-actions-row--advanced">
             <details class="calc-disclosure" id="calc-more-actions">
-              <summary title="Advanced controls for manual mode overrides and maintenance actions.">More actions (advanced) <span class="calc-inline-help calc-inline-help--hint" data-help="Advanced controls for manual mode overrides and maintenance actions." aria-label="Help: advanced actions" tabindex="0" role="button">?</span></summary>
+              <summary title="Advanced controls for mode override, maintenance, and power-user actions.">Advanced tools <span class="calc-inline-help calc-inline-help--hint" data-help="Advanced controls for mode override, maintenance, and power-user actions." aria-label="Help: advanced tools" tabindex="0" role="button">?</span></summary>
               <div class="calc-disclosure-body">
                 <div class="calc-advanced-wrap">
                   <div class="calc-mode-switch" id="calc-mode-switch" role="group" aria-label="Calculator interface mode selector">
-                    <span class="calc-mode-label" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls.">Mode override <span class="calc-inline-help calc-inline-help--hint" data-help="Manually force UI depth: Quick for essentials, Operator for operational KPIs, Architect for policy-heavy controls." aria-label="Help: mode override" tabindex="0" role="button">?</span></span>
+                    <span class="calc-mode-label" title="Manually force UI depth: Quick for essentials, Operator for operational KPIs, or Architect for policy-heavy controls.">Mode override <span class="calc-inline-help calc-inline-help--hint" data-help="Manually force UI depth: Quick for essentials, Operator for operational KPIs, or Architect for policy-heavy controls." aria-label="Help: mode override options" tabindex="0" role="button">?</span></span>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="quick" onclick="setUiMode('quick')" aria-pressed="false">Quick</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="operator" onclick="setUiMode('operator')" aria-pressed="false">Operator</button>
                     <button type="button" class="calc-mode-btn" data-ui-mode-btn="architect" onclick="setUiMode('architect')" aria-pressed="false">Architect</button>
@@ -4396,14 +4700,6 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
                 <button class="reset-btn calc-action-btn calc-action-btn--neutral" type="button" onclick="resetModel()">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6A5 5 0 1 0 3 2.5"/><polyline points="1,1 1,4 4,4"/></svg>
                   Reset defaults
-                </button>
-                <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load a healthy demo scenario">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5 4.5 9.5 10.5 2.5"/></svg>
-                  Demo healthy
-                </button>
-                <button class="calc-action-btn calc-action-btn--demo-bad" type="button" onclick="loadDemoScenario('unhealthy')" aria-label="Load an unhealthy demo scenario">
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 4.2v2.8"/><circle cx="6" cy="8.9" r="0.2" fill="currentColor"/></svg>
-                  Demo unhealthy
                 </button>
               </div>
             </details>
@@ -4889,7 +5185,11 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         </div>
 
         <div class="portfolio-overlay reliability-overlay" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
-          <div class="startup-title">SLA/SLO/SLI reliability economics (Release 4 scaffold)<span class="finops-2026-pill">Operator &amp; Architect</span></div>
+          <div class="startup-title">SLA/SLO/SLI reliability economics (Release 4 scaffold)<span class="calc-new-badge calc-new-badge--inline">NEW</span><span class="finops-2026-pill">Operator &amp; Architect</span></div>
+          <details class="reliability-explainer" open>
+            <summary>What Release 4 adds and how it is modeled</summary>
+            <div class="reliability-explainer-body">Release 4 reliability includes <strong>10 reliability inputs</strong>, <strong>8 reliability output cards</strong>, and <strong>2 chart overlays</strong> (Total Cost + Reliability, Profit + Reliability). The model combines four downside lanes (SLA penalties, incident labor, downtime revenue loss, churn-risk expectation), then computes reliability-adjusted cost, reliability-adjusted profit/loss, ARPU uplift needed, and extra clients needed at current ARPU. This helps teams choose between resilience investment, pricing changes, or additional client growth with a quantified trade-off view.</div>
+          </details>
           <div class="calc-fields">
             <div class="calc-field" id="field-reliabilityEnabled">
               <label class="calc-label" for="inp-reliabilityEnabled">
@@ -5175,19 +5475,37 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
 
           <div class="calc-out-card reliability-card" id="out-relFailureCost" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
-            <div class="calc-out-label">Expected Reliability Failure Cost</div>
+            <div class="calc-out-label">Expected Reliability Failure Cost <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
             <div class="calc-out-val muted" id="oval-relFailureCost">—</div>
             <div class="calc-out-sub">Penalties + incident labor + outage loss + churn-risk expectation</div>
           </div>
 
           <div class="calc-out-card reliability-card" id="out-relAdjustedCost" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
-            <div class="calc-out-label">Reliability-Adjusted Cost</div>
+            <div class="calc-out-label">Reliability-Adjusted Cost <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
             <div class="calc-out-val muted" id="oval-relAdjustedCost">—</div>
             <div class="calc-out-sub">Baseline modeled cost plus reliability investment and expected failure burden</div>
           </div>
 
+          <div class="calc-out-card reliability-card" id="out-relProfitImpact" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Reliability-Adjusted Profit / Loss <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
+            <div class="calc-out-val muted" id="oval-relProfitImpact">—</div>
+            <div class="calc-out-sub">Revenue minus reliability-adjusted monthly cost envelope (includes reliability downside + investment)</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relArpuUplift" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">ARPU Uplift Needed <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
+            <div class="calc-out-val muted" id="oval-relArpuUplift">—</div>
+            <div class="calc-out-sub">Incremental price per client needed to preserve margin target under reliability-adjusted cost</div>
+          </div>
+
+          <div class="calc-out-card reliability-card" id="out-relExtraClients" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
+            <div class="calc-out-label">Extra Clients Needed @ Current ARPU <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
+            <div class="calc-out-val muted" id="oval-relExtraClients">—</div>
+            <div class="calc-out-sub">Additional clients required to absorb reliability-adjusted cost if current ARPU is unchanged</div>
+          </div>
+
           <div class="calc-out-card reliability-card" id="out-relRiskBand" data-feature="sla-slo-sli-economics" data-ui-mode="operator architect">
-            <div class="calc-out-label">Reliability Risk Band</div>
+            <div class="calc-out-label">Reliability Risk Band <span class="calc-new-badge calc-new-badge--inline">R4</span></div>
             <div class="calc-out-val muted" id="oval-relRiskBand">—</div>
             <div class="calc-out-sub">Risk signal from breach gap and expected reliability loss share</div>
           </div>
@@ -5459,8 +5777,10 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
       <button class="toggle-btn" id="btn-infra-raw" onclick="toggle('infra-raw')" style="color:var(--infra-raw);border-color:var(--infra-raw)"><span class="swatch" style="background:var(--infra-raw)"></span>Infra (On-Demand)</button>
       <button class="toggle-btn" id="btn-infra-cud" onclick="toggle('infra-cud')" style="color:var(--infra-cud);border-color:var(--infra-cud)"><span class="swatch" style="background:linear-gradient(90deg,var(--infra-cud) 55%,transparent 55%) repeat-x left/9px 3px"></span>Infra (With CUDs)</button>
       <button class="toggle-btn" id="btn-total"     onclick="toggle('total')"     style="color:var(--total);    border-color:var(--total)"><span class="swatch" style="background:var(--total)"></span>Total Cost / mo</button>
+      <button class="toggle-btn" id="btn-total-rel" onclick="toggle('total-rel')" style="color:var(--total-rel);border-color:var(--total-rel)"><span class="swatch" style="background:linear-gradient(90deg,var(--total-rel) 60%,transparent 60%) repeat-x left/10px 3px"></span>Total Cost + Reliability / mo</button>
       <button class="toggle-btn" id="btn-revenue"   onclick="toggle('revenue')"   style="color:var(--revenue);  border-color:var(--revenue)"><span class="swatch" style="background:var(--revenue)"></span>Revenue / mo</button>
       <button class="toggle-btn" id="btn-profit"    onclick="toggle('profit')"    style="color:var(--profit);   border-color:var(--profit)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI</button>
+      <button class="toggle-btn" id="btn-profit-rel" onclick="toggle('profit-rel')" style="color:var(--profit-rel);border-color:var(--profit-rel)"><span class="swatch" style="background:linear-gradient(90deg,var(--profit-rel) 60%,transparent 60%) repeat-x left/10px 3px"></span>Profit / ROI + Reliability</button>
       <button class="toggle-btn" id="btn-price-min" onclick="toggle('price-min')" style="color:var(--price-min);border-color:var(--price-min)"><span class="swatch" style="background:linear-gradient(90deg,var(--price-min) 40%,transparent 40%) repeat-x left/7px 3px"></span>Revenue Target / mo</button>
     </div>
   </div>
@@ -5501,12 +5821,20 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="readout-val" id="sp-total">—</div>
         </div>
         <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--total-rel)"></span>Total Cost + Reliability</div>
+          <div class="readout-val" id="sp-total-rel">—</div>
+        </div>
+        <div class="readout-row">
           <div class="readout-label"><span class="readout-swatch" style="background:var(--revenue)"></span>Revenue / mo</div>
           <div class="readout-val" id="sp-revenue">—</div>
         </div>
         <div class="readout-row">
           <div class="readout-label"><span class="readout-swatch" style="background:var(--profit)"></span>Profit / Loss</div>
           <div class="readout-val" id="sp-profit">—</div>
+        </div>
+        <div class="readout-row">
+          <div class="readout-label"><span class="readout-swatch" style="background:var(--profit-rel)"></span>Profit / Loss + Reliability</div>
+          <div class="readout-val" id="sp-profit-rel">—</div>
         </div>
         <div class="readout-row">
           <div class="readout-label"><span class="readout-swatch" style="background:var(--price-min);border:1px solid #bbb"></span>Revenue Target / mo</div>
@@ -5883,6 +6211,7 @@ const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
 const UI_INTENT_OPTIONS = ['viability', 'operations', 'architecture', 'executive'];
 const UI_INTENT_DEFAULT = 'viability';
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
+const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
 const UI_INTENT_PROFILES = {
   viability: {
     mode: 'quick',
@@ -5980,7 +6309,7 @@ const SHAREABLE_INPUT_KEYS = [
   'criticalRevenuePerMinute', 'arrExposedMonthly',
   'slaPenaltyRatePerBreachPointMonthly', 'reliabilityInvestmentMonthly'
 ];
-const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'revenue', 'profit', 'price-min'];
+const SHAREABLE_CURVE_KEYS = ['dev', 'infra-raw', 'infra-cud', 'total', 'total-rel', 'revenue', 'profit', 'profit-rel', 'price-min'];
 const TECH_DOMAIN_SCHEMA = [
   { key: 'cloud', inputKey: 'infraTotal', label: 'Cloud', focusDimension: 'Cloud IaaS/PaaS' },
   { key: 'saas', inputKey: 'costSaaS', label: 'SaaS', focusDimension: 'Software subscriptions' },
@@ -6216,6 +6545,33 @@ const OUTPUT_TOOLTIP_CONTENT = {
       '<code>AdjustedCost = BaselineModeledCost + ReliabilityInvestment + ExpectedFailureCost</code>.',
       'Lets teams compare preventive spend with expected downside risk in one cost frame.',
       'Designed as additive overlay so baseline core economics remain intact when disabled.'
+    ]
+  },
+  'out-relProfitImpact': {
+    title: 'Reliability-Adjusted Profit / Loss',
+    what: 'Shows monthly profit after reliability downside and reliability investment are included in the cost envelope.',
+    how: [
+      '<code>RelProfit = Revenue - ReliabilityAdjustedCost</code>.',
+      'Revenue uses current ARPU and client count; adjusted cost includes baseline cost, reliability investment, and expected failure cost.',
+      'Use this together with risk band to evaluate whether resilience spending improves risk-adjusted margin.'
+    ]
+  },
+  'out-relArpuUplift': {
+    title: 'ARPU Uplift Needed',
+    what: 'Indicates how much additional ARPU per client is required to maintain margin target after reliability-adjusted cost is included.',
+    how: [
+      '<code>RequiredARPU_with_rel = (ReliabilityAdjustedCost / n) × (1 + marginTarget)</code>.',
+      '<code>ARPUUplift = max(0, RequiredARPU_with_rel - CurrentARPU)</code>.',
+      'If uplift is near zero, current pricing already absorbs reliability downside at the target margin.'
+    ]
+  },
+  'out-relExtraClients': {
+    title: 'Extra Clients Needed @ Current ARPU',
+    what: 'Estimates additional client volume needed when current ARPU is fixed and reliability-adjusted costs are included.',
+    how: [
+      'Scans client counts and finds first <code>n</code> where <code>CurrentARPU × n >= (BaseCost(n) + ReliabilityLoad) × (1 + marginTarget)</code>.',
+      '<code>ExtraClients = max(0, RequiredClients_with_rel - CurrentClients)</code>.',
+      'Useful when pricing changes are constrained and scale increase is the primary lever.'
     ]
   },
   'out-relRiskBand': {
@@ -6702,6 +7058,7 @@ function normalizeTechDomainSelection(list) {
 // ─── TOGGLE ─────────────────────────────────────────────────────
 function toggle(id) {
   const btn = document.getElementById(`btn-${id}`);
+  if (!btn || btn.disabled) return;
   if (hidden.has(id)) {
     hidden.delete(id);
     if (paths[id]) paths[id].attr('opacity', 0.92);
@@ -7107,8 +7464,8 @@ function renderRoleOnboardingState(inputs = {}) {
   const outcomesLabelEl = document.getElementById('calc-outcomes-label');
   if (outcomesLabelEl) {
     outcomesLabelEl.textContent = hasRequiredInputs
-      ? "You'll get first"
-      : "You'll get first (after Step 2)";
+      ? 'Top outcomes preview'
+      : 'Top outcomes unlock after Step 2';
   }
 
   const applyState = (stepEl, state) => {
@@ -7314,7 +7671,7 @@ function renderIntentOutcomePreview(profile, options = {}) {
     const placeholder = document.createElement('span');
     placeholder.className = 'calc-intent-outcome-chip calc-intent-outcome-chip--placeholder';
     placeholder.setAttribute('role', 'listitem');
-    placeholder.textContent = 'Complete Step 2 to preview outcomes';
+    placeholder.textContent = 'Complete Step 2 (Infra Cost + ARPU) to unlock outcomes';
     outcomesEl.appendChild(placeholder);
     return;
   }
@@ -7411,6 +7768,7 @@ function syncUiModeButtons() {
     btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     btn.classList.toggle('is-active', pressed);
   });
+  syncReliabilityVisibilityHint();
 }
 
 function setUiMode(mode, recalcAfter = true) {
@@ -7426,6 +7784,112 @@ function setUiMode(mode, recalcAfter = true) {
     updateProgressPills();
     draw();
   }
+}
+
+function getRelease4ReliabilitySeen() {
+  try {
+    return window.localStorage.getItem(RELEASE4_RELIABILITY_SEEN_KEY) === '1';
+  } catch (err) {
+    return false;
+  }
+}
+
+function setRelease4ReliabilitySeen() {
+  try {
+    window.localStorage.setItem(RELEASE4_RELIABILITY_SEEN_KEY, '1');
+  } catch (err) {
+    // Ignore storage failures silently.
+  }
+}
+
+function applyReliabilityDiscoveryState() {
+  const discoveryEl = document.getElementById('calc-r4-discovery');
+  if (!discoveryEl) return;
+  const isSeen = getRelease4ReliabilitySeen();
+  discoveryEl.classList.toggle('is-coach', !isSeen);
+
+  const dismissBtn = discoveryEl.querySelector('button[onclick="dismissReliabilityCoachmark()"]');
+  if (dismissBtn) dismissBtn.hidden = isSeen;
+
+  const emphasisTargets = [
+    document.querySelector('.reliability-overlay'),
+    document.getElementById('out-relFailureCost'),
+    document.getElementById('out-relAdjustedCost'),
+    document.getElementById('out-relRiskBand')
+  ].filter(Boolean);
+
+  emphasisTargets.forEach(el => el.classList.toggle('reliability-emphasis', !isSeen));
+}
+
+function ensureReliabilityPreviewVisible() {
+  const reliabilityNodes = Array.from(document.querySelectorAll('[data-feature="sla-slo-sli-economics"]'));
+  reliabilityNodes.forEach((node) => {
+    if (node.hasAttribute('hidden')) node.removeAttribute('hidden');
+    if (node.style && node.style.display === 'none') node.style.display = '';
+  });
+}
+
+function dismissReliabilityCoachmark() {
+  setRelease4ReliabilitySeen();
+  applyReliabilityDiscoveryState();
+  syncReliabilityVisibilityHint();
+}
+
+function syncReliabilityVisibilityHint() {
+  const noteEl = document.getElementById('reliability-visibility-note');
+  if (!noteEl) return;
+  const mode = getCurrentUiMode();
+  const overlay = document.querySelector('.reliability-overlay');
+  const overlayHidden = !overlay || overlay.hasAttribute('hidden') || window.getComputedStyle(overlay).display === 'none';
+
+  if (mode === 'quick') {
+    noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability Economics is shown in Operator and Architect modes. <button type="button" class="calc-inline-link-btn" onclick="setUiIntent(\'operations\')">Switch to Operations</button>';
+    return;
+  }
+
+  if (overlayHidden) {
+    noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability module is currently in preview gate mode. <button type="button" class="calc-inline-link-btn" onclick="focusReliabilityFeature()">Open reliability preview</button>';
+    return;
+  }
+
+  noteEl.innerHTML = '<strong>Release 4 visibility:</strong> Reliability controls are active in Group B and reliability cards are marked in Group C. <button type="button" class="calc-inline-link-btn" onclick="focusReliabilityFeature()">Jump to reliability</button>';
+}
+
+function focusReliabilityFeature() {
+  setRelease4ReliabilitySeen();
+  if (getCurrentUiMode() === 'quick') {
+    setUiIntent('operations');
+  }
+
+  ensureReliabilityPreviewVisible();
+  window.setTimeout(ensureReliabilityPreviewVisible, 140);
+
+  applyReliabilityDiscoveryState();
+  syncReliabilityVisibilityHint();
+
+  const target = document.getElementById('field-reliabilityEnabled') || document.getElementById('out-relFailureCost');
+  if (target) {
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('reliability-spotlight');
+      window.setTimeout(() => target.classList.remove('reliability-spotlight'), 1500);
+    });
+  }
+
+  writeShareFeedback('Release 4 reliability inputs ready. Toggle Reliability Economics to On to activate R4 outputs.', false);
+}
+
+function focusScenarioDemos() {
+  const demos = document.getElementById('calc-scenario-demos');
+  if (!demos) return;
+  demos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  demos.classList.add('reliability-spotlight');
+  window.setTimeout(() => demos.classList.remove('reliability-spotlight'), 1400);
+}
+
+function initRelease4ReliabilityDiscovery() {
+  applyReliabilityDiscoveryState();
+  syncReliabilityVisibilityHint();
 }
 
 async function initFeatureRuntime() {
@@ -7529,12 +7993,26 @@ function loadDemoScenario(scenarioKey) {
   }
 
   clearShareStateParam();
+  if (scenarioKey === 'reliability' || scenarioKey === 'reliabilityHealthy' || scenarioKey === 'reliabilityUnhealthy') {
+    setRelease4ReliabilitySeen();
+    ensureReliabilityPreviewVisible();
+    window.setTimeout(ensureReliabilityPreviewVisible, 140);
+    applyReliabilityDiscoveryState();
+    syncReliabilityVisibilityHint();
+  }
   writeShareFeedback(`${preset.label} demo loaded. ${preset.summary}`, false);
 
-  const healthSection = document.getElementById('group-health');
-  if (healthSection) {
+  const focusSelector = typeof preset.focusSelector === 'string' && preset.focusSelector
+    ? preset.focusSelector
+    : '#group-health';
+  const focusEl = document.querySelector(focusSelector);
+  if (focusEl) {
     requestAnimationFrame(() => {
-      healthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      focusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (focusSelector === '#field-reliabilityEnabled' || focusSelector === '#out-relFailureCost') {
+        focusEl.classList.add('reliability-spotlight');
+        window.setTimeout(() => focusEl.classList.remove('reliability-spotlight'), 1500);
+      }
     });
   }
 }
@@ -7789,26 +8267,56 @@ function clearShareStateParam() {
 
 // ─── MODEL PARAMS (live, updated by calculator) ──────────────────
 let MODEL = { K:50000, a:0.45, c:0.8, b:1.28, g:0.68, ARPU:30, m:0.15, nMax:1000 };
+let chartReliabilityInputs = null;
 
 // ─── DATA MODEL ─────────────────────────────────────────────────
 function buildData() {
   const coreEconomics = window.FiceCalCoreEconomics;
+  let points;
   if (coreEconomics && typeof coreEconomics.buildDataFromModel === 'function') {
-    return coreEconomics.buildDataFromModel(MODEL, 300);
+    points = coreEconomics.buildDataFromModel(MODEL, 300);
+  } else {
+    const { K, a, c, b, g, ARPU, m, nMax } = MODEL;
+    const N = 300;
+    points = d3.range(N + 1).map(i => {
+      const n       = Math.max(1, (i / N) * nMax);
+      const dev      = K * Math.pow(n, -a);
+      const infraRaw = c * Math.pow(n, b);
+      const infraCud = g * c * Math.pow(n, b * 0.96);
+      const total    = dev + infraRaw;
+      const revenue  = ARPU * n;
+      const profit   = revenue - total;
+      const priceMin = total * (1 + m);
+      return { n, dev, infraRaw, infraCud, total, revenue, profit, priceMin };
+    });
   }
 
-  const { K, a, c, b, g, ARPU, m, nMax } = MODEL;
-  const N = 300;
-  return d3.range(N + 1).map(i => {
-    const n       = Math.max(1, (i / N) * nMax);
-    const dev      = K * Math.pow(n, -a);
-    const infraRaw = c * Math.pow(n, b);
-    const infraCud = g * c * Math.pow(n, b * 0.96);
-    const total    = dev + infraRaw;
-    const revenue  = ARPU * n;
-    const profit   = revenue - total;
-    const priceMin = total * (1 + m);
-    return { n, dev, infraRaw, infraCud, total, revenue, profit, priceMin };
+  const reliabilityMetrics = chartReliabilityInputs && chartReliabilityInputs.reliabilityMetrics;
+  const hasReliabilitySignal = Boolean(
+    chartReliabilityInputs &&
+    chartReliabilityInputs.reliabilityEnabled &&
+    reliabilityMetrics &&
+    reliabilityMetrics.enabled &&
+    reliabilityMetrics.expectedReliabilityFailureCostMonthly !== null
+  );
+  const reliabilityLoadMonthly = hasReliabilitySignal
+    ? Math.max(
+      0,
+      (Number(reliabilityMetrics.reliabilityInvestmentMonthly) || 0) +
+      (Number(reliabilityMetrics.expectedReliabilityFailureCostMonthly) || 0)
+    )
+    : 0;
+
+  return points.map(point => {
+    if (!hasReliabilitySignal) {
+      return { ...point, totalRel: null, profitRel: null };
+    }
+    const totalRel = point.total + reliabilityLoadMonthly;
+    return {
+      ...point,
+      totalRel,
+      profitRel: point.revenue - totalRel
+    };
   });
 }
 
@@ -7879,9 +8387,17 @@ function draw() {
 
   // Scales
   const xSc = d3.scaleLinear().domain([0, nMax]).range([0, iW]);
-  const yMax = d3.max(pts, d => Math.max(d.total, d.revenue)) * 1.08;
-  const yMin = d3.min(pts, d => d.profit) * 1.1;
+  const yMax = d3.max(pts, d => Math.max(
+    d.total,
+    d.revenue,
+    Number.isFinite(d.totalRel) ? d.totalRel : Number.NEGATIVE_INFINITY
+  )) * 1.08;
+  const yMin = d3.min(pts, d => Math.min(
+    d.profit,
+    Number.isFinite(d.profitRel) ? d.profitRel : Number.POSITIVE_INFINITY
+  )) * 1.1;
   const ySc  = d3.scaleLinear().domain([yMin, yMax]).range([iH, 0]);
+  const hasReliabilityOverlay = pts.some(d => Number.isFinite(d.totalRel) && Number.isFinite(d.profitRel));
   currentScales = { xSc, ySc, beN: isFinite(beN) ? beN : null, ssEnd };
 
   // Defs
@@ -7933,11 +8449,24 @@ function draw() {
   zoneLabels.forEach(l => {
     const lx = xSc(l.cx);
     if (lx < 0 || lx > iW) return;
+    const zoneFontSize = Math.max(9.5, W * 0.0105);
+    const estWidth = l.text.length * zoneFontSize * 0.58;
+    const sidePad = 6;
+    let anchor = 'middle';
+    let safeX = lx;
+    if (lx - (estWidth / 2) < sidePad) {
+      anchor = 'start';
+      safeX = sidePad;
+    } else if (lx + (estWidth / 2) > iW - sidePad) {
+      anchor = 'end';
+      safeX = iW - sidePad;
+    }
     g.append('text')
-      .attr('x', lx).attr('y', zLabelY)
-      .attr('text-anchor', 'middle')
-      .attr('fill', l.color).attr('font-size', Math.max(8, W * 0.009))
-      .attr('font-family', 'JetBrains Mono').attr('letter-spacing', '0.1em')
+      .attr('x', safeX).attr('y', zLabelY)
+      .attr('text-anchor', anchor)
+      .attr('fill', l.color).attr('font-size', zoneFontSize)
+      .attr('font-family', 'JetBrains Mono').attr('font-weight', '600').attr('letter-spacing', '0.08em')
+      .attr('paint-order', 'stroke').attr('stroke', '#ffffff').attr('stroke-width', 2.6)
       .text(l.text);
   });
 
@@ -7962,57 +8491,78 @@ function draw() {
 
   // Curves
   const curveDefs = [
-    { id: 'dev',       key: 'dev',      color: '#d55e00', dash: null,  w: 2.5, label: 'Dev Cost (Amortized)' },
-    { id: 'infra-raw', key: 'infraRaw', color: '#009e73', dash: null,  w: 2.5, label: 'Infra (On-Demand)' },
-    { id: 'infra-cud', key: 'infraCud', color: '#009e73', dash: '7,4', w: 2,   label: 'Infra (CUDs)' },
-    { id: 'total',     key: 'total',    color: '#444444', dash: null,  w: 2.2, label: 'Total Cost / mo' },
-    { id: 'revenue',   key: 'revenue',  color: '#0072b2', dash: null,  w: 2.5, label: 'Revenue / mo' },
-    { id: 'profit',    key: 'profit',   color: '#7b2d8b', dash: '6,3', w: 2,   label: 'Profit / ROI' },
-    { id: 'price-min', key: 'priceMin', color: '#555555', dash: '3,4', w: 1.5, label: 'Revenue Target / mo' },
+    { id: 'dev',       key: 'dev',      color: '#d55e00', dash: null,  w: 2.5, label: 'Dev Cost (Amortized)', shortLabel: 'Dev Cost', available: true },
+    { id: 'infra-raw', key: 'infraRaw', color: '#009e73', dash: null,  w: 2.5, label: 'Infra (On-Demand)', shortLabel: 'Infra (On-Demand)', available: true },
+    { id: 'infra-cud', key: 'infraCud', color: '#009e73', dash: '7,4', w: 2,   label: 'Infra (CUDs)', shortLabel: 'Infra (CUDs)', available: true },
+    { id: 'total',     key: 'total',    color: '#444444', dash: null,  w: 2.2, label: 'Total Cost / mo', shortLabel: 'Total Cost', available: true },
+    { id: 'total-rel', key: 'totalRel', color: '#8a3d00', dash: '5,3', w: 2.2, label: 'Total Cost + Reliability', shortLabel: 'Total + Reliability', available: hasReliabilityOverlay },
+    { id: 'revenue',   key: 'revenue',  color: '#0072b2', dash: null,  w: 2.5, label: 'Revenue / mo', shortLabel: 'Revenue', available: true },
+    { id: 'profit',    key: 'profit',   color: '#7b2d8b', dash: '6,3', w: 2,   label: 'Profit / ROI', shortLabel: 'Profit / ROI', available: true },
+    { id: 'profit-rel', key: 'profitRel', color: '#b33f7a', dash: '2,4', w: 2, label: 'Profit / ROI + Reliability', shortLabel: 'Profit + Reliability', available: hasReliabilityOverlay },
+    { id: 'price-min', key: 'priceMin', color: '#555555', dash: '3,4', w: 1.5, label: 'Revenue Target / mo', shortLabel: 'Rev. Target / mo', available: true },
   ];
 
+  ['total-rel', 'profit-rel'].forEach(curveId => {
+    const btn = document.getElementById(`btn-${curveId}`);
+    if (!btn) return;
+    const available = curveDefs.some(curve => curve.id === curveId && curve.available);
+    btn.disabled = !available;
+    btn.classList.toggle('off', !available || hidden.has(curveId));
+    btn.title = available
+      ? 'Toggle reliability-adjusted curve visibility.'
+      : 'Enable Reliability Economics and populate reliability inputs to activate this curve.';
+  });
+
   const lineGen = key => d3.line()
-    .defined(d => isFinite(d[key]))
+    .defined(d => Number.isFinite(d[key]))
     .x(d => xSc(d.n))
     .y(d => ySc(d[key]))
     .curve(d3.curveCatmullRom.alpha(0.5));
 
   paths = {};
   curveDefs.forEach(c => {
+    const isVisible = !hidden.has(c.id) && c.available;
     paths[c.id] = g.append('path')
       .datum(pts)
       .attr('fill', 'none')
       .attr('stroke', c.color)
       .attr('stroke-width', c.w)
       .attr('stroke-dasharray', c.dash || null)
-      .attr('opacity', hidden.has(c.id) ? 0 : 0.92)
+      .attr('opacity', isVisible ? 0.92 : 0)
       .attr('d', lineGen(c.key));
   });
 
   // End-of-line labels
-  const labelFontSize = Math.max(8.5, W * 0.011);
+  const labelFontSize = Math.max(9.5, W * 0.0115);
+  const labelX = Math.max(14, iW - 8);
   const usedYs = [];
   curveDefs.forEach(c => {
+    if (!c.available) return;
     const last = pts[pts.length - 1];
     const yv   = last[c.key];
     if (!isFinite(yv)) return;
     let cy = ySc(yv);
+    cy = Math.min(iH - 6, Math.max(10, cy));
     // nudge overlapping labels
     let tries = 0;
     while (usedYs.some(uy => Math.abs(uy - cy) < labelFontSize + 3) && tries < 20) {
       cy += (cy < iH / 2 ? -1 : 1) * (labelFontSize + 2);
+      cy = Math.min(iH - 6, Math.max(10, cy));
       tries++;
     }
     if (cy < -6 || cy > iH + 6) return;
     usedYs.push(cy);
+    const labelText = iW < 760 ? (c.shortLabel || c.label) : c.label;
     g.append('text')
-      .attr('x', iW + 5).attr('y', cy + 4)
+      .attr('x', labelX).attr('y', cy + 4)
+      .attr('text-anchor', 'end')
       .attr('fill', c.color)
       .attr('font-size', labelFontSize)
       .attr('font-weight', '500')
       .attr('font-family', 'Inter')
-      .attr('opacity', hidden.has(c.id) ? 0.3 : 1)
-      .text(c.label);
+      .attr('paint-order', 'stroke').attr('stroke', '#ffffff').attr('stroke-width', 2.4)
+      .attr('opacity', hidden.has(c.id) ? 0.28 : 1)
+      .text(labelText);
   });
 
   // Break-even annotation
@@ -8134,7 +8684,7 @@ function draw() {
       curveDefs.forEach(c => {
         const yv = d[c.key];
         const cy = ySc(yv);
-        if (isFinite(yv) && cy >= -10 && cy <= iH + 10) {
+        if (c.available && !hidden.has(c.id) && isFinite(yv) && cy >= -10 && cy <= iH + 10) {
           hoverDots[c.id].attr('cx', xSc(d.n)).attr('cy', cy).attr('opacity', 1);
         } else {
           hoverDots[c.id].attr('opacity', 0);
@@ -8147,11 +8697,20 @@ function draw() {
       document.getElementById('sp-infra-raw').textContent = fmt(d.infraRaw);
       document.getElementById('sp-infra-cud').textContent = fmt(d.infraCud);
       document.getElementById('sp-total').textContent     = fmt(d.total);
+      document.getElementById('sp-total-rel').textContent = Number.isFinite(d.totalRel) ? fmt(d.totalRel) : '—';
       document.getElementById('sp-revenue').textContent   = fmt(d.revenue);
 
       const profEl = document.getElementById('sp-profit');
       profEl.textContent  = (d.profit >= 0 ? '+' : '') + fmt(d.profit);
       profEl.className    = 'readout-val ' + (d.profit >= 0 ? 'positive' : 'negative');
+      const relProfitEl = document.getElementById('sp-profit-rel');
+      if (Number.isFinite(d.profitRel)) {
+        relProfitEl.textContent = (d.profitRel >= 0 ? '+' : '') + fmt(d.profitRel);
+        relProfitEl.className = 'readout-val ' + (d.profitRel >= 0 ? 'positive' : 'negative');
+      } else {
+        relProfitEl.textContent = '—';
+        relProfitEl.className = 'readout-val muted';
+      }
       document.getElementById('sp-price-min').textContent = fmt(d.priceMin);
 
       const zone = zoneFor(d.n, beN, ssEnd);
@@ -8359,6 +8918,147 @@ const DEMO_SCENARIOS = {
       },
       td: [...VALID_TECH_DOMAIN_KEYS],
       p: ['aws', 'azure', 'gcp'],
+      h: []
+    }
+  },
+  reliability: {
+    label: 'Reliability (Release 4)',
+    summary: 'SLA/SLO/SLI reliability economics scenario loaded with visible risk/downside trade-offs.',
+    focusSelector: '#field-reliabilityEnabled',
+    state: {
+      v: SHARE_STATE_VERSION,
+      ui: 'operations',
+      um: 'operator',
+      i: {
+        nRef: 220,
+        devPerClient: 330,
+        infraTotal: 5200,
+        ARPU: 58,
+        startupTargetPrice: 62,
+        startupTargetClients: 260,
+        cudPct: 22,
+        margin: 18,
+        nMax: 2500,
+        budgetMonthly: 9200,
+        forecastGrowthPct: 9,
+        forecastBestEfficiencyPct: 6,
+        forecastWorstDriftPct: 11,
+        savingsIdentified: 1700,
+        savingsRealized: 620,
+        costAvoidance: 340,
+        costSaaS: 980,
+        costLicensing: 560,
+        costPrivateCloud: 430,
+        costDataCenter: 250,
+        costLabor: 760,
+        aiEnabled: 'off',
+        reliabilityEnabled: 'on',
+        sloTargetAvailabilityPct: 99.9,
+        sliObservedAvailabilityPct: 99.4,
+        incidentCountMonthly: 5,
+        mttrHours: 1.8,
+        incidentBlendedHourlyRate: 120,
+        criticalRevenuePerMinute: 40,
+        arrExposedMonthly: 90000,
+        slaPenaltyRatePerBreachPointMonthly: 5000,
+        reliabilityInvestmentMonthly: 2100
+      },
+      td: [...VALID_TECH_DOMAIN_KEYS],
+      p: ['aws', 'azure'],
+      h: []
+    }
+  },
+  reliabilityHealthy: {
+    label: 'Reliability Healthy (Release 4)',
+    summary: 'SLA/SLO/SLI reliability economics healthy case loaded with low breach-risk and stronger resilience posture.',
+    focusSelector: '#field-reliabilityEnabled',
+    state: {
+      v: SHARE_STATE_VERSION,
+      ui: 'operations',
+      um: 'operator',
+      i: {
+        nRef: 260,
+        devPerClient: 280,
+        infraTotal: 4700,
+        ARPU: 66,
+        startupTargetPrice: 68,
+        startupTargetClients: 260,
+        cudPct: 34,
+        margin: 18,
+        nMax: 2500,
+        budgetMonthly: 9000,
+        forecastGrowthPct: 11,
+        forecastBestEfficiencyPct: 8,
+        forecastWorstDriftPct: 7,
+        savingsIdentified: 1900,
+        savingsRealized: 1250,
+        costAvoidance: 480,
+        costSaaS: 760,
+        costLicensing: 420,
+        costPrivateCloud: 300,
+        costDataCenter: 190,
+        costLabor: 640,
+        aiEnabled: 'off',
+        reliabilityEnabled: 'on',
+        sloTargetAvailabilityPct: 99.9,
+        sliObservedAvailabilityPct: 99.93,
+        incidentCountMonthly: 1,
+        mttrHours: 0.6,
+        incidentBlendedHourlyRate: 100,
+        criticalRevenuePerMinute: 28,
+        arrExposedMonthly: 78000,
+        slaPenaltyRatePerBreachPointMonthly: 4500,
+        reliabilityInvestmentMonthly: 2600
+      },
+      td: [...VALID_TECH_DOMAIN_KEYS],
+      p: ['aws', 'azure'],
+      h: []
+    }
+  },
+  reliabilityUnhealthy: {
+    label: 'Reliability Unhealthy (Release 4)',
+    summary: 'SLA/SLO/SLI reliability economics stress case loaded with elevated breach-risk and downside exposure.',
+    focusSelector: '#field-reliabilityEnabled',
+    state: {
+      v: SHARE_STATE_VERSION,
+      ui: 'operations',
+      um: 'operator',
+      i: {
+        nRef: 180,
+        devPerClient: 420,
+        infraTotal: 5900,
+        ARPU: 52,
+        startupTargetPrice: 58,
+        startupTargetClients: 220,
+        cudPct: 12,
+        margin: 18,
+        nMax: 2500,
+        budgetMonthly: 9600,
+        forecastGrowthPct: 4,
+        forecastBestEfficiencyPct: 3,
+        forecastWorstDriftPct: 16,
+        savingsIdentified: 1500,
+        savingsRealized: 420,
+        costAvoidance: 220,
+        costSaaS: 1160,
+        costLicensing: 620,
+        costPrivateCloud: 520,
+        costDataCenter: 290,
+        costLabor: 880,
+        aiEnabled: 'off',
+        reliabilityEnabled: 'on',
+        sloTargetAvailabilityPct: 99.9,
+        sliObservedAvailabilityPct: 99.1,
+        incidentCountMonthly: 9,
+        mttrHours: 3.2,
+        incidentBlendedHourlyRate: 145,
+        criticalRevenuePerMinute: 95,
+        arrExposedMonthly: 130000,
+        slaPenaltyRatePerBreachPointMonthly: 9500,
+        reliabilityInvestmentMonthly: 900
+      },
+      td: [...VALID_TECH_DOMAIN_KEYS],
+      p: ['aws', 'azure'],
       h: []
     }
   }
@@ -8872,6 +9572,42 @@ function findRequiredClientsForTargetPrice(targetPrice, maxN, model = MODEL) {
   return null;
 }
 
+function findRequiredClientsForTargetPriceWithReliability(targetPrice, maxN, reliabilityLoadMonthly = 0, model = MODEL) {
+  if (!(targetPrice > 0)) return null;
+  const limit = Math.max(1, Math.round(maxN));
+  const reliabilityLoad = Math.max(0, Number(reliabilityLoadMonthly) || 0);
+  for (let n = 1; n <= limit; n++) {
+    const baseTotal = totalCostAtClients(n, model);
+    const adjustedMinPrice = ((baseTotal + reliabilityLoad) / Math.max(1, n)) * (1 + model.m);
+    if (adjustedMinPrice <= targetPrice) return n;
+  }
+  return null;
+}
+
+function getReliabilityCurveSignature(inputs = {}) {
+  const metrics = inputs && inputs.reliabilityMetrics;
+  const failureCost = metrics && metrics.expectedReliabilityFailureCostMonthly !== null
+    ? Number(metrics.expectedReliabilityFailureCostMonthly).toFixed(2)
+    : 'na';
+  const investment = metrics && metrics.reliabilityInvestmentMonthly !== null
+    ? Number(metrics.reliabilityInvestmentMonthly).toFixed(2)
+    : 'na';
+  return [
+    inputs.reliabilityEnabled ? 'on' : 'off',
+    inputs.sloTargetAvailabilityPct ?? '',
+    inputs.sliObservedAvailabilityPct ?? '',
+    inputs.incidentCountMonthly ?? '',
+    inputs.mttrHours ?? '',
+    inputs.incidentBlendedHourlyRate ?? '',
+    inputs.criticalRevenuePerMinute ?? '',
+    inputs.arrExposedMonthly ?? '',
+    inputs.slaPenaltyRatePerBreachPointMonthly ?? '',
+    inputs.reliabilityInvestmentMonthly ?? '',
+    failureCost,
+    investment
+  ].join('|');
+}
+
 function buildNormalizationSnapshot(inputs) {
   const nSample = (inputs.nRef && inputs.nRef > 0) ? inputs.nRef : DEFAULT_N_REF;
   const selectedDomains = normalizeTechDomainSelection(inputs.techDomains);
@@ -9222,6 +9958,7 @@ function updateProgressPills() {
 
 function recalculate() {
   cacheSubTexts();
+  const previousReliabilityCurveSignature = getReliabilityCurveSignature(chartReliabilityInputs || {});
 
   const nRef         = getInp('inp-nRef');
   const devPerClient = getInp('inp-devPerClient');
@@ -9347,9 +10084,13 @@ function recalculate() {
     reliabilityMetrics: null
   };
 
-  if (changed) { draw(); }
+  chartReliabilityInputs = lastInputs;
   updateOutputCards(lastInputs);
   updateHealthAndRecommendations(lastInputs);
+  const nextReliabilityCurveSignature = getReliabilityCurveSignature(chartReliabilityInputs || {});
+  if (changed || previousReliabilityCurveSignature !== nextReliabilityCurveSignature) {
+    draw();
+  }
 
   const text = document.getElementById('calc-status-text');
   if (derivations.length && text) {
@@ -9804,6 +10545,9 @@ function updateOutputCards(inputs) {
     setOut('oval-relDowntime', null, '', '', 'Reliability Economics = On');
     setOut('oval-relFailureCost', null, '', '', 'Reliability Economics = On');
     setOut('oval-relAdjustedCost', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relProfitImpact', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relArpuUplift', null, '', '', 'Reliability Economics = On');
+    setOut('oval-relExtraClients', null, '', '', 'Reliability Economics = On');
     setOut('oval-relRiskBand', null, '', '', 'Reliability Economics = On');
     setOut('oval-relDataConfidence', null, '', '', 'Reliability Economics = On');
     if (reliabilityGuardrailEl) {
@@ -9813,6 +10557,9 @@ function updateOutputCards(inputs) {
     setOut('oval-relDowntime', null, '', '', 'Observed SLI Availability %');
     setOut('oval-relFailureCost', null, '', '', 'Reliability inputs for penalties, incident labor, and exposure');
     setOut('oval-relAdjustedCost', null, '', '', 'Baseline cost + reliability inputs');
+    setOut('oval-relProfitImpact', null, '', '', 'Revenue / Client (ARPU) + reliability-adjusted cost');
+    setOut('oval-relArpuUplift', null, '', '', 'Current ARPU + reliability-adjusted cost');
+    setOut('oval-relExtraClients', null, '', '', 'Current ARPU + reliability-adjusted cost');
     setOut('oval-relRiskBand', null, '', '', 'Reliability signal inputs');
     setOut('oval-relDataConfidence', null, '', '', 'Reliability input completeness');
     if (reliabilityGuardrailEl) {
@@ -9839,6 +10586,74 @@ function updateOutputCards(inputs) {
     setOut('oval-relAdjustedCost', `${fmtOut(reliabilityMetrics.reliabilityAdjustedCostMonthly, 0)} / mo`, 'good', '');
     setOut('oval-relRiskBand', reliabilityMetrics.reliabilityRiskBand.toUpperCase(), riskClass, riskClass === 'good' ? '' : riskClass);
     setOut('oval-relDataConfidence', reliabilityMetrics.reliabilityDataConfidence.toUpperCase(), confidenceClass, confidenceClass === 'good' ? '' : confidenceClass);
+
+    const reliabilityLoadMonthly =
+      Math.max(0, Number(reliabilityMetrics.reliabilityInvestmentMonthly) || 0) +
+      Math.max(0, Number(reliabilityMetrics.expectedReliabilityFailureCostMonthly) || 0);
+    const reliabilityAdjustedProfitMonthly = hasARPU
+      ? (revenue - reliabilityMetrics.reliabilityAdjustedCostMonthly)
+      : null;
+    const reliabilityRoiPct = hasARPU && reliabilityMetrics.reliabilityAdjustedCostMonthly > 0
+      ? (reliabilityAdjustedProfitMonthly / reliabilityMetrics.reliabilityAdjustedCostMonthly) * 100
+      : null;
+
+    if (!hasARPU || reliabilityAdjustedProfitMonthly === null) {
+      setOut('oval-relProfitImpact', null, '', '', 'Revenue / Client (ARPU)');
+    } else {
+      const relProfitClass = reliabilityAdjustedProfitMonthly >= 0
+        ? 'good'
+        : (reliabilityAdjustedProfitMonthly >= -(reliabilityMetrics.reliabilityAdjustedCostMonthly * 0.1) ? 'warn' : 'bad');
+      const relProfitCard = relProfitClass === 'good' ? '' : relProfitClass;
+      setOut('oval-relProfitImpact', `${fmtOut(reliabilityAdjustedProfitMonthly, 0)} / mo`, relProfitClass, relProfitCard);
+      const relProfitSub = document.querySelector('#out-relProfitImpact .calc-out-sub');
+      if (relProfitSub) {
+        const roiText = reliabilityRoiPct === null ? 'ROI n/a' : `ROI ${reliabilityRoiPct.toFixed(1)}%`;
+        relProfitSub.textContent = `Revenue ${fmtOut(revenue, 0)} − adjusted cost ${fmtOut(reliabilityMetrics.reliabilityAdjustedCostMonthly, 0)} (${roiText}).`;
+      }
+    }
+
+    const requiredArpuWithReliability = (reliabilityMetrics.reliabilityAdjustedCostMonthly / Math.max(1, nSample)) * (1 + m);
+    if (!hasARPU) {
+      setOut('oval-relArpuUplift', null, '', '', 'Current ARPU');
+    } else {
+      const arpuUpliftNeeded = Math.max(0, requiredArpuWithReliability - arpuUsed);
+      const arpuUpliftClass = arpuUpliftNeeded <= 0.01
+        ? 'good'
+        : (arpuUpliftNeeded <= Math.max(0.01, arpuUsed * 0.05) ? 'warn' : 'bad');
+      setOut('oval-relArpuUplift', `${fmtOut(arpuUpliftNeeded, 2)} / client`, arpuUpliftClass, arpuUpliftClass === 'good' ? '' : arpuUpliftClass);
+      const arpuUpliftSub = document.querySelector('#out-relArpuUplift .calc-out-sub');
+      if (arpuUpliftSub) {
+        arpuUpliftSub.textContent = `Target ARPU with ${(m * 100).toFixed(1)}% margin: ${fmtOut(requiredArpuWithReliability, 2)} / client (current ${fmtOut(arpuUsed, 2)} / client).`;
+      }
+    }
+
+    if (!hasARPU || !hasAnyCostInput) {
+      setOut('oval-relExtraClients', null, '', '', 'Current ARPU + core cost inputs');
+    } else {
+      const requiredClientsWithReliability = findRequiredClientsForTargetPriceWithReliability(
+        arpuUsed,
+        searchMax,
+        reliabilityLoadMonthly,
+        MODEL
+      );
+      if (requiredClientsWithReliability === null) {
+        setOut('oval-relExtraClients', `> ${searchMax.toLocaleString()} clients`, 'bad', 'bad');
+        const relClientsSub = document.querySelector('#out-relExtraClients .calc-out-sub');
+        if (relClientsSub) {
+          relClientsSub.textContent = 'Current ARPU appears too low to absorb reliability-adjusted cost in modeled range.';
+        }
+      } else {
+        const extraClientsNeeded = Math.max(0, Math.ceil(requiredClientsWithReliability - nSample));
+        const extraClientsClass = extraClientsNeeded === 0
+          ? 'good'
+          : (extraClientsNeeded <= Math.max(25, Math.ceil(nSample * 0.1)) ? 'warn' : 'bad');
+        setOut('oval-relExtraClients', `${extraClientsNeeded.toLocaleString()} clients`, extraClientsClass, extraClientsClass === 'good' ? '' : extraClientsClass);
+        const relClientsSub = document.querySelector('#out-relExtraClients .calc-out-sub');
+        if (relClientsSub) {
+          relClientsSub.textContent = `Required clients with reliability load: ${Math.ceil(requiredClientsWithReliability).toLocaleString()} (current ${Math.round(nSample).toLocaleString()}).`;
+        }
+      }
+    }
 
     const adjustedSub = document.querySelector('#out-relAdjustedCost .calc-out-sub');
     if (adjustedSub) {
@@ -10282,6 +11097,7 @@ function resetModel() {
     reliabilityInvestmentMonthly: null,
     reliabilityMetrics: null
   };
+  chartReliabilityInputs = lastInputs;
   const ids = [
     'inp-nRef','inp-devPerClient','inp-infraTotal','inp-ARPU',
     'inp-startupTargetPrice','inp-startupTargetClients',
@@ -10856,9 +11672,17 @@ function initInlineHelpHints() {
   const hints = Array.from(document.querySelectorAll('.calc-inline-help--hint[data-help]'));
   if (!hints.length || window.__inlineHelpHintsInitialized) return;
   const popover = document.createElement('div');
+  popover.id = 'calc-inline-help-popover';
   popover.className = 'calc-inline-help-popover';
   popover.setAttribute('role', 'tooltip');
+  popover.setAttribute('aria-hidden', 'true');
   document.body.appendChild(popover);
+
+  hints.forEach((el) => {
+    el.setAttribute('aria-haspopup', 'true');
+    el.setAttribute('aria-controls', popover.id);
+    el.setAttribute('aria-expanded', 'false');
+  });
 
   let activeHint = null;
 
@@ -10892,7 +11716,11 @@ function initInlineHelpHints() {
 
   const closeAll = () => {
     popover.classList.remove('is-open');
-    hints.forEach((el) => el.classList.remove('is-open'));
+    popover.setAttribute('aria-hidden', 'true');
+    hints.forEach((el) => {
+      el.classList.remove('is-open');
+      el.setAttribute('aria-expanded', 'false');
+    });
     activeHint = null;
   };
 
@@ -10904,11 +11732,16 @@ function initInlineHelpHints() {
       return;
     }
     hints.forEach((node) => {
-      if (node !== el) node.classList.remove('is-open');
+      if (node !== el) {
+        node.classList.remove('is-open');
+        node.setAttribute('aria-expanded', 'false');
+      }
     });
     el.classList.add('is-open');
+    el.setAttribute('aria-expanded', 'true');
     activeHint = el;
     placePopover(el);
+    popover.setAttribute('aria-hidden', 'false');
   };
 
   hints.forEach((el) => {
@@ -10933,6 +11766,11 @@ function initInlineHelpHints() {
   });
 
   document.addEventListener('click', closeAll);
+  document.addEventListener('focusin', (event) => {
+    if (!event.target.closest('.calc-inline-help--hint[data-help]')) {
+      closeAll();
+    }
+  });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeAll();
   });
@@ -11039,6 +11877,7 @@ updatePageMetadataFromGitHub();
 setTechDomainSelection(DEFAULT_TECH_DOMAINS, false);
 initRecommendationCategoryFilters();
 setUiIntent(getStoredUiIntent(), { recalcAfter: false, syncMode: true, persist: false, syncRecommendations: true });
+initRelease4ReliabilityDiscovery();
 initCfoDashboardExport();
 initQbvFocusMode();
 initMcpModal();

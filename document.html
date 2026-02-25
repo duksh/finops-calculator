@@ -490,7 +490,7 @@
   <section class="hero" aria-labelledby="doc-hero-title">
     <p class="kicker">User guide and technical reference</p>
     <h1 id="doc-hero-title">Documentation for FiceCal + MCP</h1>
-    <p>This document explains each FiceCal section, how the model derives outputs (including AI token economics and SLA/SLO/SLI reliability economics), and how to operationalize the same logic via MCP for assistant-driven workflows and automations.</p>
+    <p>This document explains each FiceCal section, how the model derives outputs (including AI token economics and Release 4 SLA/SLO/SLI reliability economics), and how to operationalize the same logic via MCP for assistant-driven workflows and automations. Current UI inventory: 6 capability lanes, 4 scenario demos, and reliability overlays/outputs for resilience decisioning across pricing, investment, and growth decisions.</p>
 
     <div class="hero-grid">
       <article class="hero-card">
@@ -499,7 +499,7 @@
       </article>
       <article class="hero-card">
         <h2>What is covered</h2>
-        <p>Calculator sections, formulas, guided workflows, AI token economics, reliability economics, health logic, share-state links, and MCP tools.</p>
+        <p>Calculator sections, formulas, guided workflows, 4 scenario demos, AI token economics, Release 4 reliability economics (10 inputs, 8 output cards, 2 chart overlays), health logic, share-state links, and MCP tools.</p>
       </article>
       <article class="hero-card">
         <h2>How to use this page</h2>
@@ -537,10 +537,11 @@
           <li>Then use Group B controls for model tuning and Quantify Business Value inputs: CUD, target margin, budget, forecast assumptions, savings realization, and cost avoidance.</li>
           <li>Optionally add multi-technology costs (SaaS, licensing, private cloud, data center, labor) and scope domains for normalization.</li>
           <li>Review Group C auto-calculated outputs and Group E health/recommendation cards, then use the chart section to inspect cost/revenue/profit behavior across scale.</li>
-          <li>Use Demo Healthy/Unhealthy in quick actions to validate expected KPI behavior before entering live portfolio assumptions.</li>
+          <li>Use all 4 scenario demos (Healthy, Unhealthy, Reliability Healthy, Reliability Unhealthy) to validate expected KPI behavior before entering live portfolio assumptions.</li>
+          <li>For resilience planning, enable Reliability Economics and compare reliability-adjusted profit, ARPU uplift needed, and extra clients needed at current ARPU.</li>
         </ol>
         <div class="callout">
-          Tip: Keep first-pass analysis simple: role -> two core inputs -> top outcomes. Expand "Guided path" and "More actions (advanced)" only after the initial readout is clear.
+          Tip: Keep first-pass analysis simple: role -> two core inputs -> top outcomes. Expand "Guided path" and "More actions (advanced)" only after the initial readout is clear. Then use reliability outputs to decide whether to invest in resilience, raise pricing, or increase client volume.
         </div>
       </section>
 
@@ -573,7 +574,7 @@
             <tr>
               <td>Group B - Reliability Economics (SLA/SLO/SLI)</td>
               <td>Enable reliability mode, provide target/observed availability, incident profile, penalty assumptions, and reliability investment.</td>
-              <td>Computes expected downtime, reliability failure-cost lanes, risk band, data confidence, and reliability-adjusted total cost overlays.</td>
+              <td>Computes expected downtime, reliability failure-cost lanes, reliability-adjusted cost, reliability-adjusted profit/loss, ARPU uplift needed, extra clients needed, risk band, and data confidence.</td>
             </tr>
             <tr>
               <td>Group B - Multi-technology Overlay</td>
@@ -583,17 +584,17 @@
             <tr>
               <td>Group C - Auto Outputs</td>
               <td>No direct input; values are derived from Groups A/B.</td>
-              <td>Break-even clients, min price, contribution margin, CCER, CUD savings, startup targets, budget variance, forecast margin/confidence bands, value realization ratio/gap, normalization confidence outputs, AI token economics outputs, and reliability economics outputs.</td>
+              <td>Break-even clients, min price, contribution margin, CCER, CUD savings, startup targets, budget variance, forecast margin/confidence bands, value realization ratio/gap, normalization confidence outputs, AI token economics outputs, and 8 reliability economics outputs.</td>
             </tr>
             <tr>
               <td>Group D - Provider Curves</td>
-              <td>Select cloud provider scenarios and visible lines.</td>
-              <td>Compares scaling behavior across cost and revenue lines.</td>
+              <td>Select cloud provider scenarios and visible lines (including reliability overlays when reliability data is active).</td>
+              <td>Compares scaling behavior across 9 curves: dev, infra raw, infra CUD, total cost, total + reliability, revenue, profit, profit + reliability, and revenue target.</td>
             </tr>
             <tr>
               <td>Group E - Health + Recommendations</td>
               <td>Derived from current assumptions.</td>
-              <td>Zone score and prioritized FinOps actions (with category filters and provider context) based on current posture.</td>
+              <td>Zone score plus prioritized FinOps actions (with category filters and provider context), including reliability-aware remediation guidance when applicable.</td>
             </tr>
           </tbody>
         </table>
@@ -601,7 +602,7 @@
 
       <section class="doc-section" id="calculation-logic" aria-labelledby="calculation-logic-title">
         <h2 id="calculation-logic-title">How calculations work</h2>
-        <p>The calculator uses deterministic formulas and scan-based thresholds to derive business viability and reliability-adjusted economics from your inputs.</p>
+        <p>The calculator uses deterministic formulas and scan-based thresholds to turn your inputs into decision-ready outputs for viability, pricing, growth planning, and reliability trade-off analysis.</p>
 
         <div class="split">
           <article class="mini-card">
@@ -616,6 +617,9 @@
               <li><code>BudgetVariance = Budget - ModeledCost</code> (headroom if positive)</li>
               <li><code>ExpectedReliabilityFailureCost = SLA Penalty + Incident Labor + Revenue-at-Risk + Churn Risk</code></li>
               <li><code>ReliabilityAdjustedCost = ExistingModeledCost + ReliabilityInvestment + ExpectedReliabilityFailureCost</code></li>
+              <li><code>ReliabilityAdjustedProfit = Revenue - ReliabilityAdjustedCost</code></li>
+              <li><code>RequiredARPU_with_rel = (ReliabilityAdjustedCost / n) * (1 + marginTarget)</code></li>
+              <li><code>ExtraClients_with_rel = first n where CurrentARPU * n &gt;= (BaseCost(n) + ReliabilityLoad) * (1 + marginTarget)</code></li>
             </ul>
           </article>
           <article class="mini-card">
@@ -630,6 +634,9 @@
               <li>Total realized value combines realized savings and cost avoidance.</li>
               <li>Realization ratio and residual gap compare delivered value against identified savings target.</li>
               <li>Reliability outputs classify risk posture (<code>none|low|medium|high</code>) and report data-confidence quality.</li>
+              <li>Reliability chart overlays activate only when reliability data is sufficient, preventing false overlays.</li>
+              <li>Reliability Healthy vs Reliability Unhealthy demos make downside and investment trade-offs comparable in seconds.</li>
+              <li>R4 profitability/pricing/client-impact outputs help teams choose between resilience investment, ARPU uplift, and scale targets with a consistent formula base.</li>
             </ul>
           </article>
         </div>
@@ -699,6 +706,7 @@
           <li>Set a conservative CUD percentage first, then refine after observing sensitivity.</li>
           <li>Set monthly budget and check Budget Variance to identify immediate overrun/headroom posture.</li>
           <li>Add forecast growth, best-case efficiency, and worst-case drift to activate the forecast margin/confidence band outputs.</li>
+          <li>Turn on Reliability Economics when incident and SLA posture matters; review reliability-adjusted profit, ARPU uplift, and extra-clients implications before approving scale plans.</li>
           <li>Add identified savings, realized savings, and cost avoidance to track realization ratio and residual value gap.</li>
           <li>Use output tooltips to validate assumptions behind each metric, then cross-check with chart curves for where margins compress at higher client counts.</li>
           <li>Use health recommendations with category filters to prioritize short-term vs strategic actions.</li>
@@ -706,11 +714,11 @@
 
         <h3>Scenario comparison approach</h3>
         <ul>
-          <li>Scenario A: current assumptions.</li>
-          <li>Scenario B: improved commitment discount and cost optimization execution.</li>
-          <li>Scenario C: revised target margin and market price.</li>
-          <li>Scenario D: growth stress case with higher cost drift.</li>
-          <li>Compare break-even, CCER, contribution margin, budget variance, forecast spread, and realization ratio across scenarios.</li>
+          <li>Scenario A (Healthy): baseline viability and balanced efficiency posture.</li>
+          <li>Scenario B (Unhealthy): downside stress posture with weak margin/efficiency signals.</li>
+          <li>Scenario C (Reliability Healthy): resilience investment and low breach-risk reliability state.</li>
+          <li>Scenario D (Reliability Unhealthy): elevated outage/breach pressure and downside-heavy reliability state.</li>
+          <li>Compare break-even, CCER, contribution margin, reliability-adjusted profit, ARPU uplift needed, and extra-clients-needed across scenarios to align finance and operations decisions.</li>
         </ul>
       </section>
 
@@ -728,12 +736,13 @@
 
       <section class="doc-section" id="share-state" aria-labelledby="share-state-title">
         <h2 id="share-state-title">Share-state links</h2>
-        <p>The calculator can generate a URL that captures the current model state so colleagues can open the same assumptions without re-entering inputs.</p>
+        <p>The calculator can generate a URL that captures the current model state so colleagues can open the same assumptions without re-entering inputs, preserving analysis context for review meetings and handoffs.</p>
         <ul>
           <li>Includes all active numeric inputs, selected tech domains, selected providers, and curve visibility toggles.</li>
           <li>This now includes Quantify Business Value controls (budget, forecast assumptions, savings realization, cost avoidance).</li>
           <li>Also includes AI token economics settings (pricing mode, rates, volumes, retry/premium mix, overhead, allocation policy).</li>
           <li>Also includes reliability economics settings (SLO/SLI assumptions, incident economics, and reliability investment).</li>
+          <li>Includes all curve toggles, including reliability overlays (<code>total-rel</code>, <code>profit-rel</code>) when enabled.</li>
           <li>Also includes UI context: selected role (<code>ui</code>) and interface mode (<code>um</code>) so shared links reopen in the same decision lens.</li>
           <li>The URL contains an encoded <code>?state=</code> token.</li>
           <li>On load, the app decodes and validates this state, then recalculates outputs, chart, health, and recommendations.</li>
