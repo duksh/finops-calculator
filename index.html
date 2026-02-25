@@ -3768,6 +3768,36 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   line-height: 1.45;
   color: #2f3d57;
 }
+.calc-out-solve-refs {
+  margin-top: 12px;
+  border-top: 1px dashed rgba(0, 90, 143, 0.25);
+  padding-top: 10px;
+}
+.calc-out-solve-refs-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #005a8f;
+}
+.calc-out-solve-ref-links {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.calc-out-solve-ref-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #045e93;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(4, 94, 147, 0.35);
+}
+.calc-out-solve-ref-link:hover {
+  border-bottom-color: rgba(4, 94, 147, 0.8);
+}
 @media (max-width: 760px) {
   .calc-out-solve-dialog {
     top: auto;
@@ -4121,6 +4151,24 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   font-size: 11px;
   color: #2a2f44;
   line-height: 1.45;
+}
+.rec-links {
+  margin-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rec-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #045e93;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(4, 94, 147, 0.35);
+}
+.rec-link:hover {
+  border-bottom-color: rgba(4, 94, 147, 0.8);
 }
 .rec-empty {
   grid-column: 1 / -1;
@@ -6302,6 +6350,37 @@ let paths = {}, hoverDots = {}, currentPts = [], currentScales = {};
 const FINOPS_2026_REPORT_URL = 'https://data.finops.org';
 const TDABC_REFERENCE_URL = 'https://hbr.org/2004/11/time-driven-activity-based-costing';
 const COMPOSITE_INDEX_REFERENCE_URL = 'https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf';
+const OFFICIAL_REFERENCE_URLS = {
+  finopsFramework: 'https://www.finops.org/framework/',
+  finopsReport: FINOPS_2026_REPORT_URL,
+  nistCloud: 'https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf',
+  forecastingPractice: 'https://otexts.com/fpp3/',
+  forecastingBenchmark: 'https://doi.org/10.1016/j.ijforecast.2019.04.014',
+  uncertaintyGuide: 'https://www.bipm.org/documents/20126/2071204/JCGM_100_2008_E.pdf',
+  sreBook: 'https://sre.google/sre-book/table-of-contents/',
+  sreWorkbook: 'https://sre.google/workbook/table-of-contents/',
+  googleCud: 'https://cloud.google.com/compute/docs/instances/signing-up-committed-use-discounts',
+  awsSavingsPlans: 'https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html',
+  awsCostOptimization: 'https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html',
+  awsRightsizing: 'https://docs.aws.amazon.com/cost-management/latest/userguide/ce-rightsizing.html',
+  awsAnomalyDetection: 'https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html',
+  azureReservations: 'https://learn.microsoft.com/en-us/azure/cost-management-billing/reservations/save-compute-costs-reservations',
+  azureCostOptimization: 'https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/',
+  azureAdvisor: 'https://learn.microsoft.com/en-us/azure/advisor/advisor-cost-recommendations',
+  azureBudgets: 'https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets',
+  gcpBudgets: 'https://cloud.google.com/billing/docs/how-to/budgets',
+  gcpRecommender: 'https://cloud.google.com/recommender/docs/recommenders',
+  gcpBigQueryCosts: 'https://cloud.google.com/bigquery/docs/best-practices-costs',
+  gcpSud: 'https://cloud.google.com/compute/docs/sustained-use-discounts',
+  ociBilling: 'https://docs.oracle.com/en-us/iaas/Content/Billing/Concepts/billingoverview.htm',
+  ociAlwaysFree: 'https://www.oracle.com/cloud/free/',
+  ibmBilling: 'https://cloud.ibm.com/docs/account?topic=account-accounts',
+  ibmSustainability: 'https://www.ibm.com/products/environmental-intelligence-suite',
+  alibabaBilling: 'https://www.alibabacloud.com/help/en/user-center/latest/billing-overview',
+  huaweiBilling: 'https://support.huaweicloud.com/intl/en-us/billing/index.html',
+  openaiPricing: 'https://openai.com/api/pricing/',
+  openaiRateLimits: 'https://platform.openai.com/docs/guides/rate-limits'
+};
 const SHARE_STATE_VERSION = 1;
 const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
 const UI_INTENT_OPTIONS = ['viability', 'operations', 'architecture', 'executive'];
@@ -6942,6 +7021,149 @@ const OUTPUT_ACTION_GUIDES = {
     ],
     monitor: ['Normalization Confidence', 'Coverage Across Domains', 'Budget Variance'],
     inputs: ['Domain completeness', 'Scope balance across cloud and non-cloud costs']
+  },
+  'out-aiTokenCost': {
+    objective: 'Keep AI token spend predictable and aligned to workload value.',
+    recommended: [
+      'Review model pricing tables and enforce token budgets by workflow.',
+      'Monitor token-volume growth against realized revenue contribution.',
+      'Set alert thresholds for sudden token-cost spikes.'
+    ],
+    potential: ['Adopt routing policies for high-cost prompts.', 'Shift repetitive prompts to lower-cost templates.'],
+    monitor: ['AI Token Cost', 'AI Total Allocated Cost', 'AI Cost / Client'],
+    inputs: ['AI token rates', 'AI token volumes', 'Retry and premium mix assumptions']
+  },
+  'out-aiAllocatedCost': {
+    objective: 'Improve AI cost attribution so chargeback/showback stays auditable.',
+    recommended: [
+      'Standardize allocation policy and apply it consistently across teams.',
+      'Validate shared overhead assumptions against actual platform invoices.',
+      'Track allocation confidence as a control KPI.'
+    ],
+    potential: ['Move toward policy-backed allocation governance.', 'Review allocation drift each month-close cycle.'],
+    monitor: ['AI Total Allocated Cost', 'AI Cost / Client', 'Normalization Confidence'],
+    inputs: ['Shared AI overhead', 'Allocation policy', 'Client baseline n']
+  },
+  'out-aiCostPerClient': {
+    objective: 'Keep AI unit cost sustainable relative to ARPU.',
+    recommended: [
+      'Compare AI cost/client to ARPU and enforce margin-safe thresholds.',
+      'Adjust pricing or usage entitlements for AI-heavy customer segments.',
+      'Reduce expensive prompt patterns before scaling AI adoption.'
+    ],
+    potential: ['Introduce AI tiering by usage intensity.', 'Use fair-use envelopes tied to package level.'],
+    monitor: ['AI Cost / Client', 'Contribution Margin', 'ARPU Uplift Needed'],
+    inputs: ['ARPU or startup-derived ARPU', 'AI allocated cost', 'Client count n']
+  },
+  'out-aiRetryInflation': {
+    objective: 'Reduce avoidable retry-driven AI spend.',
+    recommended: [
+      'Set retry budgets and maximum retries per workflow.',
+      'Instrument failure reasons and eliminate prompt/timeout defects.',
+      'Track retry inflation trend as an engineering quality signal.'
+    ],
+    potential: ['Introduce request validation before model call.', 'Use fallback flows for known failure classes.'],
+    monitor: ['AI Retry Inflation', 'AI Token Cost', 'AI Cost / Client'],
+    inputs: ['Retry rate %', 'Token usage telemetry', 'Workflow error tracking']
+  },
+  'out-aiPremiumMix': {
+    objective: 'Keep premium-model usage aligned to high-value use cases.',
+    recommended: [
+      'Route low-complexity requests to lower-cost models by policy.',
+      'Reserve premium models for high-risk or high-value decisions.',
+      'Review premium-mix drift in monthly FinOps governance reviews.'
+    ],
+    potential: ['Implement confidence-based routing logic.', 'A/B test quality vs cost for model tiers.'],
+    monitor: ['AI Premium Mix', 'AI Token Cost', 'AI Cost / Client'],
+    inputs: ['Premium mix %', 'Routing policy', 'Model cost cards']
+  },
+  'out-relDowntime': {
+    objective: 'Reduce expected downtime to protect revenue and trust.',
+    recommended: [
+      'Improve incident response speed and reliability engineering backlog discipline.',
+      'Review SLI measurement quality and SLO target realism.',
+      'Prioritize reliability controls for highest business-impact services.'
+    ],
+    potential: ['Use error-budget policy for release pacing.', 'Harden observability and alert quality.'],
+    monitor: ['Expected Downtime', 'Reliability Risk Band', 'Expected Reliability Failure Cost'],
+    inputs: ['Observed SLI', 'Incident count', 'MTTR']
+  },
+  'out-relFailureCost': {
+    objective: 'Shrink expected monthly downside from reliability failures.',
+    recommended: [
+      'Quantify and reduce top contributors (penalties, labor, revenue-at-risk, churn-risk).',
+      'Increase preventive controls where expected downside exceeds investment cost.',
+      'Re-baseline breach assumptions with current service behavior.'
+    ],
+    potential: ['Separate customer-impact severity tiers.', 'Track failure-cost trend by service line.'],
+    monitor: ['Expected Reliability Failure Cost', 'Reliability-Adjusted Cost', 'Reliability Risk Band'],
+    inputs: ['SLO/SLI gap', 'Penalty assumptions', 'Revenue-at-risk and ARR exposure']
+  },
+  'out-relAdjustedCost': {
+    objective: 'Ensure resilience spend and downside exposure are visible in one cost frame.',
+    recommended: [
+      'Review adjusted cost against budget and margin guardrails before approval cycles.',
+      'Balance preventive investment against expected failure burden.',
+      'Track adjusted cost trend to validate resilience ROI.'
+    ],
+    potential: ['Run scenario comparisons with different investment levels.', 'Set governance threshold for acceptable adjusted-cost ratio.'],
+    monitor: ['Reliability-Adjusted Cost', 'Budget Variance', 'Reliability-Adjusted Profit / Loss'],
+    inputs: ['Reliability investment', 'Expected failure cost components', 'Baseline modeled cost']
+  },
+  'out-relProfitImpact': {
+    objective: 'Maintain positive profitability after resilience and downside costs are included.',
+    recommended: [
+      'If adjusted profit is negative, evaluate pricing uplift and efficiency actions immediately.',
+      'Prioritize reliability fixes with highest downside reduction per euro invested.',
+      'Align growth plans with risk-adjusted margin constraints.'
+    ],
+    potential: ['Set risk-adjusted profit targets per quarter.', 'Add reliability ROI checkpoints to operating reviews.'],
+    monitor: ['Reliability-Adjusted Profit / Loss', 'ARPU Uplift Needed', 'Extra Clients Needed @ Current ARPU'],
+    inputs: ['ARPU', 'Reliability-adjusted cost', 'Client baseline n']
+  },
+  'out-relArpuUplift': {
+    objective: 'Close pricing gap required to sustain target margin under reliability-adjusted costs.',
+    recommended: [
+      'Use packaging changes or value-based pricing to recover reliability-adjusted margin.',
+      'Pair pricing changes with reliability improvements to support customer acceptance.',
+      'Re-check target margin if uplift requirement exceeds market tolerance.'
+    ],
+    potential: ['Introduce resilience-linked service tiers.', 'Model phased pricing rollout for retention safety.'],
+    monitor: ['ARPU Uplift Needed', 'Required Price @ Target Clients', 'Contribution Margin'],
+    inputs: ['Current ARPU', 'Reliability-adjusted cost', 'Margin target']
+  },
+  'out-relExtraClients': {
+    objective: 'Understand growth burden if pricing stays fixed while reliability-adjusted costs rise.',
+    recommended: [
+      'If extra-client gap is large, combine growth plan with pricing and cost actions.',
+      'Use funnel conversion and retention assumptions to test achievability.',
+      'Avoid growth-only strategy when unit economics remain structurally weak.'
+    ],
+    potential: ['Run acquisition-capacity stress tests.', 'Sequence growth initiatives by payback speed.'],
+    monitor: ['Extra Clients Needed @ Current ARPU', 'Break-Even Clients', 'Target Monthly Revenue'],
+    inputs: ['Current ARPU', 'Client count n', 'Reliability-adjusted cost envelope']
+  },
+  'out-relRiskBand': {
+    objective: 'Move risk classification toward lower-risk operating posture.',
+    recommended: [
+      'Treat HIGH risk as immediate remediation queue with executive visibility.',
+      'Reduce breach-gap and expected failure-cost share through targeted controls.',
+      'Track risk-band movement after each remediation cycle.'
+    ],
+    potential: ['Set policy thresholds by service criticality.', 'Link risk-band transitions to release-governance gates.'],
+    monitor: ['Reliability Risk Band', 'Expected Downtime', 'Expected Reliability Failure Cost'],
+    inputs: ['SLO/SLI values', 'Incident profile', 'Risk exposure fields']
+  },
+  'out-relDataConfidence': {
+    objective: 'Increase reliability-data quality before making major resilience commitments.',
+    recommended: [
+      'Populate missing reliability inputs to improve confidence tier.',
+      'Validate incident and exposure data quality from source systems.',
+      'Document assumption quality and retire placeholders quickly.'
+    ],
+    potential: ['Create reliability data dictionary with owners.', 'Automate monthly data-quality checks.'],
+    monitor: ['Reliability Data Confidence', 'Reliability Risk Band', 'Reliability-Adjusted Cost'],
+    inputs: ['Reliability input completeness', 'Exposure and penalty assumptions', 'Incident telemetry quality']
   }
 };
 
@@ -7212,6 +7434,13 @@ function renderOutputSolutionPanel(cardId) {
   const valueText = (card.querySelector('.calc-out-val') || {}).textContent || '—';
   const needsDataActions = (guide.inputs || []).map(item => `Provide ${item} to unlock reliable recommendations.`);
   const recommended = signal.key === 'needs' && needsDataActions.length ? needsDataActions : (guide.recommended || []);
+  const refLinks = normalizeOfficialReferences([
+    ...(OUTPUT_CARD_OFFICIAL_REFERENCE_MAP[cardId] || []),
+    ...(config.refs || [])
+  ]);
+  const refsHtml = refLinks.length
+    ? `<div class="calc-out-solve-refs"><div class="calc-out-solve-refs-title">Official references</div><div class="calc-out-solve-ref-links">${refLinks.map(ref => `<a class="calc-out-solve-ref-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('')}</div></div>`
+    : '';
   const audience = OUTPUT_AUDIENCE_MODES[getOutputAudienceMode(outputSolveAudienceMode)];
   const labels = audience.sectionLabels;
 
@@ -7241,6 +7470,7 @@ function renderOutputSolutionPanel(cardId) {
         ${buildActionList(guide.inputs || [])}
       </section>
     </div>
+    ${refsHtml}
   `;
   applyGlossaryAutoLinks(outputSolveBodyEl);
 }
@@ -9302,6 +9532,236 @@ const RECOMMENDATIONS = [
   { icon:'🌐', title:'Control inter-region / inter-cloud egress', desc:'Network egress charges often become hidden margin erosion drivers in multi-cloud topologies.', action:'Action: Build monthly egress map by service path; redesign data flows to reduce charge-heavy hops.', providers:['multi'], zones:['green','yellow','red'], priority:'medium' }
 ];
 
+const OUTPUT_CARD_CATEGORY_MAP = {
+  'out-beN': 'pricing',
+  'out-minPrice': 'pricing',
+  'out-vcpu': 'infrastructure',
+  'out-margin': 'pricing',
+  'out-ccer': 'infrastructure',
+  'out-cudSave': 'infrastructure',
+  'out-reqClients': 'marketing',
+  'out-reqPrice': 'pricing',
+  'out-targetRevenue': 'marketing',
+  'out-budgetVariance': 'governance',
+  'out-forecastBand': 'governance',
+  'out-forecastSpread': 'governance',
+  'out-realizedValue': 'governance',
+  'out-realizationRatio': 'governance',
+  'out-realizationGap': 'governance',
+  'out-techCoverage': 'governance',
+  'out-techNorm': 'infrastructure',
+  'out-focusMaturity': 'governance',
+  'out-aiTokenCost': 'infrastructure',
+  'out-aiAllocatedCost': 'governance',
+  'out-aiCostPerClient': 'pricing',
+  'out-aiRetryInflation': 'infrastructure',
+  'out-aiPremiumMix': 'pricing',
+  'out-relDowntime': 'infrastructure',
+  'out-relFailureCost': 'governance',
+  'out-relAdjustedCost': 'governance',
+  'out-relProfitImpact': 'pricing',
+  'out-relArpuUplift': 'pricing',
+  'out-relExtraClients': 'marketing',
+  'out-relRiskBand': 'governance',
+  'out-relDataConfidence': 'governance'
+};
+
+const PROVIDER_OFFICIAL_REFERENCE_MAP = {
+  aws: [
+    { label: 'AWS Cost Optimization pillar', url: OFFICIAL_REFERENCE_URLS.awsCostOptimization },
+    { label: 'AWS Savings Plans', url: OFFICIAL_REFERENCE_URLS.awsSavingsPlans }
+  ],
+  azure: [
+    { label: 'Azure Cost Optimization', url: OFFICIAL_REFERENCE_URLS.azureCostOptimization },
+    { label: 'Azure Reservations guidance', url: OFFICIAL_REFERENCE_URLS.azureReservations }
+  ],
+  gcp: [
+    { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud },
+    { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
+  ],
+  oci: [
+    { label: 'OCI billing overview', url: OFFICIAL_REFERENCE_URLS.ociBilling },
+    { label: 'OCI Always Free', url: OFFICIAL_REFERENCE_URLS.ociAlwaysFree }
+  ],
+  ibm: [
+    { label: 'IBM Cloud billing docs', url: OFFICIAL_REFERENCE_URLS.ibmBilling },
+    { label: 'IBM sustainability suite', url: OFFICIAL_REFERENCE_URLS.ibmSustainability }
+  ],
+  alibaba: [
+    { label: 'Alibaba Cloud billing overview', url: OFFICIAL_REFERENCE_URLS.alibabaBilling }
+  ],
+  huawei: [
+    { label: 'Huawei Cloud billing docs', url: OFFICIAL_REFERENCE_URLS.huaweiBilling }
+  ],
+  multi: [
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+  ]
+};
+
+const CATEGORY_OFFICIAL_REFERENCE_MAP = {
+  infrastructure: [
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+  ],
+  pricing: [
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'NIST cloud definition', url: OFFICIAL_REFERENCE_URLS.nistCloud }
+  ],
+  marketing: [
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice }
+  ],
+  crm: [
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
+    { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
+  ],
+  governance: [
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'Uncertainty guide (JCGM 100)', url: OFFICIAL_REFERENCE_URLS.uncertaintyGuide }
+  ]
+};
+
+const OUTPUT_CARD_OFFICIAL_REFERENCE_MAP = {
+  'out-cudSave': [
+    { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud },
+    { label: 'AWS Savings Plans', url: OFFICIAL_REFERENCE_URLS.awsSavingsPlans },
+    { label: 'Azure reservations', url: OFFICIAL_REFERENCE_URLS.azureReservations }
+  ],
+  'out-forecastBand': [
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
+    { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
+  ],
+  'out-forecastSpread': [
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
+    { label: 'Uncertainty guide (JCGM 100)', url: OFFICIAL_REFERENCE_URLS.uncertaintyGuide }
+  ],
+  'out-techCoverage': [
+    { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-techNorm': [
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL },
+    { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL }
+  ],
+  'out-focusMaturity': [
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
+    { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL }
+  ],
+  'out-aiTokenCost': [
+    { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-aiAllocatedCost': [
+    { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-aiCostPerClient': [
+    { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-aiRetryInflation': [
+    { label: 'OpenAI rate-limits guide', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-aiPremiumMix': [
+    { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-relDowntime': [
+    { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook }
+  ],
+  'out-relFailureCost': [
+    { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook }
+  ],
+  'out-relAdjustedCost': [
+    { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+  ],
+  'out-relProfitImpact': [
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-relArpuUplift': [
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+  ],
+  'out-relExtraClients': [
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice }
+  ],
+  'out-relRiskBand': [
+    { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook }
+  ],
+  'out-relDataConfidence': [
+    { label: 'Uncertainty guide (JCGM 100)', url: OFFICIAL_REFERENCE_URLS.uncertaintyGuide },
+    { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook }
+  ]
+};
+
+function normalizeOfficialReferences(refs = []) {
+  const seen = new Set();
+  return (Array.isArray(refs) ? refs : [])
+    .filter(ref => ref && typeof ref.url === 'string' && /^https:\/\//i.test(ref.url))
+    .map(ref => ({ label: String(ref.label || 'Official reference').trim(), url: ref.url.trim() }))
+    .filter(ref => {
+      if (!ref.url || seen.has(ref.url)) return false;
+      seen.add(ref.url);
+      return true;
+    });
+}
+
+function getCategoryOfficialReferences(categoryKey) {
+  const normalizedCategory = normalizeRecommendationCategory(categoryKey || 'infrastructure');
+  return normalizeOfficialReferences(CATEGORY_OFFICIAL_REFERENCE_MAP[normalizedCategory] || CATEGORY_OFFICIAL_REFERENCE_MAP.infrastructure);
+}
+
+function getProviderOfficialReferences(providers = []) {
+  const refs = [];
+  (Array.isArray(providers) ? providers : []).forEach(provider => {
+    if (!PROVIDER_OFFICIAL_REFERENCE_MAP[provider]) return;
+    refs.push(...PROVIDER_OFFICIAL_REFERENCE_MAP[provider]);
+  });
+  return normalizeOfficialReferences(refs);
+}
+
+function getOutputCardOfficialReferences(cardId, fallbackRefs = []) {
+  const refs = OUTPUT_CARD_OFFICIAL_REFERENCE_MAP[cardId] || fallbackRefs;
+  if (refs && refs.length) return normalizeOfficialReferences(refs);
+  return normalizeOfficialReferences([
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+  ]);
+}
+
+function resolveRecommendationOfficialReferences(rec) {
+  if (!rec) return [];
+  const explicit = normalizeOfficialReferences(rec.refs || []);
+  if (explicit.length) return explicit;
+
+  if (rec.cardId) {
+    return getOutputCardOfficialReferences(rec.cardId, []);
+  }
+
+  const providerRefs = getProviderOfficialReferences(rec.providers || []);
+  if (providerRefs.length) return providerRefs;
+
+  const categoryRefs = getCategoryOfficialReferences(rec.categoryKey || rec.category || 'infrastructure');
+  return categoryRefs.length ? categoryRefs : normalizeOfficialReferences([
+    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+  ]);
+}
+
+function buildRecommendationReferenceLinks(refs = []) {
+  const normalized = normalizeOfficialReferences(refs);
+  if (!normalized.length) return '';
+  return `<div class="rec-links">${normalized.map(ref => `<a class="rec-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('')}</div>`;
+}
+
 function priorityWeight(priority) {
   if (priority === 'high') return 0;
   if (priority === 'medium') return 1;
@@ -9469,6 +9929,53 @@ function buildAiTokenRecommendations({ aiMetrics, arpuUsed }) {
   return aiRecs;
 }
 
+function buildOutputCardRecommendations({ zoneKey }) {
+  const cards = Array.from(document.querySelectorAll('#calc-kpi-output-grid .calc-out-card')).filter(card => card && card.id && card.offsetParent !== null);
+  if (!cards.length) return [];
+
+  return cards.map(card => {
+    const cardId = card.id;
+    const config = OUTPUT_TOOLTIP_CONTENT[cardId] || { title: cardId };
+    const guide = OUTPUT_ACTION_GUIDES[cardId] || {
+      objective: 'Keep this indicator in a decision-ready range.',
+      recommended: ['Review assumptions for this indicator and apply corrective actions.'],
+      monitor: ['Re-check indicator trend in the next review cycle.'],
+      inputs: ['Relevant calculator inputs for this indicator']
+    };
+    const signal = getOutputCardSignal(card);
+    const valueText = ((card.querySelector('.calc-out-val') || {}).textContent || '—').trim();
+
+    let priority = 'low';
+    if (signal.key === 'bad') priority = 'high';
+    else if (signal.key === 'warn' || signal.key === 'needs') priority = 'medium';
+
+    let actionText = guide.recommended && guide.recommended.length ? guide.recommended[0] : 'Review this indicator with current assumptions.';
+    if (signal.key === 'needs' && guide.inputs && guide.inputs.length) {
+      actionText = `Provide ${guide.inputs[0]} to unlock reliable recommendations and compare scenarios.`;
+    } else if (signal.key === 'good' && guide.monitor && guide.monitor.length) {
+      actionText = `Maintain current performance and monitor ${guide.monitor[0]} in the next review cycle.`;
+    }
+
+    const categoryKey = OUTPUT_CARD_CATEGORY_MAP[cardId] || inferRecommendationCategory({ title: config.title, action: actionText });
+    const refs = getOutputCardOfficialReferences(cardId, config.refs || []);
+    const icon = signal.key === 'bad' ? '🔴' : (signal.key === 'warn' ? '🟡' : (signal.key === 'needs' ? '⚪' : '🟢'));
+
+    return {
+      icon,
+      title: `${config.title} - ${signal.label}`,
+      desc: `${guide.objective} Current value: ${valueText}.`,
+      action: `Action: ${actionText}`,
+      category: categoryKey,
+      categoryKey,
+      providers: [],
+      zones: [zoneKey],
+      priority,
+      cardId,
+      refs
+    };
+  });
+}
+
 function toggleProvider(provider) {
   const btn = document.querySelector(`[data-provider="${provider}"]`);
   if (selectedProviders.has(provider)) {
@@ -9482,13 +9989,31 @@ function toggleProvider(provider) {
 }
 
 function updateHealthAndRecommendations(inputs) {
-  const { nRef, infraTotal, ARPU: arpuInp, effectiveARPU, arpuMode, aiMetrics } = inputs || {};
-  const nSample  = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
+  const {
+    nRef,
+    infraTotal,
+    ARPU: arpuInp,
+    effectiveARPU,
+    arpuMode,
+    budgetMonthly,
+    forecastGrowthPct,
+    forecastBestEfficiencyPct,
+    forecastWorstDriftPct,
+    savingsIdentified,
+    savingsRealized,
+    costAvoidance,
+    aiEnabled,
+    aiMetrics,
+    reliabilityEnabled,
+    reliabilityMetrics
+  } = inputs || {};
+  const nSample = (nRef && nRef > 0) ? nRef : DEFAULT_N_REF;
   const hasInfra = infraTotal !== null && infraTotal !== undefined;
   const arpuUsed = (effectiveARPU !== null && effectiveARPU !== undefined && effectiveARPU > 0)
     ? effectiveARPU
     : ((arpuInp !== null && arpuInp !== undefined && arpuInp > 0) ? arpuInp : null);
-  const hasARPU  = arpuUsed !== null;
+  const hasARPU = arpuUsed !== null;
+  const hasAnyCostInput = hasInfra;
 
   const bannerEl = document.getElementById('health-banner');
   const groupBadgeEl = document.getElementById('health-group-num');
@@ -9511,7 +10036,7 @@ function updateHealthAndRecommendations(inputs) {
     return;
   }
 
-  const { K, a, c, b, g } = MODEL;
+  const { K, a, c, b, g, m } = MODEL;
   const dev      = K * Math.pow(nSample, -a);
   const infraRaw = c * Math.pow(nSample, b);
   const infraCud = g * c * Math.pow(nSample, b * 0.96);
@@ -9526,6 +10051,55 @@ function updateHealthAndRecommendations(inputs) {
   const beN = economics.breakEvenN;
   const minCostN = economics.minUnitCostN;
   const minUnitCostPerClient = economics.minUnitCostPerClient;
+
+  const normalization = buildNormalizationSnapshot(inputs || {});
+  const budgetBasisCost = normalization.totalMonthly > 0 ? normalization.totalMonthly : total;
+  const hasBudget = budgetMonthly !== null && budgetMonthly !== undefined && budgetMonthly >= 0;
+  const budgetVariance = hasBudget ? (budgetMonthly - budgetBasisCost) : null;
+  const budgetVariancePct = hasBudget && budgetMonthly > 0 ? (budgetVariance / budgetMonthly) * 100 : null;
+
+  const growthPct = forecastGrowthPct !== null && forecastGrowthPct !== undefined ? forecastGrowthPct : 0;
+  const bestEfficiencyPct = Math.max(0, Math.min(95, forecastBestEfficiencyPct !== null && forecastBestEfficiencyPct !== undefined ? forecastBestEfficiencyPct : 0));
+  const worstDriftPct = Math.max(0, forecastWorstDriftPct !== null && forecastWorstDriftPct !== undefined ? forecastWorstDriftPct : 0);
+  const hasForecastSignal = [forecastGrowthPct, forecastBestEfficiencyPct, forecastWorstDriftPct].some(v => v !== null && v !== undefined && Number(v) !== 0);
+
+  let forecastState = null;
+  if (hasAnyCostInput && hasARPU && hasForecastSignal) {
+    const forecastN = Math.max(1, Math.round(nSample * (1 + growthPct / 100)));
+    const forecastDev = K * Math.pow(forecastN, -a);
+    const forecastInfra = c * Math.pow(forecastN, b);
+    const forecastTotal = forecastDev + forecastInfra;
+    const forecastRevenue = arpuUsed * forecastN;
+    const baselineMargin = forecastRevenue - forecastTotal;
+    const bestMargin = forecastRevenue - (forecastTotal * (1 - (bestEfficiencyPct / 100)));
+    const worstMargin = forecastRevenue - (forecastTotal * (1 + (worstDriftPct / 100)));
+    const spread = bestMargin - worstMargin;
+    const spreadPct = forecastRevenue > 0 ? (spread / forecastRevenue) * 100 : 0;
+    forecastState = { forecastN, baselineMargin, worstMargin, spreadPct };
+  }
+
+  const identifiedUsed = savingsIdentified !== null && savingsIdentified !== undefined ? savingsIdentified : null;
+  const totalRealizedValue =
+    (savingsRealized !== null && savingsRealized !== undefined ? savingsRealized : 0) +
+    (costAvoidance !== null && costAvoidance !== undefined ? costAvoidance : 0);
+  const hasRealizationSignal = [savingsIdentified, savingsRealized, costAvoidance].some(v => v !== null && v !== undefined);
+  const realizationRatioPct = identifiedUsed !== null && identifiedUsed > 0
+    ? (totalRealizedValue / identifiedUsed) * 100
+    : null;
+  const realizationGap = identifiedUsed !== null && identifiedUsed > 0
+    ? identifiedUsed - totalRealizedValue
+    : null;
+
+  const hasAiSignal = Boolean(aiEnabled && aiMetrics && aiMetrics.enabled && aiMetrics.aiTotalTokenCost !== null);
+  const hasReliabilitySignal = Boolean(
+    reliabilityEnabled &&
+    reliabilityMetrics &&
+    reliabilityMetrics.enabled &&
+    reliabilityMetrics.expectedReliabilityFailureCostMonthly !== null
+  );
+  const reliabilityAdjustedProfitMonthly = hasReliabilitySignal
+    ? (revenue - reliabilityMetrics.reliabilityAdjustedCostMonthly)
+    : null;
 
   let score = 100;
   const failed = [];
@@ -9551,6 +10125,130 @@ function updateHealthAndRecommendations(inputs) {
   if (cudSaveGapPct > 0.15) {
     score -= 5;
     failed.push(`Commitment saving gap is ${(cudSaveGapPct * 100).toFixed(1)}% of infra spend.`);
+  }
+
+  if (hasBudget && budgetMonthly > 0 && budgetVariance !== null && budgetVariance < 0) {
+    if (budgetVariancePct < -10) {
+      score -= 10;
+      failed.push(`Budget variance is ${budgetVariancePct.toFixed(1)}% over budget.`);
+    } else {
+      score -= 5;
+      failed.push(`Budget variance is ${budgetVariancePct.toFixed(1)}% over budget.`);
+    }
+  }
+
+  if (forecastState) {
+    if (forecastState.baselineMargin < 0) {
+      score -= 10;
+      failed.push('Forecast baseline margin is negative under current assumptions.');
+    }
+    if (forecastState.worstMargin < 0) {
+      score -= 5;
+      failed.push('Forecast worst-case margin is negative; downside resilience is weak.');
+    }
+    if (forecastState.spreadPct > 25) {
+      score -= 8;
+      failed.push(`Forecast spread is wide (${forecastState.spreadPct.toFixed(1)}% of forecast revenue).`);
+    } else if (forecastState.spreadPct > 10) {
+      score -= 4;
+      failed.push(`Forecast spread is moderate (${forecastState.spreadPct.toFixed(1)}% of forecast revenue).`);
+    }
+  }
+
+  if (hasRealizationSignal && realizationRatioPct !== null) {
+    if (realizationRatioPct < 70) {
+      score -= 10;
+      failed.push(`Savings realization ratio is low (${realizationRatioPct.toFixed(1)}%).`);
+    } else if (realizationRatioPct < 100) {
+      score -= 4;
+      failed.push(`Savings realization ratio is below target (${realizationRatioPct.toFixed(1)}%).`);
+    }
+    if (realizationGap !== null && identifiedUsed > 0 && realizationGap > identifiedUsed * 0.2) {
+      score -= 4;
+      failed.push('Residual value gap remains materially open against identified target.');
+    }
+  }
+
+  if (normalization.selectedCount > 0) {
+    if (normalization.coveragePct < 50) {
+      score -= 8;
+      failed.push(`Domain coverage is low (${normalization.coveragePct.toFixed(0)}%) for selected scope.`);
+    } else if (normalization.coveragePct < 80) {
+      score -= 4;
+      failed.push(`Domain coverage is partial (${normalization.coveragePct.toFixed(0)}%) for selected scope.`);
+    }
+
+    if (normalization.confidence === 'Low') {
+      score -= 6;
+      failed.push('Normalization confidence is low due to incomplete selected-domain inputs.');
+    } else if (normalization.confidence === 'Medium') {
+      score -= 3;
+      failed.push('Normalization confidence is medium; broaden selected-domain input completeness.');
+    }
+  }
+
+  if (Boolean(aiEnabled)) {
+    if (!hasAiSignal) {
+      score -= 6;
+      failed.push('AI token economics is enabled but key AI cost inputs are incomplete.');
+    } else {
+      if (hasARPU && aiMetrics.aiCostPerClient !== null && aiMetrics.aiCostPerClient > arpuUsed * 0.45) {
+        score -= 8;
+        failed.push('AI cost per client is high relative to ARPU.');
+      } else if (hasARPU && aiMetrics.aiCostPerClient !== null && aiMetrics.aiCostPerClient > arpuUsed * 0.25) {
+        score -= 4;
+        failed.push('AI cost per client is elevated relative to ARPU.');
+      }
+      if (aiMetrics.aiRetryInflationPct > 20) {
+        score -= 5;
+        failed.push(`AI retry inflation is high (${aiMetrics.aiRetryInflationPct.toFixed(1)}%).`);
+      } else if (aiMetrics.aiRetryInflationPct > 10) {
+        score -= 3;
+        failed.push(`AI retry inflation is above target (${aiMetrics.aiRetryInflationPct.toFixed(1)}%).`);
+      }
+      if (aiMetrics.aiPremiumMixPct > 45) {
+        score -= 4;
+        failed.push(`AI premium-model mix is high (${aiMetrics.aiPremiumMixPct.toFixed(1)}%).`);
+      } else if (aiMetrics.aiPremiumMixPct > 25) {
+        score -= 2;
+        failed.push(`AI premium-model mix is elevated (${aiMetrics.aiPremiumMixPct.toFixed(1)}%).`);
+      }
+      if (aiMetrics.allocationConfidence === 'low') {
+        score -= 4;
+        failed.push('AI allocation confidence is low; strengthen telemetry before chargeback decisions.');
+      } else if (aiMetrics.allocationConfidence === 'medium') {
+        score -= 2;
+        failed.push('AI allocation confidence is medium; validate allocation assumptions.');
+      }
+    }
+  }
+
+  if (Boolean(reliabilityEnabled)) {
+    if (!hasReliabilitySignal) {
+      score -= 8;
+      failed.push('Reliability economics is enabled but required reliability inputs remain incomplete.');
+    } else {
+      if (reliabilityMetrics.reliabilityRiskBand === 'high') {
+        score -= 10;
+        failed.push('Reliability risk band is HIGH.');
+      } else if (reliabilityMetrics.reliabilityRiskBand === 'medium') {
+        score -= 5;
+        failed.push('Reliability risk band is MEDIUM.');
+      }
+
+      if (reliabilityMetrics.reliabilityDataConfidence === 'low') {
+        score -= 5;
+        failed.push('Reliability data confidence is low.');
+      } else if (reliabilityMetrics.reliabilityDataConfidence === 'medium') {
+        score -= 2;
+        failed.push('Reliability data confidence is medium.');
+      }
+
+      if (reliabilityAdjustedProfitMonthly !== null && reliabilityAdjustedProfitMonthly < 0) {
+        score -= 8;
+        failed.push('Reliability-adjusted profit is negative at current ARPU and cost posture.');
+      }
+    }
   }
 
   score = Math.max(0, Math.min(100, score));
@@ -9586,6 +10284,7 @@ function updateHealthAndRecommendations(inputs) {
   scoreEl.style.color = zoneColor;
 
   const providers = Array.from(selectedProviders);
+  const outputCardRecommendations = buildOutputCardRecommendations({ zoneKey });
   const strategicRecommendations = buildStrategicRecommendations({
     zoneKey,
     nSample,
@@ -9596,8 +10295,12 @@ function updateHealthAndRecommendations(inputs) {
   });
   const aiRecommendations = buildAiTokenRecommendations({ aiMetrics, arpuUsed });
   const activeIntent = getCurrentUiIntent();
-  const scoped = [...strategicRecommendations, ...aiRecommendations, ...RECOMMENDATIONS]
-    .map(rec => ({ ...rec, categoryKey: inferRecommendationCategory(rec) }))
+  const scoped = [...outputCardRecommendations, ...strategicRecommendations, ...aiRecommendations, ...RECOMMENDATIONS]
+    .map(rec => {
+      const categoryKey = normalizeRecommendationCategory(rec.categoryKey || rec.category || inferRecommendationCategory(rec));
+      const refs = resolveRecommendationOfficialReferences({ ...rec, categoryKey });
+      return { ...rec, categoryKey, refs };
+    })
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
     .sort((a, b) => {
@@ -9629,6 +10332,7 @@ function updateHealthAndRecommendations(inputs) {
     const providerTag = rec.providers.length ? rec.providers.join('/').toUpperCase() : 'UNIVERSAL';
     const priorityTag = rec.priority.toUpperCase();
     const categoryLabel = recommendationCategoryLabel(rec.categoryKey);
+    const linksHtml = buildRecommendationReferenceLinks(rec.refs || []);
     return `
       <article class="rec-card ${rec.priority}">
         <div class="rec-head">
@@ -9640,6 +10344,7 @@ function updateHealthAndRecommendations(inputs) {
         </div>
         <p class="rec-desc">${rec.desc}</p>
         <p class="rec-action">→ ${rec.action}</p>
+        ${linksHtml}
       </article>
     `;
   }).join('');

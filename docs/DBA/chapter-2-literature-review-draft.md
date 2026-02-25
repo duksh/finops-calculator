@@ -92,5 +92,5 @@ The next chapter should therefore focus on research methodology and artifact des
 
 ### Companion files
 
-- Full reference matrix with APA entries and URLs: `docs/reference-source-catalog.md`
+- Full reference matrix with APA entries and URLs: `docs/DBA/reference-source-catalog.md`
 - In-app public references section: `index.html#references-section`
