@@ -3539,6 +3539,12 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   display: none;
   z-index: 20;
 }
+.calc-out-tip.tip-floating {
+  position: fixed;
+  right: auto;
+  top: 0;
+  z-index: 280;
+}
 .calc-out-card.tip-open .calc-out-tip { display: block; }
 .calc-out-tip-title {
   font-family: 'Source Serif 4', serif;
@@ -4180,6 +4186,13 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   box-shadow: 0 8px 28px rgba(0,0,0,0.13);
   padding: 14px 16px 12px;
   pointer-events: none;
+}
+.ftip.tip-floating {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: auto;
+  z-index: 280;
 }
 .ftip.open { display: block; }
 
@@ -6883,6 +6896,117 @@ const OUTPUT_AUDIENCE_MODES = {
 };
 
 let activeOutputTipCard = null;
+let outputTooltipPositionListenersBound = false;
+let formulaTooltipPositionListenersBound = false;
+
+function clearOutputCardTooltipPlacement(panel) {
+  if (!panel) return;
+  panel.classList.remove('tip-floating');
+  panel.style.removeProperty('left');
+  panel.style.removeProperty('top');
+  panel.style.removeProperty('width');
+  panel.style.removeProperty('max-height');
+  panel.style.removeProperty('overflow-y');
+}
+
+function positionOutputCardTooltip(card) {
+  if (!card || !card.classList.contains('tip-open')) return;
+  const panel = card.querySelector('.calc-out-tip');
+  const btn = card.querySelector('.calc-out-tip-btn');
+  if (!panel || !btn) return;
+
+  const viewportPadding = 10;
+  const gap = 8;
+
+  panel.classList.add('tip-floating');
+  panel.style.maxHeight = '';
+  panel.style.overflowY = '';
+
+  const maxWidth = Math.max(220, Math.min(340, window.innerWidth - (viewportPadding * 2)));
+  panel.style.width = `${maxWidth}px`;
+
+  const btnRect = btn.getBoundingClientRect();
+  const panelHeight = panel.offsetHeight;
+
+  let top = btnRect.bottom + gap;
+  if ((top + panelHeight) > (window.innerHeight - viewportPadding)) {
+    top = btnRect.top - panelHeight - gap;
+  }
+
+  const maxHeight = Math.max(180, window.innerHeight - (viewportPadding * 2));
+  if (panelHeight > maxHeight) {
+    panel.style.maxHeight = `${maxHeight}px`;
+    panel.style.overflowY = 'auto';
+    if (top < viewportPadding) top = viewportPadding;
+  }
+
+  let left = btnRect.right - maxWidth;
+  if (left < viewportPadding) left = viewportPadding;
+  const maxLeft = window.innerWidth - maxWidth - viewportPadding;
+  if (left > maxLeft) left = maxLeft;
+  if (top < viewportPadding) top = viewportPadding;
+
+  panel.style.left = `${Math.round(left)}px`;
+  panel.style.top = `${Math.round(top)}px`;
+}
+
+function syncActiveOutputTooltipPlacement() {
+  if (!activeOutputTipCard || !activeOutputTipCard.classList.contains('tip-open')) return;
+  positionOutputCardTooltip(activeOutputTipCard);
+}
+
+function clearFormulaTooltipPlacement(card) {
+  if (!card) return;
+  const tip = card.querySelector('.ftip');
+  if (!tip) return;
+  tip.classList.remove('tip-floating');
+  tip.style.removeProperty('left');
+  tip.style.removeProperty('top');
+  tip.style.removeProperty('width');
+}
+
+function positionFormulaTooltip(card) {
+  if (!card || !card.classList.contains('active')) return;
+  const tip = card.querySelector('.ftip');
+  if (!tip) return;
+
+  const viewportPadding = 10;
+  const gap = 10;
+  const cardRect = card.getBoundingClientRect();
+
+  tip.classList.add('tip-floating');
+  const maxWidth = Math.max(220, Math.min(320, window.innerWidth - (viewportPadding * 2)));
+  tip.style.width = `${maxWidth}px`;
+
+  const tipHeight = tip.offsetHeight;
+  let placeBelow = cardRect.top < (window.innerHeight / 2);
+  let top = placeBelow
+    ? cardRect.bottom + gap
+    : cardRect.top - tipHeight - gap;
+
+  if (!placeBelow && top < viewportPadding) {
+    placeBelow = true;
+    top = cardRect.bottom + gap;
+  }
+  if (placeBelow && (top + tipHeight) > (window.innerHeight - viewportPadding)) {
+    placeBelow = false;
+    top = cardRect.top - tipHeight - gap;
+  }
+  if (top < viewportPadding) top = viewportPadding;
+
+  let left = cardRect.left;
+  const maxLeft = window.innerWidth - maxWidth - viewportPadding;
+  if (left > maxLeft) left = maxLeft;
+  if (left < viewportPadding) left = viewportPadding;
+
+  card.classList.toggle('flip-down', placeBelow);
+  tip.style.left = `${Math.round(left)}px`;
+  tip.style.top = `${Math.round(top)}px`;
+}
+
+function syncActiveFormulaTooltipPlacement() {
+  document.querySelectorAll('.formula-card.active').forEach(positionFormulaTooltip);
+}
 
 function ensureOutputSolutionPanel() {
   if (outputSolveModalEl) return;
@@ -9802,6 +9926,7 @@ function closeOutputCardTooltip(card) {
   card.classList.remove('tip-open');
   const btn = card.querySelector('.calc-out-tip-btn');
   const panel = card.querySelector('.calc-out-tip');
+  clearOutputCardTooltipPlacement(panel);
   if (btn) btn.setAttribute('aria-expanded', 'false');
   if (panel) panel.setAttribute('aria-hidden', 'true');
   if (activeOutputTipCard === card) activeOutputTipCard = null;
@@ -9826,6 +9951,7 @@ function toggleOutputCardTooltip(card) {
   if (btn) btn.setAttribute('aria-expanded', 'true');
   if (panel) panel.setAttribute('aria-hidden', 'false');
   activeOutputTipCard = card;
+  positionOutputCardTooltip(card);
 }
 
 function initOutputCardTooltips() {
@@ -9884,6 +10010,12 @@ function initOutputCardTooltips() {
     if (event.target.closest('.calc-out-card.tip-enabled')) return;
     closeAllOutputCardTooltips();
   });
+
+  if (!outputTooltipPositionListenersBound) {
+    outputTooltipPositionListenersBound = true;
+    window.addEventListener('resize', syncActiveOutputTooltipPlacement, { passive: true });
+    window.addEventListener('scroll', syncActiveOutputTooltipPlacement, { passive: true, capture: true });
+  }
 }
 
 function onInput(fieldId) {
@@ -11434,10 +11566,12 @@ function initQbvFocusMode() {
 // ─── FORMULA TOOLTIP LOGIC ───────────────────────────────────────
 function closeFormulaCardTooltip(card) {
   if (!card) return;
+  card.classList.remove('flip-down');
   card.classList.remove('active');
   card.setAttribute('aria-expanded', 'false');
   const tip = card.querySelector('.ftip');
   if (!tip) return;
+  clearFormulaTooltipPlacement(card);
   tip.classList.remove('open');
   tip.setAttribute('aria-hidden', 'true');
 }
@@ -11455,15 +11589,12 @@ function toggleTip(card) {
   closeAllFormulaCardTooltips();
 
   if (!isOpen) {
-    // Determine if tooltip should flip downward (card in upper half of page)
-    const rect = card.getBoundingClientRect();
-    const midWindow = window.innerHeight / 2;
-    card.classList.toggle('flip-down', rect.top < midWindow);
     card.classList.add('active');
     card.setAttribute('aria-expanded', 'true');
     tip.classList.add('open');
     tip.setAttribute('aria-hidden', 'false');
     tip.style.pointerEvents = 'none'; // keep clicks passing through
+    positionFormulaTooltip(card);
   }
 }
 
@@ -11497,6 +11628,12 @@ function initFormulaCardTooltips() {
     if (event.target.closest('.formula-card')) return;
     closeAllFormulaCardTooltips();
   });
+
+  if (!formulaTooltipPositionListenersBound) {
+    formulaTooltipPositionListenersBound = true;
+    window.addEventListener('resize', syncActiveFormulaTooltipPlacement, { passive: true });
+    window.addEventListener('scroll', syncActiveFormulaTooltipPlacement, { passive: true, capture: true });
+  }
 }
 
 // Close tooltip on Escape key
