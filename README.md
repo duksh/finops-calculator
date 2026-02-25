@@ -193,6 +193,24 @@ FiceCal is static-host friendly (GitHub Pages, Netlify, Vercel, or any static we
 
 ### Public mirror (source repo -> `duksh.github.io`)
 
+Preferred release command (sync + commit + push public mirror):
+
+```bash
+./scripts/release-sync-public.sh
+```
+
+Guard check mode (fails if public mirror is out of sync):
+
+```bash
+./scripts/release-sync-public.sh --check
+```
+
+Configuration:
+
+- Set either `PUB` (in `scripts/sync-public-pages.local.sh`) or `DUKSH_GITHUB_IO_PATH` (in `scripts/check-repo-mapping.local.sh`) to your local `duksh.github.io` checkout path.
+
+Manual fallback (if needed):
+
 1. Sync primary pages:
 
 ```bash
