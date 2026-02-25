@@ -102,6 +102,49 @@ Representative equations include:
 
 ---
 
+## Research foundation for DBA thesis citations
+
+To reinforce the research-backed positioning of recent FiceCal releases (reliability economics, forecast confidence outputs, and cross-cloud optimization guidance), use the references below as the core bibliography set.
+
+### Feature-to-reference map
+
+- **Cloud economics and scale modeling** (power-law style cost behavior, break-even framing)
+  - Harms & Yamartino (2010) - *The Economics of the Cloud*
+  - Bayrak, Conley & Wilkie (2011) - *The Economics of Cloud Computing*
+  - Bourreau, de Streel & Graef (2024) - *The Economics of the Cloud* (TSE)
+
+- **FinOps operating model and KPI governance** (CCER, optimization playbooks)
+  - Bryant (2022) - peer-reviewed FinOps framing in *ITNOW*
+  - FinOps Foundation (2026) - *State of FinOps Report*
+  - Nawrocki & Smendowski (2024) - FinOps optimization study in *Journal of Computational Science*
+
+- **Committed use optimization and multi-cloud comparability**
+  - Google Cloud CUD documentation
+  - GSA/ITVMO cross-cloud discount benchmarking
+  - AWS Well-Architected Cost Optimization Pillar
+  - Azure Well-Architected Cost Optimization guidance
+
+- **Reliability economics (Release 4)** (SLA/SLO/SLI cost-of-failure, investment trade-offs)
+  - Beyer et al. (2016) - *Site Reliability Engineering*
+  - Jones et al. (2018) - *The Site Reliability Workbook*
+
+- **Forecast bands and confidence interpretation**
+  - Hyndman & Athanasopoulos (2021) - *Forecasting: Principles and Practice*
+  - Makridakis, Spiliotis & Assimakopoulos (2020) - M4 competition paper
+  - JCGM (2008) - *Guide to the Expression of Uncertainty in Measurement*
+
+- **Cost allocation and composite scoring**
+  - Kaplan & Anderson (2004) - Time-Driven Activity-Based Costing
+  - Nardo et al. (2008) - OECD/JRC Composite Indicators Handbook
+
+### Practical note for thesis writing
+
+For formal dissertation chapters, pair each practitioner/industry source (FinOps Foundation, cloud vendor docs, Well-Architected guidance) with at least one peer-reviewed source in the same paragraph. This improves methodological defensibility while preserving real-world relevance.
+
+All references are also maintained in the in-app **Academic & Primary References** section at `index.html#references-section`.
+
+---
+
 ## Project structure
 
 - `index.html` - main application page (UI shell, calculator orchestration, chart rendering)
