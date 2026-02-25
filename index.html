@@ -3971,6 +3971,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 .provider-logo.ibm { background: #052fad; color: #fff; }
 .provider-logo.alibaba { background: #ff6a00; color: #fff; }
 .provider-logo.huawei { background: #cf0a2c; color: #fff; }
+.provider-logo.onprem { background: #4b5563; color: #fff; }
 .provider-logo.multi { background: #5a5a8a; color: #fff; }
 
 /* ── GROUP E: HEALTH + RECOMMENDATIONS ── */
@@ -5772,7 +5773,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <button class="provider-btn" data-provider="ibm" onclick="toggleProvider('ibm')"><span class="provider-logo ibm" aria-hidden="true">ibm</span><span class="provider-label">IBM Cloud</span><span class="check">✓</span></button>
           <button class="provider-btn" data-provider="alibaba" onclick="toggleProvider('alibaba')"><span class="provider-logo alibaba" aria-hidden="true">ali</span><span class="provider-label">Alibaba Cloud</span><span class="check">✓</span></button>
           <button class="provider-btn" data-provider="huawei" onclick="toggleProvider('huawei')"><span class="provider-logo huawei" aria-hidden="true">hw</span><span class="provider-label">Huawei Cloud</span><span class="check">✓</span></button>
-          <button class="provider-btn" data-provider="multi" onclick="toggleProvider('multi')"><span class="provider-logo multi" aria-hidden="true">∞</span><span class="provider-label">Multi-Cloud</span><span class="check">✓</span></button>
+          <button class="provider-btn" data-provider="onprem" onclick="toggleProvider('onprem')"><span class="provider-logo onprem" aria-hidden="true">dc</span><span class="provider-label">On-Prem Data Center</span><span class="check">✓</span></button>
         </div>
       </div>
 
@@ -6352,6 +6353,13 @@ const TDABC_REFERENCE_URL = 'https://hbr.org/2004/11/time-driven-activity-based-
 const COMPOSITE_INDEX_REFERENCE_URL = 'https://knowledge4policy.ec.europa.eu/sites/default/files/jrc47008_handbook_final.pdf';
 const OFFICIAL_REFERENCE_URLS = {
   finopsFramework: 'https://www.finops.org/framework/',
+  finopsUnitEconomics: 'https://www.finops.org/framework/capabilities/unit-economics/',
+  finopsRateOptimization: 'https://www.finops.org/framework/capabilities/rate-optimization/',
+  finopsWorkloadOptimization: 'https://www.finops.org/framework/capabilities/workload-optimization/',
+  finopsAllocation: 'https://www.finops.org/framework/capabilities/allocation/',
+  finopsForecasting: 'https://www.finops.org/framework/capabilities/forecasting/',
+  finopsAnomalyManagement: 'https://www.finops.org/framework/capabilities/anomaly-management/',
+  finopsBudgetManagement: 'https://www.finops.org/framework/capabilities/budget-management/',
   finopsReport: FINOPS_2026_REPORT_URL,
   nistCloud: 'https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf',
   forecastingPractice: 'https://otexts.com/fpp3/',
@@ -6363,14 +6371,20 @@ const OFFICIAL_REFERENCE_URLS = {
   awsSavingsPlans: 'https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html',
   awsCostOptimization: 'https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html',
   awsRightsizing: 'https://docs.aws.amazon.com/cost-management/latest/userguide/ce-rightsizing.html',
+  awsSpot: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html',
   awsAnomalyDetection: 'https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html',
+  awsS3IntelligentTiering: 'https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html',
   azureReservations: 'https://learn.microsoft.com/en-us/azure/cost-management-billing/reservations/save-compute-costs-reservations',
   azureCostOptimization: 'https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/',
   azureAdvisor: 'https://learn.microsoft.com/en-us/azure/advisor/advisor-cost-recommendations',
   azureBudgets: 'https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets',
+  azureSpot: 'https://learn.microsoft.com/en-us/azure/virtual-machines/spot-vms',
   gcpBudgets: 'https://cloud.google.com/billing/docs/how-to/budgets',
+  gcpBudgetPubSub: 'https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications',
   gcpRecommender: 'https://cloud.google.com/recommender/docs/recommenders',
+  gcpBillingExport: 'https://cloud.google.com/billing/docs/how-to/export-data-bigquery',
   gcpBigQueryCosts: 'https://cloud.google.com/bigquery/docs/best-practices-costs',
+  gcpBigQueryReservations: 'https://cloud.google.com/bigquery/docs/reservations-intro',
   gcpSud: 'https://cloud.google.com/compute/docs/sustained-use-discounts',
   ociBilling: 'https://docs.oracle.com/en-us/iaas/Content/Billing/Concepts/billingoverview.htm',
   ociAlwaysFree: 'https://www.oracle.com/cloud/free/',
@@ -6378,8 +6392,10 @@ const OFFICIAL_REFERENCE_URLS = {
   ibmSustainability: 'https://www.ibm.com/products/environmental-intelligence-suite',
   alibabaBilling: 'https://www.alibabacloud.com/help/en/user-center/latest/billing-overview',
   huaweiBilling: 'https://support.huaweicloud.com/intl/en-us/billing/index.html',
+  onPremVmwareResourceManagement: 'https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-resource-management/GUID-24B177F0-BB8D-4CE1-B7E2-A5A54B4D54E8.html',
   openaiPricing: 'https://openai.com/api/pricing/',
-  openaiRateLimits: 'https://platform.openai.com/docs/guides/rate-limits'
+  openaiRateLimits: 'https://platform.openai.com/docs/guides/rate-limits',
+  openCost: 'https://opencost.io/docs/'
 };
 const SHARE_STATE_VERSION = 1;
 const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
@@ -6693,6 +6709,71 @@ const OUTPUT_TOOLTIP_CONTENT = {
     ],
     refs: [
       { label: 'State of FinOps report', url: FINOPS_2026_REPORT_URL }
+    ]
+  },
+  'out-aiTokenCost': {
+    title: 'AI Token Cost',
+    what: 'Monthly AI inference spend from token consumption and selected pricing model.',
+    how: [
+      '<code>TokenCost = (InputTokens × InputRate) + (OutputTokens × OutputRate)</code> (or blended equivalent).',
+      'Retry rate and premium model mix increase effective token burn.',
+      'Use this metric to control direct model spend before overhead allocation.'
+    ],
+    refs: [
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+      { label: 'OpenAI rate-limit guidance', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits }
+    ]
+  },
+  'out-aiAllocatedCost': {
+    title: 'AI Total Allocated Cost',
+    what: 'AI token cost plus shared overhead allocated to product/client context.',
+    how: [
+      '<code>AIAllocatedCost = TokenCost + SharedOverheadAllocation</code>.',
+      'Allocation policy controls how overhead distribution is applied.',
+      'Use this metric for chargeback/showback and margin planning.'
+    ],
+    refs: [
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+      { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation }
+    ]
+  },
+  'out-aiCostPerClient': {
+    title: 'AI Cost / Client',
+    what: 'Allocated AI cost normalized per active client for unit-economics decisions.',
+    how: [
+      '<code>AICostPerClient = AIAllocatedCost / n</code>.',
+      'Compare this directly against ARPU to protect contribution margin.',
+      'Use this metric to set AI pricing tiers and fair-use envelopes.'
+    ],
+    refs: [
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+      { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics }
+    ]
+  },
+  'out-aiRetryInflation': {
+    title: 'AI Retry Inflation',
+    what: 'Extra AI cost percentage caused by retries compared to first-pass execution.',
+    how: [
+      '<code>RetryInflation% = (RetryDrivenTokenCost / BaseTokenCost) × 100</code>.',
+      'High retry inflation indicates quality, timeout, or workflow reliability defects.',
+      'Lower retry inflation directly improves AI margin profile.'
+    ],
+    refs: [
+      { label: 'OpenAI rate-limit guidance', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits },
+      { label: 'FinOps workload optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsWorkloadOptimization }
+    ]
+  },
+  'out-aiPremiumMix': {
+    title: 'AI Premium Mix',
+    what: 'Share of AI requests routed to premium models with higher unit costs.',
+    how: [
+      '<code>PremiumMix% = PremiumRequests / TotalRequests × 100</code>.',
+      'High premium mix raises weighted cost per request and per-client cost.',
+      'Use routing policy to reserve premium models for high-value workloads.'
+    ],
+    refs: [
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+      { label: 'FinOps rate optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsRateOptimization }
     ]
   },
   'out-relDowntime': {
@@ -7167,6 +7248,48 @@ const OUTPUT_ACTION_GUIDES = {
   }
 };
 
+const OUTPUT_PROVIDER_ACTION_OVERRIDES = {
+  'out-vcpu': {
+    aws: 'Use AWS Cost Explorer rightsizing recommendations and apply actions on top monthly-impact resources.',
+    azure: 'Use Azure Advisor cost recommendations and remediate right-size or idle findings.',
+    gcp: 'Use GCP Recommender cost recommendations and remove idle or oversized resources.',
+    oci: 'Use OCI cost analysis views to right-size underutilized compute profiles.',
+    ibm: 'Use IBM Cloud usage and billing reports to right-size persistent workloads.',
+    onprem: 'Use virtualization and host telemetry to right-size VM clusters and reclaim unused capacity.'
+  },
+  'out-ccer': {
+    aws: 'Use AWS Cost Optimization and rightsizing reports to lift revenue per cloud spend.',
+    azure: 'Use Azure Cost Management plus Advisor findings to lift revenue per cloud spend.',
+    gcp: 'Use Billing export and Recommender actions to lift revenue per cloud spend.',
+    oci: 'Use OCI Billing and Cost Management reports to improve spend efficiency per workload.',
+    ibm: 'Use IBM Cloud billing analytics to reduce non-value spend and improve efficiency ratio.',
+    onprem: 'Use chargeback/showback and capacity telemetry to improve service revenue-to-cost efficiency.'
+  },
+  'out-cudSave': {
+    aws: 'Review AWS Savings Plans recommendations and commit only to stable baseline usage.',
+    azure: 'Review Azure Reservations recommendations and prioritize always-on workloads.',
+    gcp: 'Review GCP committed-use discount recommendations for stable baseline workloads.',
+    oci: 'Review OCI usage commitments and baseline workloads before increasing credit commitments.',
+    ibm: 'Review IBM reserved capacity options for predictable long-running workloads.',
+    onprem: 'Review long-run infrastructure leases and maintenance contracts against actual baseline demand.'
+  }
+};
+
+function getPrimaryScopedProvider(providerScope = []) {
+  const scoped = normalizeProviderKeys(providerScope).filter(provider => provider !== 'multi');
+  if (scoped.length === 1) return scoped[0];
+  return null;
+}
+
+function getProviderSpecificOutputAction(cardId, signalKey, providerScope = []) {
+  if (signalKey === 'good' || signalKey === 'needs') return '';
+  const primary = getPrimaryScopedProvider(providerScope);
+  if (!primary) return '';
+  const cardMap = OUTPUT_PROVIDER_ACTION_OVERRIDES[cardId] || null;
+  if (!cardMap) return '';
+  return cardMap[primary] || '';
+}
+
 const OUTPUT_AUDIENCE_MODES = {
   founder: {
     label: 'Founder',
@@ -7434,10 +7557,7 @@ function renderOutputSolutionPanel(cardId) {
   const valueText = (card.querySelector('.calc-out-val') || {}).textContent || '—';
   const needsDataActions = (guide.inputs || []).map(item => `Provide ${item} to unlock reliable recommendations.`);
   const recommended = signal.key === 'needs' && needsDataActions.length ? needsDataActions : (guide.recommended || []);
-  const refLinks = normalizeOfficialReferences([
-    ...(OUTPUT_CARD_OFFICIAL_REFERENCE_MAP[cardId] || []),
-    ...(config.refs || [])
-  ]);
+  const refLinks = getOutputCardOfficialReferences(cardId, config.refs || [], getActiveProviderScope());
   const refsHtml = refLinks.length
     ? `<div class="calc-out-solve-refs"><div class="calc-out-solve-refs-title">Official references</div><div class="calc-out-solve-ref-links">${refLinks.map(ref => `<a class="calc-out-solve-ref-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('')}</div></div>`
     : '';
@@ -9528,6 +9648,8 @@ const RECOMMENDATIONS = [
   { icon:'🌱', title:'IBM sustainability + cost co-optimisation', desc:'Joint carbon and cost intelligence can identify high-impact remediation opportunities.', action:'Action: IBM Environmental Intelligence Suite + cost reports for optimisation prioritisation.', providers:['ibm'], zones:['green'], priority:'low' },
   { icon:'📦', title:'Alibaba subscription billing shift', desc:'Subscription billing can materially reduce compute costs versus pay-as-you-go baselines.', action:'Action: Alibaba Console → Billing → Resource Plans / Subscription migration candidates.', providers:['alibaba'], zones:['yellow','red'], priority:'medium' },
   { icon:'🧾', title:'Huawei ECS Reservations', desc:'Reservation strategies reduce long-run compute cost where workloads are predictable.', action:'Action: Huawei Cloud Console → Billing Center → Reserved Instances for ECS fleet.', providers:['huawei'], zones:['yellow','red'], priority:'medium' },
+  { icon:'🏢', title:'On-Prem capacity rightsizing cadence', desc:'Without recurring capacity rightsizing, fixed data-center spend can drift away from real demand.', action:'Action: Data center ops console → host/cluster utilization review → right-size overprovisioned VM and storage pools.', providers:['onprem'], zones:['yellow','red'], priority:'high' },
+  { icon:'📊', title:'On-Prem showback and cost allocation baseline', desc:'Service-level showback is required to expose who consumes compute, storage, and facility-backed resources.', action:'Action: Define service cost model and publish monthly showback with owner, environment, and service tags.', providers:['onprem'], zones:['green','yellow','red'], priority:'medium' },
   { icon:'🧭', title:'Adopt unified multi-cloud FinOps platform', desc:'Cross-cloud visibility and unit economics governance require a single cost operating model.', action:'Action: Integrate billing exports into a common platform (CloudHealth/OpenCost/warehouse model).', providers:['multi'], zones:['green','yellow','red'], priority:'high' },
   { icon:'🌐', title:'Control inter-region / inter-cloud egress', desc:'Network egress charges often become hidden margin erosion drivers in multi-cloud topologies.', action:'Action: Build monthly egress map by service path; redesign data flows to reduce charge-heavy hops.', providers:['multi'], zones:['green','yellow','red'], priority:'medium' }
 ];
@@ -9569,14 +9691,14 @@ const OUTPUT_CARD_CATEGORY_MAP = {
 const PROVIDER_OFFICIAL_REFERENCE_MAP = {
   aws: [
     { label: 'AWS Cost Optimization pillar', url: OFFICIAL_REFERENCE_URLS.awsCostOptimization },
-    { label: 'AWS Savings Plans', url: OFFICIAL_REFERENCE_URLS.awsSavingsPlans }
+    { label: 'AWS rightsizing recommendations', url: OFFICIAL_REFERENCE_URLS.awsRightsizing }
   ],
   azure: [
     { label: 'Azure Cost Optimization', url: OFFICIAL_REFERENCE_URLS.azureCostOptimization },
-    { label: 'Azure Reservations guidance', url: OFFICIAL_REFERENCE_URLS.azureReservations }
+    { label: 'Azure Advisor cost recommendations', url: OFFICIAL_REFERENCE_URLS.azureAdvisor }
   ],
   gcp: [
-    { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud },
+    { label: 'GCP billing budgets', url: OFFICIAL_REFERENCE_URLS.gcpBudgets },
     { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
   ],
   oci: [
@@ -9593,42 +9715,87 @@ const PROVIDER_OFFICIAL_REFERENCE_MAP = {
   huawei: [
     { label: 'Huawei Cloud billing docs', url: OFFICIAL_REFERENCE_URLS.huaweiBilling }
   ],
+  onprem: [
+    { label: 'VMware vSphere resource management', url: OFFICIAL_REFERENCE_URLS.onPremVmwareResourceManagement, providers: ['onprem'] },
+    { label: 'OpenCost documentation', url: OFFICIAL_REFERENCE_URLS.openCost, providers: ['onprem'] }
+  ],
   multi: [
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+    { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation },
+    { label: 'OpenCost documentation', url: OFFICIAL_REFERENCE_URLS.openCost }
   ]
 };
 
 const CATEGORY_OFFICIAL_REFERENCE_MAP = {
   infrastructure: [
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+    { label: 'FinOps workload optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsWorkloadOptimization },
+    { label: 'FinOps rate optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsRateOptimization }
   ],
   pricing: [
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
-    { label: 'NIST cloud definition', url: OFFICIAL_REFERENCE_URLS.nistCloud }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
   ],
   marketing: [
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
-    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice }
-  ],
-  crm: [
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
     { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
   ],
+  crm: [
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice }
+  ],
   governance: [
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
+    { label: 'FinOps budget management capability', url: OFFICIAL_REFERENCE_URLS.finopsBudgetManagement },
+    { label: 'FinOps anomaly management capability', url: OFFICIAL_REFERENCE_URLS.finopsAnomalyManagement },
     { label: 'Uncertainty guide (JCGM 100)', url: OFFICIAL_REFERENCE_URLS.uncertaintyGuide }
   ]
 };
 
 const OUTPUT_CARD_OFFICIAL_REFERENCE_MAP = {
+  'out-beN': [
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+  ],
+  'out-minPrice': [
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+  ],
+  'out-vcpu': [
+    { label: 'AWS rightsizing recommendations', url: OFFICIAL_REFERENCE_URLS.awsRightsizing },
+    { label: 'Azure Advisor cost recommendations', url: OFFICIAL_REFERENCE_URLS.azureAdvisor },
+    { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
+  ],
+  'out-margin': [
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+  ],
+  'out-ccer': [
+    { label: 'AWS Cost Optimization pillar', url: OFFICIAL_REFERENCE_URLS.awsCostOptimization },
+    { label: 'Azure Cost Optimization', url: OFFICIAL_REFERENCE_URLS.azureCostOptimization },
+    { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
+  ],
   'out-cudSave': [
     { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud },
     { label: 'AWS Savings Plans', url: OFFICIAL_REFERENCE_URLS.awsSavingsPlans },
     { label: 'Azure reservations', url: OFFICIAL_REFERENCE_URLS.azureReservations }
   ],
+  'out-reqClients': [
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
+    { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
+  ],
+  'out-reqPrice': [
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+  ],
+  'out-targetRevenue': [
+    { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
+    { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
+  ],
+  'out-budgetVariance': [
+    { label: 'FinOps budget management capability', url: OFFICIAL_REFERENCE_URLS.finopsBudgetManagement },
+    { label: 'Azure budget controls tutorial', url: OFFICIAL_REFERENCE_URLS.azureBudgets },
+    { label: 'GCP budget alerts', url: OFFICIAL_REFERENCE_URLS.gcpBudgets }
+  ],
   'out-forecastBand': [
+    { label: 'FinOps forecasting capability', url: OFFICIAL_REFERENCE_URLS.finopsForecasting },
     { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
     { label: 'Forecasting benchmark (M4)', url: OFFICIAL_REFERENCE_URLS.forecastingBenchmark }
   ],
@@ -9636,37 +9803,49 @@ const OUTPUT_CARD_OFFICIAL_REFERENCE_MAP = {
     { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice },
     { label: 'Uncertainty guide (JCGM 100)', url: OFFICIAL_REFERENCE_URLS.uncertaintyGuide }
   ],
+  'out-realizedValue': [
+    { label: 'FinOps anomaly management capability', url: OFFICIAL_REFERENCE_URLS.finopsAnomalyManagement },
+    { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation }
+  ],
+  'out-realizationRatio': [
+    { label: 'FinOps anomaly management capability', url: OFFICIAL_REFERENCE_URLS.finopsAnomalyManagement },
+    { label: 'FinOps forecasting capability', url: OFFICIAL_REFERENCE_URLS.finopsForecasting }
+  ],
+  'out-realizationGap': [
+    { label: 'FinOps anomaly management capability', url: OFFICIAL_REFERENCE_URLS.finopsAnomalyManagement },
+    { label: 'FinOps budget management capability', url: OFFICIAL_REFERENCE_URLS.finopsBudgetManagement }
+  ],
   'out-techCoverage': [
     { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation }
   ],
   'out-techNorm': [
     { label: 'TDABC reference', url: TDABC_REFERENCE_URL },
     { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL }
   ],
   'out-focusMaturity': [
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport },
+    { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation },
     { label: 'Composite indicators handbook', url: COMPOSITE_INDEX_REFERENCE_URL }
   ],
   'out-aiTokenCost': [
     { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'OpenAI rate-limit guidance', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits }
   ],
   'out-aiAllocatedCost': [
     { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation }
   ],
   'out-aiCostPerClient': [
     { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics }
   ],
   'out-aiRetryInflation': [
     { label: 'OpenAI rate-limits guide', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps workload optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsWorkloadOptimization }
   ],
   'out-aiPremiumMix': [
     { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps rate optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsRateOptimization }
   ],
   'out-relDowntime': [
     { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
@@ -9678,15 +9857,15 @@ const OUTPUT_CARD_OFFICIAL_REFERENCE_MAP = {
   ],
   'out-relAdjustedCost': [
     { label: 'Google SRE book', url: OFFICIAL_REFERENCE_URLS.sreBook },
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics }
   ],
   'out-relProfitImpact': [
     { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics }
   ],
   'out-relArpuUplift': [
     { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics }
   ],
   'out-relExtraClients': [
     { label: 'Google SRE workbook', url: OFFICIAL_REFERENCE_URLS.sreWorkbook },
@@ -9702,11 +9881,290 @@ const OUTPUT_CARD_OFFICIAL_REFERENCE_MAP = {
   ]
 };
 
+const RECOMMENDATION_TITLE_REFERENCE_RULES = [
+  {
+    test: /below break-even|negative break-even/i,
+    refs: [
+      { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+      { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+    ]
+  },
+  {
+    test: /ccer below|cloud cost efficiency/i,
+    refs: [
+      { label: 'AWS Cost Optimization pillar', url: OFFICIAL_REFERENCE_URLS.awsCostOptimization },
+      { label: 'Azure Cost Optimization', url: OFFICIAL_REFERENCE_URLS.azureCostOptimization },
+      { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
+    ]
+  },
+  {
+    test: /contribution margin is negative|reprice ai-heavy/i,
+    refs: [
+      { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+      { label: 'TDABC reference', url: TDABC_REFERENCE_URL }
+    ]
+  },
+  {
+    test: /cost allocation tagging/i,
+    refs: [
+      { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation },
+      { label: 'NIST cloud definition', url: OFFICIAL_REFERENCE_URLS.nistCloud }
+    ]
+  },
+  {
+    test: /12-month cost forecasting|forecast/i,
+    refs: [
+      { label: 'FinOps forecasting capability', url: OFFICIAL_REFERENCE_URLS.finopsForecasting },
+      { label: 'Forecasting principles', url: OFFICIAL_REFERENCE_URLS.forecastingPractice }
+    ]
+  },
+  {
+    test: /savings plans/i,
+    refs: [
+      { label: 'AWS Savings Plans', url: OFFICIAL_REFERENCE_URLS.awsSavingsPlans, providers: ['aws'] },
+      { label: 'Azure reservations guidance', url: OFFICIAL_REFERENCE_URLS.azureReservations, providers: ['azure'] },
+      { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud, providers: ['gcp'] },
+      { label: 'FinOps rate optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsRateOptimization }
+    ]
+  },
+  {
+    test: /right-sizing/i,
+    refs: [
+      { label: 'AWS rightsizing recommendations', url: OFFICIAL_REFERENCE_URLS.awsRightsizing }
+    ]
+  },
+  {
+    test: /spot/i,
+    refs: [
+      { label: 'AWS Spot instances', url: OFFICIAL_REFERENCE_URLS.awsSpot },
+      { label: 'Azure Spot VMs', url: OFFICIAL_REFERENCE_URLS.azureSpot }
+    ]
+  },
+  {
+    test: /cost anomaly detection|anomaly/i,
+    refs: [
+      { label: 'AWS Cost Anomaly Detection', url: OFFICIAL_REFERENCE_URLS.awsAnomalyDetection },
+      { label: 'FinOps anomaly management capability', url: OFFICIAL_REFERENCE_URLS.finopsAnomalyManagement }
+    ]
+  },
+  {
+    test: /intelligent-tiering/i,
+    refs: [
+      { label: 'S3 Intelligent-Tiering', url: OFFICIAL_REFERENCE_URLS.awsS3IntelligentTiering }
+    ]
+  },
+  {
+    test: /azure reservations|hybrid benefit/i,
+    refs: [
+      { label: 'Azure reservations guidance', url: OFFICIAL_REFERENCE_URLS.azureReservations }
+    ]
+  },
+  {
+    test: /azure advisor/i,
+    refs: [
+      { label: 'Azure Advisor cost recommendations', url: OFFICIAL_REFERENCE_URLS.azureAdvisor }
+    ]
+  },
+  {
+    test: /azure budget/i,
+    refs: [
+      { label: 'Azure budget controls tutorial', url: OFFICIAL_REFERENCE_URLS.azureBudgets }
+    ]
+  },
+  {
+    test: /resource-based cud/i,
+    refs: [
+      { label: 'GCP committed use discounts', url: OFFICIAL_REFERENCE_URLS.googleCud }
+    ]
+  },
+  {
+    test: /sustained use discounts/i,
+    refs: [
+      { label: 'GCP sustained use discounts', url: OFFICIAL_REFERENCE_URLS.gcpSud },
+      { label: 'GCP billing export to BigQuery', url: OFFICIAL_REFERENCE_URLS.gcpBillingExport }
+    ]
+  },
+  {
+    test: /gcp recommender/i,
+    refs: [
+      { label: 'GCP Recommender docs', url: OFFICIAL_REFERENCE_URLS.gcpRecommender }
+    ]
+  },
+  {
+    test: /pub\/sub/i,
+    refs: [
+      { label: 'GCP budget Pub/Sub notifications', url: OFFICIAL_REFERENCE_URLS.gcpBudgetPubSub }
+    ]
+  },
+  {
+    test: /bigquery query cost controls/i,
+    refs: [
+      { label: 'BigQuery cost optimization best practices', url: OFFICIAL_REFERENCE_URLS.gcpBigQueryCosts },
+      { label: 'BigQuery reservations overview', url: OFFICIAL_REFERENCE_URLS.gcpBigQueryReservations }
+    ]
+  },
+  {
+    test: /oci universal credits/i,
+    refs: [
+      { label: 'OCI billing overview', url: OFFICIAL_REFERENCE_URLS.ociBilling }
+    ]
+  },
+  {
+    test: /oci always free/i,
+    refs: [
+      { label: 'OCI Always Free', url: OFFICIAL_REFERENCE_URLS.ociAlwaysFree }
+    ]
+  },
+  {
+    test: /ibm reserved virtual servers/i,
+    refs: [
+      { label: 'IBM Cloud billing docs', url: OFFICIAL_REFERENCE_URLS.ibmBilling }
+    ]
+  },
+  {
+    test: /ibm sustainability/i,
+    refs: [
+      { label: 'IBM Environmental Intelligence Suite', url: OFFICIAL_REFERENCE_URLS.ibmSustainability }
+    ]
+  },
+  {
+    test: /alibaba subscription billing/i,
+    refs: [
+      { label: 'Alibaba Cloud billing overview', url: OFFICIAL_REFERENCE_URLS.alibabaBilling }
+    ]
+  },
+  {
+    test: /huawei ecs reservations/i,
+    refs: [
+      { label: 'Huawei Cloud billing docs', url: OFFICIAL_REFERENCE_URLS.huaweiBilling }
+    ]
+  },
+  {
+    test: /multi-cloud finops platform/i,
+    refs: [
+      { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation },
+      { label: 'OpenCost documentation', url: OFFICIAL_REFERENCE_URLS.openCost }
+    ]
+  },
+  {
+    test: /on-prem|data center/i,
+    refs: [
+      { label: 'VMware vSphere resource management', url: OFFICIAL_REFERENCE_URLS.onPremVmwareResourceManagement, providers: ['onprem'] },
+      { label: 'OpenCost documentation', url: OFFICIAL_REFERENCE_URLS.openCost, providers: ['onprem'] }
+    ]
+  },
+  {
+    test: /inter-region|inter-cloud egress/i,
+    refs: [
+      { label: 'AWS Cost Optimization pillar', url: OFFICIAL_REFERENCE_URLS.awsCostOptimization },
+      { label: 'Azure Cost Optimization', url: OFFICIAL_REFERENCE_URLS.azureCostOptimization }
+    ]
+  },
+  {
+    test: /ai retry inflation/i,
+    refs: [
+      { label: 'OpenAI rate-limit guidance', url: OFFICIAL_REFERENCE_URLS.openaiRateLimits },
+      { label: 'FinOps workload optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsWorkloadOptimization }
+    ]
+  },
+  {
+    test: /premium model routing|ai premium mix/i,
+    refs: [
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing },
+      { label: 'FinOps rate optimization capability', url: OFFICIAL_REFERENCE_URLS.finopsRateOptimization }
+    ]
+  },
+  {
+    test: /allocation telemetry|ai allocation/i,
+    refs: [
+      { label: 'FinOps allocation capability', url: OFFICIAL_REFERENCE_URLS.finopsAllocation },
+      { label: 'OpenAI API pricing', url: OFFICIAL_REFERENCE_URLS.openaiPricing }
+    ]
+  }
+];
+
+const KNOWN_PROVIDER_KEYS = ['aws', 'azure', 'gcp', 'oci', 'ibm', 'alibaba', 'huawei', 'onprem', 'multi'];
+const PROVIDER_REFERENCE_DETECTION_RULES = {
+  aws: [/aws\.amazon\.com/i, /docs\.aws\.amazon\.com/i, /\baws\b/i],
+  azure: [/learn\.microsoft\.com/i, /\bazure\b/i],
+  gcp: [/cloud\.google\.com/i, /\bgcp\b/i, /google cloud/i, /bigquery/i],
+  oci: [/oracle\.com/i, /docs\.oracle\.com/i, /\boci\b/i],
+  ibm: [/cloud\.ibm\.com/i, /\bibm\b/i],
+  alibaba: [/alibabacloud\.com/i, /\balibaba\b/i],
+  huawei: [/huaweicloud\.com/i, /\bhuawei\b/i],
+  onprem: [/vmware\.com/i, /on-?prem/i, /data center/i],
+  multi: [/opencost\.io/i, /multi-cloud/i]
+};
+
+function normalizeProviderKeys(providers = []) {
+  const seen = new Set();
+  return (Array.isArray(providers) ? providers : [])
+    .map(provider => String(provider || '').trim().toLowerCase())
+    .filter(provider => KNOWN_PROVIDER_KEYS.includes(provider))
+    .filter(provider => {
+      if (seen.has(provider)) return false;
+      seen.add(provider);
+      return true;
+    });
+}
+
+function getActiveProviderScope(overrideProviders = []) {
+  const explicit = normalizeProviderKeys(overrideProviders);
+  if (explicit.length) {
+    return explicit.length >= 2 && !explicit.includes('multi')
+      ? [...explicit, 'multi']
+      : explicit;
+  }
+
+  const selected = normalizeProviderKeys(Array.from(selectedProviders));
+  if (selected.length >= 2 && !selected.includes('multi')) {
+    return [...selected, 'multi'];
+  }
+  return selected;
+}
+
+function detectReferenceProviders(ref) {
+  const explicit = normalizeProviderKeys(ref && ref.providers ? ref.providers : []);
+  if (explicit.length) return explicit;
+
+  const haystack = `${ref?.label || ''} ${ref?.url || ''}`;
+  return KNOWN_PROVIDER_KEYS.filter(provider => {
+    const rules = PROVIDER_REFERENCE_DETECTION_RULES[provider] || [];
+    return rules.some(rule => rule.test(haystack));
+  });
+}
+
+function filterReferencesForProviderScope(refs = [], providerScope = []) {
+  const normalizedRefs = normalizeOfficialReferences(refs);
+  if (!normalizedRefs.length) return [];
+
+  const scopedProviders = normalizeProviderKeys(providerScope);
+  if (!scopedProviders.length) return normalizedRefs;
+
+  const hasProviderSpecificRefs = normalizedRefs.some(ref => detectReferenceProviders(ref).length > 0);
+  if (!hasProviderSpecificRefs) return normalizedRefs;
+
+  const filtered = normalizedRefs.filter(ref => {
+    const refProviders = detectReferenceProviders(ref);
+    if (!refProviders.length) return true;
+    return refProviders.some(provider => scopedProviders.includes(provider));
+  });
+
+  if (filtered.length) return filtered;
+
+  const neutral = normalizedRefs.filter(ref => detectReferenceProviders(ref).length === 0);
+  return neutral.length ? neutral : normalizedRefs;
+}
+
 function normalizeOfficialReferences(refs = []) {
   const seen = new Set();
   return (Array.isArray(refs) ? refs : [])
     .filter(ref => ref && typeof ref.url === 'string' && /^https:\/\//i.test(ref.url))
-    .map(ref => ({ label: String(ref.label || 'Official reference').trim(), url: ref.url.trim() }))
+    .map(ref => ({
+      label: String(ref.label || 'Official reference').trim(),
+      url: ref.url.trim(),
+      providers: normalizeProviderKeys(ref.providers || [])
+    }))
     .filter(ref => {
       if (!ref.url || seen.has(ref.url)) return false;
       seen.add(ref.url);
@@ -9728,31 +10186,42 @@ function getProviderOfficialReferences(providers = []) {
   return normalizeOfficialReferences(refs);
 }
 
-function getOutputCardOfficialReferences(cardId, fallbackRefs = []) {
+function getOutputCardOfficialReferences(cardId, fallbackRefs = [], providerScope = []) {
   const refs = OUTPUT_CARD_OFFICIAL_REFERENCE_MAP[cardId] || fallbackRefs;
-  if (refs && refs.length) return normalizeOfficialReferences(refs);
-  return normalizeOfficialReferences([
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
-  ]);
+  if (refs && refs.length) return filterReferencesForProviderScope(refs, providerScope);
+  return filterReferencesForProviderScope([
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'NIST cloud definition', url: OFFICIAL_REFERENCE_URLS.nistCloud }
+  ], providerScope);
+}
+
+function getRecommendationTitleOfficialReferences(title = '', providerScope = []) {
+  const value = String(title || '').trim();
+  if (!value) return [];
+  const match = RECOMMENDATION_TITLE_REFERENCE_RULES.find(rule => rule.test && rule.test.test(value));
+  return match ? filterReferencesForProviderScope(match.refs || [], providerScope) : [];
 }
 
 function resolveRecommendationOfficialReferences(rec) {
   if (!rec) return [];
-  const explicit = normalizeOfficialReferences(rec.refs || []);
+  const providerScope = getActiveProviderScope(rec.providers || []);
+  const explicit = filterReferencesForProviderScope(rec.refs || [], providerScope);
   if (explicit.length) return explicit;
 
+  const titleRefs = getRecommendationTitleOfficialReferences(rec.title || '', providerScope);
+  if (titleRefs.length) return titleRefs;
+
   if (rec.cardId) {
-    return getOutputCardOfficialReferences(rec.cardId, []);
+    return getOutputCardOfficialReferences(rec.cardId, [], providerScope);
   }
 
-  const providerRefs = getProviderOfficialReferences(rec.providers || []);
+  const providerRefs = getProviderOfficialReferences((rec.providers && rec.providers.length) ? rec.providers : providerScope);
   if (providerRefs.length) return providerRefs;
 
-  const categoryRefs = getCategoryOfficialReferences(rec.categoryKey || rec.category || 'infrastructure');
+  const categoryRefs = filterReferencesForProviderScope(getCategoryOfficialReferences(rec.categoryKey || rec.category || 'infrastructure'), providerScope);
   return categoryRefs.length ? categoryRefs : normalizeOfficialReferences([
-    { label: 'FinOps Framework', url: OFFICIAL_REFERENCE_URLS.finopsFramework },
-    { label: 'State of FinOps data', url: OFFICIAL_REFERENCE_URLS.finopsReport }
+    { label: 'FinOps unit economics capability', url: OFFICIAL_REFERENCE_URLS.finopsUnitEconomics },
+    { label: 'NIST cloud definition', url: OFFICIAL_REFERENCE_URLS.nistCloud }
   ]);
 }
 
@@ -9932,10 +10401,22 @@ function buildAiTokenRecommendations({ aiMetrics, arpuUsed }) {
 function buildOutputCardRecommendations({ zoneKey }) {
   const cards = Array.from(document.querySelectorAll('#calc-kpi-output-grid .calc-out-card')).filter(card => card && card.id && card.offsetParent !== null);
   if (!cards.length) return [];
+  const providerScope = getActiveProviderScope();
+
+  const signalInterpretation = {
+    good: 'Interpretation: this metric is currently inside the preferred operating band.',
+    warn: 'Interpretation: this metric is outside the preferred band and needs corrective action in this planning cycle.',
+    bad: 'Interpretation: this metric is materially off-target and should be treated as an immediate remediation priority.',
+    needs: 'Interpretation: this metric cannot be trusted yet because required inputs are missing.'
+  };
 
   return cards.map(card => {
     const cardId = card.id;
-    const config = OUTPUT_TOOLTIP_CONTENT[cardId] || { title: cardId };
+    const config = OUTPUT_TOOLTIP_CONTENT[cardId] || null;
+    const labelText = String((card.querySelector('.calc-out-label') || {}).textContent || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const displayTitle = (config && config.title) || labelText || cardId.replace(/^out-/, '');
     const guide = OUTPUT_ACTION_GUIDES[cardId] || {
       objective: 'Keep this indicator in a decision-ready range.',
       recommended: ['Review assumptions for this indicator and apply corrective actions.'],
@@ -9951,20 +10432,26 @@ function buildOutputCardRecommendations({ zoneKey }) {
 
     let actionText = guide.recommended && guide.recommended.length ? guide.recommended[0] : 'Review this indicator with current assumptions.';
     if (signal.key === 'needs' && guide.inputs && guide.inputs.length) {
-      actionText = `Provide ${guide.inputs[0]} to unlock reliable recommendations and compare scenarios.`;
+      actionText = `Provide ${guide.inputs[0]} and rerun calculations before using this metric in decisions.`;
     } else if (signal.key === 'good' && guide.monitor && guide.monitor.length) {
-      actionText = `Maintain current performance and monitor ${guide.monitor[0]} in the next review cycle.`;
+      actionText = `Keep current controls and verify ${guide.monitor[0]} remains stable at the next review.`;
+    } else {
+      const providerSpecificAction = getProviderSpecificOutputAction(cardId, signal.key, providerScope);
+      if (providerSpecificAction) actionText = providerSpecificAction;
     }
 
-    const categoryKey = OUTPUT_CARD_CATEGORY_MAP[cardId] || inferRecommendationCategory({ title: config.title, action: actionText });
-    const refs = getOutputCardOfficialReferences(cardId, config.refs || []);
+    const categoryKey = OUTPUT_CARD_CATEGORY_MAP[cardId] || inferRecommendationCategory({ title: displayTitle, action: actionText });
+    const refs = getOutputCardOfficialReferences(cardId, (config && config.refs) || [], providerScope);
     const icon = signal.key === 'bad' ? '🔴' : (signal.key === 'warn' ? '🟡' : (signal.key === 'needs' ? '⚪' : '🟢'));
+    const monitorText = (guide.monitor && guide.monitor.length) ? guide.monitor[0] : displayTitle;
+    const description = `${signalInterpretation[signal.key] || signalInterpretation.warn} Goal: ${guide.objective} Current value: ${valueText}.`;
+    const recommendationAction = `Action: ${actionText} Confirm impact on ${monitorText} in the next run.`;
 
     return {
       icon,
-      title: `${config.title} - ${signal.label}`,
-      desc: `${guide.objective} Current value: ${valueText}.`,
-      action: `Action: ${actionText}`,
+      title: `${displayTitle} - ${signal.label}`,
+      desc: description,
+      action: recommendationAction,
       category: categoryKey,
       categoryKey,
       providers: [],
@@ -10283,7 +10770,7 @@ function updateHealthAndRecommendations(inputs) {
   scoreEl.textContent = String(Math.round(score));
   scoreEl.style.color = zoneColor;
 
-  const providers = Array.from(selectedProviders);
+  const providers = getActiveProviderScope();
   const outputCardRecommendations = buildOutputCardRecommendations({ zoneKey });
   const strategicRecommendations = buildStrategicRecommendations({
     zoneKey,
@@ -10697,7 +11184,7 @@ function cacheSubTexts() {
 
 function buildOutputTooltipHtml(cardId, config) {
   const items = config.how.map(item => `<li>${item}</li>`).join('');
-  const refs = [{ label: 'State of FinOps 2026 context', url: FINOPS_2026_REPORT_URL }, ...(config.refs || [])];
+  const refs = getOutputCardOfficialReferences(cardId, config.refs || [], getActiveProviderScope());
   const links = refs.map(ref => `<a class="calc-out-tip-link" href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.label} ↗</a>`).join('');
   return `
     <div class="calc-out-tip-title">${config.title}</div>
