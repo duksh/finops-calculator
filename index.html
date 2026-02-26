@@ -2129,6 +2129,12 @@ body.chart-focus-open #chart-section .chart-focus-close {
   color: #4f6280;
   font-family: 'JetBrains Mono', monospace;
 }
+.agent-triage-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
 .agent-triage-status.is-checking {
   color: #5a5a8a;
 }
@@ -2137,6 +2143,17 @@ body.chart-focus-open #chart-section .chart-focus-close {
 }
 .agent-triage-status.is-error {
   color: #8a3d00;
+}
+.agent-triage-retry {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  min-height: 0;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+.agent-triage-retry:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 .calc-scenario-suite {
   display: grid;
@@ -5330,7 +5347,10 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             >
               Run Agent Triage (Beta)
             </button>
-            <div class="agent-triage-status" id="agent-triage-status" aria-live="polite">Agent endpoint not configured. Add <code>?agentApi=...</code> to enable triage.</div>
+            <div class="agent-triage-status-row">
+              <div class="agent-triage-status" id="agent-triage-status" aria-live="polite">Agent endpoint not configured. Add ?agentApi=https://&lt;service&gt;.onrender.com to enable triage.</div>
+              <button type="button" class="calc-inline-link-btn agent-triage-retry" id="agent-triage-retry-btn" onclick="retryAgentTriageStatus()" aria-label="Retry Agent Hub connectivity check">Retry</button>
+            </div>
             <div class="agent-triage-result" id="agent-triage-result" hidden aria-live="polite"></div>
           </div>
           <div class="calc-actions-row calc-actions-row--advanced">
@@ -7035,6 +7055,7 @@ const AGENT_AUDIENCE_BY_INTENT = {
   architecture: 'cto',
   executive: 'cfo'
 };
+const AGENT_HTTP_TIMEOUT_MS = 12000;
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
 const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
 const FEATURE_TOGGLE_ORDER = ['multi-tech-normalization', 'ai-token-economics', 'sla-slo-sli-economics'];
@@ -9615,6 +9636,13 @@ function setAgentTriageButtonLoading(isLoading) {
   btn.textContent = isLoading ? 'Running Agent Triage...' : 'Run Agent Triage (Beta)';
 }
 
+function setAgentTriageRetryLoading(isLoading) {
+  const btn = document.getElementById('agent-triage-retry-btn');
+  if (!btn) return;
+  btn.disabled = Boolean(isLoading);
+  btn.textContent = isLoading ? 'Checking…' : 'Retry';
+}
+
 function setAgentTriageStatus(message, tone = 'neutral') {
   const statusEl = document.getElementById('agent-triage-status');
   if (!statusEl) return;
@@ -9625,6 +9653,20 @@ function setAgentTriageStatus(message, tone = 'neutral') {
   statusEl.textContent = message;
 }
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = AGENT_HTTP_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+function retryAgentTriageStatus() {
+  refreshAgentTriageStatus();
+}
+
 async function refreshAgentTriageStatus() {
   const endpoint = resolveAgentApiBaseUrl();
   if (!endpoint) {
@@ -9632,9 +9674,10 @@ async function refreshAgentTriageStatus() {
     return;
   }
 
+  setAgentTriageRetryLoading(true);
   setAgentTriageStatus(`Checking Agent Hub at ${endpoint}...`, 'checking');
   try {
-    const response = await fetch(`${endpoint}/healthz`, {
+    const response = await fetchWithTimeout(`${endpoint}/healthz`, {
       method: 'GET',
       headers: {
         'accept': 'application/json'
@@ -9647,8 +9690,14 @@ async function refreshAgentTriageStatus() {
     }
 
     setAgentTriageStatus(`Agent Hub connected at ${endpoint}.`, 'ok');
-  } catch {
+  } catch (err) {
+    if (err && err.name === 'AbortError') {
+      setAgentTriageStatus(`Agent Hub health check timed out after ${Math.round(AGENT_HTTP_TIMEOUT_MS / 1000)}s at ${endpoint}.`, 'error');
+      return;
+    }
     setAgentTriageStatus(`Agent Hub unreachable at ${endpoint}.`, 'error');
+  } finally {
+    setAgentTriageRetryLoading(false);
   }
 }
 
@@ -9719,9 +9768,10 @@ async function runAgentTriage() {
   }
 
   setAgentTriageButtonLoading(true);
+  setAgentTriageRetryLoading(true);
   setAgentTriageStatus(`Submitting triage request to ${endpoint}...`, 'checking');
   try {
-    const response = await fetch(`${endpoint}/v1/agent/triage`, {
+    const response = await fetchWithTimeout(`${endpoint}/v1/agent/triage`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -9747,10 +9797,16 @@ async function runAgentTriage() {
     setAgentTriageStatus(`Agent Hub connected at ${endpoint}.`, 'ok');
     renderAgentTriageResult(parsed, endpoint);
   } catch (err) {
+    if (err && err.name === 'AbortError') {
+      setAgentTriageStatus(`Agent Hub triage timed out after ${Math.round(AGENT_HTTP_TIMEOUT_MS / 1000)}s at ${endpoint}.`, 'error');
+      renderAgentTriageError('Agent triage request timed out. Try again or verify endpoint responsiveness.');
+      return;
+    }
     setAgentTriageStatus(`Agent Hub unreachable at ${endpoint}.`, 'error');
     renderAgentTriageError(err instanceof Error ? err.message : 'Unable to reach Agent Hub endpoint.');
   } finally {
     setAgentTriageButtonLoading(false);
+    setAgentTriageRetryLoading(false);
   }
 }
 
