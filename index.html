@@ -7062,6 +7062,7 @@ const AGENT_AUDIENCE_BY_INTENT = {
   architecture: 'cto',
   executive: 'cfo'
 };
+const AGENT_API_DEFAULT_BASE = 'https://ficecal-agent-hub.onrender.com';
 const AGENT_HTTP_TIMEOUT_MS = 12000;
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
 const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
@@ -9603,6 +9604,33 @@ function resolveAgentApiBaseUrl() {
     if (fromQuery) return fromQuery.replace(/\/+$/, '');
   } catch {}
 
+  if (typeof AGENT_API_DEFAULT_BASE === 'string' && AGENT_API_DEFAULT_BASE.trim()) {
+    return AGENT_API_DEFAULT_BASE.trim().replace(/\/+$/, '');
+  }
+
+  return '';
+}
+
+function validateAgentTriageInputs(inputs) {
+  if (!inputs || typeof inputs !== 'object') {
+    return 'Add Infra Cost and ARPU before running Agent Triage.';
+  }
+
+  const infraTotal = Number(inputs.infraTotal);
+  const arpu = Number(inputs.ARPU);
+  const hasInfra = Number.isFinite(infraTotal) && infraTotal > 0;
+  const hasArpu = Number.isFinite(arpu) && arpu > 0;
+
+  if (!hasInfra && !hasArpu) {
+    return 'Add Infra Cost and ARPU before running Agent Triage.';
+  }
+  if (!hasInfra) {
+    return 'Add Infra Cost before running Agent Triage.';
+  }
+  if (!hasArpu) {
+    return 'Add ARPU before running Agent Triage.';
+  }
+
   return '';
 }
 
@@ -9769,8 +9797,10 @@ async function runAgentTriage() {
   }
 
   const payload = buildAgentTriagePayload();
-  if (!payload.inputs || Object.keys(payload.inputs).length === 0) {
-    renderAgentTriageError('Add at least one meaningful calculator input before running Agent Triage.');
+  const readinessError = validateAgentTriageInputs(payload.inputs);
+  if (readinessError) {
+    setAgentTriageStatus(readinessError, 'error');
+    renderAgentTriageError(readinessError);
     return;
   }
 
