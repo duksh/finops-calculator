@@ -4490,6 +4490,19 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
   font-size: var(--font-size-2xs);
   line-height: 1.45;
 }
+.rec-severity-helper {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px dashed rgba(57, 66, 89, 0.28);
+  background: rgba(57, 66, 89, 0.05);
+  color: #4b5263;
+  font-size: var(--font-size-2xs);
+  line-height: 1.45;
+}
+.rec-severity-divider {
+  margin: 4px 0 2px;
+}
 .rec-filters-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -4575,6 +4588,36 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
 .rec-tag.category-marketing { color: #005a6f; border-color: rgba(0,158,115,0.4); background: rgba(0,158,115,0.12); }
 .rec-tag.category-crm { color: #6f3a9a; border-color: rgba(123,45,139,0.4); background: rgba(123,45,139,0.12); }
 .rec-tag.category-governance { color: #595f73; border-color: rgba(96,103,122,0.45); background: rgba(96,103,122,0.12); }
+.rec-tag.severity-critical { color: #8a3100; border-color: rgba(213,94,0,0.42); background: rgba(213,94,0,0.12); }
+.rec-tag.severity-high { color: #7a5400; border-color: rgba(230,159,0,0.45); background: rgba(230,159,0,0.14); }
+.rec-tag.severity-needs { color: #4f347f; border-color: rgba(106,81,163,0.42); background: rgba(106,81,163,0.12); }
+.rec-tag.severity-low { color: #0a664e; border-color: rgba(0,158,115,0.45); background: rgba(0,158,115,0.11); }
+
+.rec-source-link {
+  appearance: none;
+  align-self: flex-start;
+  border: 1px dashed rgba(57,66,89,0.42);
+  border-radius: 7px;
+  background: rgba(57,66,89,0.04);
+  color: #3f475f;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.rec-source-link:hover,
+.rec-source-link:focus-visible {
+  border-color: rgba(0,114,178,0.52);
+  background: rgba(0,114,178,0.1);
+  color: #0f4e76;
+  outline: none;
+}
+#calc-kpi-output-grid .calc-out-card.rec-source-target {
+  box-shadow: 0 0 0 3px rgba(0, 114, 178, 0.18);
+  border-color: rgba(0,114,178,0.52);
+}
 
 .rec-desc {
   color: var(--muted);
@@ -6267,6 +6310,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <button class="rec-filter-btn" type="button" data-rec-category="governance" aria-pressed="false">Governance</button>
           </div>
           <div class="intent-rec-helper" id="intent-rec-helper">Recommendation emphasis adapts to selected intent while keeping health-score logic unchanged.</div>
+          <div class="rec-severity-helper" id="rec-severity-helper"><strong>Severity order:</strong> Critical → High → Needs data → Low. Recommendation cards mapped from Group C outputs show their source metric.</div>
           <div class="rec-list" id="rec-list">
             <div class="rec-empty">Recommendations will appear here once enough data is available.</div>
           </div>
@@ -11396,6 +11440,161 @@ function priorityWeight(priority) {
   return 2;
 }
 
+const RECOMMENDATION_SEVERITY_META = Object.freeze({
+  critical: { rank: 0, key: 'critical', label: 'Critical' },
+  high: { rank: 1, key: 'high', label: 'High' },
+  needs: { rank: 2, key: 'needs', label: 'Needs data' },
+  low: { rank: 3, key: 'low', label: 'Low' },
+  info: { rank: 4, key: 'info', label: 'Info' }
+});
+
+function getOutputCardTitleById(cardId = '') {
+  if (!cardId) return '';
+  const fromTooltip = OUTPUT_TOOLTIP_CONTENT[cardId];
+  if (fromTooltip && fromTooltip.title) return fromTooltip.title;
+  const card = document.getElementById(cardId);
+  if (!card) return cardId;
+  const labelText = String((card.querySelector('.calc-out-label') || {}).textContent || '').replace(/\s+/g, ' ').trim();
+  return labelText || cardId;
+}
+
+function getRecommendationSeverityMeta(rec = {}, zoneKey = 'green') {
+  if (rec && typeof rec.severityKey === 'string' && RECOMMENDATION_SEVERITY_META[rec.severityKey]) {
+    return RECOMMENDATION_SEVERITY_META[rec.severityKey];
+  }
+
+  if (rec && rec.cardId) {
+    const card = document.getElementById(rec.cardId);
+    if (card) return getOutputCardSeverityMeta(card);
+  }
+
+  if (rec && rec.priority === 'high') return RECOMMENDATION_SEVERITY_META.high;
+  if (rec && rec.priority === 'medium') return RECOMMENDATION_SEVERITY_META.needs;
+  if (rec && rec.priority === 'low') return RECOMMENDATION_SEVERITY_META.low;
+  return RECOMMENDATION_SEVERITY_META.info;
+}
+
+function decorateRecommendationForRender(rec = {}, zoneKey = 'green') {
+  const severity = getRecommendationSeverityMeta(rec, zoneKey);
+  const sourceCardId = rec.sourceCardId || rec.cardId || '';
+  const sourceCardLabel = rec.sourceCardLabel || getOutputCardTitleById(sourceCardId);
+  const mappingType = rec.mappingType || (sourceCardId ? 'output-card' : 'general');
+  return {
+    ...rec,
+    severityKey: severity.key,
+    severityRank: severity.rank,
+    severityLabel: severity.label,
+    sourceCardId,
+    sourceCardLabel,
+    mappingType
+  };
+}
+
+function buildRecommendationSeverityDividerHtml(severityKey, count) {
+  const label = getSeverityDividerLabel(severityKey, count);
+  return `
+    <div class="calc-severity-divider severity-${severityKey} rec-severity-divider" aria-label="${label}">
+      <span class="calc-severity-divider-line"></span>
+      <span class="calc-severity-divider-label">${label}</span>
+      <span class="calc-severity-divider-line"></span>
+    </div>
+  `;
+}
+
+function buildRecommendationCardHtml(rec) {
+  const providerTag = rec.providers.length ? rec.providers.join('/').toUpperCase() : 'UNIVERSAL';
+  const priorityTag = rec.priority.toUpperCase();
+  const categoryLabel = recommendationCategoryLabel(rec.categoryKey);
+  const linksHtml = buildRecommendationReferenceLinks(rec.refs || []);
+  const sourceHtml = rec.sourceCardId
+    ? `<button type="button" class="rec-source-link" data-source-card-id="${rec.sourceCardId}" aria-label="Mapped from ${rec.sourceCardLabel || rec.sourceCardId}">Mapped from: ${rec.sourceCardLabel || rec.sourceCardId}</button>`
+    : '';
+
+  return `
+    <article class="rec-card ${rec.priority}${rec.sourceCardId ? ' is-source-linked' : ''}" data-severity-key="${rec.severityKey}">
+      <div class="rec-head">
+        <span class="rec-icon">${rec.icon}</span>
+        <span class="rec-title">${rec.title}</span>
+        <span class="rec-tag severity-${rec.severityKey}">${rec.severityLabel}</span>
+        <span class="rec-tag category-${rec.categoryKey}">${categoryLabel}</span>
+        <span class="rec-tag">${providerTag}</span>
+        <span class="rec-tag priority-${rec.priority}">${priorityTag}</span>
+      </div>
+      <p class="rec-desc">${rec.desc}</p>
+      <p class="rec-action">→ ${rec.action}</p>
+      ${sourceHtml}
+      ${linksHtml}
+    </article>
+  `;
+}
+
+function renderRecommendationsBySeverity(recommendations = []) {
+  if (!recommendations.length) return '';
+
+  const counts = recommendations.reduce((acc, rec) => {
+    const key = rec.severityKey || 'info';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+  const rendered = [];
+  let activeSeverity = null;
+  recommendations.forEach((rec) => {
+    if (rec.severityKey !== activeSeverity) {
+      activeSeverity = rec.severityKey;
+      rendered.push(buildRecommendationSeverityDividerHtml(activeSeverity, counts[activeSeverity] || 0));
+    }
+    rendered.push(buildRecommendationCardHtml(rec));
+  });
+  return rendered.join('');
+}
+
+function updateRecommendationSeverityHelper(recommendations = []) {
+  const helperEl = document.getElementById('rec-severity-helper');
+  if (!helperEl) return;
+
+  if (!recommendations.length) {
+    helperEl.innerHTML = '<strong>Severity order:</strong> Critical → High → Needs data → Low. Recommendation cards mapped from Group C outputs show their source metric.';
+    return;
+  }
+
+  const counters = { critical: 0, high: 0, needs: 0, low: 0 };
+  let mappedCount = 0;
+  recommendations.forEach((rec) => {
+    if (Object.prototype.hasOwnProperty.call(counters, rec.severityKey)) counters[rec.severityKey] += 1;
+    if (rec.sourceCardId) mappedCount += 1;
+  });
+
+  helperEl.innerHTML = `<strong>Severity order:</strong> Critical → High → Needs data → Low. Visible now: ${counters.critical} critical, ${counters.high} high, ${counters.needs} needs data, ${counters.low} low. Mapped recommendation cards: ${mappedCount}.`;
+}
+
+let recommendationSourceCardHandlerBound = false;
+
+function focusRecommendationSourceCard(cardId) {
+  if (!cardId) return;
+  const card = document.getElementById(cardId);
+  if (!card) return;
+
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  card.classList.add('rec-source-target');
+  window.setTimeout(() => {
+    card.classList.remove('rec-source-target');
+  }, 1400);
+}
+
+function bindRecommendationSourceCardHandler() {
+  if (recommendationSourceCardHandlerBound) return;
+  recommendationSourceCardHandlerBound = true;
+
+  document.addEventListener('click', (event) => {
+    const sourceBtn = event.target.closest && event.target.closest('.rec-source-link');
+    if (!sourceBtn) return;
+    event.preventDefault();
+    event.stopPropagation();
+    focusRecommendationSourceCard(sourceBtn.dataset.sourceCardId || '');
+  }, true);
+}
+
 function normalizeRecommendationCategory(category) {
   return Object.prototype.hasOwnProperty.call(RECOMMENDATION_CATEGORY_LABELS, category)
     ? category
@@ -11583,11 +11782,12 @@ function buildOutputCardRecommendations({ zoneKey }) {
       inputs: ['Relevant calculator inputs for this indicator']
     };
     const signal = getOutputCardSignal(card);
+    const severity = getOutputCardSeverityMeta(card);
     const valueText = ((card.querySelector('.calc-out-val') || {}).textContent || '—').trim();
 
     let priority = 'low';
-    if (signal.key === 'bad') priority = 'high';
-    else if (signal.key === 'warn' || signal.key === 'needs') priority = 'medium';
+    if (severity.key === 'critical') priority = 'high';
+    else if (severity.key === 'high' || severity.key === 'needs') priority = 'medium';
 
     let actionText = guide.recommended && guide.recommended.length ? guide.recommended[0] : 'Review this indicator with current assumptions.';
     if (signal.key === 'needs' && guide.inputs && guide.inputs.length) {
@@ -11616,7 +11816,13 @@ function buildOutputCardRecommendations({ zoneKey }) {
       providers: [],
       zones: [zoneKey],
       priority,
+      severityKey: severity.key,
+      severityRank: severity.rank,
+      severityLabel: severity.label,
       cardId,
+      sourceCardId: cardId,
+      sourceCardLabel: displayTitle,
+      mappingType: 'output-card',
       refs
     };
   });
@@ -11678,6 +11884,7 @@ function updateHealthAndRecommendations(inputs) {
     scoreEl.textContent = '—';
     scoreEl.style.color = '#7a7a8c';
     listEl.innerHTML = '<div class="rec-empty">Recommendations will appear after health scoring data is available.</div>';
+    updateRecommendationSeverityHelper([]);
     renderIntentGuidedPath(inputs || {});
     return;
   }
@@ -11944,12 +12151,15 @@ function updateHealthAndRecommendations(inputs) {
   const scoped = [...outputCardRecommendations, ...strategicRecommendations, ...aiRecommendations, ...RECOMMENDATIONS]
     .map(rec => {
       const categoryKey = normalizeRecommendationCategory(rec.categoryKey || rec.category || inferRecommendationCategory(rec));
-      const refs = resolveRecommendationOfficialReferences({ ...rec, categoryKey });
-      return { ...rec, categoryKey, refs };
+      const decorated = decorateRecommendationForRender({ ...rec, categoryKey }, zoneKey);
+      const refs = resolveRecommendationOfficialReferences({ ...decorated, categoryKey });
+      return { ...decorated, categoryKey, refs };
     })
     .filter(rec => rec.zones.includes(zoneKey))
     .filter(rec => rec.providers.length === 0 || providers.some(p => rec.providers.includes(p)))
     .sort((a, b) => {
+      const severityDelta = (a.severityRank ?? Number.MAX_SAFE_INTEGER) - (b.severityRank ?? Number.MAX_SAFE_INTEGER);
+      if (severityDelta !== 0) return severityDelta;
       const priorityDelta = priorityWeight(a.priority) - priorityWeight(b.priority);
       if (priorityDelta !== 0) return priorityDelta;
       const intentDelta = recommendationIntentWeight(a.categoryKey, activeIntent) - recommendationIntentWeight(b.categoryKey, activeIntent);
@@ -11969,31 +12179,14 @@ function updateHealthAndRecommendations(inputs) {
     } else {
       listEl.innerHTML = `<div class="rec-empty">No ${selectedLabel} recommendations match your current zone/provider context. Try another category or switch back to All.</div>`;
     }
+    updateRecommendationSeverityHelper([]);
     applyGlossaryAutoLinks(document.getElementById('group-health'));
     renderIntentGuidedPath(inputs || {});
     return;
   }
 
-  listEl.innerHTML = filtered.map(rec => {
-    const providerTag = rec.providers.length ? rec.providers.join('/').toUpperCase() : 'UNIVERSAL';
-    const priorityTag = rec.priority.toUpperCase();
-    const categoryLabel = recommendationCategoryLabel(rec.categoryKey);
-    const linksHtml = buildRecommendationReferenceLinks(rec.refs || []);
-    return `
-      <article class="rec-card ${rec.priority}">
-        <div class="rec-head">
-          <span class="rec-icon">${rec.icon}</span>
-          <span class="rec-title">${rec.title}</span>
-          <span class="rec-tag category-${rec.categoryKey}">${categoryLabel}</span>
-          <span class="rec-tag">${providerTag}</span>
-          <span class="rec-tag priority-${rec.priority}">${priorityTag}</span>
-        </div>
-        <p class="rec-desc">${rec.desc}</p>
-        <p class="rec-action">→ ${rec.action}</p>
-        ${linksHtml}
-      </article>
-    `;
-  }).join('');
+  listEl.innerHTML = renderRecommendationsBySeverity(filtered);
+  updateRecommendationSeverityHelper(filtered);
   applyGlossaryAutoLinks(document.getElementById('group-health'));
   renderIntentGuidedPath(inputs || {});
 }
@@ -14695,6 +14888,7 @@ async function updatePageMetadataFromGitHub() {
 initOutputCardTooltips();
 initFormulaCardTooltips();
 bindMissingDataCtaHandler();
+bindRecommendationSourceCardHandler();
 cacheSubTexts();
 refreshCurrencyUnits();
 applyInformationIcons();
