@@ -1971,6 +1971,20 @@ body.chart-focus-open #chart-section .chart-focus-close {
   border-color: rgba(213,94,0,0.58);
   background: rgba(213,94,0,0.2);
 }
+.calc-action-btn--agent {
+  border-color: rgba(0,158,115,0.38);
+  background: rgba(0,158,115,0.11);
+  color: #006d4d;
+}
+.calc-action-btn--agent:hover {
+  border-color: rgba(0,158,115,0.55);
+  background: rgba(0,158,115,0.18);
+}
+.calc-action-btn--agent:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
 
 .calc-new-badge {
   display: inline-flex;
@@ -2034,12 +2048,95 @@ body.chart-focus-open #chart-section .chart-focus-close {
 .calc-actions-row--controls {
   grid-template-columns: minmax(0, 1fr);
 }
+.calc-actions-row--agent {
+  grid-template-columns: minmax(0, 1fr);
+  background: rgba(0,158,115,0.04);
+}
 .calc-actions-row--scenarios {
   background: rgba(0,114,178,0.03);
 }
 .calc-actions-row--advanced {
   border-bottom: 0;
   padding-bottom: 10px;
+}
+.agent-triage-result {
+  border: 1px solid rgba(0,158,115,0.28);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+.agent-triage-result[hidden] {
+  display: none !important;
+}
+.agent-triage-result.is-error {
+  border-color: rgba(181,76,0,0.35);
+  background: rgba(181,76,0,0.06);
+}
+.agent-triage-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.agent-triage-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #006d4d;
+}
+.agent-triage-meta {
+  font-size: 10px;
+  color: #4f6280;
+  font-family: 'JetBrains Mono', monospace;
+}
+.agent-triage-summary {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #243d56;
+}
+.agent-triage-actions {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+.agent-triage-actions li {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #2d4460;
+}
+.agent-triage-assumptions {
+  margin: 0;
+  font-size: 11px;
+  color: #4b5f78;
+}
+.agent-triage-assumptions ul {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  display: grid;
+  gap: 4px;
+}
+.agent-triage-status {
+  margin: 2px 0 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #4f6280;
+  font-family: 'JetBrains Mono', monospace;
+}
+.agent-triage-status.is-checking {
+  color: #5a5a8a;
+}
+.agent-triage-status.is-ok {
+  color: #006d4d;
+}
+.agent-triage-status.is-error {
+  color: #8a3d00;
 }
 .calc-scenario-suite {
   display: grid;
@@ -4941,7 +5038,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
         <button class="cta-btn" aria-describedby="cta-band-note" onclick="document.getElementById('calculator-section').scrollIntoView({behavior:'smooth', block:'start'})">Get Started — Open FiceCal</button>
         <button class="cta-btn cta-btn-secondary" type="button" data-mcp-open aria-haspopup="dialog" aria-controls="mcp-modal" aria-describedby="cta-band-note">Learn more about FiceCal MCP</button>
       </div>
-      <p class="cta-note" id="cta-band-note">Need agent-ready workflows? The same calculator model is available as MCP tools that assistants can call directly.</p>
+      <p class="cta-note" id="cta-band-note">Need agent-ready workflows? The same calculator model is available as MCP tools, and Agent Hub beta exposes a triage HTTP endpoint for quick action plans.</p>
     </div>
   </section>
 
@@ -4953,12 +5050,13 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <div class="mcp-kicker">FiceCal MCP</div>
           <h2 class="mcp-title" id="mcp-section-title">Use this model from AI assistants, not just from the browser UI.</h2>
           <p class="mcp-subtitle">
-            FiceCal is also available as a Model Context Protocol (MCP) server so teams can request break-even, health, AI token economics, and recommendation outputs programmatically from Cursor, Windsurf, Claude Desktop, and other MCP-capable tools.
+            FiceCal is also available as a Model Context Protocol (MCP) server so teams can request break-even, health, AI token economics, and recommendation outputs programmatically from Cursor, Windsurf, Claude Desktop, and other MCP-capable tools. A Render-hostable Agent Hub beta extends this with a triage workflow endpoint.
           </p>
         </div>
         <div class="mcp-head-actions">
           <button class="mcp-chip-btn" type="button" data-mcp-open aria-haspopup="dialog" aria-controls="mcp-modal">Learn more</button>
           <a class="mcp-chip-link" href="https://github.com/duksh/finops-calculator-mcp" target="_blank" rel="noopener noreferrer">Open MCP Repo ↗</a>
+          <a class="mcp-chip-link" href="https://github.com/duksh/finops-calculator-mcp/tree/main/server/agents" target="_blank" rel="noopener noreferrer">Agent Hub Beta ↗</a>
         </div>
       </div>
 
@@ -4989,6 +5087,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
             <li>Turn pricing and cloud assumptions into quick scenario comparisons.</li>
             <li>Embed FinOps checks in architecture reviews and governance workflows.</li>
             <li>Generate recommendation summaries without re-entering calculator inputs.</li>
+            <li>Run deterministic triage plans from <code>/v1/agent/triage</code> for executive-ready next actions.</li>
           </ul>
         </article>
       </div>
@@ -5219,6 +5318,20 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="1" y="1" width="7" height="7" rx="1"/></svg>
               Copy state link
             </button>
+          </div>
+          <div class="calc-actions-row calc-actions-row--agent">
+            <button
+              class="calc-action-btn calc-action-btn--agent"
+              id="calc-agent-triage-btn"
+              type="button"
+              onclick="runAgentTriage()"
+              aria-label="Run Agent Hub triage using current calculator inputs"
+              title="Calls the configured Agent Hub endpoint and returns top actions. Configure endpoint with ?agentApi=https://<service>.onrender.com or window.FICECAL_AGENT_API_BASE."
+            >
+              Run Agent Triage (Beta)
+            </button>
+            <div class="agent-triage-status" id="agent-triage-status" aria-live="polite">Agent endpoint not configured. Add <code>?agentApi=...</code> to enable triage.</div>
+            <div class="agent-triage-result" id="agent-triage-result" hidden aria-live="polite"></div>
           </div>
           <div class="calc-actions-row calc-actions-row--advanced">
             <details class="calc-disclosure" id="calc-more-actions">
@@ -6822,6 +6935,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <li>Add MCP config with command <code>node</code>.</li>
           <li>Set args to absolute path ending in <code>/server/index.js</code>.</li>
           <li>Reload client and confirm tools are discovered.</li>
+          <li>For HTTP workflows, deploy <code>server/agents</code> and call <code>/v1/agent/triage</code>.</li>
         </ul>
       </article>
 
@@ -6831,6 +6945,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           <li><code>finops.calculate</code> for full scenario outputs.</li>
           <li><code>finops.health</code> for score-only checks in workflows.</li>
           <li><code>finops.recommend</code> for zone/provider action plans.</li>
+          <li><code>POST /v1/agent/triage</code> for summary + top actions from current inputs.</li>
         </ul>
       </article>
 
@@ -6907,6 +7022,19 @@ const SHARE_STATE_VERSION = 1;
 const UI_MODE_OPTIONS = ['quick', 'operator', 'architect'];
 const UI_INTENT_OPTIONS = ['viability', 'operations', 'architecture', 'executive'];
 const UI_INTENT_DEFAULT = 'viability';
+const AGENT_SUPPORTED_PROVIDERS = ['aws', 'azure', 'gcp', 'oci', 'ibm', 'alibaba', 'huawei', 'multi'];
+const AGENT_GOAL_BY_INTENT = {
+  viability: 'improve-margin',
+  operations: 'improve-health-zone',
+  architecture: 'reduce-ccer',
+  executive: 'board-brief'
+};
+const AGENT_AUDIENCE_BY_INTENT = {
+  viability: 'cfo',
+  operations: 'finops',
+  architecture: 'cto',
+  executive: 'cfo'
+};
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
 const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
 const FEATURE_TOGGLE_ORDER = ['multi-tech-normalization', 'ai-token-economics', 'sla-slo-sli-economics'];
@@ -9424,6 +9552,205 @@ function copyShareStateLink() {
       .catch(fallback);
   } else {
     fallback();
+  }
+}
+
+function escapeAgentText(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function resolveAgentApiBaseUrl() {
+  if (typeof window.FICECAL_AGENT_API_BASE === 'string' && window.FICECAL_AGENT_API_BASE.trim()) {
+    return window.FICECAL_AGENT_API_BASE.trim().replace(/\/+$/, '');
+  }
+
+  try {
+    const url = new URL(window.location.href);
+    const fromQuery = String(url.searchParams.get('agentApi') || '').trim();
+    if (fromQuery) return fromQuery.replace(/\/+$/, '');
+  } catch {}
+
+  return '';
+}
+
+function buildAgentTriagePayload() {
+  const inputs = {};
+  SHAREABLE_INPUT_KEYS.forEach((key) => {
+    const value = lastInputs ? lastInputs[key] : null;
+    if (value === null || value === undefined || value === '') return;
+    if (typeof value === 'number' && !Number.isFinite(value)) return;
+    inputs[key] = value;
+  });
+  inputs.techDomains = getSelectedTechDomains();
+
+  const intent = getCurrentUiIntent();
+  const providerScope = getActiveProviderScope().filter((provider) => AGENT_SUPPORTED_PROVIDERS.includes(provider));
+
+  return {
+    requestId: `ui-triage-${Date.now()}`,
+    inputs,
+    providers: providerScope,
+    context: {
+      goal: AGENT_GOAL_BY_INTENT[intent] || 'improve-health-zone',
+      audience: AGENT_AUDIENCE_BY_INTENT[intent] || 'finops',
+      maxActions: 3,
+      timeHorizonDays: 90
+    },
+    options: {
+      includeStateToken: true,
+      includeRaw: true
+    }
+  };
+}
+
+function setAgentTriageButtonLoading(isLoading) {
+  const btn = document.getElementById('calc-agent-triage-btn');
+  if (!btn) return;
+  btn.disabled = Boolean(isLoading);
+  btn.textContent = isLoading ? 'Running Agent Triage...' : 'Run Agent Triage (Beta)';
+}
+
+function setAgentTriageStatus(message, tone = 'neutral') {
+  const statusEl = document.getElementById('agent-triage-status');
+  if (!statusEl) return;
+  statusEl.classList.remove('is-checking', 'is-ok', 'is-error');
+  if (tone === 'checking') statusEl.classList.add('is-checking');
+  if (tone === 'ok') statusEl.classList.add('is-ok');
+  if (tone === 'error') statusEl.classList.add('is-error');
+  statusEl.textContent = message;
+}
+
+async function refreshAgentTriageStatus() {
+  const endpoint = resolveAgentApiBaseUrl();
+  if (!endpoint) {
+    setAgentTriageStatus('Agent endpoint not configured. Add ?agentApi=https://<service>.onrender.com to enable triage.', 'error');
+    return;
+  }
+
+  setAgentTriageStatus(`Checking Agent Hub at ${endpoint}...`, 'checking');
+  try {
+    const response = await fetch(`${endpoint}/healthz`, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      setAgentTriageStatus(`Agent Hub unavailable (${response.status}) at ${endpoint}.`, 'error');
+      return;
+    }
+
+    setAgentTriageStatus(`Agent Hub connected at ${endpoint}.`, 'ok');
+  } catch {
+    setAgentTriageStatus(`Agent Hub unreachable at ${endpoint}.`, 'error');
+  }
+}
+
+function renderAgentTriageResult(payload, endpoint) {
+  const panel = document.getElementById('agent-triage-result');
+  if (!panel) return;
+
+  const summary = (payload && payload.summary) || {};
+  const actions = Array.isArray(payload && payload.actionPlan) ? payload.actionPlan : [];
+  const assumptions = Array.isArray(payload && payload.assumptions) ? payload.assumptions : [];
+  const scoreText = (summary.currentScore === null || summary.currentScore === undefined)
+    ? 'score unavailable'
+    : `score ${Math.round(summary.currentScore)}`;
+  const zoneText = summary.currentZoneTitle || summary.currentZoneKey || 'zone unavailable';
+  const actionItems = actions.length
+    ? actions.map((action) => {
+      const title = escapeAgentText(action.title || 'Untitled action');
+      const priority = escapeAgentText(action.priority || 'medium');
+      const category = escapeAgentText(action.category || 'infrastructure');
+      const rationale = escapeAgentText(action.rationale || action.action || 'No rationale provided.');
+      return `<li><strong>${title}</strong> <em>(${priority}/${category})</em><br>${rationale}</li>`;
+    }).join('')
+    : '<li>No prioritized actions were returned for the current input state.</li>';
+
+  const assumptionsBlock = assumptions.length
+    ? `<div class="agent-triage-assumptions"><strong>Assumptions / warnings:</strong><ul>${assumptions.map(item => `<li>${escapeAgentText(item)}</li>`).join('')}</ul></div>`
+    : '';
+
+  panel.classList.remove('is-error');
+  panel.hidden = false;
+  panel.innerHTML = `
+    <div class="agent-triage-head">
+      <div class="agent-triage-title">Agent Triage Result</div>
+      <div class="agent-triage-meta">Endpoint: ${escapeAgentText(endpoint)}</div>
+    </div>
+    <p class="agent-triage-summary"><strong>${escapeAgentText(zoneText)}</strong> (${escapeAgentText(scoreText)}). ${escapeAgentText(summary.headline || 'No headline generated.')}</p>
+    <ol class="agent-triage-actions">${actionItems}</ol>
+    ${assumptionsBlock}
+  `;
+}
+
+function renderAgentTriageError(message) {
+  const panel = document.getElementById('agent-triage-result');
+  if (!panel) return;
+
+  panel.classList.add('is-error');
+  panel.hidden = false;
+  panel.innerHTML = `
+    <div class="agent-triage-head">
+      <div class="agent-triage-title">Agent Triage Error</div>
+    </div>
+    <p class="agent-triage-summary">${escapeAgentText(message)}</p>
+  `;
+}
+
+async function runAgentTriage() {
+  const endpoint = resolveAgentApiBaseUrl();
+  if (!endpoint) {
+    setAgentTriageStatus('Agent endpoint not configured. Add ?agentApi=https://<service>.onrender.com to enable triage.', 'error');
+    renderAgentTriageError('No Agent Hub endpoint configured. Use ?agentApi=https://<service>.onrender.com in the URL or set window.FICECAL_AGENT_API_BASE before running triage.');
+    return;
+  }
+
+  const payload = buildAgentTriagePayload();
+  if (!payload.inputs || Object.keys(payload.inputs).length === 0) {
+    renderAgentTriageError('Add at least one meaningful calculator input before running Agent Triage.');
+    return;
+  }
+
+  setAgentTriageButtonLoading(true);
+  setAgentTriageStatus(`Submitting triage request to ${endpoint}...`, 'checking');
+  try {
+    const response = await fetch(`${endpoint}/v1/agent/triage`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const raw = await response.text();
+    let parsed = {};
+    try {
+      parsed = raw ? JSON.parse(raw) : {};
+    } catch {
+      parsed = { status: 'error', error: raw || 'Non-JSON response from Agent Hub.' };
+    }
+
+    if (!response.ok || parsed.status === 'error' || parsed.status === 'needs-input') {
+      const fallbackError = `Agent triage call failed (${response.status || 'network'}).`;
+      setAgentTriageStatus(`Agent Hub request failed at ${endpoint}.`, 'error');
+      renderAgentTriageError(parsed.error || fallbackError);
+      return;
+    }
+
+    setAgentTriageStatus(`Agent Hub connected at ${endpoint}.`, 'ok');
+    renderAgentTriageResult(parsed, endpoint);
+  } catch (err) {
+    setAgentTriageStatus(`Agent Hub unreachable at ${endpoint}.`, 'error');
+    renderAgentTriageError(err instanceof Error ? err.message : 'Unable to reach Agent Hub endpoint.');
+  } finally {
+    setAgentTriageButtonLoading(false);
   }
 }
 
@@ -14910,6 +15237,7 @@ renderCfoForecastDashboard(null);
 if (!loadSharedStateFromUrl()) {
   updateHealthAndRecommendations(lastInputs);
 }
+refreshAgentTriageStatus();
 initFeatureRuntime();
 </script>
 </body>
