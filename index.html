@@ -9744,8 +9744,8 @@ function renderAgentTriageResult(payload, endpoint) {
   const actions = Array.isArray(payload && payload.actionPlan) ? payload.actionPlan : [];
   const assumptions = Array.isArray(payload && payload.assumptions) ? payload.assumptions : [];
   const scoreText = (summary.currentScore === null || summary.currentScore === undefined)
-    ? 'score unavailable'
-    : `score ${Math.round(summary.currentScore)}`;
+    ? 'agent baseline score unavailable'
+    : `agent baseline score ${Math.round(summary.currentScore)}`;
   const zoneText = summary.currentZoneTitle || summary.currentZoneKey || 'zone unavailable';
   const actionItems = actions.length
     ? actions.map((action) => {
@@ -9769,6 +9769,7 @@ function renderAgentTriageResult(payload, endpoint) {
       <div class="agent-triage-meta">Endpoint: ${escapeAgentText(endpoint)}</div>
     </div>
     <p class="agent-triage-summary"><strong>${escapeAgentText(zoneText)}</strong> (${escapeAgentText(scoreText)}). ${escapeAgentText(summary.headline || 'No headline generated.')}</p>
+    <p class="agent-triage-meta">Note: Agent baseline score uses core checks and may differ from the Health Zone score.</p>
     <ol class="agent-triage-actions">${actionItems}</ol>
     ${assumptionsBlock}
   `;
