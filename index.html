@@ -9849,15 +9849,22 @@ async function runAgentTriage() {
 }
 
 function runAgentDemoScenario() {
-  const loaded = loadDemoScenario('unhealthy');
+  const loaded = loadDemoScenario('unhealthy', { focusSelector: '#agent-triage-status' });
   if (!loaded) return;
   writeShareFeedback('Agent demo preset loaded. Running Agent Triage…', false);
-  window.setTimeout(() => {
-    runAgentTriage();
+  window.setTimeout(async () => {
+    await runAgentTriage();
+    const resultEl = document.getElementById('agent-triage-result');
+    const focusTarget = resultEl && !resultEl.hidden
+      ? resultEl
+      : document.getElementById('agent-triage-status');
+    if (focusTarget) {
+      focusTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }, 180);
 }
 
-function loadDemoScenario(scenarioKey) {
+function loadDemoScenario(scenarioKey, options = {}) {
   const preset = DEMO_SCENARIOS[scenarioKey];
   if (!preset) {
     writeShareFeedback('Demo preset not found.', true);
@@ -9890,9 +9897,11 @@ function loadDemoScenario(scenarioKey) {
   }
   writeShareFeedback(`${preset.label} demo loaded. ${preset.summary}`, false);
 
-  const focusSelector = typeof preset.focusSelector === 'string' && preset.focusSelector
-    ? preset.focusSelector
-    : '#group-health';
+  const optionFocusSelector = typeof options.focusSelector === 'string' ? options.focusSelector : '';
+  const focusSelector = optionFocusSelector
+    || (typeof preset.focusSelector === 'string' && preset.focusSelector
+      ? preset.focusSelector
+      : '#group-health');
   const focusEl = document.querySelector(focusSelector);
   if (focusEl) {
     requestAnimationFrame(() => {

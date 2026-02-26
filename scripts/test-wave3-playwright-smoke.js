@@ -139,6 +139,76 @@ async function run() {
   try {
     const context = await browser.newContext({ acceptDownloads: true });
 
+    await context.route('https://ficecal-agent-hub.onrender.com/**', async route => {
+      const request = route.request();
+      const { pathname } = new URL(request.url());
+
+      if (request.method() === 'GET' && pathname === '/healthz') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json; charset=utf-8',
+          body: JSON.stringify({
+            status: 'ok',
+            service: 'ficecal-agent-hub',
+            workflow: './workflows/triage.workflow.v1.json'
+          })
+        });
+        return;
+      }
+
+      if (request.method() === 'POST' && pathname === '/v1/agent/triage') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json; charset=utf-8',
+          body: JSON.stringify({
+            requestId: 'test-agent-demo',
+            status: 'success',
+            generatedAt: new Date().toISOString(),
+            summary: {
+              currentZoneTitle: 'Red Zone - Critical Action Needed',
+              currentZoneKey: 'red',
+              currentScore: 10,
+              headline: 'Prioritize raise realized arpu above cost floor to improve from Red Zone - Critical Action Needed.'
+            },
+            actionPlan: [
+              {
+                title: 'Raise realized ARPU above cost floor',
+                priority: 'high',
+                category: 'pricing',
+                rationale: 'Current ARPU is below modeled floor and margin remains negative.'
+              },
+              {
+                title: 'CRM retention and expansion revenue playbook',
+                priority: 'high',
+                category: 'crm',
+                rationale: 'Expansion and retention levers are required near limit conditions.'
+              }
+            ],
+            assumptions: []
+          })
+        });
+        return;
+      }
+
+      if (request.method() === 'GET' && pathname === '/') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json; charset=utf-8',
+          body: JSON.stringify({
+            status: 'ok',
+            service: 'ficecal-agent-hub'
+          })
+        });
+        return;
+      }
+
+      await route.fulfill({
+        status: 404,
+        contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ status: 'error', error: 'Route not found (mock)' })
+      });
+    });
+
     // 1) Intent switch + mode sync
     const page = await context.newPage();
     page.setDefaultTimeout(STEP_TIMEOUT_MS);
@@ -282,7 +352,45 @@ async function run() {
       `Unexpected export filename: ${filename}`
     );
 
-    console.log('[PASS] Wave 3 + Release 4 Playwright smoke checks passed');
+    // 6) Agent Demo acceptance: connected status + baseline score note + action list
+    const pageAgentDemo = await context.newPage();
+    pageAgentDemo.setDefaultTimeout(STEP_TIMEOUT_MS);
+    await pageAgentDemo.goto(`${baseUrl}/index.html#calculator-section`, { waitUntil: 'domcontentloaded' });
+
+    await waitAndClick(pageAgentDemo, 'button[aria-label="Load Agent demo preset and run triage"]');
+
+    await pageAgentDemo.waitForFunction(() => {
+      const statusEl = document.getElementById('agent-triage-status');
+      return Boolean(statusEl && /Agent Hub connected at/.test(statusEl.textContent || ''));
+    }, null, { timeout: STEP_TIMEOUT_MS });
+
+    await pageAgentDemo.waitForFunction(() => {
+      const panel = document.getElementById('agent-triage-result');
+      return Boolean(panel && !panel.hidden && panel.textContent && panel.textContent.trim().length > 0);
+    }, null, { timeout: STEP_TIMEOUT_MS });
+
+    const triageSummaryText = (await pageAgentDemo.textContent('#agent-triage-result .agent-triage-summary')) || '';
+    assert.ok(
+      /agent baseline score\s+\d+/i.test(triageSummaryText),
+      `Expected triage summary to include agent baseline score, got: ${triageSummaryText}`
+    );
+
+    const triagePanelText = (await pageAgentDemo.textContent('#agent-triage-result')) || '';
+    assert.ok(
+      triagePanelText.includes('Agent baseline score uses core checks and may differ from the Health Zone score.'),
+      'Expected baseline-score clarification note in triage panel'
+    );
+
+    const triageActionCount = await pageAgentDemo.evaluate(() => {
+      return document.querySelectorAll('#agent-triage-result .agent-triage-actions li').length;
+    });
+    assert.ok(triageActionCount > 0, 'Expected at least one triage action in Agent Demo result');
+    assert.ok(
+      !triagePanelText.includes('No prioritized actions were returned for the current input state.'),
+      'Agent Demo should render prioritized actions, not the empty-action fallback'
+    );
+
+    console.log('[PASS] Wave 3 + Release 4 + Agent Demo Playwright smoke checks passed');
   } finally {
     await browser.close();
     await new Promise(resolve => server.close(resolve));
