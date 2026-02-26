@@ -5296,8 +5296,8 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
           </div>
           <div class="calc-actions-row calc-actions-row--scenarios" id="calc-scenario-demos">
             <div class="calc-scenario-suite">
-              <div class="calc-scenario-title" id="calc-scenario-title">Scenario demos (4 presets)</div>
-              <p class="calc-scenario-copy" id="calc-scenario-copy">Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.</p>
+              <div class="calc-scenario-title" id="calc-scenario-title">Scenario demos (5 presets)</div>
+              <p class="calc-scenario-copy" id="calc-scenario-copy">Load 1 of 5 curated states to compare baseline viability, downside stress, Release 4 reliability posture, and a one-click Agent triage demo with the same model logic and outputs.</p>
               <div class="calc-scenario-actions" role="group" aria-label="Scenario demo presets">
                 <div class="calc-scenario-item">
                   <button class="calc-action-btn calc-action-btn--demo-good" type="button" onclick="loadDemoScenario('healthy')" aria-label="Load Healthy preset">
@@ -5326,6 +5326,13 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
                     Reliability Unhealthy (R4)
                   </button>
                   <span class="calc-scenario-meta">Reliability downside stress</span>
+                </div>
+                <div class="calc-scenario-item" data-scenario-group="agent">
+                  <button class="calc-action-btn calc-action-btn--agent" type="button" onclick="runAgentDemoScenario()" aria-label="Load Agent demo preset and run triage">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h8"/><path d="M8.2 3.8 10.5 6l-2.3 2.2"/></svg>
+                    Agent Demo
+                  </button>
+                  <span class="calc-scenario-meta">Loads downside state + runs triage</span>
                 </div>
               </div>
             </div>
@@ -9810,18 +9817,27 @@ async function runAgentTriage() {
   }
 }
 
+function runAgentDemoScenario() {
+  const loaded = loadDemoScenario('unhealthy');
+  if (!loaded) return;
+  writeShareFeedback('Agent demo preset loaded. Running Agent Triage…', false);
+  window.setTimeout(() => {
+    runAgentTriage();
+  }, 180);
+}
+
 function loadDemoScenario(scenarioKey) {
   const preset = DEMO_SCENARIOS[scenarioKey];
   if (!preset) {
     writeShareFeedback('Demo preset not found.', true);
-    return;
+    return false;
   }
 
   const isReliabilityScenario = scenarioKey === 'reliability' || scenarioKey === 'reliabilityHealthy' || scenarioKey === 'reliabilityUnhealthy';
   if (isReliabilityScenario && !isFeatureRuntimeEnabled('sla-slo-sli-economics')) {
     openFeatureToggles('sla-slo-sli-economics');
     writeShareFeedback('Reliability demo is disabled. Enable SLA/SLO/SLI Reliability Economics in Feature controls first.', true);
-    return;
+    return false;
   }
 
   closeOutputSolutionPanel();
@@ -9830,7 +9846,7 @@ function loadDemoScenario(scenarioKey) {
   const applied = applySharedState(preset.state);
   if (!applied) {
     writeShareFeedback('Could not load demo scenario.', true);
-    return;
+    return false;
   }
 
   clearShareStateParam();
@@ -9856,6 +9872,8 @@ function loadDemoScenario(scenarioKey) {
       }
     });
   }
+
+  return true;
 }
 
 function normaliseSharedInput(el, rawValue) {
