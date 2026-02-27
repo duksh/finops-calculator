@@ -29,6 +29,12 @@
       "manifestPath": "src/features/sla-slo-sli-economics/feature.json",
       "enabled": true,
       "required": false
+    },
+    {
+      "id": "agent-orchestration",
+      "manifestPath": "src/features/agent-orchestration/feature.json",
+      "enabled": true,
+      "required": false
     }
   ]
 }

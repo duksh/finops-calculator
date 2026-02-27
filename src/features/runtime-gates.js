@@ -35,6 +35,12 @@
         manifestPath: 'src/features/sla-slo-sli-economics/feature.json',
         enabled: true,
         required: false
+      },
+      {
+        id: 'agent-orchestration',
+        manifestPath: 'src/features/agent-orchestration/feature.json',
+        enabled: true,
+        required: false
       }
     ]
   };
@@ -43,7 +49,8 @@
     'core-economics': { id: 'core-economics', status: 'active' },
     'multi-tech-normalization': { id: 'multi-tech-normalization', status: 'active' },
     'ai-token-economics': { id: 'ai-token-economics', status: 'experimental' },
-    'sla-slo-sli-economics': { id: 'sla-slo-sli-economics', status: 'experimental' }
+    'sla-slo-sli-economics': { id: 'sla-slo-sli-economics', status: 'experimental' },
+    'agent-orchestration': { id: 'agent-orchestration', status: 'experimental' }
   };
 
   function getStoredFeatureOverrides() {

@@ -5327,7 +5327,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
                   </button>
                   <span class="calc-scenario-meta">Reliability downside stress</span>
                 </div>
-                <div class="calc-scenario-item" data-scenario-group="agent">
+                <div class="calc-scenario-item" data-scenario-group="agent" data-feature="agent-orchestration">
                   <button class="calc-action-btn calc-action-btn--agent" type="button" onclick="runAgentDemoScenario()" aria-label="Load Agent demo preset and run triage">
                     <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h8"/><path d="M8.2 3.8 10.5 6l-2.3 2.2"/></svg>
                     Agent Demo
@@ -5343,7 +5343,7 @@ body.cfo-focus-open #qbv-dashboard .cfo-focus-close {
               Copy state link
             </button>
           </div>
-          <div class="calc-actions-row calc-actions-row--agent">
+          <div class="calc-actions-row calc-actions-row--agent" data-feature="agent-orchestration">
             <button
               class="calc-action-btn calc-action-btn--agent"
               id="calc-agent-triage-btn"
@@ -7066,12 +7066,13 @@ const AGENT_API_DEFAULT_BASE = 'https://ficecal-agent-hub.onrender.com';
 const AGENT_HTTP_TIMEOUT_MS = 12000;
 const UI_INTENT_STORAGE_KEY = 'ficecal.ui.intent';
 const RELEASE4_RELIABILITY_SEEN_KEY = 'ficecal.r4.reliability.seen';
-const FEATURE_TOGGLE_ORDER = ['multi-tech-normalization', 'ai-token-economics', 'sla-slo-sli-economics'];
+const FEATURE_TOGGLE_ORDER = ['multi-tech-normalization', 'ai-token-economics', 'sla-slo-sli-economics', 'agent-orchestration'];
 const FEATURE_TOGGLE_LABELS = {
   'core-economics': 'Core Economics',
   'multi-tech-normalization': 'Multi-Technology Normalization',
   'ai-token-economics': 'AI Token Economics',
-  'sla-slo-sli-economics': 'SLA/SLO/SLI Reliability Economics'
+  'sla-slo-sli-economics': 'SLA/SLO/SLI Reliability Economics',
+  'agent-orchestration': 'ADK/A2A Agent Orchestration'
 };
 const UI_INTENT_PROFILES = {
   viability: {
@@ -8623,6 +8624,7 @@ function applyFeatureGates() {
     runtime.applyDomGates(document);
   }
   syncScenarioDemoVisibility();
+  syncAgentModuleState();
   syncFineTuneAreaIndicatorState();
   renderFeatureToggleControls();
 }
@@ -8663,20 +8665,53 @@ function getFeatureDisplayName(featureId) {
 
 function syncScenarioDemoVisibility() {
   const reliabilityEnabled = isFeatureRuntimeEnabled('sla-slo-sli-economics');
+  const agentEnabled = isFeatureRuntimeEnabled('agent-orchestration');
   document.querySelectorAll('[data-scenario-group="reliability"]').forEach((el) => {
     el.hidden = !reliabilityEnabled;
   });
+  document.querySelectorAll('[data-scenario-group="agent"]').forEach((el) => {
+    el.hidden = !agentEnabled;
+  });
+
+  const totalPresets = 2 + (reliabilityEnabled ? 2 : 0) + (agentEnabled ? 1 : 0);
 
   const titleEl = document.getElementById('calc-scenario-title');
   if (titleEl) {
-    titleEl.textContent = reliabilityEnabled ? 'Scenario demos (4 presets)' : 'Scenario demos (2 presets)';
+    titleEl.textContent = `Scenario demos (${totalPresets} presets)`;
   }
 
   const copyEl = document.getElementById('calc-scenario-copy');
   if (copyEl) {
-    copyEl.textContent = reliabilityEnabled
-      ? 'Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture with the same model logic and outputs.'
-      : 'Load 1 of 2 curated states to compare baseline viability and downside stress. Enable the Reliability module in Advanced tools to unlock the Release 4 reliability demos.';
+    if (reliabilityEnabled && agentEnabled) {
+      copyEl.textContent = 'Load 1 of 5 curated states to compare baseline viability, downside stress, Release 4 reliability posture, and a one-click ADK/A2A Agent triage demo.';
+    } else if (reliabilityEnabled) {
+      copyEl.textContent = 'Load 1 of 4 curated states to compare baseline viability, downside stress, and Release 4 reliability healthy/unhealthy posture. Enable Agent Orchestration in Feature controls to unlock the Agent demo.';
+    } else if (agentEnabled) {
+      copyEl.textContent = 'Load 1 of 3 curated states to compare baseline viability, downside stress, and a one-click ADK/A2A Agent triage demo. Enable Reliability in Feature controls to unlock Release 4 reliability demos.';
+    } else {
+      copyEl.textContent = 'Load 1 of 2 curated states to compare baseline viability and downside stress. Enable Reliability and Agent Orchestration in Feature controls to unlock advanced demos.';
+    }
+  }
+}
+
+function syncAgentModuleState() {
+  const enabled = isFeatureRuntimeEnabled('agent-orchestration');
+  const statusEl = document.getElementById('agent-triage-status');
+  const resultEl = document.getElementById('agent-triage-result');
+  if (!statusEl) return;
+
+  if (!enabled) {
+    setAgentTriageStatus('Agent module disabled in Feature controls. Enable ADK/A2A Agent Orchestration to run triage.', 'error');
+    if (resultEl) {
+      resultEl.hidden = true;
+      resultEl.classList.remove('is-error');
+      resultEl.innerHTML = '';
+    }
+    return;
+  }
+
+  if (/Agent module disabled in Feature controls\./i.test(statusEl.textContent || '')) {
+    setAgentTriageStatus('Agent endpoint not configured. Add ?agentApi=https://<service>.onrender.com to enable triage.', 'neutral');
   }
 }
 
@@ -9703,6 +9738,11 @@ function retryAgentTriageStatus() {
 }
 
 async function refreshAgentTriageStatus() {
+  if (!isFeatureRuntimeEnabled('agent-orchestration')) {
+    setAgentTriageStatus('Agent module disabled in Feature controls. Enable ADK/A2A Agent Orchestration to run triage.', 'error');
+    return;
+  }
+
   const endpoint = resolveAgentApiBaseUrl();
   if (!endpoint) {
     setAgentTriageStatus('Agent endpoint not configured. Add ?agentApi=https://<service>.onrender.com to enable triage.', 'error');
@@ -9790,6 +9830,12 @@ function renderAgentTriageError(message) {
 }
 
 async function runAgentTriage() {
+  if (!isFeatureRuntimeEnabled('agent-orchestration')) {
+    setAgentTriageStatus('Agent module disabled in Feature controls. Enable ADK/A2A Agent Orchestration to run triage.', 'error');
+    renderAgentTriageError('Agent module is disabled. Enable ADK/A2A Agent Orchestration in Advanced tools > Feature controls.');
+    return;
+  }
+
   const endpoint = resolveAgentApiBaseUrl();
   if (!endpoint) {
     setAgentTriageStatus('Agent endpoint not configured. Add ?agentApi=https://<service>.onrender.com to enable triage.', 'error');
@@ -9849,6 +9895,11 @@ async function runAgentTriage() {
 }
 
 function runAgentDemoScenario() {
+  if (!isFeatureRuntimeEnabled('agent-orchestration')) {
+    writeShareFeedback('Agent Demo is disabled. Enable ADK/A2A Agent Orchestration in Feature controls first.', true);
+    return;
+  }
+
   const loaded = loadDemoScenario('unhealthy', { focusSelector: '#agent-triage-status' });
   if (!loaded) return;
   writeShareFeedback('Agent demo preset loaded. Running Agent Triage…', false);

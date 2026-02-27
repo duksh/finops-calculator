@@ -1,0 +1,31 @@
+{
+  "id": "agent-orchestration",
+  "name": "ADK/A2A Agent Orchestration",
+  "version": "0.1.0",
+  "owner": "ficecal-agent-platform",
+  "status": "experimental",
+  "dependsOn": ["core-economics"],
+  "uiModes": ["operator", "architect"],
+  "inputs": [
+    "agent.requestId",
+    "agent.providers",
+    "agent.context.goal",
+    "agent.context.audience",
+    "agent.context.maxActions",
+    "agent.context.timeHorizonDays",
+    "inputs.infraTotal",
+    "inputs.ARPU"
+  ],
+  "outputs": [
+    "agent.summary.currentZoneTitle",
+    "agent.summary.currentZoneKey",
+    "agent.summary.currentScore",
+    "agent.summary.headline",
+    "agent.actionPlan",
+    "agent.assumptions"
+  ],
+  "healthSignals": [
+    "agentEndpointReachability",
+    "agentPayloadReadiness"
+  ]
+}
